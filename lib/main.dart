@@ -11,14 +11,6 @@ Future<void> main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  DatabaseReference ref = FirebaseDatabase.instance.ref();
-
-
-  await ref.set({
-    "nombre": "Pepe",
-    "telefono" : "3424"
-  });
-
   runApp(App());
 }
 
