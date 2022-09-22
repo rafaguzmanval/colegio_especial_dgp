@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "85240334260",
+    "project_id": "proyectoprueba-56640",
+    "storage_bucket": "proyectoprueba-56640.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:85240334260:android:522cf2809d3f2eb40954e1",
+        "android_client_info": {
+          "package_name": "com.example.colegio_especial_dgp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "85240334260-2ul75gj846hrbc5lu93e7eq70bp8100r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoc8y0kLqq50XAVomKSpXowqqh0HTwcwU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "85240334260-2ul75gj846hrbc5lu93e7eq70bp8100r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
