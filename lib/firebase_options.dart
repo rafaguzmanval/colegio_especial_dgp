@@ -47,30 +47,32 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyBd0ZQxAA1sdx1L2qzwIaRwjArbc1792Go',
-    appId: '1:85240334260:web:9a2ad40f269a5ffe0954e1',
-    messagingSenderId: '85240334260',
-    databaseURL: 'https://proyectoprueba-56640-default-rtdb.firebaseio.com/',
-    projectId: 'proyectoprueba-56640',
-    authDomain: 'proyectoprueba-56640.firebaseapp.com',
-    storageBucket: 'proyectoprueba-56640.appspot.com',
+    apiKey: 'AIzaSyDqEPueN1GkeAWB1BTWStCMJcX9wai_pqU',
+    appId: '1:231977102251:web:14dd833f4d426adb3900ee',
+    messagingSenderId: '231977102251',
+    projectId: 'colegioespecialdgp',
+    authDomain: 'colegioespecialdgp.firebaseapp.com',
+    databaseURL: 'https://colegioespecialdgp-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'colegioespecialdgp.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAoc8y0kLqq50XAVomKSpXowqqh0HTwcwU',
-    appId: '1:85240334260:android:522cf2809d3f2eb40954e1',
-    messagingSenderId: '85240334260',
-    projectId: 'proyectoprueba-56640',
-    storageBucket: 'proyectoprueba-56640.appspot.com',
+    apiKey: 'AIzaSyBPJlgGrtEgnTJ3sl4b7Pv_u6bIMMpn0-g',
+    appId: '1:231977102251:android:32c35a48e89caaae3900ee',
+    messagingSenderId: '231977102251',
+    projectId: 'colegioespecialdgp',
+    databaseURL: 'https://colegioespecialdgp-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'colegioespecialdgp.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBZkAK2FcP02phmnd3xvM_Uwxz_KFssDtY',
-    appId: '1:85240334260:ios:f4e342e725e7a4530954e1',
-    messagingSenderId: '85240334260',
-    projectId: 'proyectoprueba-56640',
-    storageBucket: 'proyectoprueba-56640.appspot.com',
-    iosClientId: '85240334260-9jn6l1fe44lopmovs800djudgt09f1vh.apps.googleusercontent.com',
+    apiKey: 'AIzaSyAU1BUCGtWfDlX29JWW7as0SXTi3cHXAis',
+    appId: '1:231977102251:ios:5548e1ccf9d7617e3900ee',
+    messagingSenderId: '231977102251',
+    projectId: 'colegioespecialdgp',
+    databaseURL: 'https://colegioespecialdgp-default-rtdb.europe-west1.firebasedatabase.app',
+    storageBucket: 'colegioespecialdgp.appspot.com',
+    iosClientId: '231977102251-v6hcg0uf9vbb1265b02v0ftu3r39l47d.apps.googleusercontent.com',
     iosBundleId: 'com.example.colegioEspecialDgp',
   );
 }

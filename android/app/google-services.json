@@ -1,34 +1,42 @@
 {
   "project_info": {
-    "project_number": "85240334260",
-    "project_id": "proyectoprueba-56640",
-    "storage_bucket": "proyectoprueba-56640.appspot.com"
+    "project_number": "231977102251",
+    "firebase_url": "https://colegioespecialdgp-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "colegioespecialdgp",
+    "storage_bucket": "colegioespecialdgp.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:85240334260:android:522cf2809d3f2eb40954e1",
+        "mobilesdk_app_id": "1:231977102251:android:32c35a48e89caaae3900ee",
         "android_client_info": {
           "package_name": "com.example.colegio_especial_dgp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "85240334260-2ul75gj846hrbc5lu93e7eq70bp8100r.apps.googleusercontent.com",
+          "client_id": "231977102251-cod6mhujhnum6t1spre8mqrsm6otjmit.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAoc8y0kLqq50XAVomKSpXowqqh0HTwcwU"
+          "current_key": "AIzaSyBPJlgGrtEgnTJ3sl4b7Pv_u6bIMMpn0-g"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "85240334260-2ul75gj846hrbc5lu93e7eq70bp8100r.apps.googleusercontent.com",
+              "client_id": "231977102251-cod6mhujhnum6t1spre8mqrsm6otjmit.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "231977102251-v6hcg0uf9vbb1265b02v0ftu3r39l47d.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.colegioEspecialDgp"
+              }
             }
           ]
         }

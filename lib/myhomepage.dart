@@ -1,5 +1,6 @@
+import 'package:colegio_especial_dgp/AccesoBD.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
+
 
 
 class MyHomePage extends StatefulWidget{
@@ -14,7 +15,7 @@ class MyHomePage extends StatefulWidget{
 class MyHomePageState extends State<MyHomePage>{
 
   String msg = 'hola';
-  AccesoBase base = new AccesoBase();
+  AccesoBD base = new AccesoBD();
 
   @override
   void initState(){
@@ -78,32 +79,3 @@ class MyHomePageState extends State<MyHomePage>{
 
 
 
-class AccesoBase{
-  DatabaseReference ref = FirebaseDatabase.instance.ref();
-
-  escribirDatos() async{
-    await ref.child("usuario/0").set({
-      "nombre": "Manolo",
-      "telefono" : "3424"
-    });
-
-    await ref.child("usuario/1").set({
-      "nombre": "Pepe",
-      "telefono" : "6666",
-      "edad" : "16"
-    });
-
-  }
-
-
-
-  Future<String> leerDatos() async{
-
-    final valor = await ref.child("usuario/0").get();
-
-
-    return valor.value.toString();
-  }
-
-
-}
