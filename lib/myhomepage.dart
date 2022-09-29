@@ -1,4 +1,8 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:colegio_especial_dgp/AccesoBD.dart';
+
 import 'package:flutter/material.dart';
 
 
@@ -14,13 +18,19 @@ class MyHomePage extends StatefulWidget{
 
 class MyHomePageState extends State<MyHomePage>{
 
-  String msg = 'hola';
+  var msg = "null";
+  var imagen = null;
   AccesoBD base = new AccesoBD();
+
+
+
 
   @override
   void initState(){
     super.initState();
-    lectura();
+    lecturaDatos();
+    lecturaImagen();
+
 
   }
 
@@ -29,42 +39,57 @@ class MyHomePageState extends State<MyHomePage>{
 
 
 
-    base.escribirDatos();
+    //base.escribirDatos();
 
-    return DefaultTabController(length: 1, child: Scaffold(
-      key: GlobalKey<ScaffoldState>(),
+    return Scaffold(
       appBar:AppBar(
         title: const Text('AppEspecial')
       ),
-      body: TabBarView(
-        children: <Widget>[
+      body: Container(
+        child: Column(
+          children: [
+            if(imagen != null)...[
+              Image.memory(imagen)
+            ]else...[
+              Text("No se ha cargado la imagen")
+            ],
+            Text(msg),
+          ],
+        )
 
-          Text(msg)
-
-        ],
 
       ),
-    )
     );
   }
 
-  lectura()
+  lecturaImagen()
   {
-    Future<String> future = base.leerDatos();
+    var future = base.leerImagen();
+
+    future.then((value){
+      imagen = value;
+      _actualizar();
+
+    });
+  }
+
+  lecturaDatos()
+  {
+    var future = base.leerDatos();
 
     future.then((value){
       msg = value;
-      print(msg);
       _actualizar();
 
     });
   }
 
 
+
   void _actualizar() async
   {
-    var reloj = 1;
-    await Future.delayed(Duration(seconds:reloj));
+    //var reloj = 1;
+    //await Future.delayed(Duration(seconds:reloj));
     setState(() {
 
     });
