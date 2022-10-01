@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Sesion.dart';
+import 'package:colegio_especial_dgp/perfilalumno.dart';
 
 import 'package:colegio_especial_dgp/rol.dart';
 import 'package:colegio_especial_dgp/usuario.dart';
@@ -59,9 +60,82 @@ class AccesoBD{
         toFirestore: (Usuario user, _) => user.toFirestore());
 
     final docSnap = await consulta.get();
-    final usuario = docSnap.data();
+
+    var usuario = null;
+    if(docSnap != null)
+      {
+        usuario = docSnap.data();
+        usuario?.id = docSnap.id;
+      }
+
 
     return usuario;
+  }
+
+  consultarTareas(id)
+  {
+
+    final ref = db.collection("usuarios");
+
+    ref.doc(id).withConverter(
+        fromFirestore: Usuario.fromFirestore,
+        toFirestore: (Usuario user, _) => user.toFirestore()).snapshots().listen((event) {
+            var usuario = event.data();
+            Sesion.misTareas = usuario?.tareas;
+            Sesion.paginaActual.actualizar();
+    });
+
+  }
+
+  addTareaAlumno(id,tarea) async{
+
+    final ref = db.collection("usuarios");
+
+    ref.doc(id).update({
+      "tareas" : FieldValue.arrayUnion([tarea]),
+    });
+
+
+  }
+
+  consultarTodosUsuarios() async
+  {
+    var usuarios = [];
+
+    final ref = db.collection("usuarios").withConverter(
+        fromFirestore: Usuario.fromFirestore,
+        toFirestore: (Usuario user, _) => user.toFirestore());
+
+    final consulta = await ref.get();
+
+
+    consulta.docs.forEach((element) {
+      final usuarioNuevo = element.data();
+      usuarioNuevo.id = element.id;
+      usuarios.add(usuarioNuevo);
+    });
+
+    return usuarios;
+
+  }
+
+  consultarTodosAlumnos() async
+  {
+    var usuarios = [];
+
+    final ref = db.collection("usuarios").withConverter(
+        fromFirestore: Usuario.fromFirestore,
+        toFirestore: (Usuario user, _) => user.toFirestore());
+
+    final consulta = await ref.where("rol",isEqualTo: "Rol.alumno").get();
+
+    consulta.docs.forEach((element) {
+      final usuarioNuevo = element.data();
+      usuarioNuevo.id = element.id;
+      usuarios.add(usuarioNuevo);
+    });
+
+    return usuarios;
   }
 
   checkearPassword(id,password) async
@@ -73,8 +147,7 @@ class AccesoBD{
 
     if(hashvalue.toString() == resultado.password)
       {
-        Sesion.nombre = resultado.nombre;
-        Sesion.rol = resultado.rol;
+
         return true;
       }
     else

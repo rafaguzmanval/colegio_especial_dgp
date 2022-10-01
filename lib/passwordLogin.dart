@@ -2,7 +2,6 @@
 import 'package:colegio_especial_dgp/discapacidad.dart';
 import 'package:colegio_especial_dgp/main.dart';
 import 'package:colegio_especial_dgp/myhomepage.dart';
-import 'package:colegio_especial_dgp/passwordLogin.dart';
 import 'clase.dart';
 import 'usuario.dart';
 import 'Sesion.dart';
@@ -15,26 +14,22 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 
-class LoginPage extends StatefulWidget{
+class PasswordLogin extends StatefulWidget{
 
   @override
-  LoginPageState createState() => LoginPageState();
+  PasswordLoginState createState() => PasswordLoginState();
 
 }
 
-class LoginPageState extends State<LoginPage>{
+class PasswordLoginState extends State<PasswordLogin>{
 
   AccesoBD base = new AccesoBD();
   var usuarios;
-  var imagen;
 
 
   @override
   void initState(){
     super.initState();
-    inicializar();
-    lecturaImagen("AppStorage/ugr.png");
-    Sesion.reload();
     Sesion.paginaActual = this;
 
   }
@@ -42,19 +37,45 @@ class LoginPageState extends State<LoginPage>{
   @override
   Widget build(BuildContext context){
 
+    final myController = TextEditingController();
+
+    @override
+    void dispose(){
+      myController.dispose();
+      super.dispose();
+    }
+    //base.escribirDatos();
+
     return Scaffold(
       appBar:AppBar(
-          title:  Text('TuCole')
+          title:  Text('Hola ${Sesion.nombre}')
       ),
       body: Container(
         alignment: Alignment.center,
           child: Column(
             children: [
-            Text("Iniciar Sesión"),
-              ListaUsuarios(),
+              TextField(
+                obscureText: true,
+                decoration: InputDecoration(
+                  border:OutlineInputBorder(),
+                  hintText: 'Introduce la clave',
+                    ),
+                  controller: myController,
+                ),
 
-              if(imagen != null)
-              Image.memory(imagen)
+                  FlatButton(
+                    child: Text("Enviar",
+                      style: TextStyle(
+                        color: Colors.cyan,
+                        decorationColor: Colors.lightBlueAccent
+                      ),
+                    ),
+                    onPressed: () {
+                      ComprobarLogeo(Sesion.id, myController.text);
+                    },
+
+
+                  )
             ],
           )
 
@@ -69,10 +90,21 @@ class LoginPageState extends State<LoginPage>{
   }
 
 
-  SeleccionUsuario() async
+  ComprobarLogeo(id,password) async
   {
+    var resul = await base.checkearPassword(id,password);
+
+    print(resul);
+
+    if(resul){
       Navigator.push(context,
-      MaterialPageRoute(builder: (context) => PasswordLogin()));
+      MaterialPageRoute(builder: (context) => MyHomePage())
+      );
+    }
+    else
+      {
+
+      }
   }
 
 
@@ -101,10 +133,7 @@ class LoginPageState extends State<LoginPage>{
                                       ),
                                     ),
                                  onPressed: () {
-                                   Sesion.id = usuarios[i].id;
-                                   Sesion.nombre = usuarios[i].nombre;
-                                   Sesion.rol = usuarios[i].rol;
-                                   SeleccionUsuario();
+                                     ComprobarLogeo(usuarios[i].id, usuarios[i].password);
                                  },
 
 
@@ -117,17 +146,6 @@ class LoginPageState extends State<LoginPage>{
 
 
       );
-  }
-
-  lecturaImagen(path)
-  {
-    var future = base.leerImagen(path);
-
-    future.then((value){
-      imagen = value;
-      _actualizar();
-
-    });
   }
 
 

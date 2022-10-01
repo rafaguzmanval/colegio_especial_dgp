@@ -1,6 +1,9 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Sesion.dart';
 import 'package:colegio_especial_dgp/discapacidad.dart';
+import 'package:colegio_especial_dgp/perfilalumno.dart';
+import 'package:colegio_especial_dgp/rol.dart';
 import 'clase.dart';
 import 'usuario.dart';
 
@@ -30,6 +33,9 @@ class MyHomePageState extends State<MyHomePage>{
   var msg = "null";
   var imagen = null;
   var video = null;
+  var alumnos = [];
+
+  var db = FirebaseFirestore.instance;
 
   AccesoBD base = new AccesoBD();
   
@@ -41,15 +47,29 @@ class MyHomePageState extends State<MyHomePage>{
     var profesor1 = Profesor("Pepa", "Castro", "OtraMierdaContraseña", "3/7/1976", []);
     base.registrarUsuario(alumno1);
     base.registrarUsuario(profesor1);*/
-    lecturaDatos("usuarios");
-    lecturaImagen("AppStorage/ugr.png");
-    lecturaVideo("Vídeos/video.mp4");
+    //lecturaDatos("usuarios");
+    //lecturaImagen("AppStorage/ugr.png");
+    //lecturaVideo("Vídeos/video.mp4");
+
+    Sesion.paginaActual = this;
+
+    if(Sesion.rol == Rol.profesor.toString())
+    {
+      cargarAlumnos();
+    }
+
+    if(Sesion.rol == Rol.alumno.toString())
+    {
+      print("Cargando tareas");
+      cargarTareas();
+    }
+
+
   }
 
   @override
   Widget build(BuildContext context){
 
-    //base.escribirDatos();
 
     return Scaffold(
       appBar:AppBar(
@@ -57,22 +77,23 @@ class MyHomePageState extends State<MyHomePage>{
             automaticallyImplyLeading: false,
       ),
       body: Container(
+        padding: EdgeInsets.symmetric(vertical: 0, horizontal:  200),
         child: Column(
           children: [
-            Text("ERES ${Sesion.rol}" ),
-            if(imagen != null)...[
-              Image.memory(imagen)
-            ]else...[
-              new CircularProgressIndicator(),
-              Text("Cargando la imagen")
-            ],
-            if(video != null)...[
-              ReproductorVideo()
-            ]else...[
-              new CircularProgressIndicator(),
-              Text("Cargando el video ")
-            ],
-            //Text(msg),
+
+
+            if(Sesion.rol == Rol.alumno.toString())...[
+              VistaAlumno()
+            ]
+            else if(Sesion.rol == Rol.profesor.toString())...[
+              VistaProfesor()
+            ]
+            else if(Sesion.rol == Rol.administrador.toString())...[
+                VistaAdministrador()
+              ]
+              else if(Sesion.rol == Rol.programador.toString())...[
+                  VistaProgramador()
+                ]
           ],
         )
 
@@ -82,11 +103,126 @@ class MyHomePageState extends State<MyHomePage>{
   }
 
 
+  Widget VistaProfesor()
+  {
+    return
+      Container(
+        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+        child:Column(
+          children:[
+
+            Text("Eres un profesor"),
+
+            for(int i = 0; i < alumnos.length; i++)
+              Container(
+                  constraints: BoxConstraints(maxWidth: 70,minWidth: 30),
+                  margin: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                      color: Colors.cyan,
+                      borderRadius: BorderRadius.circular(20)),
+                  alignment: Alignment.center,
+                  child: FlatButton(
+                    child: Text(alumnos[i].nombre,
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: () {
+                      Sesion.seleccion = alumnos[i].id;
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => perfilAlumno()));
+                    },
+
+
+                  )
+
+              )
+
+          ],
+        ),
+      );
+  }
+
+
+  Widget VistaAlumno()
+  {
+    return
+      Container(
+        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+          child:Column(
+              children:[
+                        Text("Eres un alumno"),
+
+
+                        for(int i = 0; i < Sesion.misTareas.length; i++)
+                          Container(
+                              constraints: BoxConstraints(maxWidth: 70,minWidth: 30),
+                              margin: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                  color: Colors.cyan,
+                                  borderRadius: BorderRadius.circular(20)),
+                              alignment: Alignment.center,
+                                child: Text(Sesion.misTareas[i],
+                                  style: TextStyle(
+                                    color: Colors.white,
+
+                                ),
+
+
+                              )
+
+                          ),
+
+                          FloatingActionButton(
+                              onPressed: (){actualizar();} ,
+                              child: const Icon(Icons.refresh),
+
+                          )
+
+
+
+                    ],
+                  ),
+      );
+  }
+
+
+  Widget VistaAdministrador()
+  {
+    return
+      Container(
+        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+        child:Column(
+          children:[
+
+            Text("Eres un profesor")
+
+          ],
+        ),
+      );
+  }
+
+  Widget VistaProgramador()
+  {
+    return
+      Container(
+        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+        child:Column(
+          children:[
+
+            Text("Eres un profesor")
+
+          ],
+        ),
+      );
+  }
+
+
   Widget ReproductorVideo()
   {
     return
     Container(
-      padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+      //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
       child:Column(
         children:[
           
@@ -104,9 +240,9 @@ class MyHomePageState extends State<MyHomePage>{
                   controller,
                   allowScrubbing: true,
                   colors:VideoProgressColors(
-                    backgroundColor: Colors.redAccent,
-                    playedColor: Colors.green,
-                    bufferedColor: Colors.purple,
+                    backgroundColor: Colors.black,
+                    playedColor: Colors.red,
+                    bufferedColor: Colors.grey,
                   )
               )
           ),
@@ -129,16 +265,6 @@ class MyHomePageState extends State<MyHomePage>{
                     icon:Icon(controller.value.isPlaying?Icons.pause:Icons.play_arrow)
                 ),
 
-                IconButton(
-                    onPressed: (){
-                      controller.seekTo(Duration(seconds: 0));
-
-                      setState(() {
-
-                      });
-                    },
-                    icon:Icon(Icons.stop)
-                )
               ],
             ),
           )
@@ -148,13 +274,23 @@ class MyHomePageState extends State<MyHomePage>{
     );
   }
 
+  cargarAlumnos() async{
+    alumnos = await base.consultarTodosAlumnos();
+    actualizar();
+  }
+
+  cargarTareas() async {
+    await base.consultarTareas(Sesion.id);
+    actualizar();
+  }
+
   lecturaImagen(path)
   {
     var future = base.leerImagen(path);
 
     future.then((value){
       imagen = value;
-      _actualizar();
+      actualizar();
 
     });
   }
@@ -169,7 +305,7 @@ class MyHomePageState extends State<MyHomePage>{
       controller.initialize().then((value){
         setState(() {});
       });
-      _actualizar();
+      actualizar();
     });
   }
 
@@ -179,20 +315,35 @@ class MyHomePageState extends State<MyHomePage>{
 
     future.then((value){
       msg = value;
-      _actualizar();
+      actualizar();
 
     });
   }
 
 
 
-  void _actualizar() async
+ void actualizar() async
   {
     //var reloj = 1;
     //await Future.delayed(Duration(seconds:reloj));
     setState(() {
 
     });
+  }
+
+
+  consultarTareas(id)
+  {
+    final ref = db.collection("usuarios");
+
+    ref.doc(id).withConverter(
+        fromFirestore: Usuario.fromFirestore,
+        toFirestore: (Usuario user, _) => user.toFirestore()).snapshots().listen((event) {
+      var usuario = event.data();
+      Sesion.misTareas = usuario?.tareas;
+      actualizar();
+    });
+
   }
 
 }
