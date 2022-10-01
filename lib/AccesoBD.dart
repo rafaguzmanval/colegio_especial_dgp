@@ -1,7 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:colegio_especial_dgp/Sesion.dart';
+
+import 'package:colegio_especial_dgp/rol.dart';
+import 'package:colegio_especial_dgp/usuario.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:crypto/crypto.dart';
@@ -21,21 +26,20 @@ class AccesoBD{
 
     final user = <String, dynamic>{
       "nombre" : usuario.nombre,
-      "apellidos" : usuario.DNI,
-      "DNI": usuario.DNI,
+      "apellidos" : usuario.apellidos,
       "password" : hashvalue.toString(),
-      "fechanacimiento" : usuario.fechanacimiento
+      "fechanacimiento" : usuario.fechanacimiento,
+      "rol" : usuario.rol
     };
 
     db.collection("usuarios").add(user).then((DocumentReference doc) => print('DocumentSnapshot added with ID: ${doc.id}'));
-
 
   }
 
 
   leerDatos(path) async{
     String valores = "";
-    await db.collection("usuarios").get().then((event) => {
+    await db.collection(path).get().then((event) => {
       for(var doc in event.docs){
         valores += "${doc.id} => ${doc.data()}"
         }
@@ -46,26 +50,35 @@ class AccesoBD{
 
   }
 
-  consultarDNI(dni) async{
+  consultarIDusuario(id) async{
 
-    var valores = "";
     final ref = db.collection("usuarios");
 
-    final consulta = ref.where("DNI", isEqualTo: dni);
+    final consulta = ref.doc(id).withConverter(
+        fromFirestore: Usuario.fromFirestore,
+        toFirestore: (Usuario user, _) => user.toFirestore());
 
-    await consulta.get().then((event) => {
+    final docSnap = await consulta.get();
+    final usuario = docSnap.data();
 
-      if(event.docs.isNotEmpty)
-      valores = event.docs.first.data().toString()
-      else{
-        print("NO SE HA ENCONTRADO EL USUARIO CON DNI: ${dni} EN LA BASE DE DATOS")
+    return usuario;
+  }
+
+  checkearPassword(id,password) async
+  {
+    var resultado = await consultarIDusuario(id);
+
+    var data = utf8.encode(password);
+    var hashvalue = sha256.convert(data);
+
+    if(hashvalue.toString() == resultado.password)
+      {
+        Sesion.nombre = resultado.nombre;
+        Sesion.rol = resultado.rol;
+        return true;
       }
-    });
-
-    print(valores);
-
-    return valores;
-
+    else
+        return false;
   }
 
   leerImagen(path) async{

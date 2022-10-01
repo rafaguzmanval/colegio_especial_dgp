@@ -1,6 +1,7 @@
-import 'dart:io';
-import 'dart:typed_data';
 
+import 'package:colegio_especial_dgp/Sesion.dart';
+import 'package:colegio_especial_dgp/discapacidad.dart';
+import 'clase.dart';
 import 'usuario.dart';
 
 import 'package:colegio_especial_dgp/AccesoBD.dart';
@@ -36,10 +37,11 @@ class MyHomePageState extends State<MyHomePage>{
   @override
   void initState(){
     super.initState();
-    var usuario = Usuario("Pepito","Perez","35325344S","MierdaDeContraseña","2/5/1998");
-    base.registrarUsuario(usuario);
-    base.consultarDNI("35325344S");
-    lecturaDatos("usuario");
+   /* var alumno1 = Alumno("Pepito","Perez","MierdaDeContraseña","2/5/1998",Discapacidad.sindromeDown,Clase("",[],[]));
+    var profesor1 = Profesor("Pepa", "Castro", "OtraMierdaContraseña", "3/7/1976", []);
+    base.registrarUsuario(alumno1);
+    base.registrarUsuario(profesor1);*/
+    lecturaDatos("usuarios");
     lecturaImagen("AppStorage/ugr.png");
     lecturaVideo("Vídeos/video.mp4");
   }
@@ -47,17 +49,17 @@ class MyHomePageState extends State<MyHomePage>{
   @override
   Widget build(BuildContext context){
 
-
-
     //base.escribirDatos();
 
     return Scaffold(
       appBar:AppBar(
-        title: const Text('AppEspecial')
+        title: Text('Hola ${Sesion.nombre}'),
+            automaticallyImplyLeading: false,
       ),
       body: Container(
         child: Column(
           children: [
+            Text("ERES ${Sesion.rol}" ),
             if(imagen != null)...[
               Image.memory(imagen)
             ]else...[
@@ -70,7 +72,7 @@ class MyHomePageState extends State<MyHomePage>{
               new CircularProgressIndicator(),
               Text("Cargando el video ")
             ],
-            Text(msg),
+            //Text(msg),
           ],
         )
 
