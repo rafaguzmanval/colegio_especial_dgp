@@ -48,13 +48,27 @@ class LoginPageState extends State<LoginPage>{
       ),
       body: Container(
         alignment: Alignment.center,
+
           child: Column(
+
             children: [
             Text("Iniciar Sesión"),
               ListaUsuarios(),
 
-              if(imagenUgr != null)
-              Image.network(imagenUgr)
+
+
+              if(imagenUgr != null)...[
+                Image(
+                  image: NetworkImage(imagenUgr),
+                  width: 100,
+                  height: 100,
+                )
+              ],
+
+              Text('Créditos: Los mochileros'),
+              Text('Rafael Guzmán , Blanca Abril , Javier Mesa , José Paneque , Hicham Bouchemma , Emilio Vargas'),
+
+
             ],
           )
 
