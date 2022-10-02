@@ -90,9 +90,9 @@ class AccesoBD{
   addTareaAlumno(id,tarea) async{
 
     final ref = db.collection("usuarios");
-
+    Sesion.misTareas.add(tarea);
     ref.doc(id).update({
-      "tareas" : FieldValue.arrayUnion([tarea]),
+      "tareas" : Sesion.misTareas,
     });
 
 

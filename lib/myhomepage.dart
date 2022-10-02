@@ -2,6 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Sesion.dart';
 import 'package:colegio_especial_dgp/discapacidad.dart';
+import 'package:colegio_especial_dgp/loginpage.dart';
 import 'package:colegio_especial_dgp/perfilalumno.dart';
 import 'package:colegio_especial_dgp/rol.dart';
 import 'clase.dart';
@@ -71,35 +72,47 @@ class MyHomePageState extends State<MyHomePage>{
   Widget build(BuildContext context){
 
 
-    return Scaffold(
-      appBar:AppBar(
-        title: Text('Hola ${Sesion.nombre}'),
-            automaticallyImplyLeading: false,
-      ),
-      body: Container(
-        padding: EdgeInsets.symmetric(vertical: 0, horizontal:  200),
-        child: Column(
-          children: [
+    return
+
+      new WillPopScope(child: new Scaffold(
+
+        appBar:AppBar(
+
+          title: Text('Hola ${Sesion.nombre}'),
+          automaticallyImplyLeading: false,
+        ),
+        body: Container(
+
+            padding: EdgeInsets.symmetric(vertical: 0, horizontal:  200),
+            child: Column(
+              children: [
 
 
-            if(Sesion.rol == Rol.alumno.toString())...[
-              VistaAlumno()
-            ]
-            else if(Sesion.rol == Rol.profesor.toString())...[
-              VistaProfesor()
-            ]
-            else if(Sesion.rol == Rol.administrador.toString())...[
-                VistaAdministrador()
-              ]
-              else if(Sesion.rol == Rol.programador.toString())...[
-                  VistaProgramador()
+                if(Sesion.rol == Rol.alumno.toString())...[
+                  VistaAlumno()
                 ]
-          ],
-        )
+                else if(Sesion.rol == Rol.profesor.toString())...[
+                  VistaProfesor()
+                ]
+                else if(Sesion.rol == Rol.administrador.toString())...[
+                    VistaAdministrador()
+                  ]
+                  else if(Sesion.rol == Rol.programador.toString())...[
+                      VistaProgramador()
+                    ]
+              ],
+            )
 
 
+        ),
       ),
-    );
+          onWillPop: () async {
+          final pop = await _onBackPressed(context);
+          return pop ?? false;
+             },
+          );
+
+
   }
 
 
@@ -149,6 +162,7 @@ class MyHomePageState extends State<MyHomePage>{
     return
       Container(
         //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+        alignment: Alignment.center,
           child:Column(
               children:[
                         Text("Eres un alumno"),
@@ -156,8 +170,9 @@ class MyHomePageState extends State<MyHomePage>{
 
                         for(int i = 0; i < Sesion.misTareas.length; i++)
                           Container(
-                              constraints: BoxConstraints(maxWidth: 70,minWidth: 30),
-                              margin: EdgeInsets.all(5),
+                              constraints: BoxConstraints(maxWidth: 200,minWidth: 200),
+                              width: 50,
+                              margin: EdgeInsets.all(10),
                               decoration: BoxDecoration(
                                   color: Colors.cyan,
                                   borderRadius: BorderRadius.circular(20)),
@@ -173,11 +188,12 @@ class MyHomePageState extends State<MyHomePage>{
 
                           ),
 
+                          /*
                           FloatingActionButton(
                               onPressed: (){actualizar();} ,
                               child: const Icon(Icons.refresh),
 
-                          )
+                          )*/
 
 
 
@@ -321,6 +337,36 @@ class MyHomePageState extends State<MyHomePage>{
   }
 
 
+  //Método para cambiar la funcionalidad del botón de volver atrás
+
+Future<bool?> _onBackPressed(BuildContext context){
+
+    return showDialog(
+        context: context,
+        builder : (context) {
+
+          return AlertDialog(
+            title: const Text('¿Seguro?'),
+            content: Text('¿Quieres cerrar sesión?'),
+
+            actions: [
+              ElevatedButton(onPressed: (){
+                Navigator.pop(context,false);
+
+              }, child: Text('No')),
+              ElevatedButton(onPressed: (){
+                Navigator.popUntil(context, (route) => route.isFirst);
+
+              }, child: Text('Sí')),
+
+            ],
+
+          );
+        }
+       );
+  }
+
+
 
  void actualizar() async
   {
@@ -331,20 +377,6 @@ class MyHomePageState extends State<MyHomePage>{
     });
   }
 
-
-  consultarTareas(id)
-  {
-    final ref = db.collection("usuarios");
-
-    ref.doc(id).withConverter(
-        fromFirestore: Usuario.fromFirestore,
-        toFirestore: (Usuario user, _) => user.toFirestore()).snapshots().listen((event) {
-      var usuario = event.data();
-      Sesion.misTareas = usuario?.tareas;
-      actualizar();
-    });
-
-  }
 
 }
 

@@ -42,9 +42,9 @@ class perfilAlumnoState extends State<perfilAlumno>{
   @override
   void initState(){
     super.initState();
-    cargarUsuario();
 
     Sesion.paginaActual = this;
+    cargarUsuario();
 
 
   }
@@ -57,7 +57,6 @@ class perfilAlumnoState extends State<perfilAlumno>{
     return Scaffold(
       appBar:AppBar(
         title: Text('Perfil '),
-            automaticallyImplyLeading: false,
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 0, horizontal:  200),
@@ -101,15 +100,22 @@ class perfilAlumnoState extends State<perfilAlumno>{
               Text(usuarioPerfil.rol),
               Text("\nTAREAS:"),
 
-              for(int i = 0; i < usuarioPerfil.tareas.length; i++)
-                Container(
-                  child:Column(
-                      children: [
-                        Text(usuarioPerfil.tareas[i])
-                        ],
+
+              if(Sesion.misTareas != null)...
+                [
+                  for(int i = 0; i < Sesion.misTareas.length; i++)
+                    Container(
+                        child:Column(
+                          children: [
+                            Text(Sesion.misTareas[i])
+                          ],
                         )
 
-                ),
+                    ),
+                ],
+
+
+
 
               Text("\n Añadir Tarea: "),
 
@@ -197,12 +203,13 @@ class perfilAlumnoState extends State<perfilAlumno>{
   cargarUsuario() async// EN sesion seleccion estara el id del usuario que se ha elegido
   {
     usuarioPerfil = await base.consultarIDusuario(Sesion.seleccion);
-    _actualizar();
+    await base.consultarTareas(Sesion.seleccion);
+    actualizar();
   }
 
 
 
-  void _actualizar() async
+  void actualizar()
   {
     setState(() {
 

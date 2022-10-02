@@ -88,7 +88,7 @@ class LoginPageState extends State<LoginPage>{
               children:[
                           for(int i = 0; i < usuarios.length; i++)
                             Container(
-                              constraints: BoxConstraints(maxWidth: 70,minWidth: 30),
+                              constraints: BoxConstraints(maxWidth: 100,minWidth: 30),
                               margin: EdgeInsets.all(5),
                               decoration: BoxDecoration(
                                 color: Colors.cyan,
