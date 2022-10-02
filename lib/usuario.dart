@@ -9,6 +9,7 @@ class Usuario{
   final fechanacimiento; // fecha de nacimiento de la que se calculará la edad
   final password; // contraseña hasheada
   final rol;
+  final foto;
   final tareas;
   Passportmethod metodoLogeo = Passportmethod.free; // Si el usuario necesita algún otro método para meter contraseña
 
@@ -20,6 +21,7 @@ class Usuario{
           this.password,
           this.fechanacimiento,
           this.rol,
+          this.foto,
           this.tareas});
 
 
@@ -34,6 +36,7 @@ class Usuario{
       password: data?['password'],
       fechanacimiento: data?['fechanacimiento'],
       rol: data?['rol'],
+      foto: data?['foto'],
       tareas: data?['tareas'] is Iterable ? List.from(data?['tareas']) : null,
 
     );
@@ -45,6 +48,7 @@ class Usuario{
       if (apellidos != null) "apellidos": apellidos,
       if (fechanacimiento != null) "fechanacimiento": fechanacimiento,
       if (rol != null) "rol": rol,
+      if(foto != null) "foto" : foto,
       if (password != null) "password": password,
       if (tareas != null) "tareas": tareas,
 

@@ -90,14 +90,28 @@ class AccesoBD{
   addTareaAlumno(id,tarea) async{
 
     final ref = db.collection("usuarios");
+    if(Sesion.misTareas == null)
+      Sesion.misTareas = [];
     Sesion.misTareas.add(tarea);
     ref.doc(id).update({
       "tareas" : Sesion.misTareas,
     });
 
-
   }
 
+  eliminarTareaAlumno(id,tarea) async{
+
+    if(Sesion.misTareas != null && Sesion.misTareas != [])
+      {
+        final ref = db.collection("usuarios");
+        Sesion.misTareas.remove(tarea);
+        ref.doc(id).update({
+          "tareas" : Sesion.misTareas,
+        });
+      }
+
+
+  }
   consultarTodosUsuarios() async
   {
     var usuarios = [];
@@ -161,7 +175,7 @@ class AccesoBD{
     print("intentando cargar imagen");
     try {
       const oneMegabyte = 1024 * 1024;
-      final Uint8List? data = await imagen.getData(oneMegabyte);
+      final String? data = await imagen.getDownloadURL();
       print("imagen cargada");
       return data;
       // Data for "images/island.jpg" is returned, use this as needed.

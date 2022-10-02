@@ -26,14 +26,14 @@ class LoginPageState extends State<LoginPage>{
 
   AccesoBD base = new AccesoBD();
   var usuarios;
-  var imagen;
+  var imagenes;
+  var imagenUgr;
 
 
   @override
   void initState(){
     super.initState();
     inicializar();
-    lecturaImagen("AppStorage/ugr.png");
     Sesion.reload();
     Sesion.paginaActual = this;
 
@@ -53,8 +53,8 @@ class LoginPageState extends State<LoginPage>{
             Text("Iniciar Sesión"),
               ListaUsuarios(),
 
-              if(imagen != null)
-              Image.memory(imagen)
+              if(imagenUgr != null)
+              Image.network(imagenUgr)
             ],
           )
 
@@ -65,6 +65,7 @@ class LoginPageState extends State<LoginPage>{
 
   inicializar() async{
     usuarios = await base.consultarTodosUsuarios();
+    imagenUgr = await lecturaImagen("AppStorage/ugr.png");
     _actualizar();
   }
 
@@ -80,57 +81,85 @@ class LoginPageState extends State<LoginPage>{
   {
     if(usuarios == null)
       return Container();
-    else
-    return
-      Container(
-        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-          child:Column(
-              children:[
-                          for(int i = 0; i < usuarios.length; i++)
-                            Container(
-                              constraints: BoxConstraints(maxWidth: 100,minWidth: 30),
-                              margin: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                color: Colors.cyan,
-                                borderRadius: BorderRadius.circular(20)),
-                              alignment: Alignment.center,
-                              child: FlatButton(
-                                child: Text(usuarios[i].nombre,
-                                    style: TextStyle(
-                                          color: Colors.white,
-                                      ),
-                                    ),
-                                 onPressed: () {
-                                   Sesion.id = usuarios[i].id;
-                                   Sesion.nombre = usuarios[i].nombre;
-                                   Sesion.rol = usuarios[i].rol;
-                                   SeleccionUsuario();
-                                 },
+    else {
+      if(imagenes == null)
+      cargarImagenesUsuario();
+      return
+        Container(
+          //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+            child: Column(
+                children: [
+                  if(usuarios != null)...[
+                    for(int i = 0; i < usuarios.length; i++)
+                      Container(
+                          constraints: BoxConstraints(
+                              maxWidth: 100, minWidth: 30),
+                          margin: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              color: Colors.cyan,
+                              borderRadius: BorderRadius.circular(20)),
+                          alignment: Alignment.center,
+                          child: FlatButton(
+                            child: Column(
+                              children: [
+                                Text(usuarios[i].nombre,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+
+                                if(imagenes != null && imagenes.length == usuarios.length)...[
+                                  Image(
+                                      width: 50,
+                                      height: 50,
+                                      image: NetworkImage(imagenes[i]))
+                                ] else
+                                  ...[
+                                    new CircularProgressIndicator()
+                                  ]
 
 
-                              )
+                              ],
 
-                            )
-                      ]
-                )
+                            ),
+                            onPressed: () {
+                              Sesion.id = usuarios[i].id;
+                              Sesion.nombre = usuarios[i].nombre;
+                              Sesion.rol = usuarios[i].rol;
+                              SeleccionUsuario();
+                            },
 
 
+                          )
 
-      );
+                      )
+                  ]
+                ]
+            )
+
+
+        );
+    }
   }
 
-  lecturaImagen(path)
+  lecturaImagen(path) async
   {
-    var future = base.leerImagen(path);
-
-    future.then((value){
-      imagen = value;
-      _actualizar();
-
-    });
+    return await base.leerImagen(path);
   }
 
+  cargarImagenesUsuario() async
+  {
+    if(usuarios != null)
+      {
+        imagenes = [];
+        for(int i = 0;i < usuarios.length; i++)
+        {
+          imagenes.add(await lecturaImagen(usuarios[i].foto));
+        }
+        _actualizar();
+      }
 
+  }
 
   void _actualizar() async
   {

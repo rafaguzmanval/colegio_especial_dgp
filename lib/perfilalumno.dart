@@ -31,6 +31,8 @@ class perfilAlumnoState extends State<perfilAlumno>{
 
   var usuarioPerfil;
 
+  var imagenPerfil;
+
   final myController = TextEditingController();
 
   @override
@@ -56,7 +58,8 @@ class perfilAlumnoState extends State<perfilAlumno>{
 
     return Scaffold(
       appBar:AppBar(
-        title: Text('Perfil '),
+        title: Text('Perfil de ${Sesion.seleccion.nombre}'
+            ''),
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 0, horizontal:  200),
@@ -98,6 +101,17 @@ class perfilAlumnoState extends State<perfilAlumno>{
               Text(usuarioPerfil.apellidos),
               Text(usuarioPerfil.fechanacimiento),
               Text(usuarioPerfil.rol),
+
+              if(imagenPerfil != null)...[
+                Image(
+                  width: 100,
+                  height: 100,
+                  image: NetworkImage(imagenPerfil),
+                )
+                ,
+              ]else...[
+                new CircularProgressIndicator()
+              ],
               Text("\nTAREAS:"),
 
 
@@ -105,9 +119,15 @@ class perfilAlumnoState extends State<perfilAlumno>{
                 [
                   for(int i = 0; i < Sesion.misTareas.length; i++)
                     Container(
-                        child:Column(
+                        child:Row(
                           children: [
-                            Text(Sesion.misTareas[i])
+
+                                Text(Sesion.misTareas[i]),
+                                IconButton(onPressed: () {base.eliminarTareaAlumno(Sesion.seleccion.id, Sesion.misTareas[i]);},
+                                icon: Icon(Icons.delete)
+                                )
+
+
                           ],
                         )
 
@@ -134,7 +154,7 @@ class perfilAlumnoState extends State<perfilAlumno>{
                   ),
                 ),
                 onPressed: () {
-                  base.addTareaAlumno(Sesion.seleccion, myController.text);
+                  base.addTareaAlumno(Sesion.seleccion.id, myController.text);
                 },
 
 
@@ -202,15 +222,29 @@ class perfilAlumnoState extends State<perfilAlumno>{
 
   cargarUsuario() async// EN sesion seleccion estara el id del usuario que se ha elegido
   {
-    usuarioPerfil = await base.consultarIDusuario(Sesion.seleccion);
-    await base.consultarTareas(Sesion.seleccion);
+    usuarioPerfil = await base.consultarIDusuario(Sesion.seleccion.id);
+    await base.consultarTareas(Sesion.seleccion.id);
     actualizar();
+  }
+
+  cargarImagen() async{
+    imagenPerfil = await lecturaImagen(usuarioPerfil.foto);
+    actualizar();
+  }
+
+
+  lecturaImagen(path) async
+  {
+     return await base.leerImagen(path);
   }
 
 
 
   void actualizar()
   {
+    if(imagenPerfil == null && usuarioPerfil != null){
+        cargarImagen();
+    }
     setState(() {
 
     });

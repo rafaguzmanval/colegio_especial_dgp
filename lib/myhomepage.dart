@@ -120,6 +120,7 @@ class MyHomePageState extends State<MyHomePage>{
   {
     return
       Container(
+        alignment: Alignment.center,
         //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
         child:Column(
           children:[
@@ -129,7 +130,7 @@ class MyHomePageState extends State<MyHomePage>{
             for(int i = 0; i < alumnos.length; i++)
               Container(
                   constraints: BoxConstraints(maxWidth: 70,minWidth: 30),
-                  margin: EdgeInsets.all(5),
+                  margin: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                       color: Colors.cyan,
                       borderRadius: BorderRadius.circular(20)),
@@ -141,7 +142,7 @@ class MyHomePageState extends State<MyHomePage>{
                       ),
                     ),
                     onPressed: () {
-                      Sesion.seleccion = alumnos[i].id;
+                      Sesion.seleccion = alumnos[i];
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => perfilAlumno()));
                     },
@@ -168,6 +169,7 @@ class MyHomePageState extends State<MyHomePage>{
                         Text("Eres un alumno"),
 
 
+                        if(Sesion.misTareas != null)...[
                         for(int i = 0; i < Sesion.misTareas.length; i++)
                           Container(
                               constraints: BoxConstraints(maxWidth: 200,minWidth: 200),
@@ -187,6 +189,7 @@ class MyHomePageState extends State<MyHomePage>{
                               )
 
                           ),
+                          ],
 
                           /*
                           FloatingActionButton(
@@ -211,7 +214,7 @@ class MyHomePageState extends State<MyHomePage>{
         child:Column(
           children:[
 
-            Text("Eres un profesor")
+            Text("Eres un administrador")
 
           ],
         ),
@@ -226,7 +229,7 @@ class MyHomePageState extends State<MyHomePage>{
         child:Column(
           children:[
 
-            Text("Eres un profesor")
+            Text("Eres un programador")
 
           ],
         ),
@@ -297,7 +300,6 @@ class MyHomePageState extends State<MyHomePage>{
 
   cargarTareas() async {
     await base.consultarTareas(Sesion.id);
-    actualizar();
   }
 
   lecturaImagen(path)
