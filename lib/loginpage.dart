@@ -26,7 +26,6 @@ class LoginPageState extends State<LoginPage>{
 
   AccesoBD base = new AccesoBD();
   var usuarios;
-  var imagenes;
   var imagenUgr;
 
 
@@ -96,8 +95,7 @@ class LoginPageState extends State<LoginPage>{
     if(usuarios == null)
       return Container();
     else {
-      if(imagenes == null)
-      cargarImagenesUsuario();
+
       return
         Container(
           //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
@@ -122,15 +120,10 @@ class LoginPageState extends State<LoginPage>{
                                   ),
                                 ),
 
-                                if(imagenes != null && imagenes.length == usuarios.length)...[
                                   Image(
                                       width: 50,
                                       height: 50,
-                                      image: NetworkImage(imagenes[i]))
-                                ] else
-                                  ...[
-                                    new CircularProgressIndicator()
-                                  ]
+                                      image: NetworkImage(usuarios[i].foto))
 
 
                               ],
@@ -161,19 +154,6 @@ class LoginPageState extends State<LoginPage>{
     return await base.leerImagen(path);
   }
 
-  cargarImagenesUsuario() async
-  {
-    if(usuarios != null)
-      {
-        imagenes = [];
-        for(int i = 0;i < usuarios.length; i++)
-        {
-          imagenes.add(await lecturaImagen(usuarios[i].foto));
-        }
-        _actualizar();
-      }
-
-  }
 
   void _actualizar() async
   {

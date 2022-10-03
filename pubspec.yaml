@@ -40,6 +40,7 @@ dependencies:
   firebase_database: ^9.1.4
   firebase_storage: ^10.3.9
   crypto: ^3.0.2
+  image_picker:
 
 dev_dependencies:
   flutter_test:

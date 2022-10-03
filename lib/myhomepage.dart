@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Sesion.dart';
 import 'package:colegio_especial_dgp/discapacidad.dart';
@@ -14,6 +16,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:video_player/video_player.dart';
+
+import 'package:image_picker/image_picker.dart';
 
 
 
@@ -35,22 +39,36 @@ class MyHomePageState extends State<MyHomePage>{
   var imagen = null;
   var video = null;
   var alumnos = [];
+  var fotoTomada;
+
+
 
   var db = FirebaseFirestore.instance;
 
   AccesoBD base = new AccesoBD();
-  
+
+  final controladorNombre = TextEditingController();
+  final controladorApellidos = TextEditingController();
+  final controladorPassword = TextEditingController();
+  final controladorFechanacimiento = TextEditingController();
+  final controladorRol = TextEditingController();
+
+
+  @override
+  void dispose(){
+    controladorNombre.dispose();
+    controladorApellidos.dispose();
+    controladorPassword.dispose();
+    controladorFechanacimiento.dispose();
+    controladorRol.dispose();
+    super.dispose();
+  }
+
+
 
   @override
   void initState(){
     super.initState();
-   /* var alumno1 = Alumno("Pepito","Perez","MierdaDeContraseña","2/5/1998",Discapacidad.sindromeDown,Clase("",[],[]));
-    var profesor1 = Profesor("Pepa", "Castro", "OtraMierdaContraseña", "3/7/1976", []);
-    base.registrarUsuario(alumno1);
-    base.registrarUsuario(profesor1);*/
-    //lecturaDatos("usuarios");
-    //lecturaImagen("AppStorage/ugr.png");
-    //lecturaVideo("Vídeos/video.mp4");
 
     Sesion.paginaActual = this;
 
@@ -67,6 +85,15 @@ class MyHomePageState extends State<MyHomePage>{
 
 
   }
+
+  selectFromCamera() async{
+    fotoTomada = await ImagePicker().pickImage(
+      source: ImageSource.camera,
+
+    );
+    actualizar();
+  }
+
 
   @override
   Widget build(BuildContext context){
@@ -214,7 +241,93 @@ class MyHomePageState extends State<MyHomePage>{
         child:Column(
           children:[
 
-            Text("Eres un administrador")
+            Text("Eres un administrador"),
+
+            Text("\nRegistra un nuevo usuario:"),
+
+            TextField(
+              obscureText: false,
+              decoration: InputDecoration(
+                border:OutlineInputBorder(),
+                hintText: 'Introduce nombre',
+              ),
+              controller: controladorNombre,
+            ),
+
+            TextField(
+              obscureText: false,
+              decoration: InputDecoration(
+                border:OutlineInputBorder(),
+                hintText: 'Introduce apellidos',
+              ),
+              controller: controladorApellidos,
+            ),
+
+            TextField(
+              obscureText: false,
+              decoration: InputDecoration(
+                border:OutlineInputBorder(),
+                hintText: 'Introduce contraseña',
+              ),
+              controller: controladorPassword,
+            ),
+
+            TextField(
+              obscureText: false,
+              decoration: InputDecoration(
+                border:OutlineInputBorder(),
+                hintText: 'Introduce fecha de nacimiento',
+              ),
+              controller: controladorFechanacimiento,
+            ),
+
+            /*
+            TextField(
+              obscureText: false,
+              decoration: InputDecoration(
+                border:OutlineInputBorder(),
+                hintText: 'Introduce rol',
+              ),
+              controller: controladorRol,
+            ),*/
+
+            ElevatedButton(
+                child: Text('Haz una foto para la imagen de perfil'),
+                onPressed: selectFromCamera
+            ),
+
+            SizedBox(
+              height: 100,
+              width: 100,
+                child: fotoTomada == null
+                  ? Center(child: Text('Ninguna foto tomada'))
+                  : Center(child: Image.file(File(fotoTomada.path)))
+            ),
+
+            TextButton(
+              child: Text("Enviar",
+                style: TextStyle(
+                    color: Colors.cyan,
+                    decorationColor: Colors.lightBlueAccent
+                ),
+              ),
+              onPressed: () {
+
+                var nombre = "" + controladorNombre.text;
+                var apellidos = "" + controladorApellidos.text;
+                var password = "" + controladorPassword.text;
+                var fechanacimiento = "" + controladorFechanacimiento.text;
+                var rol = "Rol.alumno" + controladorRol.text;
+
+                Usuario usuario = Usuario();
+                usuario.setUsuario(nombre, apellidos, password, fechanacimiento, rol, "");
+                registrarUsuario(usuario, File(fotoTomada.path));
+
+              },
+
+            )
+
+
 
           ],
         ),
@@ -327,15 +440,11 @@ class MyHomePageState extends State<MyHomePage>{
     });
   }
 
-  lecturaDatos(path)
+
+  //Método para registrar usuario
+  registrarUsuario(usuario,foto)
   {
-    var future = base.leerDatos(path);
-
-    future.then((value){
-      msg = value;
-      actualizar();
-
-    });
+    base.registrarUsuario(usuario,foto);
   }
 
 
@@ -369,14 +478,9 @@ Future<bool?> _onBackPressed(BuildContext context){
   }
 
 
-
  void actualizar() async
   {
-    //var reloj = 1;
-    //await Future.delayed(Duration(seconds:reloj));
-    setState(() {
-
-    });
+    setState((){});
   }
 
 

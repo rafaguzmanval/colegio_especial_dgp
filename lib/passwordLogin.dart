@@ -34,17 +34,17 @@ class PasswordLoginState extends State<PasswordLogin>{
 
   }
 
+  final myController = TextEditingController();
+
+  @override
+  void dispose(){
+    myController.dispose();
+    super.dispose();
+  }
+
+
   @override
   Widget build(BuildContext context){
-
-    final myController = TextEditingController();
-
-    @override
-    void dispose(){
-      myController.dispose();
-      super.dispose();
-    }
-    //base.escribirDatos();
 
     return Scaffold(
       appBar:AppBar(

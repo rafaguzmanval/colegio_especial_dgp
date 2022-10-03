@@ -4,13 +4,13 @@ import 'package:colegio_especial_dgp/rol.dart';
 
 class Usuario{
   var id;
-  final nombre;
-  final apellidos ;
-  final fechanacimiento; // fecha de nacimiento de la que se calculará la edad
-  final password; // contraseña hasheada
-  final rol;
-  final foto;
-  final tareas;
+  var nombre;
+  var apellidos ;
+  var fechanacimiento; // fecha de nacimiento de la que se calculará la edad
+  var password; // contraseña hasheada
+  var rol;
+  var foto;
+  var tareas;
   Passportmethod metodoLogeo = Passportmethod.free; // Si el usuario necesita algún otro método para meter contraseña
 
 
@@ -38,7 +38,6 @@ class Usuario{
       rol: data?['rol'],
       foto: data?['foto'],
       tareas: data?['tareas'] is Iterable ? List.from(data?['tareas']) : null,
-
     );
   }
 
@@ -53,6 +52,17 @@ class Usuario{
       if (tareas != null) "tareas": tareas,
 
     };
+  }
+
+  setUsuario(nombre,apellidos,password,fechanacimiento,rol,foto)
+  {
+    this.nombre = nombre;
+    this.apellidos = apellidos;
+    this.password = password;
+    this.fechanacimiento = fechanacimiento;
+    this.rol = rol;
+    this.foto = foto;
+
   }
 
 }

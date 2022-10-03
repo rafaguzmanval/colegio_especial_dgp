@@ -102,16 +102,12 @@ class perfilAlumnoState extends State<perfilAlumno>{
               Text(usuarioPerfil.fechanacimiento),
               Text(usuarioPerfil.rol),
 
-              if(imagenPerfil != null)...[
-                Image(
-                  width: 100,
-                  height: 100,
-                  image: NetworkImage(imagenPerfil),
-                )
-                ,
-              ]else...[
-                new CircularProgressIndicator()
-              ],
+              Image(
+                width: 100,
+                height: 100,
+                image: NetworkImage(usuarioPerfil.foto),
+              )
+              ,
               Text("\nTAREAS:"),
 
 
@@ -227,24 +223,15 @@ class perfilAlumnoState extends State<perfilAlumno>{
     actualizar();
   }
 
-  cargarImagen() async{
-    imagenPerfil = await lecturaImagen(usuarioPerfil.foto);
-    actualizar();
-  }
-
-
   lecturaImagen(path) async
   {
      return await base.leerImagen(path);
   }
 
 
-
   void actualizar()
   {
-    if(imagenPerfil == null && usuarioPerfil != null){
-        cargarImagen();
-    }
+
     setState(() {
 
     });

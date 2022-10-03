@@ -13,6 +13,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 
+String encriptacionSha256(String password)
+{
+  var data = utf8.encode(password);
+  var hashvalue = sha256.convert(data);
+
+  return hashvalue.toString();
+}
 
 
 class AccesoBD{
@@ -20,88 +27,117 @@ class AccesoBD{
   var db = FirebaseFirestore.instance;
   var storageRef = FirebaseStorage.instance.ref();
 
-  registrarUsuario(usuario) async{
 
-    var data = utf8.encode(usuario.password);
-    var hashvalue = sha256.convert(data);
+  registrarUsuario(usuario,foto) async{
 
-    final user = <String, dynamic>{
-      "nombre" : usuario.nombre,
-      "apellidos" : usuario.apellidos,
-      "password" : hashvalue.toString(),
-      "fechanacimiento" : usuario.fechanacimiento,
-      "rol" : usuario.rol
-    };
+    try {
+      //Se encripta la contaseña
+      var nuevaPassword = encriptacionSha256(usuario.password);
+      var nombrehaseao = encriptacionSha256(usuario.apellidos + usuario.fechanacimiento);
 
-    db.collection("usuarios").add(user).then((DocumentReference doc) => print('DocumentSnapshot added with ID: ${doc.id}'));
+      var fotoPath = "Imágenes/perfiles/${usuario.nombre+usuario.apellidos+nombrehaseao}";
+
+
+
+
+      print("Se envia la imagen");
+
+      await storageRef.child(fotoPath).putFile(foto).then((p0) async {
+          var fotoURL = await leerImagen(fotoPath);
+
+            var user = <String, dynamic>{
+              "nombre": usuario.nombre,
+              "apellidos": usuario.apellidos,
+              "password": nuevaPassword,
+              "fechanacimiento": usuario.fechanacimiento,
+              "rol": usuario.rol,
+              "foto": fotoURL,
+              "tareas": []
+            };
+
+        db.collection("usuarios").add(user);
+
+    });
+
+
+
+
+
+    }
+    catch(e){
+      print(e);
+    }
 
   }
 
-
-  leerDatos(path) async{
-    String valores = "";
-    await db.collection(path).get().then((event) => {
-      for(var doc in event.docs){
-        valores += "${doc.id} => ${doc.data()}"
-        }
-      }
-    );
-
-    return valores;
-
-  }
 
   consultarIDusuario(id) async{
 
-    final ref = db.collection("usuarios");
+    try {
+      final ref = db.collection("usuarios");
 
-    final consulta = ref.doc(id).withConverter(
-        fromFirestore: Usuario.fromFirestore,
-        toFirestore: (Usuario user, _) => user.toFirestore());
+      final consulta = ref.doc(id).withConverter(
+          fromFirestore: Usuario.fromFirestore,
+          toFirestore: (Usuario user, _) => user.toFirestore());
 
-    final docSnap = await consulta.get();
+      final docSnap = await consulta.get();
 
-    var usuario = null;
-    if(docSnap != null)
-      {
+      var usuario = null;
+      if (docSnap != null) {
         usuario = docSnap.data();
         usuario?.id = docSnap.id;
       }
 
 
-    return usuario;
+      return usuario;
+    }
+    catch(e){
+      print(e);
+    }
   }
 
   consultarTareas(id)
   {
 
-    final ref = db.collection("usuarios");
+    try {
+      final ref = db.collection("usuarios");
 
-    ref.doc(id).withConverter(
-        fromFirestore: Usuario.fromFirestore,
-        toFirestore: (Usuario user, _) => user.toFirestore()).snapshots().listen((event) {
-            var usuario = event.data();
-            Sesion.misTareas = usuario?.tareas;
-            Sesion.paginaActual.actualizar();
-    });
+      ref.doc(id).withConverter(
+          fromFirestore: Usuario.fromFirestore,
+          toFirestore: (Usuario user, _) => user.toFirestore())
+          .snapshots()
+          .listen((event) {
+        var usuario = event.data();
+        Sesion.misTareas = usuario?.tareas;
+        Sesion.paginaActual.actualizar();
+      });
+    }
+    catch(e){
+      print(e);
+    }
 
   }
 
   addTareaAlumno(id,tarea) async{
-
-    final ref = db.collection("usuarios");
-    if(Sesion.misTareas == null)
-      Sesion.misTareas = [];
-    Sesion.misTareas.add(tarea);
-    ref.doc(id).update({
-      "tareas" : Sesion.misTareas,
-    });
+    try {
+      final ref = db.collection("usuarios");
+      if (Sesion.misTareas == null)
+        Sesion.misTareas = [];
+      Sesion.misTareas.add(tarea);
+      ref.doc(id).update({
+        "tareas": Sesion.misTareas,
+      });
+    }
+    catch(e){
+      print(e);
+    }
 
   }
 
   eliminarTareaAlumno(id,tarea) async{
 
-    if(Sesion.misTareas != null && Sesion.misTareas != [])
+    try{
+      if(Sesion.misTareas != null && Sesion.misTareas != [])
       {
         final ref = db.collection("usuarios");
         Sesion.misTareas.remove(tarea);
@@ -109,63 +145,77 @@ class AccesoBD{
           "tareas" : Sesion.misTareas,
         });
       }
+    }catch(e){
+      print(e);
+    }
+
+
 
 
   }
   consultarTodosUsuarios() async
   {
-    var usuarios = [];
+    try{
+      var usuarios = [];
 
-    final ref = db.collection("usuarios").withConverter(
-        fromFirestore: Usuario.fromFirestore,
-        toFirestore: (Usuario user, _) => user.toFirestore());
+      final ref = db.collection("usuarios").withConverter(
+          fromFirestore: Usuario.fromFirestore,
+          toFirestore: (Usuario user, _) => user.toFirestore());
 
-    final consulta = await ref.get();
+      final consulta = await ref.get();
 
 
-    consulta.docs.forEach((element) {
-      final usuarioNuevo = element.data();
-      usuarioNuevo.id = element.id;
-      usuarios.add(usuarioNuevo);
-    });
+      consulta.docs.forEach((element) {
+        final usuarioNuevo = element.data();
+        usuarioNuevo.id = element.id;
+        usuarios.add(usuarioNuevo);
+      });
 
-    return usuarios;
+      return usuarios;
+    }catch(e){
+      print(e);
+    }
 
   }
 
   consultarTodosAlumnos() async
   {
-    var usuarios = [];
+    try {
+      var usuarios = [];
 
-    final ref = db.collection("usuarios").withConverter(
-        fromFirestore: Usuario.fromFirestore,
-        toFirestore: (Usuario user, _) => user.toFirestore());
+      final ref = db.collection("usuarios").withConverter(
+          fromFirestore: Usuario.fromFirestore,
+          toFirestore: (Usuario user, _) => user.toFirestore());
 
-    final consulta = await ref.where("rol",isEqualTo: "Rol.alumno").get();
+      final consulta = await ref.where("rol", isEqualTo: "Rol.alumno").get();
 
-    consulta.docs.forEach((element) {
-      final usuarioNuevo = element.data();
-      usuarioNuevo.id = element.id;
-      usuarios.add(usuarioNuevo);
-    });
+      consulta.docs.forEach((element) {
+        final usuarioNuevo = element.data();
+        usuarioNuevo.id = element.id;
+        usuarios.add(usuarioNuevo);
+      });
 
-    return usuarios;
+      return usuarios;
+    }catch(e){
+      print(e);
+    }
   }
 
   checkearPassword(id,password) async
   {
-    var resultado = await consultarIDusuario(id);
+    try {
+      var resultado = await consultarIDusuario(id);
 
-    var data = utf8.encode(password);
-    var hashvalue = sha256.convert(data);
+      var PassEncriptada = encriptacionSha256(password);
 
-    if(hashvalue.toString() == resultado.password)
-      {
-
+      if (PassEncriptada == resultado.password) {
         return true;
       }
-    else
+      else
         return false;
+    }catch(e){
+      print(e);
+    }
   }
 
   leerImagen(path) async{
@@ -176,7 +226,7 @@ class AccesoBD{
     try {
       const oneMegabyte = 1024 * 1024;
       final String? data = await imagen.getDownloadURL();
-      print("imagen cargada");
+      print("imagen cargada ${data}");
       return data;
       // Data for "images/island.jpg" is returned, use this as needed.
     } on FirebaseException catch (e) {
