@@ -27,7 +27,7 @@ class LoginPageState extends State<LoginPage>{
   AccesoBD base = new AccesoBD();
   var usuarios;
   var imagenUgr;
-  var maxUsuariosPorFila = 3;
+  var maxUsuariosPorFila = 2;
 
 
   @override
@@ -57,12 +57,27 @@ class LoginPageState extends State<LoginPage>{
 
 
 
-              if(imagenUgr != null)...[
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
 
-                Image.network(imagenUgr,width:100,
-                  height: 70,
-                  fit: BoxFit.fill,),
-              ],
+                children: [
+
+                    if(imagenUgr != null)...[
+
+                      Image.network(imagenUgr,width:100,
+                        height: 100,
+                        fit: BoxFit.fill,),
+                    ],
+                  Image.asset("assets/mochileros.png" ,
+                          width:100 ,
+                      height:100)
+
+
+                ]
+
+              ),
+
+
 
               Text('Créditos: Los mochileros'),
               Text('Rafael Guzmán , Blanca Abril , Javier Mesa , José Paneque , Hicham Bouchemma , Emilio Vargas'),
@@ -85,8 +100,10 @@ class LoginPageState extends State<LoginPage>{
 
   SeleccionUsuario() async
   {
-      Navigator.push(context,
+      await Navigator.push(context,
       MaterialPageRoute(builder: (context) => PasswordLogin()));
+
+      inicializar();
   }
 
 

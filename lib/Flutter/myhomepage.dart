@@ -19,7 +19,10 @@ import 'package:video_player/video_player.dart';
 
 import "package:image_picker/image_picker.dart";
 
-
+enum seleccionImagen{
+  camara,
+  galeria
+}
 
 
 class MyHomePage extends StatefulWidget{
@@ -39,6 +42,9 @@ class MyHomePageState extends State<MyHomePage>{
   var alumnos = [];
   var fotoTomada;
   ImagePicker capturador = new ImagePicker();
+
+  var registrando = false;
+  var mensajeDeRegistro = "";
 
 
 
@@ -85,13 +91,24 @@ class MyHomePageState extends State<MyHomePage>{
 
   }
 
-  selectFromCamera() async{
+  selectFromCamera(seleccion) async{
 
     try {
+      if(seleccion == seleccionImagen.camara)
+        {
       print("Se va a abrir la cámara de fotos");
         fotoTomada =  await capturador.pickImage(
             source: ImageSource.camera,
-        );
+            imageQuality: 15,
+
+        );}
+    else
+      {
+        print("Se coger una foto de la galería");
+        fotoTomada =  await capturador.pickImage(
+            source: ImageSource.gallery,
+            imageQuality: 15);
+      }
 
     }
     catch(e){
@@ -299,7 +316,11 @@ class MyHomePageState extends State<MyHomePage>{
 
             ElevatedButton(
                 child: Text('Haz una foto para la imagen de perfil'),
-                onPressed: selectFromCamera
+                onPressed: (){selectFromCamera(seleccionImagen.camara);}
+            ),
+            ElevatedButton(
+                child: Text('Elige una foto de la galería'),
+                onPressed: (){selectFromCamera(seleccionImagen.galeria);}
             ),
 
             SizedBox(
@@ -310,33 +331,34 @@ class MyHomePageState extends State<MyHomePage>{
                   : Center(child: Image.file(File(fotoTomada.path))),
             ),
 
+            Text(mensajeDeRegistro),
+
+            Visibility(
+                visible: !registrando,
+                child:
             TextButton(
-              child: Text("Enviar",
+              child: Text("Registrar",
                 style: TextStyle(
                     color: Colors.cyan,
                     decorationColor: Colors.lightBlueAccent
                 ),
               ),
               onPressed: () {
-
-                try {
-                  var nombre = "" + controladorNombre.text;
-                  var apellidos = "" + controladorApellidos.text;
-                  var password = "" + controladorPassword.text;
-                  var fechanacimiento = "" + controladorFechanacimiento.text;
-                  var rol = "Rol.alumno" + controladorRol.text;
-
-
-                  Usuario usuario = Usuario();
-                  usuario.setUsuario(
-                      nombre, apellidos, password, fechanacimiento, rol, "");
-                  registrarUsuario(usuario, File(fotoTomada.path));
-                }
-                catch(e){print(e);}
-
+                registrarUsuario();
               },
 
             )
+            ),
+
+
+            Visibility(
+                visible: registrando,
+                child: new CircularProgressIndicator()
+
+            ),
+
+
+
 
 
 
@@ -453,9 +475,55 @@ class MyHomePageState extends State<MyHomePage>{
 
 
   //Método para registrar usuario
-  registrarUsuario(usuario,foto)
+  registrarUsuario()
   {
-    base.registrarUsuario(usuario,foto);
+
+    // FALTARIA HACER COMPROBACIÓN DE QUE EL NOMBRE Y APELLIDOS YA ESTÁN REGISTRADOS EN LA BASE DE DATOS
+
+    if(controladorNombre.text.isNotEmpty && controladorApellidos.text.isNotEmpty && controladorPassword.text.isNotEmpty
+        && controladorFechanacimiento.text.isNotEmpty && fotoTomada != null)
+    {
+      registrando = true;
+      actualizar();
+
+      var nombre = "" + controladorNombre.text;
+      var apellidos = "" + controladorApellidos.text;
+      var password = "" + controladorPassword.text;
+      var fechanacimiento = "" + controladorFechanacimiento.text;
+      var rol = "Rol.alumno" + controladorRol.text;
+
+      Usuario usuario = Usuario();
+      usuario.setUsuario(
+          nombre, apellidos, password, fechanacimiento, rol, "");
+
+
+      var future = base.registrarUsuario(usuario, File(fotoTomada.path));
+
+      future.then((value) {
+        registrando = false;
+
+        if (value) {
+          controladorNombre.text = "";
+          controladorApellidos.text = "";
+          controladorPassword.text = "";
+          controladorFechanacimiento.text = "";
+          fotoTomada = null;
+
+          mensajeDeRegistro =
+          "Registro completado correctamente\nPuedes volver a registrar otro usuario:";
+        }
+        else {
+          mensajeDeRegistro = "Fallo al registrar, inténtelo de nuevo";
+        }
+
+        actualizar();
+      });
+    }
+    else
+      {
+        mensajeDeRegistro = "Es necesario rellenar todos los campos";
+        actualizar();
+      }
   }
 
 

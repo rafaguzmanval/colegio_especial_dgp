@@ -40,7 +40,7 @@ class AccesoBD{
 
       print("Se envia la imagen");
 
-      await storageRef.child(fotoPath).putFile(foto).then((p0) async {
+      return await storageRef.child(fotoPath).putFile(foto).then((p0) async {
           var fotoURL = await leerImagen(fotoPath);
 
             var user = <String, dynamic>{
@@ -53,12 +53,15 @@ class AccesoBD{
               "tareas": []
             };
 
-        db.collection("usuarios").add(user);
+          db.collection("usuarios").add(user);
+
+          return true;
 
       });
     }
     catch(e){
       print(e);
+      return false;
     }
 
   }
