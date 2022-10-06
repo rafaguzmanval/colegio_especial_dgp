@@ -48,39 +48,42 @@ class PasswordLoginState extends State<PasswordLogin>{
 
     return Scaffold(
       appBar:AppBar(
-          title:  Text('Hola ${Sesion.nombre}')
-      ),
-      body: Container(
-        alignment: Alignment.center,
-          child: Column(
-            children: [
-              TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  border:OutlineInputBorder(),
-                  hintText: 'Introduce la clave',
-                    ),
-                  controller: myController,
-                ),
-
-                  FlatButton(
-                    child: Text("Enviar",
-                      style: TextStyle(
-                        color: Colors.cyan,
-                        decorationColor: Colors.lightBlueAccent
-                      ),
-                    ),
-                    onPressed: () {
-                      ComprobarLogeo(Sesion.id, myController.text);
-                    },
-
-
-                  )
-            ],
-          )
-
+          title:  Text('Hola ${Sesion.nombre}'),
 
       ),
+      body:
+          Container(
+              margin:EdgeInsets.all(5),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+
+                children: [
+                  TextField(
+                    obscureText: true,
+
+                    decoration: InputDecoration(
+                      border:OutlineInputBorder(),
+                      hintText: 'Introduce la clave',
+                        ),
+                      controller: myController,
+                    ),
+
+                  ElevatedButton(
+                        child: Text("Enviar",
+                          style: TextStyle(
+                            color: Colors.black54,
+                          ),
+                        ),
+                        onPressed: () {
+                          ComprobarLogeo(Sesion.id, myController.text);
+                        },
+
+
+                      )
+                ],
+              )
+
+        ),
     );
   }
 
@@ -106,49 +109,6 @@ class PasswordLoginState extends State<PasswordLogin>{
 
       }
   }
-
-
-  Widget ListaUsuarios()
-  {
-    if(usuarios == null)
-      return Container();
-    else
-    return
-      Container(
-        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-          child:Column(
-              children:[
-                          for(int i = 0; i < usuarios.length; i++)
-                            Container(
-                              constraints: BoxConstraints(maxWidth: 70,minWidth: 30),
-                              margin: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                color: Colors.cyan,
-                                borderRadius: BorderRadius.circular(20)),
-                              alignment: Alignment.center,
-                              child: FlatButton(
-                                child: Text(usuarios[i].nombre,
-                                    style: TextStyle(
-                                          color: Colors.white,
-                                      ),
-                                    ),
-                                 onPressed: () {
-                                     ComprobarLogeo(usuarios[i].id, usuarios[i].password);
-                                 },
-
-
-                              )
-
-                            )
-                      ]
-                )
-
-
-
-      );
-  }
-
-
 
   void _actualizar() async
   {

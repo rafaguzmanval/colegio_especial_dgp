@@ -100,39 +100,44 @@ class LoginPageState extends State<LoginPage>{
         Container(
           //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
             child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if(usuarios != null)...[
-                    for(int i = 0; i < usuarios.length; i++)
+                  for(int i = 0; i < usuarios.length/2; i++)
+                    Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+
+                      children: [
+                        for(int j = i*2; j < (i*2) + 2 && j < usuarios.length; j++)
                       Container(
-                          constraints: BoxConstraints(
-                              maxWidth: 100, minWidth: 30),
-                          margin: EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              color: Colors.cyan,
-                              borderRadius: BorderRadius.circular(20)),
+                          width:100,
+                          height: 100,
+                          margin: EdgeInsets.all(20),
                           alignment: Alignment.center,
-                          child: FlatButton(
+                          child: ElevatedButton(
                             child: Column(
                               children: [
-                                Text(usuarios[i].nombre,
+                                Text(usuarios[j].nombre,
                                   style: TextStyle(
                                     color: Colors.white,
                                   ),
                                 ),
 
-                                  Image(
-                                      width: 50,
-                                      height: 50,
-                                      image: NetworkImage(usuarios[i].foto))
+                                Image(
+                                    width: 100,
+                                    height: 70,
+                                    fit: BoxFit.fill,
 
 
+                                    image: NetworkImage(usuarios[j].foto))
                               ],
 
                             ),
                             onPressed: () {
-                              Sesion.id = usuarios[i].id;
-                              Sesion.nombre = usuarios[i].nombre;
-                              Sesion.rol = usuarios[i].rol;
+                              Sesion.id = usuarios[j].id;
+                              Sesion.nombre = usuarios[j].nombre;
+                              Sesion.rol = usuarios[j].rol;
                               SeleccionUsuario();
                             },
 
@@ -140,6 +145,10 @@ class LoginPageState extends State<LoginPage>{
                           )
 
                       )
+                      ],
+                    )
+
+                     )
                   ]
                 ]
             )

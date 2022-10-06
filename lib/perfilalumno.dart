@@ -13,10 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 
-
-
-
-
 class perfilAlumno extends StatefulWidget{
 
   @override
@@ -62,7 +58,7 @@ class perfilAlumnoState extends State<perfilAlumno>{
             ''),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(vertical: 0, horizontal:  200),
+        padding: EdgeInsets.symmetric(vertical: 0, horizontal:  10),
         child: Column(
           children: [
 
@@ -143,7 +139,7 @@ class perfilAlumnoState extends State<perfilAlumno>{
                 controller: myController,
               ),
 
-              FlatButton(
+              ElevatedButton(
                 child: Text("Añadir Tarea",
                   style: TextStyle(
                       color: Colors.amberAccent,

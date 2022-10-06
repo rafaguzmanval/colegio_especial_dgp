@@ -38,8 +38,6 @@ class AccesoBD{
       var fotoPath = "Imágenes/perfiles/${usuario.nombre+usuario.apellidos+nombrehaseao}";
 
 
-
-
       print("Se envia la imagen");
 
       await storageRef.child(fotoPath).putFile(foto).then((p0) async {
@@ -57,12 +55,7 @@ class AccesoBD{
 
         db.collection("usuarios").add(user);
 
-    });
-
-
-
-
-
+      });
     }
     catch(e){
       print(e);
@@ -148,9 +141,6 @@ class AccesoBD{
     }catch(e){
       print(e);
     }
-
-
-
 
   }
   consultarTodosUsuarios() async

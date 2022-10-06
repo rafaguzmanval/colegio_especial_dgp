@@ -22,7 +22,7 @@ class App extends StatelessWidget{
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Proyecto Colegio Especial',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(primarySwatch: Colors.deepOrange),
       home: LoginPage(),
     );
   }

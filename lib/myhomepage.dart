@@ -17,9 +17,7 @@ import 'package:flutter/material.dart';
 
 import 'package:video_player/video_player.dart';
 
-import 'package:image_picker/image_picker.dart';
-
-
+import "package:image_picker/image_picker.dart";
 
 
 
@@ -40,6 +38,7 @@ class MyHomePageState extends State<MyHomePage>{
   var video = null;
   var alumnos = [];
   var fotoTomada;
+  ImagePicker capturador = new ImagePicker();
 
 
 
@@ -87,10 +86,17 @@ class MyHomePageState extends State<MyHomePage>{
   }
 
   selectFromCamera() async{
-    fotoTomada = await ImagePicker().pickImage(
-      source: ImageSource.camera,
 
-    );
+    try {
+      print("Se va a abrir la cámara de fotos");
+        fotoTomada =  await capturador.pickImage(
+            source: ImageSource.camera,
+        );
+
+    }
+    catch(e){
+      print(e);
+    }
     actualizar();
   }
 
@@ -110,7 +116,7 @@ class MyHomePageState extends State<MyHomePage>{
         ),
         body: Container(
 
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal:  200),
+            padding: EdgeInsets.symmetric(vertical: 0, horizontal:  0),
             child: Column(
               children: [
 
@@ -162,7 +168,7 @@ class MyHomePageState extends State<MyHomePage>{
                       color: Colors.cyan,
                       borderRadius: BorderRadius.circular(20)),
                   alignment: Alignment.center,
-                  child: FlatButton(
+                  child: ElevatedButton(
                     child: Text(alumnos[i].nombre,
                       style: TextStyle(
                         color: Colors.white,
@@ -301,7 +307,7 @@ class MyHomePageState extends State<MyHomePage>{
               width: 100,
                 child: fotoTomada == null
                   ? Center(child: Text('Ninguna foto tomada'))
-                  : Center(child: Image.file(File(fotoTomada.path)))
+                  : Center(child: Image.file(File(fotoTomada.path))),
             ),
 
             TextButton(
@@ -313,15 +319,20 @@ class MyHomePageState extends State<MyHomePage>{
               ),
               onPressed: () {
 
-                var nombre = "" + controladorNombre.text;
-                var apellidos = "" + controladorApellidos.text;
-                var password = "" + controladorPassword.text;
-                var fechanacimiento = "" + controladorFechanacimiento.text;
-                var rol = "Rol.alumno" + controladorRol.text;
+                try {
+                  var nombre = "" + controladorNombre.text;
+                  var apellidos = "" + controladorApellidos.text;
+                  var password = "" + controladorPassword.text;
+                  var fechanacimiento = "" + controladorFechanacimiento.text;
+                  var rol = "Rol.alumno" + controladorRol.text;
 
-                Usuario usuario = Usuario();
-                usuario.setUsuario(nombre, apellidos, password, fechanacimiento, rol, "");
-                registrarUsuario(usuario, File(fotoTomada.path));
+
+                  Usuario usuario = Usuario();
+                  usuario.setUsuario(
+                      nombre, apellidos, password, fechanacimiento, rol, "");
+                  registrarUsuario(usuario, File(fotoTomada.path));
+                }
+                catch(e){print(e);}
 
               },
 
