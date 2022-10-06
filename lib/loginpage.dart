@@ -27,6 +27,7 @@ class LoginPageState extends State<LoginPage>{
   AccesoBD base = new AccesoBD();
   var usuarios;
   var imagenUgr;
+  var maxUsuariosPorFila = 3;
 
 
   @override
@@ -57,11 +58,10 @@ class LoginPageState extends State<LoginPage>{
 
 
               if(imagenUgr != null)...[
-                Image(
-                  image: NetworkImage(imagenUgr),
-                  width: 100,
-                  height: 100,
-                )
+
+                Image.network(imagenUgr,width:100,
+                  height: 70,
+                  fit: BoxFit.fill,),
               ],
 
               Text('Créditos: Los mochileros'),
@@ -103,13 +103,13 @@ class LoginPageState extends State<LoginPage>{
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if(usuarios != null)...[
-                  for(int i = 0; i < usuarios.length/2; i++)
+                  for(int i = 0; i < usuarios.length/maxUsuariosPorFila; i++)
                     Container(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
 
                       children: [
-                        for(int j = i*2; j < (i*2) + 2 && j < usuarios.length; j++)
+                        for(int j = i*maxUsuariosPorFila; j < (i*maxUsuariosPorFila) + maxUsuariosPorFila && j < usuarios.length; j++)
                       Container(
                           width:100,
                           height: 100,
@@ -124,13 +124,9 @@ class LoginPageState extends State<LoginPage>{
                                   ),
                                 ),
 
-                                Image(
-                                    width: 100,
-                                    height: 70,
-                                    fit: BoxFit.fill,
-
-
-                                    image: NetworkImage(usuarios[j].foto))
+                                Image.network(usuarios[j].foto,width:100,
+                                  height: 70,
+                                  fit: BoxFit.fill,),
                               ],
 
                             ),
