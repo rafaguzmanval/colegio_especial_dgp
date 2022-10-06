@@ -2,15 +2,15 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:colegio_especial_dgp/Sesion.dart';
-import 'package:colegio_especial_dgp/discapacidad.dart';
-import 'package:colegio_especial_dgp/loginpage.dart';
-import 'package:colegio_especial_dgp/perfilalumno.dart';
-import 'package:colegio_especial_dgp/rol.dart';
-import 'clase.dart';
-import 'usuario.dart';
+import 'package:colegio_especial_dgp/Dart/Sesion.dart';
+import 'package:colegio_especial_dgp/Dart/discapacidad.dart';
+import 'package:colegio_especial_dgp/Flutter/loginpage.dart';
+import 'package:colegio_especial_dgp/Flutter/perfilalumno.dart';
+import 'package:colegio_especial_dgp/Dart/rol.dart';
+import 'package:colegio_especial_dgp/Dart/clase.dart';
+import 'package:colegio_especial_dgp/Dart/usuario.dart';
 
-import 'package:colegio_especial_dgp/AccesoBD.dart';
+import 'package:colegio_especial_dgp/Dart/AccesoBD.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';

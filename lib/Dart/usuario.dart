@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:colegio_especial_dgp/passportmethod.dart';
-import 'package:colegio_especial_dgp/rol.dart';
+import 'package:colegio_especial_dgp/Dart/passportmethod.dart';
+import 'package:colegio_especial_dgp/Dart/rol.dart';
 
 class Usuario{
   var id;

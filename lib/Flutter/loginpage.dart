@@ -1,13 +1,13 @@
 
-import 'package:colegio_especial_dgp/discapacidad.dart';
-import 'package:colegio_especial_dgp/main.dart';
-import 'package:colegio_especial_dgp/myhomepage.dart';
-import 'package:colegio_especial_dgp/passwordLogin.dart';
-import 'clase.dart';
-import 'usuario.dart';
-import 'Sesion.dart';
+import 'package:colegio_especial_dgp/Dart/discapacidad.dart';
+import 'package:colegio_especial_dgp/Dart/main.dart';
+import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
+import 'package:colegio_especial_dgp/Flutter/passwordLogin.dart';
+import '../Dart/clase.dart';
+import '../Dart/usuario.dart';
+import '../Dart/Sesion.dart';
 
-import 'package:colegio_especial_dgp/AccesoBD.dart';
+import 'package:colegio_especial_dgp/Dart/AccesoBD.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';

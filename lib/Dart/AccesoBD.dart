@@ -3,11 +3,11 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:colegio_especial_dgp/Sesion.dart';
-import 'package:colegio_especial_dgp/perfilalumno.dart';
+import 'package:colegio_especial_dgp/Dart/Sesion.dart';
+import 'package:colegio_especial_dgp/Flutter/perfilalumno.dart';
 
-import 'package:colegio_especial_dgp/rol.dart';
-import 'package:colegio_especial_dgp/usuario.dart';
+import 'package:colegio_especial_dgp/Dart/rol.dart';
+import 'package:colegio_especial_dgp/Dart/usuario.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:crypto/crypto.dart';

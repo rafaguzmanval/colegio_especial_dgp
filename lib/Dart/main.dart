@@ -2,8 +2,8 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'myhomepage.dart';
-import 'loginpage.dart';
+import '../Flutter/myhomepage.dart';
+import '../Flutter/loginpage.dart';
 
 var user = "";
 
