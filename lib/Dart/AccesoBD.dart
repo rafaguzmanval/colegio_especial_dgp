@@ -93,7 +93,7 @@ class AccesoBD{
     }
   }
 
-  consultarTareasAsignadasAlumno(id)
+  consultarTareasAsignadasAlumno(id) async
   {
 
     try {
@@ -103,10 +103,22 @@ class AccesoBD{
           fromFirestore: Usuario.fromFirestore,
           toFirestore: (Usuario user, _) => user.toFirestore())
           .snapshots()
-          .listen((event) {
+          .listen((event) async{
+
         var usuario = event.data();
-        Sesion.misTareas = usuario?.tareas;
+        var nuevasTareas = [];
+        for(int i = 0; i < usuario?.tareas.length; i++){
+          print(usuario?.tareas[i]);
+            await consultarIDTarea(usuario?.tareas[i]).then( (nuevaTarea) {
+              nuevasTareas.add(nuevaTarea);
+
+             }
+            );
+        }
+
+        Sesion.misTareas = nuevasTareas;
         Sesion.paginaActual.actualizar();
+
       });
     }
     catch(e){
@@ -122,11 +134,20 @@ class AccesoBD{
   addTareaAlumno(id,tarea) async{
     try {
       final ref = db.collection("usuarios");
-      if (Sesion.misTareas == null)
-        Sesion.misTareas = [];
-      Sesion.misTareas.add(tarea);
+      var nuevasTareas = [];
+
+      if(Sesion.misTareas != null)
+        {
+          for(int i = 0; i < Sesion.misTareas.length; i++)
+            {
+              nuevasTareas.add(Sesion.misTareas[i].id);
+            }
+        }
+
+      nuevasTareas.add(tarea);
+
       ref.doc(id).update({
-        "tareas": Sesion.misTareas,
+        "tareas": nuevasTareas,
       });
     }
     catch(e){
@@ -135,15 +156,21 @@ class AccesoBD{
 
   }
 
-  eliminarTareaAlumno(id,tarea) async{
+  eliminarTareaAlumno(id,indicetarea) async{
 
     try{
       if(Sesion.misTareas != null && Sesion.misTareas != [])
       {
         final ref = db.collection("usuarios");
-        Sesion.misTareas.remove(tarea);
+
+        var nuevasTareas = [];
+
+        for(int i = 0; i < Sesion.misTareas.length; i++){
+          if(i != indicetarea) nuevasTareas.add(Sesion.misTareas[i].id);
+        }
+
         ref.doc(id).update({
-          "tareas" : Sesion.misTareas,
+          "tareas" : nuevasTareas,
         });
       }
     }catch(e){
@@ -210,17 +237,45 @@ class AccesoBD{
 
       final consulta = await ref.get();
 
-      List<String> lista = [];
+      var lista = [];
 
       consulta.docs.forEach((element) {
-        print(element.data().nombre);
-        lista.add(element.data().nombre);
+        var nuevaTarea = element.data();
+        nuevaTarea.id = element.id;
+        lista.add(nuevaTarea);
       });
 
       return lista;
     }
     catch (e) {
     print(e);
+    }
+  }
+
+  consultarIDTarea(id) async{
+
+    try {
+      final ref = db.collection("Tareas");
+
+      final consulta = ref.doc(id).withConverter(
+          fromFirestore: Tarea.fromFirestore,
+          toFirestore: (Tarea tarea, _) => tarea.toFirestore());
+
+      final docSnap = await consulta.get();
+
+
+      var tarea = null;
+      if (docSnap != null) {
+
+        tarea = docSnap.data();
+        tarea?.id = docSnap.id;
+      }
+
+
+      return tarea;
+    }
+    catch(e){
+      print(e);
     }
   }
 

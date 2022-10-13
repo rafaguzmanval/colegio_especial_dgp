@@ -3,6 +3,7 @@ import 'package:colegio_especial_dgp/Dart/Sesion.dart';
 import 'package:colegio_especial_dgp/Dart/discapacidad.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import '../Dart/clase.dart';
+import '../Dart/tarea.dart';
 import '../Dart/usuario.dart';
 
 import 'package:colegio_especial_dgp/Dart/AccesoBD.dart';
@@ -29,8 +30,14 @@ class perfilAlumnoState extends State<perfilAlumno>{
 
   var imagenPerfil;
 
-  var tareas;
-  var tareaElegida;
+  //Tareas del alumno que están asignadas y se muestran en su perfil
+  var tareasAlumno = [];
+
+  //Todas las tareas que el profesor selecciona para asignar al alumno
+  var tareas = [];
+  var nombresTareas = ["Nada seleccionado"];
+  var tareaElegida = "Nada seleccionado";
+  var idTareaElegida = null;
 
   final myController = TextEditingController();
 
@@ -114,13 +121,18 @@ class perfilAlumnoState extends State<perfilAlumno>{
 
               if(Sesion.misTareas != null)...
                 [
+
                   for(int i = 0; i < Sesion.misTareas.length; i++)
+
+                    if(Sesion.misTareas[i] is Tarea)...[
                     Container(
+
                         child:Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
 
-                                Text(Sesion.misTareas[i]),
-                                IconButton(onPressed: () {base.eliminarTareaAlumno(Sesion.seleccion.id, Sesion.misTareas[i]);},
+                                Text(Sesion.misTareas[i].nombre),
+                                IconButton(onPressed: () {base.eliminarTareaAlumno(Sesion.seleccion.id, i);},
                                 icon: Icon(Icons.delete)
                                 )
 
@@ -129,6 +141,10 @@ class perfilAlumnoState extends State<perfilAlumno>{
                         )
 
                     ),
+                    ]
+                  else...[
+                    new CircularProgressIndicator()
+                    ]
                 ],
 
 
@@ -144,9 +160,13 @@ class perfilAlumnoState extends State<perfilAlumno>{
                 controller: myController,
               ),*/
 
+              if(tareas != null && nombresTareas.length > 1)...[
               DropdownButton(
-                  items: tareas.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
+
+                  value: tareaElegida,
+
+                  items: nombresTareas.map((String value) {
+                    return DropdownMenuItem(
                       value: value,
                       child: Text(value),
                     );
@@ -156,6 +176,25 @@ class perfilAlumnoState extends State<perfilAlumno>{
                   // This is called when the user selects an item.
                   setState(() {
                     tareaElegida = value!;
+
+                    if(tareaElegida == "Nada seleccionado"){
+                      idTareaElegida = null;
+                    }
+                    else
+                      {
+                        int i = 0;
+                        bool salir = false;
+                        while(i < tareas.length && !salir){
+
+                          if(tareas[i].nombre == tareaElegida){
+                            idTareaElegida = tareas[i].id;
+                            salir = true;
+                          }
+                          i++;
+                        }
+                      }
+
+
                   });
                 },
               ),
@@ -167,12 +206,15 @@ class perfilAlumnoState extends State<perfilAlumno>{
                   ),
                 ),
                 onPressed: () {
-                  if(tareaElegida != null)
-                  base.addTareaAlumno(Sesion.seleccion.id, tareaElegida);
+                  if(idTareaElegida != null)
+                    {
+                      base.addTareaAlumno(Sesion.seleccion.id, idTareaElegida);
+                    }
                 },
 
 
               )
+              ]
 
 
 
@@ -244,6 +286,11 @@ class perfilAlumnoState extends State<perfilAlumno>{
   cargarTareas() async
   {
     tareas = await base.consultarTodasLasTareas();
+
+    for(int i = 0; i < tareas.length; i++){
+      nombresTareas.add(tareas[i].nombre);
+    }
+
     actualizar();
   }
 

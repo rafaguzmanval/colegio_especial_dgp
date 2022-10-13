@@ -46,7 +46,9 @@ class MyHomePageState extends State<MyHomePage>{
   var registrando = false;
   var mensajeDeRegistro = "";
 
-
+  var indiceTextos = 0;
+  var indiceImagenes = 0;
+  var indiceVideos = 0;
 
   var db = FirebaseFirestore.instance;
 
@@ -231,16 +233,40 @@ class MyHomePageState extends State<MyHomePage>{
                                   color: Colors.cyan,
                                   borderRadius: BorderRadius.circular(20)),
                               alignment: Alignment.center,
-                                child: Text(Sesion.misTareas[i],
-                                  style: TextStyle(
-                                    color: Colors.white,
-
-                                ),
+                                child: Column(children: [
 
 
-                              )
 
-                          ),
+                                      Text(Sesion.misTareas[i].nombre,
+                                        style: TextStyle(
+                                          color: Colors.white,
+
+                                       ),
+                                      ),
+
+                                      for(int j = 0; j < Sesion.misTareas[i].orden.length; j++)
+                                        
+                                        if(Sesion.misTareas[i].orden[j] == "T")...[
+                                          Text(Sesion.misTareas[i].textos[indiceTextos]
+                                              ,style: TextStyle(
+                                                color: Colors.white,
+                                              )
+                                          ),
+                                          
+                                        ]
+                                        else if(Sesion.misTareas[i].orden[j] == "I")...[
+                                          
+                                          Image.network(Sesion.misTareas[i].imagenes[indiceImagenes])
+                                          
+                                          ]
+                                        else if(Sesion.misTareas[i].orden[j] == "V")...[
+
+                                          ]
+                                  
+                                ]
+
+                              ),
+                          )
                           ],
 
                           /*
@@ -558,6 +584,24 @@ Future<bool?> _onBackPressed(BuildContext context){
        );
   }
 
+  void resetIndicesTarea(){
+    indiceImagenes = 0;
+    indiceTextos = 0;
+    indiceVideos = 0;
+  }
+  
+  void incIndiceImagenes(){
+    indiceImagenes++;
+  }
+
+
+  void incIndiceTextos(){
+    indiceTextos++;
+  }
+
+  void incIndiceVideos(){
+    indiceVideos++;
+  }
 
  void actualizar() async
   {
