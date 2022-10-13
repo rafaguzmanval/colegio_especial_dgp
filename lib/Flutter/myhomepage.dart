@@ -77,6 +77,8 @@ class MyHomePageState extends State<MyHomePage>{
 
     Sesion.paginaActual = this;
 
+
+
     if(Sesion.rol == Rol.profesor.toString())
     {
       cargarAlumnos();
@@ -445,7 +447,7 @@ class MyHomePageState extends State<MyHomePage>{
   }
 
   cargarTareas() async {
-    await base.consultarTareas(Sesion.id);
+    await base.consultarTareasAsignadasAlumno(Sesion.id);
   }
 
   lecturaImagen(path)

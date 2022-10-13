@@ -29,6 +29,9 @@ class perfilAlumnoState extends State<perfilAlumno>{
 
   var imagenPerfil;
 
+  var tareas;
+  var tareaElegida;
+
   final myController = TextEditingController();
 
   @override
@@ -43,6 +46,8 @@ class perfilAlumnoState extends State<perfilAlumno>{
 
     Sesion.paginaActual = this;
     cargarUsuario();
+    cargarTareas();
+
 
 
   }
@@ -131,12 +136,28 @@ class perfilAlumnoState extends State<perfilAlumno>{
 
               Text("\n Añadir Tarea: "),
 
-              TextField(
+             /* TextField(
                 decoration: InputDecoration(
                   border:OutlineInputBorder(),
                   hintText: 'Introduce nueva tarea',
                 ),
                 controller: myController,
+              ),*/
+
+              DropdownButton(
+                  items: tareas.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+
+                onChanged: (String? value) {
+                  // This is called when the user selects an item.
+                  setState(() {
+                    tareaElegida = value!;
+                  });
+                },
               ),
 
               ElevatedButton(
@@ -146,7 +167,8 @@ class perfilAlumnoState extends State<perfilAlumno>{
                   ),
                 ),
                 onPressed: () {
-                  base.addTareaAlumno(Sesion.seleccion.id, myController.text);
+                  if(tareaElegida != null)
+                  base.addTareaAlumno(Sesion.seleccion.id, tareaElegida);
                 },
 
 
@@ -215,7 +237,13 @@ class perfilAlumnoState extends State<perfilAlumno>{
   cargarUsuario() async// EN sesion seleccion estara el id del usuario que se ha elegido
   {
     usuarioPerfil = await base.consultarIDusuario(Sesion.seleccion.id);
-    await base.consultarTareas(Sesion.seleccion.id);
+    await base.consultarTareasAsignadasAlumno(Sesion.seleccion.id);
+    actualizar();
+  }
+
+  cargarTareas() async
+  {
+    tareas = await base.consultarTodasLasTareas();
     actualizar();
   }
 

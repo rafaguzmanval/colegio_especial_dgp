@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/Sesion.dart';
+import 'package:colegio_especial_dgp/Dart/tarea.dart';
 import 'package:colegio_especial_dgp/Flutter/perfilalumno.dart';
 
 import 'package:colegio_especial_dgp/Dart/rol.dart';
@@ -92,7 +93,7 @@ class AccesoBD{
     }
   }
 
-  consultarTareas(id)
+  consultarTareasAsignadasAlumno(id)
   {
 
     try {
@@ -113,6 +114,10 @@ class AccesoBD{
     }
 
   }
+
+
+
+
 
   addTareaAlumno(id,tarea) async{
     try {
@@ -171,6 +176,8 @@ class AccesoBD{
 
   }
 
+
+
   consultarTodosAlumnos() async
   {
     try {
@@ -191,6 +198,29 @@ class AccesoBD{
       return usuarios;
     }catch(e){
       print(e);
+    }
+  }
+
+
+  consultarTodasLasTareas() async{
+    try {
+      final ref = db.collection("Tareas").withConverter(
+          fromFirestore: Tarea.fromFirestore,
+          toFirestore: (Tarea tarea,_) => tarea.toFirestore());
+
+      final consulta = await ref.get();
+
+      List<String> lista = [];
+
+      consulta.docs.forEach((element) {
+        print(element.data().nombre);
+        lista.add(element.data().nombre);
+      });
+
+      return lista;
+    }
+    catch (e) {
+    print(e);
     }
   }
 
