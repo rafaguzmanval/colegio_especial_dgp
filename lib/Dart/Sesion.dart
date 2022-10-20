@@ -6,6 +6,7 @@ class Sesion{
    static var misTareas;
    static var seleccion;
    static var paginaActual;
+   static var controladoresVideo = [];
 
    static reload(){
       id = null;

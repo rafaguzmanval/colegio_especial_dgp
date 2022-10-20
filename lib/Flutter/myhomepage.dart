@@ -34,7 +34,7 @@ class MyHomePage extends StatefulWidget{
 
 class MyHomePageState extends State<MyHomePage>{
 
-  late VideoPlayerController controller;
+
 
   var msg = "null";
   var imagen = null;
@@ -60,6 +60,9 @@ class MyHomePageState extends State<MyHomePage>{
   final controladorFechanacimiento = TextEditingController();
   final controladorRol = TextEditingController();
 
+  var controladoresVideo = [];
+
+
 
   @override
   void dispose(){
@@ -68,6 +71,14 @@ class MyHomePageState extends State<MyHomePage>{
     controladorPassword.dispose();
     controladorFechanacimiento.dispose();
     controladorRol.dispose();
+
+    for(int i = 0; i < Sesion.controladoresVideo.length;i++)
+      {
+        Sesion.controladoresVideo[i].dispose();
+      }
+
+    Sesion.controladoresVideo.clear();
+
     super.dispose();
   }
 
@@ -143,7 +154,7 @@ class MyHomePageState extends State<MyHomePage>{
 
 
                 if(Sesion.rol == Rol.alumno.toString())...[
-                  VistaAlumno()
+                  VistaAlumno(),
                 ]
                 else if(Sesion.rol == Rol.profesor.toString())...[
                   VistaProfesor()
@@ -156,6 +167,8 @@ class MyHomePageState extends State<MyHomePage>{
                     ]
               ],
             )
+
+
 
 
         ),
@@ -214,6 +227,7 @@ class MyHomePageState extends State<MyHomePage>{
 
   Widget VistaAlumno()
   {
+
     return
       Container(
         //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
@@ -236,7 +250,6 @@ class MyHomePageState extends State<MyHomePage>{
                                 child: Column(children: [
 
 
-
                                       Text(Sesion.misTareas[i].nombre,
                                         style: TextStyle(
                                           color: Colors.white,
@@ -244,29 +257,16 @@ class MyHomePageState extends State<MyHomePage>{
                                        ),
                                       ),
 
+                                      resetIndicesTarea(),
                                       for(int j = 0; j < Sesion.misTareas[i].orden.length; j++)
-                                        
-                                        if(Sesion.misTareas[i].orden[j] == "T")...[
-                                          Text(Sesion.misTareas[i].textos[indiceTextos]
-                                              ,style: TextStyle(
-                                                color: Colors.white,
-                                              )
-                                          ),
-                                          
-                                        ]
-                                        else if(Sesion.misTareas[i].orden[j] == "I")...[
-                                          
-                                          Image.network(Sesion.misTareas[i].imagenes[indiceImagenes])
-                                          
-                                          ]
-                                        else if(Sesion.misTareas[i].orden[j] == "V")...[
+                                        lecturaTarea(Sesion.misTareas[i].orden[j],i)
 
-                                          ]
                                   
                                 ]
 
                               ),
-                          )
+                          ),
+                          resetIndicesVideos()
                           ],
 
                           /*
@@ -395,6 +395,39 @@ class MyHomePageState extends State<MyHomePage>{
       );
   }
 
+  Widget lecturaTarea(String valor, i){
+
+
+    if(valor == "T")
+      {
+        String pathTexto = Sesion.misTareas[i].textos[indiceTextos];
+        incIndiceTextos();
+        return
+        Text(pathTexto
+          ,style: TextStyle(
+          color: Colors.white,
+          )
+        );
+      }
+    else if(valor == "I")
+      {
+        String pathImagen = Sesion.misTareas[i].imagenes[indiceImagenes];
+        incIndiceImagenes();
+        return
+          Image.network(pathImagen);
+      }
+    else if(valor == "V" && Sesion.controladoresVideo.length > 0 )
+      {
+        var indice = indiceVideos;
+        //incIndiceVideos();
+        print(indiceVideos);
+        return  ReproductorVideo(Sesion.controladoresVideo[indiceVideos++]);
+      }
+
+    else return
+        Container();
+  }
+
   Widget VistaProgramador()
   {
     return
@@ -411,26 +444,25 @@ class MyHomePageState extends State<MyHomePage>{
   }
 
 
-  Widget ReproductorVideo()
+  Widget ReproductorVideo(controlador)
   {
     return
     Container(
       //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
       child:Column(
         children:[
-          
           AspectRatio(
-            aspectRatio: controller.value.aspectRatio ,
-            child: VideoPlayer(controller)
+            aspectRatio: controlador.value.aspectRatio ,
+            child: VideoPlayer(controlador)
           ),
 
           Container( //duration of video
-            child: Text("Total Duration: " + controller.value.duration.toString()),
+            child: Text("Total Duration: " + controlador.value.duration.toString()),
           ),
 
           Container(
               child: VideoProgressIndicator(
-                  controller,
+                  controlador,
                   allowScrubbing: true,
                   colors:VideoProgressColors(
                     backgroundColor: Colors.black,
@@ -445,17 +477,17 @@ class MyHomePageState extends State<MyHomePage>{
               children: [
                 IconButton(
                     onPressed: (){
-                      if(controller.value.isPlaying){
-                        controller.pause();
+                      if(controlador.value.isPlaying){
+                        controlador.pause();
                       }else{
-                        controller.play();
+                        controlador.play();
                       }
 
                       setState(() {
 
                       });
                     },
-                    icon:Icon(controller.value.isPlaying?Icons.pause:Icons.play_arrow)
+                    icon:Icon(controlador.value.isPlaying?Icons.pause:Icons.play_arrow)
                 ),
 
               ],
@@ -473,7 +505,7 @@ class MyHomePageState extends State<MyHomePage>{
   }
 
   cargarTareas() async {
-    await base.consultarTareasAsignadasAlumno(Sesion.id);
+    await base.consultarTareasAsignadasAlumno(Sesion.id,true);
   }
 
   lecturaImagen(path)
@@ -491,13 +523,13 @@ class MyHomePageState extends State<MyHomePage>{
 
     var future = base.leerVideo(path);
 
-    future.then((value){
+    future.then((value){/*
       video = value;
       controller = VideoPlayerController.network(video);
       controller.initialize().then((value){
         setState(() {});
       });
-      actualizar();
+      actualizar();*/
     });
   }
 
@@ -584,10 +616,18 @@ Future<bool?> _onBackPressed(BuildContext context){
        );
   }
 
-  void resetIndicesTarea(){
+  Widget resetIndicesTarea(){
     indiceImagenes = 0;
     indiceTextos = 0;
+
+
+    return Container();
+  }
+
+  Widget resetIndicesVideos(){
     indiceVideos = 0;
+
+    return Container();
   }
   
   void incIndiceImagenes(){

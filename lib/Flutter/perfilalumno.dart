@@ -279,7 +279,7 @@ class perfilAlumnoState extends State<perfilAlumno>{
   cargarUsuario() async// EN sesion seleccion estara el id del usuario que se ha elegido
   {
     usuarioPerfil = await base.consultarIDusuario(Sesion.seleccion.id);
-    await base.consultarTareasAsignadasAlumno(Sesion.seleccion.id);
+    await base.consultarTareasAsignadasAlumno(Sesion.seleccion.id,false);
     actualizar();
   }
 

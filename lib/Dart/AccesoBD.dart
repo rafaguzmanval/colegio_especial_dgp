@@ -13,6 +13,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 
 String encriptacionSha256(String password)
 {
@@ -93,7 +94,7 @@ class AccesoBD{
     }
   }
 
-  consultarTareasAsignadasAlumno(id) async
+  consultarTareasAsignadasAlumno(id,cargarVideos) async
   {
 
     try {
@@ -117,12 +118,37 @@ class AccesoBD{
         }
 
         Sesion.misTareas = nuevasTareas;
+
+        if(cargarVideos)
+          {
+            try {
+              for (int i = 0; i < Sesion.misTareas.length; i++) {
+                for (int j = 0; j < Sesion.misTareas[i].videos.length; j++) {
+                  print("nuevo video " + Sesion.misTareas[i].videos[j]);
+                  var nuevoControlador = VideoPlayerController.network(
+                      Sesion.misTareas[i].videos[j]);
+                  Sesion.controladoresVideo.add(nuevoControlador);
+                  Sesion.controladoresVideo.last.initialize()
+                      .then((value) {
+
+                  });
+                }
+              }
+            }
+            catch(e){print(e);};
+          }
+
         Sesion.paginaActual.actualizar();
+        return;
 
       });
+
+
+
     }
     catch(e){
       print(e);
+      return false;
     }
 
   }
