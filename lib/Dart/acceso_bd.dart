@@ -100,7 +100,7 @@ class AccesoBD{
     try {
       final ref = db.collection("usuarioTieneTareas");
 
-      await ref.where("idUsuario",isEqualTo: id).get().then((e) async{
+      await ref.where("idUsuario",isEqualTo: id).snapshots().listen((e) async{
 
         var nuevasTareas = [];
         for(int i = 0; i < e.docs.length; i++)
