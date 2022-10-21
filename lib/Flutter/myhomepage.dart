@@ -19,6 +19,8 @@ import 'package:video_player/video_player.dart';
 
 import "package:image_picker/image_picker.dart";
 
+import "package:flutter_tts/flutter_tts.dart";
+
 enum SeleccionImagen{
   camara,
   galeria
@@ -60,6 +62,10 @@ class MyHomePageState extends State<MyHomePage>{
   final controladorRol = TextEditingController();
 
   var controladoresVideo = [];
+
+  var lenguajes;
+
+  FlutterTts tts = new FlutterTts();
 
 
   ///Cuándo se pasa de página es necesario que todos los controladores de los formularios y de los reproductores de vídeo se destruyan.
@@ -103,8 +109,16 @@ class MyHomePageState extends State<MyHomePage>{
       print("Cargando tareas");
       cargarTareas();
     }
+    initTTS();
 
+  }
 
+  void initTTS() async{
+      lenguajes = List<String>.from(await tts.getLanguages);
+      await tts.setVolume(1.0);
+      await tts.setPitch(1.0);
+      await tts.setLanguage("es-ES");
+      actualizar();
   }
 
   ///introduce en el atributo @fototomada la imagen, @seleccion nos indica si el método va a ser desde la cámara o de galería
@@ -647,6 +661,9 @@ Future<bool?> _onBackPressed(BuildContext context){
     setState((){});
   }
 
+  void _speak(text) async{
+    await tts.speak(text);
+  }
 
 }
 
