@@ -1,12 +1,12 @@
 
-import 'package:colegio_especial_dgp/Dart/Sesion.dart';
+import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/discapacidad.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import '../Dart/clase.dart';
 import '../Dart/tarea.dart';
 import '../Dart/usuario.dart';
 
-import 'package:colegio_especial_dgp/Dart/AccesoBD.dart';
+import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -14,14 +14,14 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 
-class perfilAlumno extends StatefulWidget{
+class PerfilAlumno extends StatefulWidget{
 
   @override
-  perfilAlumnoState createState() => perfilAlumnoState();
+  PerfilAlumnoState createState() => PerfilAlumnoState();
 
 }
 
-class perfilAlumnoState extends State<perfilAlumno>{
+class PerfilAlumnoState extends State<PerfilAlumno>{
 
 
   AccesoBD base = new AccesoBD();
@@ -119,20 +119,20 @@ class perfilAlumnoState extends State<perfilAlumno>{
               Text("\nTAREAS:"),
 
 
-              if(Sesion.misTareas != null)...
+              if(Sesion.tareas != null)...
                 [
 
-                  for(int i = 0; i < Sesion.misTareas.length; i++)
+                  for(int i = 0; i < Sesion.tareas.length; i++)
 
-                    if(Sesion.misTareas[i] is Tarea)...[
+                    if(Sesion.tareas[i] is Tarea)...[
                     Container(
 
                         child:Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
 
-                                Text(Sesion.misTareas[i].nombre),
-                                IconButton(onPressed: () {base.eliminarTareaAlumno(Sesion.seleccion.id, i);},
+                                Text(Sesion.tareas[i].nombre),
+                                IconButton(onPressed: () {base.eliminarTareaAlumno(Sesion.tareas[i].idRelacion);},
                                 icon: Icon(Icons.delete)
                                 )
 

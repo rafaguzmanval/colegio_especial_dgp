@@ -2,15 +2,15 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:colegio_especial_dgp/Dart/Sesion.dart';
+import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/discapacidad.dart';
 import 'package:colegio_especial_dgp/Flutter/loginpage.dart';
-import 'package:colegio_especial_dgp/Flutter/perfilalumno.dart';
+import 'package:colegio_especial_dgp/Flutter/perfil_alumno.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/clase.dart';
 import 'package:colegio_especial_dgp/Dart/usuario.dart';
 
-import 'package:colegio_especial_dgp/Dart/AccesoBD.dart';
+import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -19,7 +19,7 @@ import 'package:video_player/video_player.dart';
 
 import "package:image_picker/image_picker.dart";
 
-enum seleccionImagen{
+enum SeleccionImagen{
   camara,
   galeria
 }
@@ -33,7 +33,6 @@ class MyHomePage extends StatefulWidget{
 }
 
 class MyHomePageState extends State<MyHomePage>{
-
 
 
   var msg = "null";
@@ -63,7 +62,7 @@ class MyHomePageState extends State<MyHomePage>{
   var controladoresVideo = [];
 
 
-
+  ///Cuándo se pasa de página es necesario que todos los controladores de los formularios y de los reproductores de vídeo se destruyan.
   @override
   void dispose(){
     controladorNombre.dispose();
@@ -90,7 +89,9 @@ class MyHomePageState extends State<MyHomePage>{
 
     Sesion.paginaActual = this;
 
-
+    Sesion.seleccion = "";
+    Sesion.tareas = [];
+    Sesion.controladoresVideo = [];
 
     if(Sesion.rol == Rol.profesor.toString())
     {
@@ -106,10 +107,11 @@ class MyHomePageState extends State<MyHomePage>{
 
   }
 
-  selectFromCamera(seleccion) async{
+  ///introduce en el atributo @fototomada la imagen, @seleccion nos indica si el método va a ser desde la cámara o de galería
+  seleccionarImagen(seleccion) async{
 
     try {
-      if(seleccion == seleccionImagen.camara)
+      if(seleccion == SeleccionImagen.camara)
         {
       print("Se va a abrir la cámara de fotos");
         fotoTomada =  await capturador.pickImage(
@@ -133,10 +135,10 @@ class MyHomePageState extends State<MyHomePage>{
   }
 
 
+  /// Este es el build de la clase MyHomePage que devuelve toda la vista génerica más la vista especial de cada usuario.
   @override
   Widget build(BuildContext context){
-
-
+    
     return
 
       new WillPopScope(child: new Scaffold(
@@ -182,7 +184,7 @@ class MyHomePageState extends State<MyHomePage>{
 
   }
 
-
+  ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
   Widget VistaProfesor()
   {
     return
@@ -211,7 +213,7 @@ class MyHomePageState extends State<MyHomePage>{
                     onPressed: () {
                       Sesion.seleccion = alumnos[i];
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => perfilAlumno()));
+                          MaterialPageRoute(builder: (context) => PerfilAlumno()));
                     },
 
 
@@ -224,7 +226,7 @@ class MyHomePageState extends State<MyHomePage>{
       );
   }
 
-
+  ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
   Widget VistaAlumno()
   {
 
@@ -237,8 +239,9 @@ class MyHomePageState extends State<MyHomePage>{
                         Text("Eres un alumno"),
 
 
-                        if(Sesion.misTareas != null)...[
-                        for(int i = 0; i < Sesion.misTareas.length; i++)
+                        if(Sesion.tareas != null)...[
+                        for(int i = 0; i < Sesion.tareas.length; i++)
+                          //TAREA
                           Container(
                               constraints: BoxConstraints(maxWidth: 200,minWidth: 200),
                               width: 50,
@@ -250,7 +253,7 @@ class MyHomePageState extends State<MyHomePage>{
                                 child: Column(children: [
 
 
-                                      Text(Sesion.misTareas[i].nombre,
+                                      Text(Sesion.tareas[i].nombre,
                                         style: TextStyle(
                                           color: Colors.white,
 
@@ -258,8 +261,8 @@ class MyHomePageState extends State<MyHomePage>{
                                       ),
 
                                       resetIndicesTarea(),
-                                      for(int j = 0; j < Sesion.misTareas[i].orden.length; j++)
-                                        lecturaTarea(Sesion.misTareas[i].orden[j],i)
+                                      for(int j = 0; j < Sesion.tareas[i].orden.length; j++)
+                                        LecturaTarea(Sesion.tareas[i].orden[j],i)
 
                                   
                                 ]
@@ -269,14 +272,6 @@ class MyHomePageState extends State<MyHomePage>{
                           resetIndicesVideos()
                           ],
 
-                          /*
-                          FloatingActionButton(
-                              onPressed: (){actualizar();} ,
-                              child: const Icon(Icons.refresh),
-
-                          )*/
-
-
 
                     ],
                   ),
@@ -284,6 +279,7 @@ class MyHomePageState extends State<MyHomePage>{
   }
 
 
+  ///Este método devuelve toda la vista que va a ver el administrador en un Widget.
   Widget VistaAdministrador()
   {
     return
@@ -344,11 +340,11 @@ class MyHomePageState extends State<MyHomePage>{
 
             ElevatedButton(
                 child: Text('Haz una foto para la imagen de perfil'),
-                onPressed: (){selectFromCamera(seleccionImagen.camara);}
+                onPressed: (){seleccionarImagen(SeleccionImagen.camara);}
             ),
             ElevatedButton(
                 child: Text('Elige una foto de la galería'),
-                onPressed: (){selectFromCamera(seleccionImagen.galeria);}
+                onPressed: (){seleccionarImagen(SeleccionImagen.galeria);}
             ),
 
             SizedBox(
@@ -395,12 +391,15 @@ class MyHomePageState extends State<MyHomePage>{
       );
   }
 
-  Widget lecturaTarea(String valor, i){
 
+  /*
+  *
+  * */
+  Widget LecturaTarea(String valor, i){
 
     if(valor == "T")
       {
-        String pathTexto = Sesion.misTareas[i].textos[indiceTextos];
+        String pathTexto = Sesion.tareas[i].textos[indiceTextos];
         incIndiceTextos();
         return
         Text(pathTexto
@@ -411,7 +410,7 @@ class MyHomePageState extends State<MyHomePage>{
       }
     else if(valor == "I")
       {
-        String pathImagen = Sesion.misTareas[i].imagenes[indiceImagenes];
+        String pathImagen = Sesion.tareas[i].imagenes[indiceImagenes];
         incIndiceImagenes();
         return
           Image.network(pathImagen);

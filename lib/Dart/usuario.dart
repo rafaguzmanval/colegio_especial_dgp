@@ -1,6 +1,22 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:colegio_especial_dgp/Dart/passportmethod.dart';
+import 'package:colegio_especial_dgp/Dart/passport_method.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
+
+/*
+*   Archivo: usuario.dart
+*
+*   Descripción:
+*   La clase Usuario almacena la información de un usuario que puede ser de cualquier tipo de rol (alumno, profesor, administrador,..)
+*   esta clase se utiliza especialmente cuándo se va a registrar un usuario y se crea una nueva instancia cuyos datos pueden introducirse en la base de datos
+*   y también de forma inversa cuándo se quiere consultar la información de un usuario desde la base de datos y se introduce en una nueva instancia
+*
+*   Es una clase que relaciona información de la BD con la información que necesita tener la aplicación con un paradigma orientado a objetos.
+*
+*   Includes:
+*   cloud_firestore.dart : Necesario para implementar los métodos que acceden a la base de datos
+*   passport_method.dart : Contiene el enum que indica el tipo de contraseña que va a usarse (clave, pin,...)
+*
+* */
 
 class Usuario{
   var id;

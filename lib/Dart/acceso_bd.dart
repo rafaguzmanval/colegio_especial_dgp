@@ -3,9 +3,9 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:colegio_especial_dgp/Dart/Sesion.dart';
+import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/tarea.dart';
-import 'package:colegio_especial_dgp/Flutter/perfilalumno.dart';
+import 'package:colegio_especial_dgp/Flutter/perfil_alumno.dart';
 
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/usuario.dart';
@@ -98,48 +98,55 @@ class AccesoBD{
   {
 
     try {
-      final ref = db.collection("usuarios");
+      final ref = db.collection("usuarioTieneTareas");
 
-      ref.doc(id).withConverter(
-          fromFirestore: Usuario.fromFirestore,
-          toFirestore: (Usuario user, _) => user.toFirestore())
-          .snapshots()
-          .listen((event) async{
+      await ref.where("idUsuario",isEqualTo: id).get().then((e) async{
 
-        var usuario = event.data();
         var nuevasTareas = [];
-        for(int i = 0; i < usuario?.tareas.length; i++){
-          print(usuario?.tareas[i]);
-            await consultarIDTarea(usuario?.tareas[i]).then( (nuevaTarea) {
+        for(int i = 0; i < e.docs.length; i++)
+          {
+            var idTarea = e.docs[i].get("idTarea");
+
+            await consultarIDTarea(idTarea).then( (nuevaTarea) {
+
+              nuevaTarea.idRelacion = e.docs.first.id;
               nuevasTareas.add(nuevaTarea);
 
-             }
-            );
+              if(i == e.docs.length - 1)
+                {
+                  Sesion.tareas = nuevasTareas;
+                  if(cargarVideos)
+                  {
+                    try {
+                      for (int i = 0; i < Sesion.tareas.length; i++) {
+                        for (int j = 0; j < Sesion.tareas[i].videos.length; j++) {
+                          print("nuevo video " + Sesion.tareas[i].videos[j]);
+                          var nuevoControlador = VideoPlayerController.network(
+                              Sesion.tareas[i].videos[j]);
+                          Sesion.controladoresVideo.add(nuevoControlador);
+                          Sesion.controladoresVideo.last.initialize()
+                              .then((value) {
+
+                          });
+                        }
+                      }
+                      Sesion.paginaActual.actualizar();
+
+                    }
+                    catch(e){print(e);};
+                }
+                  Sesion.paginaActual.actualizar();
+                  return;
+
+            }});
+
+
+
+
+
+
         }
 
-        Sesion.misTareas = nuevasTareas;
-
-        if(cargarVideos)
-          {
-            try {
-              for (int i = 0; i < Sesion.misTareas.length; i++) {
-                for (int j = 0; j < Sesion.misTareas[i].videos.length; j++) {
-                  print("nuevo video " + Sesion.misTareas[i].videos[j]);
-                  var nuevoControlador = VideoPlayerController.network(
-                      Sesion.misTareas[i].videos[j]);
-                  Sesion.controladoresVideo.add(nuevoControlador);
-                  Sesion.controladoresVideo.last.initialize()
-                      .then((value) {
-
-                  });
-                }
-              }
-            }
-            catch(e){print(e);};
-          }
-
-        Sesion.paginaActual.actualizar();
-        return;
 
       });
 
@@ -157,24 +164,16 @@ class AccesoBD{
 
 
 
-  addTareaAlumno(id,tarea) async{
+  addTareaAlumno(idUsuario,idTarea) async{
     try {
-      final ref = db.collection("usuarios");
-      var nuevasTareas = [];
 
-      if(Sesion.misTareas != null)
-        {
-          for(int i = 0; i < Sesion.misTareas.length; i++)
-            {
-              nuevasTareas.add(Sesion.misTareas[i].id);
-            }
-        }
+      var tar = <String, dynamic>{
+        "idUsuario": idUsuario,
+        "idTarea": idTarea,
+      };
 
-      nuevasTareas.add(tarea);
+      db.collection("usuarioTieneTareas").add(tar);
 
-      ref.doc(id).update({
-        "tareas": nuevasTareas,
-      });
     }
     catch(e){
       print(e);
@@ -182,22 +181,12 @@ class AccesoBD{
 
   }
 
-  eliminarTareaAlumno(id,indicetarea) async{
+  eliminarTareaAlumno(id) async{
 
     try{
-      if(Sesion.misTareas != null && Sesion.misTareas != [])
+      if(Sesion.tareas != null && Sesion.tareas != [])
       {
-        final ref = db.collection("usuarios");
-
-        var nuevasTareas = [];
-
-        for(int i = 0; i < Sesion.misTareas.length; i++){
-          if(i != indicetarea) nuevasTareas.add(Sesion.misTareas[i].id);
-        }
-
-        ref.doc(id).update({
-          "tareas" : nuevasTareas,
-        });
+        final ref = db.collection("usuarioTieneTareas").doc(id).delete();
       }
     }catch(e){
       print(e);

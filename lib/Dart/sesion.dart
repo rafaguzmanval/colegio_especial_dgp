@@ -3,7 +3,7 @@ class Sesion{
    static var id;
    static var nombre;
    static var rol;
-   static var misTareas;
+   static var tareas;
    static var seleccion;
    static var paginaActual;
    static var controladoresVideo = [];
@@ -12,7 +12,7 @@ class Sesion{
       id = null;
       nombre = null;
       rol = null;
-      misTareas = [];
+      tareas = [];
       seleccion = null;
 
    }
@@ -21,7 +21,7 @@ class Sesion{
       id = null;
       nombre = null;
       rol = null;
-      misTareas = [];
+      tareas = [];
       seleccion = null;
    }
 }

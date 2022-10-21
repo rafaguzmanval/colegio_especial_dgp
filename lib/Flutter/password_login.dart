@@ -4,9 +4,9 @@ import 'package:colegio_especial_dgp/Dart/main.dart';
 import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
 import '../Dart/clase.dart';
 import '../Dart/usuario.dart';
-import '../Dart/Sesion.dart';
+import '../Dart/sesion.dart';
 
-import 'package:colegio_especial_dgp/Dart/AccesoBD.dart';
+import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';

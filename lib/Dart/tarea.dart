@@ -1,9 +1,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:colegio_especial_dgp/Dart/passportmethod.dart';
-import 'package:colegio_especial_dgp/Dart/rol.dart';
+
+/*
+* Archivo: tarea.dart
+*
+* Descripción :
+*               Esta clase se encarga de instanciar las tareas que están almacenadas en la base de datos para poder visualizar la información que poseen.
+*               En principio una tarea dispone de texto, imágenes, vídeos y un orden de aparición
+*
+* Includes :
+*   cloud_firestore.dart : Para que los métodos puedan acceder a la base de datos para leer las tareas.
+* */
+
 
 class Tarea{
   var id;
+  var idRelacion;
   var nombre;
   var textos;
   var imagenes;
