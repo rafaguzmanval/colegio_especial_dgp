@@ -98,6 +98,50 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
 
   Widget VistaProfesor()
   {
+    return perfilAlumno();
+
+  }
+
+
+  Widget VistaAlumno()
+  {
+    Navigator.pop(context);
+    return
+      Container(
+        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+          child:Column(
+              children:[
+                        Text("Eres un alumno"),
+
+                    ],
+                  ),
+      );
+  }
+
+
+  Widget VistaAdministrador()
+  {
+    return perfilAlumno();
+  }
+
+  Widget VistaProgramador()
+  {
+    return
+      Container(
+        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+        child:Column(
+          children:[
+
+            Text("Eres un profesor")
+
+          ],
+        ),
+      );
+  }
+
+
+  Widget perfilAlumno()
+  {
     return
       Container(
         //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
@@ -120,39 +164,39 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
 
 
               if(Sesion.tareas != null)...
-                [
+              [
 
-                  for(int i = 0; i < Sesion.tareas.length; i++)
+                for(int i = 0; i < Sesion.tareas.length; i++)
 
-                    if(Sesion.tareas[i] is Tarea)...[
+                  if(Sesion.tareas[i] is Tarea)...[
                     Container(
 
                         child:Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
 
-                                Text(Sesion.tareas[i].nombre),
-                                IconButton(onPressed: () {base.eliminarTareaAlumno(Sesion.tareas[i].idRelacion);},
+                            Text(Sesion.tareas[i].nombre),
+                            IconButton(onPressed: () {base.eliminarTareaAlumno(Sesion.tareas[i].idRelacion);},
                                 icon: Icon(Icons.delete)
-                                )
+                            )
 
 
                           ],
                         )
 
                     ),
-                    ]
+                  ]
                   else...[
                     new CircularProgressIndicator()
-                    ]
-                ],
+                  ]
+              ],
 
 
 
 
               Text("\n Añadir Tarea: "),
 
-             /* TextField(
+              /* TextField(
                 decoration: InputDecoration(
                   border:OutlineInputBorder(),
                   hintText: 'Introduce nueva tarea',
@@ -161,7 +205,7 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
               ),*/
 
               if(tareas != null && nombresTareas.length > 1)...[
-              DropdownButton(
+                DropdownButton(
 
                   value: tareaElegida,
 
@@ -172,15 +216,15 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
                     );
                   }).toList(),
 
-                onChanged: (String? value) {
-                  // This is called when the user selects an item.
-                  setState(() {
-                    tareaElegida = value!;
+                  onChanged: (String? value) {
+                    // This is called when the user selects an item.
+                    setState(() {
+                      tareaElegida = value!;
 
-                    if(tareaElegida == "Nada seleccionado"){
-                      idTareaElegida = null;
-                    }
-                    else
+                      if(tareaElegida == "Nada seleccionado"){
+                        idTareaElegida = null;
+                      }
+                      else
                       {
                         int i = 0;
                         bool salir = false;
@@ -195,25 +239,25 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
                       }
 
 
-                  });
-                },
-              ),
-
-              ElevatedButton(
-                child: Text("Añadir Tarea",
-                  style: TextStyle(
-                      color: Colors.amberAccent,
-                  ),
+                    });
+                  },
                 ),
-                onPressed: () {
-                  if(idTareaElegida != null)
+
+                ElevatedButton(
+                  child: Text("Añadir Tarea",
+                    style: TextStyle(
+                      color: Colors.amberAccent,
+                    ),
+                  ),
+                  onPressed: () {
+                    if(idTareaElegida != null)
                     {
                       base.addTareaAlumno(Sesion.seleccion.id, idTareaElegida);
                     }
-                },
+                  },
 
 
-              )
+                )
               ]
 
 
@@ -223,53 +267,6 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
             ]
 
 
-
-          ],
-        ),
-      );
-  }
-
-
-  Widget VistaAlumno()
-  {
-    return
-      Container(
-        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-          child:Column(
-              children:[
-                        Text("Eres un alumno"),
-
-
-                    ],
-                  ),
-      );
-  }
-
-
-  Widget VistaAdministrador()
-  {
-    return
-      Container(
-        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-        child:Column(
-          children:[
-
-            Text("Eres un profesor")
-
-          ],
-        ),
-      );
-  }
-
-  Widget VistaProgramador()
-  {
-    return
-      Container(
-        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-        child:Column(
-          children:[
-
-            Text("Eres un profesor")
 
           ],
         ),
