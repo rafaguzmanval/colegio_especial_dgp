@@ -1,11 +1,10 @@
 
-import 'package:colegio_especial_dgp/Dart/discapacidad.dart';
 import 'package:colegio_especial_dgp/Dart/main.dart';
-import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
 import 'package:colegio_especial_dgp/Flutter/password_login.dart';
-import '../Dart/clase.dart';
-import '../Dart/usuario.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import '../Dart/notificacion.dart';
 import '../Dart/sesion.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,6 +12,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:video_player/video_player.dart';
+
 
 
 class LoginPage extends StatefulWidget{
@@ -29,13 +29,37 @@ class LoginPageState extends State<LoginPage>{
   var imagenUgr;
   var maxUsuariosPorFila = 2;
 
+  FlutterLocalNotificationsPlugin notificaciones = new FlutterLocalNotificationsPlugin();
+
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
+    obtenerAutenticacion();
     inicializar();
+    Notificacion.initialize(flutterLocalNotificationsPlugin);
+    Notificacion.showBigTextNotification(title: "Bienvenio", body: "LA gran notificacion", fln: flutterLocalNotificationsPlugin);
     Sesion.reload();
     Sesion.paginaActual = this;
+
+  }
+
+  obtenerAutenticacion() async{
+
+    try {
+      Sesion.credenciales =
+      await FirebaseAuth.instance.signInAnonymously();
+      print("Signed in with temporary account.");
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case "operation-not-allowed":
+          print("Anonymous auth hasn't been enabled for this project.");
+          break;
+        default:
+          print("Unknown error.");
+      }
+    }
+
 
   }
 
@@ -92,6 +116,7 @@ class LoginPageState extends State<LoginPage>{
   }
 
   inicializar() async{
+
     usuarios = await base.consultarTodosUsuarios();
     imagenUgr = await lecturaImagen("AppStorage/ugr.png");
     _actualizar();

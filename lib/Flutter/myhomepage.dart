@@ -11,10 +11,13 @@ import 'package:colegio_especial_dgp/Dart/usuario.dart';
 
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:colegio_especial_dgp/Flutter/registro_usuarios.dart';
+import 'package:colegio_especial_dgp/Flutter/tablon_comunicacion.dart';
 import 'package:colegio_especial_dgp/Flutter/ver_tareas.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'package:video_player/video_player.dart';
 
@@ -144,14 +147,23 @@ class MyHomePageState extends State<MyHomePage>{
   {
 
     return
-      Container(
-        child: ElevatedButton(
+      Row(
+        children: [
+            ElevatedButton(
             child: Text('Tareas'),
             onPressed: (){
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => VerTareas()));
             }
         ),
+          ElevatedButton(
+              child: Text('Tablon Comunicación'),
+              onPressed: (){
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => TablonComunicacion()));
+              }
+          ),
+    ]
       );
   }
 

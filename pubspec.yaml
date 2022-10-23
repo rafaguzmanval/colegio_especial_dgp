@@ -43,6 +43,13 @@ dependencies:
   firebase_storage: ^10.3.9
   crypto: ^3.0.2
   image_picker: ^0.8.4+4
+  firebase_auth: ^3.11.2
+  flutter_local_notifications: ^12.0.2
+  timezone: ^0.9.0
+  rxdart: ^0.27.5
+  path_provider: ^2.0.11
+  http: ^0.13.5
+  flutter_native_timezone: ^2.0.0
 
 dev_dependencies:
 

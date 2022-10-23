@@ -39,6 +39,11 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
   var tareaElegida = "Nada seleccionado";
   var idTareaElegida = null;
 
+  bool esNuevaTareaCargando = false;
+  bool esTareaEliminandose = false;
+
+  int tareaEliminandose = 0;
+
   final myController = TextEditingController();
 
   @override
@@ -71,7 +76,9 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
       ),
       body: Container(
         padding: EdgeInsets.symmetric(vertical: 0, horizontal:  10),
+        alignment: Alignment.center,
         child: Column(
+
           children: [
 
 
@@ -144,6 +151,8 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
   {
     return
       Container(
+
+
         //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
         child:Column(
           children:[
@@ -172,13 +181,16 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
                     Container(
 
                         child:Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
 
                             Text(Sesion.tareas[i].nombre),
-                            IconButton(onPressed: () {base.eliminarTareaAlumno(Sesion.tareas[i].idRelacion);},
+                            IconButton(onPressed: () {base.eliminarTareaAlumno(Sesion.tareas[i].idRelacion);esTareaEliminandose = true;tareaEliminandose = i; actualizar();},
                                 icon: Icon(Icons.delete)
-                            )
+                            ),
+
+                            if(esTareaEliminandose && i == tareaEliminandose)...[
+                              new CircularProgressIndicator(),
+                            ]
 
 
                           ],
@@ -188,7 +200,8 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
                   ]
                   else...[
                     new CircularProgressIndicator()
-                  ]
+                  ],
+
               ],
 
 
@@ -253,12 +266,20 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
                     if(idTareaElegida != null)
                     {
                       base.addTareaAlumno(Sesion.seleccion.id, idTareaElegida);
+                      esNuevaTareaCargando = true;
+                      actualizar();
                     }
                   },
 
 
-                )
-              ]
+                ),
+
+                if(esNuevaTareaCargando)...[
+                  new CircularProgressIndicator()
+                ]
+              ],
+
+
 
 
 
@@ -289,11 +310,6 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
     }
 
     actualizar();
-  }
-
-  lecturaImagen(path) async
-  {
-     return await base.leerImagen(path);
   }
 
 

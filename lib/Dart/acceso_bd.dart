@@ -15,6 +15,7 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+
 String encriptacionSha256(String password)
 {
   var data = utf8.encode(password);
@@ -100,7 +101,7 @@ class AccesoBD{
     try {
       final ref = db.collection("usuarioTieneTareas");
 
-      await ref.where("idUsuario",isEqualTo: id).snapshots().listen((e) async{
+      await ref.where("idUsuario",isEqualTo: id).orderBy("fechainicio")..snapshots().listen((e) async{
 
         var nuevasTareas = [];
         for(int i = 0; i < e.docs.length; i++)
@@ -109,10 +110,10 @@ class AccesoBD{
 
             await consultarIDTarea(idTarea).then( (nuevaTarea) {
 
-              nuevaTarea.idRelacion = e.docs.first.id;
+              nuevaTarea.idRelacion = e.docs[i].id;
               nuevasTareas.add(nuevaTarea);
 
-              if(i == e.docs.length - 1)
+              if(nuevasTareas.length == e.docs.length)
                 {
                   Sesion.tareas = nuevasTareas;
                   if(cargarVideos)
@@ -120,7 +121,6 @@ class AccesoBD{
                     try {
                       for (int i = 0; i < Sesion.tareas.length; i++) {
                         for (int j = 0; j < Sesion.tareas[i].videos.length; j++) {
-                          print("nuevo video " + Sesion.tareas[i].videos[j]);
                           var nuevoControlador = VideoPlayerController.network(
                               Sesion.tareas[i].videos[j]);
                           Sesion.controladoresVideo.add(nuevoControlador);
@@ -140,12 +140,10 @@ class AccesoBD{
 
             }});
 
-
-
-
-
-
         }
+
+        if(e.docs.length == 0)
+          Sesion.tareas = [];
 
 
       });
@@ -161,18 +159,19 @@ class AccesoBD{
   }
 
 
-
-
-
   addTareaAlumno(idUsuario,idTarea) async{
     try {
 
       var tar = <String, dynamic>{
         "idUsuario": idUsuario,
         "idTarea": idTarea,
+        "fechainicio" : DateTime.now().millisecondsSinceEpoch
       };
 
-      db.collection("usuarioTieneTareas").add(tar);
+      await db.collection("usuarioTieneTareas").add(tar).then((value) {
+        Sesion.paginaActual.esNuevaTareaCargando = false;
+        Sesion.paginaActual.actualizar();
+      });
 
     }
     catch(e){
@@ -186,7 +185,10 @@ class AccesoBD{
     try{
       if(Sesion.tareas != null && Sesion.tareas != [])
       {
-        final ref = db.collection("usuarioTieneTareas").doc(id).delete();
+        await db.collection("usuarioTieneTareas").doc(id).delete().then((value) {
+          Sesion.paginaActual.esTareaEliminandose = false;
+          Sesion.paginaActual.actualizar();
+        });
       }
     }catch(e){
       print(e);
@@ -217,7 +219,6 @@ class AccesoBD{
     }
 
   }
-
 
 
   consultarTodosAlumnos() async
@@ -302,6 +303,7 @@ class AccesoBD{
       var PassEncriptada = encriptacionSha256(password);
 
       if (PassEncriptada == resultado.password) {
+
         return true;
       }
       else

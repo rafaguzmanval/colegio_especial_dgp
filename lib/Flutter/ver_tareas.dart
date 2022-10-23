@@ -90,16 +90,7 @@ class VerTareasState extends State<VerTareas>{
       cargarTareas();
     }
 
-    initTTS();
 
-  }
-
-  void initTTS() async{
-      lenguajes = List<String>.from(await tts.getLanguages);
-      await tts.setVolume(1.0);
-      await tts.setPitch(1.0);
-      await tts.setLanguage("es-ES");
-      actualizar();
   }
 
 
@@ -240,7 +231,6 @@ class VerTareasState extends State<VerTareas>{
       }
     else if(valor == "V" && Sesion.controladoresVideo.length > 0 )
       {
-        print(indiceVideos);
         return  ReproductorVideo(Sesion.controladoresVideo[indiceVideos++]);
       }
 

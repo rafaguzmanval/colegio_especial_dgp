@@ -1,6 +1,7 @@
 
 class Sesion{
    static var id;
+   static var credenciales;
    static var nombre;
    static var rol;
    static var tareas;
