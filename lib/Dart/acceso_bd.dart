@@ -70,6 +70,40 @@ class AccesoBD{
   }
 
 
+  crearTarea(tarea) async{
+
+    try {
+      //Se encripta la contaseña
+
+
+      var fotoPath = "Imágenes/pictogramas/"+tarea.imagenes[0].name;
+
+
+      return await storageRef.child(fotoPath).putFile(tarea.imagenes[0]).then((p0) async {
+        var fotoURL = await leerImagen(fotoPath);
+
+        var Nuevatarea = <String, dynamic>{
+          "nombre": tarea.nombre,
+          "textos": tarea.tareas,
+          "imagenes": tarea.imagenes,
+          "videos": tarea.videos,
+          "orden": tarea.orden
+        };
+
+        db.collection("Tarea").add(Nuevatarea);
+
+        return true;
+
+      });
+    }
+    catch(e){
+      print(e);
+      return false;
+    }
+
+  }
+
+
   consultarIDusuario(id) async{
 
     try {

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/discapacidad.dart';
+import 'package:colegio_especial_dgp/Flutter/crear_tarea.dart';
 import 'package:colegio_especial_dgp/Flutter/loginpage.dart';
 import 'package:colegio_especial_dgp/Flutter/perfil_alumno.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
@@ -190,6 +191,14 @@ class MyHomePageState extends State<MyHomePage>{
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => RegistroUsuarios()));
                 }
+              ),
+
+              ElevatedButton(
+                  child: Text('Crear Tarea'),
+                  onPressed: (){
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => CrearTarea()));
+                  }
               ),
           ]
     );

@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 
-
 class LoginPage extends StatefulWidget{
 
   @override
@@ -34,6 +33,7 @@ class LoginPageState extends State<LoginPage>{
 
   @override
   void initState() {
+
     super.initState();
     obtenerAutenticacion();
     inicializar();
@@ -66,6 +66,8 @@ class LoginPageState extends State<LoginPage>{
   @override
   Widget build(BuildContext context){
 
+    var media = MediaQuery.of(context).size;
+
     return Scaffold(
       appBar:AppBar(
           title:  Text('TuCole')
@@ -76,15 +78,15 @@ class LoginPageState extends State<LoginPage>{
           child: Column(
 
             children: [
-            Text("Iniciar Sesión"),
-              ListaUsuarios(),
 
+              Text("Iniciar Sesión"),
+              ListaUsuarios(),
 
 
               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
 
-                children: [
+                  children: [
 
                     if(imagenUgr != null)...[
 
@@ -92,12 +94,12 @@ class LoginPageState extends State<LoginPage>{
                         height: 100,
                         fit: BoxFit.fill,),
                     ],
-                  Image.asset("assets/mochileros.png" ,
-                          width:100 ,
-                      height:100)
+                    Image.asset("assets/mochileros.png" ,
+                        width:100 ,
+                        height:100)
 
 
-                ]
+                  ]
 
               ),
 
@@ -108,7 +110,8 @@ class LoginPageState extends State<LoginPage>{
 
 
             ],
-          )
+          ),
+
 
 
       ),
@@ -121,6 +124,7 @@ class LoginPageState extends State<LoginPage>{
     imagenUgr = await lecturaImagen("AppStorage/ugr.png");
     _actualizar();
   }
+
 
 
   SeleccionUsuario() async
