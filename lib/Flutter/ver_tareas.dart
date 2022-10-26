@@ -257,56 +257,57 @@ class VerTareasState extends State<VerTareas>{
   Widget ReproductorVideo(controlador)
   {
     return
-    Container(
-      //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-      child:Column(
-        children:[
-          AspectRatio(
-            aspectRatio: controlador.value.aspectRatio ,
-            child: VideoPlayer(controlador)
-          ),
+      Container(
+        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+          child:Column(
+              children:[
 
-          Container( //duration of video
-            child: Text("Total Duration: " + controlador.value.duration.toString()),
-          ),
+                ElevatedButton(
 
-          Container(
-              child: VideoProgressIndicator(
-                  controlador,
-                  allowScrubbing: true,
-                  colors:VideoProgressColors(
-                    backgroundColor: Colors.black,
-                    playedColor: Colors.red,
-                    bufferedColor: Colors.grey,
-                  )
-              )
-          ),
-
-          Container(
-            child: Row(
-              children: [
-                IconButton(
-                    onPressed: (){
-                      if(controlador.value.isPlaying){
-                        controlador.pause();
-                      }else{
-                        controlador.play();
-                      }
-
-                      setState(() {
-
-                      });
-                    },
-                    icon:Icon(controlador.value.isPlaying?Icons.pause:Icons.play_arrow)
+                  onPressed: (){
+                    if(controlador.value.isPlaying){
+                      controlador.pause();
+                    }else{
+                      controlador.play();
+                    }
+                    setState(() {
+                    });
+                  },
+                  child: AspectRatio(
+                      aspectRatio: controlador.value.aspectRatio ,
+                      child: VideoPlayer(controlador)
+                  ),
                 ),
 
-              ],
-            ),
-          )
-        ]
-      )
+                Icon(
+                  controlador.value.isPlaying?Icons.pause:Icons.play_arrow,
+                  size: 20,
+                  semanticLabel: controlador.value.isPlaying?"Pausa":"Reanudar",
+                ),
 
-    );
+
+
+                Container( //duration of video
+                  child: Text("Total Duration: " + controlador.value.duration.toString()),
+                ),
+
+                /*
+                Container(
+                    child: VideoProgressIndicator(
+                        controlador,
+                        allowScrubbing: true,
+                        colors:VideoProgressColors(
+                          backgroundColor: Colors.black,
+                          playedColor: Colors.red,
+                          bufferedColor: Colors.grey,
+                        )
+                    )
+                ),*/
+
+              ]
+          )
+
+      );
   }
 
 

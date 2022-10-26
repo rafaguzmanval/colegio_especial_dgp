@@ -5,6 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'firebase_options.dart';
 import '../Flutter/myhomepage.dart';
 import '../Flutter/loginpage.dart';
+import 'notificacion.dart';
 
 var user = "";
 
@@ -24,6 +25,7 @@ class App extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    Notificacion.initialize(flutterLocalNotificationsPlugin);
     return MaterialApp(
       title: 'Proyecto Colegio Especial',
       theme: ThemeData(primarySwatch: Colors.deepOrange),

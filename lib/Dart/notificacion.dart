@@ -9,7 +9,9 @@ class Notificacion{
     var iOSInitialize = new DarwinInitializationSettings();
     var initializationsSettings = new InitializationSettings(android: androidInitialize,
         iOS: iOSInitialize);
-    await flutterLocalNotificationsPlugin.initialize(initializationsSettings );
+    await flutterLocalNotificationsPlugin.initialize(initializationsSettings);
+
+
   }
 
   static Future showBigTextNotification({var id =0,required String title, required String body,
@@ -17,8 +19,8 @@ class Notificacion{
   } ) async {
     AndroidNotificationDetails androidPlatformChannelSpecifics =
     new AndroidNotificationDetails(
-      'you_can_name_it_whatever1',
-      'channel_name',
+      '1',
+      'canal1',
 
       playSound: true,
       sound: RawResourceAndroidNotificationSound('cancion'),

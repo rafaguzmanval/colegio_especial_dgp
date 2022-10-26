@@ -75,29 +75,66 @@ class AccesoBD{
     try {
       //Se encripta la contaseña
 
+      var imagenes = [];
+      var videos = [];
 
-      var fotoPath = "Imágenes/pictogramas/"+tarea.imagenes[0].name;
+      var futuros = <Future>[];
+
+      int i = 0;
+
+      log("Se meten imagenes");
+      if(tarea.imagenes.length > 0)
+        {
+
+          var fotoPath = "Imágenes/pictogramas/"+encriptacionSha256(tarea.imagenes[0].path);
+          await storageRef.child(fotoPath).putFile(tarea.imagenes[0]).then( (d0) async {
+            log("Se está comprobando que la imagen se ha subido correctamente");
+            await leerImagen(fotoPath).then((value){
+              log(value);
+              imagenes.add(value);
+              log("Se añadio la imagen al array");
+              i++;
+            });
+            log("Se leido lo de await leerImagen");
+          }
+          );
+        }
+
+      log("Se meten videos");
+      if(tarea.videos.length > 0)
+        {
+          var videoPath = "Vídeos/"+encriptacionSha256(tarea.videos[0].path);
+
+          await storageRef.child(videoPath).putFile(tarea.videos[0]).then((p0) async {
+            await leerVideo(videoPath).then((value) {
+              videos.add(value);
+              i++;
+
+            });
 
 
-      return await storageRef.child(fotoPath).putFile(tarea.imagenes[0]).then((p0) async {
-        var fotoURL = await leerImagen(fotoPath);
+          });
+        }
 
-        var Nuevatarea = <String, dynamic>{
+      while( i != tarea.imagenes.length + tarea.videos.length){};
+
+        log("Todos los futures se han completado");
+        var nuevaTarea = <String, dynamic>{
           "nombre": tarea.nombre,
-          "textos": tarea.tareas,
-          "imagenes": tarea.imagenes,
-          "videos": tarea.videos,
+          "textos": tarea.textos,
+          "imagenes": imagenes,
+          "videos": videos,
           "orden": tarea.orden
         };
 
-        db.collection("Tarea").add(Nuevatarea);
+        db.collection("Tareas").add(nuevaTarea);
 
         return true;
 
-      });
     }
     catch(e){
-      print(e);
+
+      log(e.toString());
       return false;
     }
 

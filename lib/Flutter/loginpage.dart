@@ -28,7 +28,6 @@ class LoginPageState extends State<LoginPage>{
   var imagenUgr;
   var maxUsuariosPorFila = 2;
 
-  FlutterLocalNotificationsPlugin notificaciones = new FlutterLocalNotificationsPlugin();
 
 
   @override
@@ -37,8 +36,7 @@ class LoginPageState extends State<LoginPage>{
     super.initState();
     obtenerAutenticacion();
     inicializar();
-    Notificacion.initialize(flutterLocalNotificationsPlugin);
-    Notificacion.showBigTextNotification(title: "Bienvenio", body: "LA gran notificacion", fln: flutterLocalNotificationsPlugin);
+    //Notificacion.showBigTextNotification(title: "Bienvenio", body: "LA gran notificacion", fln: flutterLocalNotificationsPlugin);
     Sesion.reload();
     Sesion.paginaActual = this;
 

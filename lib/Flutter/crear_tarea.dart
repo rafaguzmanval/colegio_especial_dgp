@@ -2,13 +2,8 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
-import 'package:colegio_especial_dgp/Dart/discapacidad.dart';
-import 'package:colegio_especial_dgp/Flutter/loginpage.dart';
-import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
-import 'package:colegio_especial_dgp/Flutter/perfil_alumno.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
-import 'package:colegio_especial_dgp/Dart/clase.dart';
-import 'package:colegio_especial_dgp/Dart/usuario.dart';
+
 
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,6 +16,8 @@ import "package:image_picker/image_picker.dart";
 
 import "package:flutter_tts/flutter_tts.dart";
 
+import '../Dart/main.dart';
+import '../Dart/notificacion.dart';
 import '../Dart/tarea.dart';
 
 enum SeleccionImagen{
@@ -73,6 +70,7 @@ class CrearTareaState extends State<CrearTarea>{
   @override
   void initState(){
     super.initState();
+    //Notificacion.showBigTextNotification(title: "Vaya vaya", body: "¿Que dices? ¿creando tu primera tarea?", fln: flutterLocalNotificationsPlugin);
 
     Sesion.paginaActual = this;
 
@@ -101,11 +99,16 @@ class CrearTareaState extends State<CrearTarea>{
         print("Hacer un video");
         await capturador.pickVideo(
           source: ImageSource.camera,
-        ).then((value) {
+        ).then((value) async{
           videoTomado = value;
-          controladorVideo = new VideoPlayerController.file(File(videoTomado.path));
+          controladorVideo = await VideoPlayerController.file(File(value?.path as String));
+          await controladorVideo.initialize();
           actualizar();
+
+          print(controladorVideo.value.duration.toString());
         });
+
+
 
 
       }
@@ -130,29 +133,10 @@ class CrearTareaState extends State<CrearTarea>{
 
           title: Text('Crea una nueva tarea'),
         ),
-        body: Container(
+        body: Sesion.rol == Rol.administrador.toString()
+              ?VistaAdministrador()
+              :VistaProfesor()
 
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal:  0),
-            child: Column(
-              children: [
-
-
-                if(Sesion.rol == Rol.alumno.toString())...[
-                  VistaAlumno(),
-                ]
-                else if(Sesion.rol == Rol.profesor.toString())...[
-                  VistaProfesor()
-                ]
-                else if(Sesion.rol == Rol.administrador.toString())...[
-                    VistaAdministrador()
-                  ]
-              ],
-            )
-
-
-
-
-        ),
       );
 
 
@@ -181,10 +165,10 @@ class CrearTareaState extends State<CrearTarea>{
   Widget VistaAdministrador()
   {
     return
-      Container(
+      SingleChildScrollView(
         //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
         child:Column(
-          children:[
+          children: <Widget>[
 
 
             Text("\nRegistra un nuevo usuario:"),
@@ -202,55 +186,58 @@ class CrearTareaState extends State<CrearTarea>{
               obscureText: false,
               decoration: InputDecoration(
                 border:OutlineInputBorder(),
-                hintText: 'Introduce contraseña',
+                hintText: 'Introduce texto',
               ),
               controller: controladorTexto,
             ),
 
 
             ElevatedButton(
-                child: Text('Haz una foto para la imagen de perfil'),
+                child: Text('Haz una foto'),
                 onPressed: (){seleccionarImagen(SeleccionImagen.camara);}
             ),
             ElevatedButton(
-                child: Text('Elige una foto de la galería'),
+                child: Text('Elige un pictograma de tu galería'),
                 onPressed: (){seleccionarImagen(SeleccionImagen.galeria);}
             ),
 
             ElevatedButton(
-                child: Text('Haz una videotutorial'),
+                child: Text('Haz un videotutorial'),
                 onPressed: (){seleccionarImagen(SeleccionImagen.video);}
             ),
 
 
-            SizedBox(
+            Container(
               height: 100,
               width: 100,
                 child: fotoTomada == null
-                  ? Center(child: Text('Ninguna foto tomada'))
+                  ? Center()
                   : Center(child: Image.file(File(fotoTomada.path))),
             ),
+
+
+            
+
+
 
             SizedBox(
               height: 200,
               width: 200,
               child: videoTomado == null
                   ? Center(child: Text('Ningun video tomado'))
-                  : Center(child: ReproductorVideo(controladorVideo)),
+                  : Center(child:ReproductorVideo(controladorVideo)),
             ),
-
-
 
 
             Text(mensajeDeValidacion),
 
-            /*
+
             Visibility(
-                visible: !registrando,
+                visible: !creando,
                 child:
 
             TextButton(
-              child: Text("Registrar",
+              child: Text("Crear nueva tarea",
                 style: TextStyle(
                     color: Colors.cyan,
                     decorationColor: Colors.lightBlueAccent
@@ -261,7 +248,7 @@ class CrearTareaState extends State<CrearTarea>{
               },
 
             )
-            ),*/
+            ),
 
 
             Visibility(
@@ -276,12 +263,10 @@ class CrearTareaState extends State<CrearTarea>{
   }
 
   //Método para registrar usuario
-  crearTarea()
+  crearTarea() async
   {
 
-    // FALTARIA HACER COMPROBACIÓN DE QUE EL NOMBRE Y APELLIDOS YA ESTÁN REGISTRADOS EN LA BASE DE DATOS
-
-    if(controladorNombre.text.isNotEmpty)
+    if(controladorNombre.text.isNotEmpty && videoTomado != null && fotoTomada != null)
     {
       creando = true;
       actualizar();
@@ -292,27 +277,27 @@ class CrearTareaState extends State<CrearTarea>{
       var textos = [];
       textos.add(texto);
       var imagenes = [];
-      imagenes.add(fotoTomada);
+      imagenes.add(File(fotoTomada.path));
 
       var videos = [];
-      videos.add(videoTomado);
+      videos.add(File(videoTomado.path));
 
-      var orden = ["T","V"];
+      var orden = ["T","I","V"];
 
 
       Tarea tarea = Tarea();
       tarea.setTarea(
-          nombre, textos,imagenes,videos,orden);
+          nombre,textos,imagenes,videos,orden);
 
-      var future = base.crearTarea(tarea);
 
-      future.then((value) {
+      await base.crearTarea(tarea).then((value) {
         creando = false;
 
         if (value) {
           controladorNombre.text = "";
           controladorTexto.text = "";
           fotoTomada = null;
+          videoTomado = null;
 
           mensajeDeValidacion =
           "Tarea creada correctamente\nPuedes volver a crear otra tarea:";
@@ -340,15 +325,37 @@ class CrearTareaState extends State<CrearTarea>{
         //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
           child:Column(
               children:[
-                AspectRatio(
-                    aspectRatio: controlador.value.aspectRatio ,
-                    child: VideoPlayer(controlador)
+
+                ElevatedButton(
+
+                  onPressed: (){
+                              if(controlador.value.isPlaying){
+                              controlador.pause();
+                              }else{
+                              controlador.play();
+                              }
+                              setState(() {
+                              });
+                      },
+                    child: AspectRatio(
+                        aspectRatio: controlador.value.aspectRatio ,
+                        child: VideoPlayer(controlador)
+                    ),
                 ),
+
+                Icon(
+                    controlador.value.isPlaying?Icons.pause:Icons.play_arrow,
+                  size: 20,
+                  semanticLabel: controlador.value.isPlaying?"Pausa":"Reanudar",
+                ),
+
+
 
                 Container( //duration of video
                   child: Text("Total Duration: " + controlador.value.duration.toString()),
                 ),
 
+                /*
                 Container(
                     child: VideoProgressIndicator(
                         controlador,
@@ -359,29 +366,8 @@ class CrearTareaState extends State<CrearTarea>{
                           bufferedColor: Colors.grey,
                         )
                     )
-                ),
+                ),*/
 
-                Container(
-                  child: Row(
-                    children: [
-                      IconButton(
-                          onPressed: (){
-                            if(controlador.value.isPlaying){
-                              controlador.pause();
-                            }else{
-                              controlador.play();
-                            }
-
-                            setState(() {
-
-                            });
-                          },
-                          icon:Icon(controlador.value.isPlaying?Icons.pause:Icons.play_arrow)
-                      ),
-
-                    ],
-                  ),
-                )
               ]
           )
 
