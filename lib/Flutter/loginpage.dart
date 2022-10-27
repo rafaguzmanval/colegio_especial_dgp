@@ -1,4 +1,6 @@
 
+import 'dart:ui';
+
 import 'package:colegio_especial_dgp/Dart/main.dart';
 import 'package:colegio_especial_dgp/Flutter/password_login.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -28,6 +30,7 @@ class LoginPageState extends State<LoginPage>{
   var imagenUgr;
   var maxUsuariosPorFila = 2;
 
+  FlutterLocalNotificationsPlugin notificaciones = new FlutterLocalNotificationsPlugin();
 
 
   @override
@@ -36,7 +39,8 @@ class LoginPageState extends State<LoginPage>{
     super.initState();
     obtenerAutenticacion();
     inicializar();
-    //Notificacion.showBigTextNotification(title: "Bienvenio", body: "LA gran notificacion", fln: flutterLocalNotificationsPlugin);
+    Notificacion.initialize(flutterLocalNotificationsPlugin);
+    Notificacion.showBigTextNotification(title: "Bienvenio", body: "LA gran notificacion", fln: flutterLocalNotificationsPlugin);
     Sesion.reload();
     Sesion.paginaActual = this;
 
@@ -64,56 +68,42 @@ class LoginPageState extends State<LoginPage>{
   @override
   Widget build(BuildContext context){
 
-    var media = MediaQuery.of(context).size;
 
-    return Scaffold(
+    return Flexible(flex: 1,child: Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar:AppBar(
+
           title:  Text('TuCole')
       ),
-      body: Container(
+      body:
+
+      SingleChildScrollView(child:
+      Container(
+
+
         alignment: Alignment.center,
 
-          child: Column(
+        child: Column(
 
-            children: [
+          children: [
+            ListaUsuarios(),
 
-              Text("Iniciar Sesión"),
-              ListaUsuarios(),
+            Text("Iniciar Sesión"),
 
+            ImagenUGR(),
 
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-
-                  children: [
-
-                    if(imagenUgr != null)...[
-
-                      Image.network(imagenUgr,width:100,
-                        height: 100,
-                        fit: BoxFit.fill,),
-                    ],
-                    Image.asset("assets/mochileros.png" ,
-                        width:100 ,
-                        height:100)
+            Text('Créditos: Los mochileros'),
+            Text('Rafael Guzmán , Blanca Abril , Javier Mesa , José Paneque , Hicham Bouchemma , Emilio Vargas'),
 
 
-                  ]
-
-              ),
+          ],
+        ),
 
 
 
-              Text('Créditos: Los mochileros'),
-              Text('Rafael Guzmán , Blanca Abril , Javier Mesa , José Paneque , Hicham Bouchemma , Emilio Vargas'),
+      )),
+    ));
 
-
-            ],
-          ),
-
-
-
-      ),
-    );
   }
 
   inicializar() async{
@@ -127,12 +117,36 @@ class LoginPageState extends State<LoginPage>{
 
   SeleccionUsuario() async
   {
-      await Navigator.push(context,
-      MaterialPageRoute(builder: (context) => PasswordLogin()));
+    await Navigator.push(context,
+        MaterialPageRoute(builder: (context) => PasswordLogin()));
 
-      inicializar();
+    inicializar();
   }
 
+  Widget ImagenUGR()
+  {
+    return Container(
+
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+
+            children: [
+
+              if(imagenUgr != null)...[
+
+                Image.network(imagenUgr,width:100,
+                  height: 100,
+                  fit: BoxFit.fill,),
+              ],
+              Image.asset("assets/mochileros.png" ,
+                  width:100 ,
+                  height:100)
+
+
+            ]
+        )
+    );
+  }
 
   Widget ListaUsuarios()
   {
@@ -142,53 +156,53 @@ class LoginPageState extends State<LoginPage>{
 
       return
         Container(
-          //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if(usuarios != null)...[
-                  for(int i = 0; i < usuarios.length/maxUsuariosPorFila; i++)
-                    Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-
-                      children: [
-                        for(int j = i*maxUsuariosPorFila; j < (i*maxUsuariosPorFila) + maxUsuariosPorFila && j < usuarios.length; j++)
+                    for(int i = 0; i < usuarios.length/maxUsuariosPorFila; i++)
                       Container(
-                          width:100,
-                          height: 100,
-                          margin: EdgeInsets.all(20),
-                          alignment: Alignment.center,
-                          child: ElevatedButton(
-                            child: Column(
-                              children: [
-                                Text(usuarios[j].nombre,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
 
-                                Image.network(usuarios[j].foto,width:100,
-                                  height: 70,
-                                  fit: BoxFit.fill,),
-                              ],
+                            children: [
+                              for(int j = i*maxUsuariosPorFila; j < (i*maxUsuariosPorFila) + maxUsuariosPorFila && j < usuarios.length; j++)
+                                Container(
+                                    width:100,
+                                    height: 100,
+                                    margin: EdgeInsets.all(20),
+                                    alignment: Alignment.center,
+                                    child: ElevatedButton(
+                                      child: Column(
+                                        children: [
+                                          Text(usuarios[j].nombre,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
 
-                            ),
-                            onPressed: () {
-                              Sesion.id = usuarios[j].id;
-                              Sesion.nombre = usuarios[j].nombre;
-                              Sesion.rol = usuarios[j].rol;
-                              SeleccionUsuario();
-                            },
+                                          Image.network(usuarios[j].foto,width:100,
+                                            height: 70,
+                                            fit: BoxFit.fill,),
+                                        ],
+
+                                      ),
+                                      onPressed: () {
+                                        Sesion.id = usuarios[j].id;
+                                        Sesion.nombre = usuarios[j].nombre;
+                                        Sesion.rol = usuarios[j].rol;
+                                        SeleccionUsuario();
+                                      },
 
 
+                                    )
+
+                                )
+                            ],
                           )
 
                       )
-                      ],
-                    )
-
-                     )
                   ]
                 ]
             )
