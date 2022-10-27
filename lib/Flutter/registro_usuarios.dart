@@ -46,7 +46,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
 
   var registrando = false;
   var mensajeDeRegistro = "";
-
+  var rolElegido = "ningun rol elegido";
 
 
   final controladorNombre = TextEditingController();
@@ -209,15 +209,20 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
               controller: controladorFechanacimiento,
             ),
 
-            /*
-            TextField(
-              obscureText: false,
-              decoration: InputDecoration(
-                border:OutlineInputBorder(),
-                hintText: 'Introduce rol',
-              ),
-              controller: controladorRol,
-            ),*/
+
+            DropdownButton(
+              value: rolElegido,
+
+              items: [Rol.profesor.toString(), Rol.administrador.toString(), Rol.alumno.toString(), "ningun rol elegido"].map((String value){
+                return DropdownMenuItem(value: value,
+                    child: Text(value),);
+              }).toList(),
+              onChanged: (String? value){
+                setState(() {
+                  rolElegido = value!;
+                });
+              },
+            ),
 
             ElevatedButton(
                 child: Text('Haz una foto para la imagen de perfil'),
@@ -274,7 +279,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
     // FALTARIA HACER COMPROBACIÓN DE QUE EL NOMBRE Y APELLIDOS YA ESTÁN REGISTRADOS EN LA BASE DE DATOS
 
     if(controladorNombre.text.isNotEmpty && controladorApellidos.text.isNotEmpty && controladorPassword.text.isNotEmpty
-        && controladorFechanacimiento.text.isNotEmpty && fotoTomada != null)
+        && controladorFechanacimiento.text.isNotEmpty && fotoTomada != null && rolElegido != "ningun rol elegido")
     {
       registrando = true;
       actualizar();
@@ -283,7 +288,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
       var apellidos = "" + controladorApellidos.text;
       var password = "" + controladorPassword.text;
       var fechanacimiento = "" + controladorFechanacimiento.text;
-      var rol = "Rol.alumno" + controladorRol.text;
+      var rol = "" + rolElegido;
 
       Usuario usuario = Usuario();
       usuario.setUsuario(
