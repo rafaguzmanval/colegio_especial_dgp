@@ -218,7 +218,6 @@ class MyHomePageState extends State<MyHomePage>{
         child:Column(
           children:[
 
-            Text("Eres un programador")
 
           ],
         ),

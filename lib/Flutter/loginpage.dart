@@ -29,8 +29,11 @@ class LoginPageState extends State<LoginPage>{
   var usuarios;
   var imagenUgr;
   var maxUsuariosPorFila = 2;
+  double offSetActual = 0;
 
   FlutterLocalNotificationsPlugin notificaciones = new FlutterLocalNotificationsPlugin();
+
+  ScrollController homeController = new ScrollController();
 
 
   @override
@@ -75,7 +78,51 @@ class LoginPageState extends State<LoginPage>{
 
           title:  Text('TuCole')
       ),
-      body:   ListaUsuarios()
+      body:   Stack(
+          children: [
+            ListaUsuarios(),
+            Container(
+              alignment: FractionalOffset(0.98,0.01),
+            child: FloatingActionButton(
+                child: Icon(Icons.arrow_upward),
+                elevation: 1.0,
+                onPressed: (){
+
+                  offSetActual -= 100.0;
+                  if(offSetActual < homeController.position.minScrollExtent)
+                    offSetActual = homeController.position.minScrollExtent;
+
+                  homeController.animateTo(
+                    offSetActual, // change 0.0 {double offset} to corresponding widget position
+                    duration: Duration(seconds: 1),
+                    curve: Curves.easeOut,
+                  );
+
+                }),
+            ),
+
+            Container(
+              alignment: FractionalOffset(0.98,0.99),
+              child: FloatingActionButton(
+                  child: Icon(Icons.arrow_downward),
+                  elevation: 1.0,
+                  onPressed: (){
+                        offSetActual += 100;
+
+                        if(offSetActual > homeController.position.maxScrollExtent)
+                          offSetActual = homeController.position.maxScrollExtent;
+
+
+                        homeController.animateTo(
+                          offSetActual, // change 0.0 {double offset} to corresponding widget position
+                          duration: Duration(seconds: 1),
+                          curve: Curves.easeOut,
+                        );
+
+                  }),
+            ),
+          ]
+      )
 
       /*
       Container(
@@ -172,6 +219,7 @@ class LoginPageState extends State<LoginPage>{
     maxUsuariosPorFila = 5;
     return
       SingleChildScrollView(
+          controller: homeController,
         child: buildLista()
       );
   }
@@ -182,6 +230,7 @@ class LoginPageState extends State<LoginPage>{
     maxUsuariosPorFila = 2;
     return
       SingleChildScrollView(
+          controller: homeController,
           child: buildLista()
       );
 
