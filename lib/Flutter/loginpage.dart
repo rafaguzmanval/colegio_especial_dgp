@@ -69,15 +69,15 @@ class LoginPageState extends State<LoginPage>{
   Widget build(BuildContext context){
 
 
-    return Flexible(flex: 1,child: Scaffold(
+    return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar:AppBar(
 
           title:  Text('TuCole')
       ),
-      body:
+      body:   ListaUsuarios()
 
-      SingleChildScrollView(child:
+      /*
       Container(
 
 
@@ -86,7 +86,6 @@ class LoginPageState extends State<LoginPage>{
         child: Column(
 
           children: [
-            ListaUsuarios(),
 
             Text("Iniciar Sesión"),
 
@@ -101,8 +100,8 @@ class LoginPageState extends State<LoginPage>{
 
 
 
-      )),
-    ));
+      )  */
+    );
 
   }
 
@@ -151,66 +150,95 @@ class LoginPageState extends State<LoginPage>{
   Widget ListaUsuarios()
   {
     if(usuarios == null)
-      return Container();
+      return Column(
+        children: [
+        ImagenUGR(),
+        Text('Créditos: Los mochileros'),
+        Text('Rafael Guzmán , Blanca Abril , Javier Mesa , José Paneque , Hicham Bouchemma , Emilio Vargas'),]
+      );
     else {
-
       return
-        Container(
+          OrientationBuilder(builder: (context,orientation)=>
+            orientation == Orientation.portrait
+                  ? buildPortrait()
+                : buildLandscape(),
 
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if(usuarios != null)...[
-                    for(int i = 0; i < usuarios.length/maxUsuariosPorFila; i++)
-                      Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-
-                            children: [
-                              for(int j = i*maxUsuariosPorFila; j < (i*maxUsuariosPorFila) + maxUsuariosPorFila && j < usuarios.length; j++)
-                                Container(
-                                    width:100,
-                                    height: 100,
-                                    margin: EdgeInsets.all(20),
-                                    alignment: Alignment.center,
-                                    child: ElevatedButton(
-                                      child: Column(
-                                        children: [
-                                          Text(usuarios[j].nombre,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-
-                                          Image.network(usuarios[j].foto,width:100,
-                                            height: 70,
-                                            fit: BoxFit.fill,),
-                                        ],
-
-                                      ),
-                                      onPressed: () {
-                                        Sesion.id = usuarios[j].id;
-                                        Sesion.nombre = usuarios[j].nombre;
-                                        Sesion.rol = usuarios[j].rol;
-                                        SeleccionUsuario();
-                                      },
-
-
-                                    )
-
-                                )
-                            ],
-                          )
-
-                      )
-                  ]
-                ]
-            )
-
-
-        );
-    }
+          );
+   }
   }
+
+  buildLandscape()
+  {
+    maxUsuariosPorFila = 5;
+    return
+      SingleChildScrollView(
+        child: buildLista()
+      );
+  }
+
+
+  buildPortrait()
+  {
+    maxUsuariosPorFila = 2;
+    return
+      SingleChildScrollView(
+          child: buildLista()
+      );
+
+  }
+
+  buildLista(){
+    return
+      Column(
+          children: [
+
+            for(int i = 0; i < usuarios.length/maxUsuariosPorFila; i++)
+              Container(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+
+                      children: [
+                        for(int j = i*maxUsuariosPorFila; j < (i*maxUsuariosPorFila) + maxUsuariosPorFila && j < usuarios.length; j++)
+                          Container(
+                              width:100,
+                              height: 100,
+                              margin: EdgeInsets.all(20),
+                              alignment: Alignment.center,
+                              child: ElevatedButton(
+                                child: Column(
+                                  children: [
+                                    Text(usuarios[j].nombre,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+
+                                    Image.network(usuarios[j].foto,width:100,
+                                      height: 70,
+                                      fit: BoxFit.fill,),
+                                  ],
+
+                                ),
+                                onPressed: () {
+                                  Sesion.id = usuarios[j].id;
+                                  Sesion.nombre = usuarios[j].nombre;
+                                  Sesion.rol = usuarios[j].rol;
+                                  SeleccionUsuario();
+                                },
+
+
+                              )
+
+                          )]
+                  )
+
+
+              ),
+          ]
+      );
+  }
+
+
 
   lecturaImagen(path) async
   {
@@ -218,20 +246,13 @@ class LoginPageState extends State<LoginPage>{
   }
 
 
+
   void _actualizar() async
   {
-    //var reloj = 1;
-    //await Future.delayed(Duration(seconds:reloj));
+    //maxUsuariosPorFila = MediaQuery.of(this.context).orientation == Orientation.portrait? 2 : 4;
     setState(() {
 
     });
   }
 
 }
-
-
-
-
-
-
-

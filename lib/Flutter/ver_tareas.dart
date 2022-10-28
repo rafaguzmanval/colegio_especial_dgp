@@ -257,9 +257,7 @@ class VerTareasState extends State<VerTareas>{
   Widget ReproductorVideo(controlador)
   {
     return
-      Container(
-        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-          child:Column(
+          Column(
               children:[
 
                 ElevatedButton(
@@ -273,23 +271,29 @@ class VerTareasState extends State<VerTareas>{
                     setState(() {
                     });
                   },
-                  child: AspectRatio(
-                      aspectRatio: controlador.value.aspectRatio ,
-                      child: VideoPlayer(controlador)
-                  ),
+                  child: Column(
+                    children: [
+                      AspectRatio(
+                          aspectRatio: controlador.value.aspectRatio ,
+                          child: VideoPlayer(controlador)
+                      ),
+                      Icon(
+                        controlador.value.isPlaying?Icons.pause:Icons.play_arrow,
+                        size: 20,
+                        semanticLabel: controlador.value.isPlaying?"Pausa":"Reanudar",
+                      ),
+
+
+                      Container( //duration of video
+                        child: Text("Total Duration: " + controlador.value.duration.toString()),
+                      ),
+
+                    ]
+
+
+                  )
                 ),
 
-                Icon(
-                  controlador.value.isPlaying?Icons.pause:Icons.play_arrow,
-                  size: 20,
-                  semanticLabel: controlador.value.isPlaying?"Pausa":"Reanudar",
-                ),
-
-
-
-                Container( //duration of video
-                  child: Text("Total Duration: " + controlador.value.duration.toString()),
-                ),
 
                 /*
                 Container(
@@ -305,7 +309,7 @@ class VerTareasState extends State<VerTareas>{
                 ),*/
 
               ]
-          )
+
 
       );
   }

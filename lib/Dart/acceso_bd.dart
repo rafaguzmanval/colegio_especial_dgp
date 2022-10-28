@@ -30,6 +30,8 @@ class AccesoBD{
   var db = FirebaseFirestore.instance;
   var storageRef = FirebaseStorage.instance.ref();
 
+  var fotoDesconocido = "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fperfiles%2Fdesconocido.png?alt=media&token=98ba72ac-776e-4f83-9aaa-57761589c974";
+
 
   registrarUsuario(usuario,foto) async{
 
@@ -38,13 +40,14 @@ class AccesoBD{
       var nuevaPassword = encriptacionSha256(usuario.password);
       var nombrehaseao = encriptacionSha256(usuario.apellidos + usuario.fechanacimiento);
 
-      var fotoPath = "Imágenes/perfiles/${usuario.nombre+usuario.apellidos+nombrehaseao}";
+      var fotoPath = null;
+      if(foto != null)
+        {
+          fotoPath = "Imágenes/perfiles/${usuario.nombre+usuario.apellidos+nombrehaseao}";
 
 
-      print("Se envia la imagen");
-
-      return await storageRef.child(fotoPath).putFile(foto).then((p0) async {
-          var fotoURL = await leerImagen(fotoPath);
+          return await storageRef.child(fotoPath).putFile(foto).then((p0) async {
+            var fotoURL = await leerImagen(fotoPath);
 
             var user = <String, dynamic>{
               "nombre": usuario.nombre,
@@ -55,12 +58,27 @@ class AccesoBD{
               "foto": fotoURL,
               "tareas": []
             };
+            db.collection("usuarios").add(user);
 
-          db.collection("usuarios").add(user);
+            return true;
+            });
+          }else{
 
-          return true;
+              var user = <String, dynamic>{
+                "nombre": usuario.nombre,
+                "apellidos": usuario.apellidos,
+                "password": nuevaPassword,
+                "fechanacimiento": usuario.fechanacimiento,
+                "rol": usuario.rol,
+                "foto": fotoDesconocido,
+                "tareas": []
+              };
+              db.collection("usuarios").add(user);
 
-      });
+              return true;
+
+          }
+
     }
     catch(e){
       print(e);

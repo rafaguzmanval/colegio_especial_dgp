@@ -20,6 +20,10 @@ import 'package:video_player/video_player.dart';
 import "package:image_picker/image_picker.dart";
 
 import "package:flutter_tts/flutter_tts.dart";
+import 'package:intl/intl.dart';
+
+
+
 
 enum SeleccionImagen{
   camara,
@@ -47,6 +51,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
   var registrando = false;
   var mensajeDeRegistro = "";
   var rolElegido = "ningun rol elegido";
+  var fechaElegida = null;
 
 
   final controladorNombre = TextEditingController();
@@ -200,6 +205,17 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
               controller: controladorPassword,
             ),
 
+            Text("Introduce fecha de nacimiento:"),
+
+            ElevatedButton(onPressed: () async{
+              await showDatePicker(context: context, locale: const Locale("es","ES"),initialDate: DateTime.now(), firstDate: DateTime(1940), lastDate: DateTime.now())
+              .then((e){ fechaElegida = e ; actualizar();});
+
+            }, child: Text((fechaElegida == null) ?"Elige la fecha de nacimiento" : DateFormat('d/M/y').format(fechaElegida))
+
+            ),
+
+            /*
             TextField(
               obscureText: false,
               decoration: InputDecoration(
@@ -207,7 +223,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
                 hintText: 'Introduce fecha de nacimiento',
               ),
               controller: controladorFechanacimiento,
-            ),
+            ),*/
 
 
             DropdownButton(
@@ -272,6 +288,11 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
       );
   }
 
+  onDateChanged()
+  {
+
+  }
+
   //Método para registrar usuario
   registrarUsuario()
   {
@@ -279,7 +300,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
     // FALTARIA HACER COMPROBACIÓN DE QUE EL NOMBRE Y APELLIDOS YA ESTÁN REGISTRADOS EN LA BASE DE DATOS
 
     if(controladorNombre.text.isNotEmpty && controladorApellidos.text.isNotEmpty && controladorPassword.text.isNotEmpty
-        && controladorFechanacimiento.text.isNotEmpty && fotoTomada != null && rolElegido != "ningun rol elegido")
+        && fechaElegida != null && rolElegido != "ningun rol elegido")
     {
       registrando = true;
       actualizar();
@@ -287,15 +308,21 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
       var nombre = "" + controladorNombre.text;
       var apellidos = "" + controladorApellidos.text;
       var password = "" + controladorPassword.text;
-      var fechanacimiento = "" + controladorFechanacimiento.text;
+      var fechanacimiento = "" + DateFormat('d/M/y').format(fechaElegida);
       var rol = "" + rolElegido;
 
       Usuario usuario = Usuario();
       usuario.setUsuario(
           nombre, apellidos, password, fechanacimiento, rol, "");
 
+      var foto = null;
+      if(fotoTomada != null)
+        {
+          foto = File(fotoTomada.path);
+        }
 
-      var future = base.registrarUsuario(usuario, File(fotoTomada.path));
+
+      var future = base.registrarUsuario(usuario, foto);
 
       future.then((value) {
         registrando = false;
@@ -323,6 +350,22 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
         actualizar();
       }
   }
+  /*
+  Future<Null> _selectDate(BuildContext context) async{
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      initialDatePickerMode: DatePickerMode.year,
+      firstDate: DateTime(1940),
+      lastDate: DateTime(2101));
+
+    if(picked != null)
+      setState(() {
+        fechaElegida = picked;
+        Date
+        controladorFechanacimiento.text = DateFormat.yMd().format(fechaElegida);
+      });
+  }*/
 
  void actualizar() async
   {
