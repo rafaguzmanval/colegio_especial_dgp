@@ -333,6 +333,29 @@ class AccesoBD{
     }
   }
 
+  consultarTodosProfesores() async
+  {
+    try {
+      var usuarios = [];
+
+      final ref = db.collection("usuarios").withConverter(
+          fromFirestore: Usuario.fromFirestore,
+          toFirestore: (Usuario user, _) => user.toFirestore());
+
+      final consulta = await ref.where("rol", isEqualTo: "Rol.profesor").get();
+
+      consulta.docs.forEach((element) {
+        final usuarioNuevo = element.data();
+        usuarioNuevo.id = element.id;
+        usuarios.add(usuarioNuevo);
+      });
+
+      return usuarios;
+    }catch(e){
+      print(e);
+    }
+  }
+
 
   consultarTodasLasTareas() async{
     try {
