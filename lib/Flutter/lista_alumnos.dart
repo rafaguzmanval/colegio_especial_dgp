@@ -75,20 +75,16 @@ class ListaAlumnosState extends State<ListaAlumnos>{
           title: Text('Lista de alumnos'),
         ),
 
-          body:   SingleChildScrollView( controller: homeController, child: Stack(
+          body:
+          Stack(
               children: [
-                if(Sesion.rol == Rol.alumno.toString())...[
-                  VistaAlumno(),
-                ]
-                else if(Sesion.rol == Rol.profesor.toString())...[
-                  VistaProfesor()
-                ]
-                else if(Sesion.rol == Rol.administrador.toString())...[
-                    VistaAdministrador()
-                  ]
-                  else if(Sesion.rol == Rol.programador.toString())...[
-                      VistaProgramador()
-                    ],
+              OrientationBuilder(builder: (context,orientation)=>
+              orientation == Orientation.portrait
+              ? buildPortrait()
+              : buildLandscape(),
+
+                ),
+
                 Container(
                   alignment: FractionalOffset(0.98,0.01),
                   child: FloatingActionButton(
@@ -131,7 +127,7 @@ class ListaAlumnosState extends State<ListaAlumnos>{
                 ),
               ]
           )
-          )
+
       );
 
 
@@ -230,6 +226,42 @@ class ListaAlumnosState extends State<ListaAlumnos>{
   cargarAlumnos() async{
     alumnos = await base.consultarTodosAlumnos();
     actualizar();
+  }
+
+  buildLandscape()
+  {
+    return
+      SingleChildScrollView(
+          controller: homeController,
+        child: lista(),
+      );
+  }
+
+
+  buildPortrait()
+  {
+    return
+      SingleChildScrollView(
+          controller: homeController,
+        child: lista(),
+      );
+
+  }
+
+  lista()
+  {
+      if(Sesion.rol == Rol.alumno.toString()) {
+        return VistaAlumno();
+    }
+    else if(Sesion.rol == Rol.profesor.toString()) {
+        return VistaProfesor();
+      }
+    else if(Sesion.rol == Rol.administrador.toString()) {
+        return  VistaAdministrador();
+      }
+    else if(Sesion.rol == Rol.programador.toString()) {
+        return VistaProgramador();
+      }
   }
 
 
