@@ -45,7 +45,8 @@ class VerTareasState extends State<VerTareas>{
   var indiceTextos = 0;
   var indiceImagenes = 0;
   var indiceVideos = 0;
-
+  double offSetActual = 0;
+  ScrollController homeController = new ScrollController();
   var db = FirebaseFirestore.instance;
 
   AccesoBD base = new AccesoBD();
@@ -106,32 +107,58 @@ class VerTareasState extends State<VerTareas>{
 
           title: Text('Tareas'),
         ),
-        body: Container(
+        body:
+                 Stack(
+                 children: [
+                 OrientationBuilder(builder: (context,orientation)=>
+          orientation == Orientation.portrait
+              ? buildPortrait()
+              : buildLandscape(),
 
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal:  0),
-            child: Column(
-              children: [
+          ),
+
+          Container(
+          alignment: FractionalOffset(0.98,0.01),
+          child: FloatingActionButton(
+          child: Icon(Icons.arrow_upward),
+          elevation: 1.0,
+          onPressed: (){
+
+          offSetActual -= 100.0;
+          if(offSetActual < homeController.position.minScrollExtent)
+          offSetActual = homeController.position.minScrollExtent;
+
+          homeController.animateTo(
+          offSetActual, // change 0.0 {double offset} to corresponding widget position
+          duration: Duration(seconds: 1),
+          curve: Curves.easeOut,
+          );
+
+          }),
+          ),
+
+          Container(
+          alignment: FractionalOffset(0.98,0.99),
+          child: FloatingActionButton(
+          child: Icon(Icons.arrow_downward),
+          elevation: 1.0,
+          onPressed: (){
+          offSetActual += 100;
+
+          if(offSetActual > homeController.position.maxScrollExtent)
+          offSetActual = homeController.position.maxScrollExtent;
 
 
-                if(Sesion.rol == Rol.alumno.toString())...[
-                  VistaAlumno(),
-                ]
-                else if(Sesion.rol == Rol.profesor.toString())...[
-                  VistaProfesor()
-                ]
-                else if(Sesion.rol == Rol.administrador.toString())...[
-                    VistaAdministrador()
-                  ]
-                  else if(Sesion.rol == Rol.programador.toString())...[
-                      VistaProgramador()
-                    ]
-              ],
-            )
+          homeController.animateTo(
+          offSetActual, // change 0.0 {double offset} to corresponding widget position
+          duration: Duration(seconds: 1),
+          curve: Curves.easeOut,
+          );
 
-
-
-
-        ),
+          }),
+          ),
+          ]
+          )
       );
 
 
@@ -317,6 +344,43 @@ class VerTareasState extends State<VerTareas>{
 
   cargarTareas() async {
     await base.consultarTareasAsignadasAlumno(Sesion.id,true);
+  }
+
+  buildLandscape()
+  {
+    return
+      SingleChildScrollView(
+        controller: homeController,
+        child: VistaTareas(),
+      );
+  }
+
+
+  buildPortrait()
+  {
+    return
+      SingleChildScrollView(
+        controller: homeController,
+        child: VistaTareas(),
+      );
+
+  }
+
+  VistaTareas()
+  {
+            if(Sesion.rol == Rol.alumno.toString()) {
+              return VistaAlumno();
+             }
+            else if(Sesion.rol == Rol.profesor.toString()) {
+              return VistaProfesor();
+            }
+            else if(Sesion.rol == Rol.administrador.toString()) {
+              return VistaAdministrador();
+            }
+              else if(Sesion.rol == Rol.programador.toString()) {
+              return VistaProgramador();
+            }
+
   }
 
 
