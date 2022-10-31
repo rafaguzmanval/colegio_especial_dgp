@@ -139,23 +139,34 @@ class ListaProfesoresState extends State<ListaProfesores>{
 
             for(int i = 0; i < profesores.length; i++)
               Container(
-                  constraints: BoxConstraints(maxWidth: 70,minWidth: 30),
+                  constraints: BoxConstraints(maxWidth: 80,minWidth: 30, maxHeight: 80),
                   margin: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                       color: Colors.cyan,
                       borderRadius: BorderRadius.circular(20)),
                   alignment: Alignment.center,
                   child: ElevatedButton(
-                    child: Text(profesores[i].nombre,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+                    child: Column(
+                      children: [
+                        Text(profesores[i].nombre,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+
+                        Image.network(profesores[i].foto,width:100,
+                          height: 55,
+                          fit: BoxFit.fill,),
+                      ],
+
                     ),
                     onPressed: () {
                       Sesion.seleccion = profesores[i];
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) => PerfilProfesor()));
                     },
+
+
 
 
                   )

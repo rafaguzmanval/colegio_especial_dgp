@@ -36,6 +36,9 @@ class ListaAlumnosState extends State<ListaAlumnos>{
   var alumnos = [];
 
   var db = FirebaseFirestore.instance;
+  double offSetActual = 0;
+  ScrollController homeController = new ScrollController();
+
 
   AccesoBD base = new AccesoBD();
 
@@ -71,13 +74,9 @@ class ListaAlumnosState extends State<ListaAlumnos>{
 
           title: Text('Lista de alumnos'),
         ),
-        body: Container(
 
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal:  0),
-            child: Column(
+          body:   SingleChildScrollView( controller: homeController, child: Stack(
               children: [
-
-
                 if(Sesion.rol == Rol.alumno.toString())...[
                   VistaAlumno(),
                 ]
@@ -89,14 +88,50 @@ class ListaAlumnosState extends State<ListaAlumnos>{
                   ]
                   else if(Sesion.rol == Rol.programador.toString())...[
                       VistaProgramador()
-                    ]
-              ],
-            )
+                    ],
+                Container(
+                  alignment: FractionalOffset(0.98,0.01),
+                  child: FloatingActionButton(
+                      child: Icon(Icons.arrow_upward),
+                      elevation: 1.0,
+                      onPressed: (){
+
+                        offSetActual -= 100.0;
+                        if(offSetActual < homeController.position.minScrollExtent)
+                          offSetActual = homeController.position.minScrollExtent;
+
+                        homeController.animateTo(
+                          offSetActual, // change 0.0 {double offset} to corresponding widget position
+                          duration: Duration(seconds: 1),
+                          curve: Curves.easeOut,
+                        );
+
+                      }),
+                ),
+
+                Container(
+                  alignment: FractionalOffset(0.98,0.99),
+                  child: FloatingActionButton(
+                      child: Icon(Icons.arrow_downward),
+                      elevation: 1.0,
+                      onPressed: (){
+                        offSetActual += 100;
+
+                        if(offSetActual > homeController.position.maxScrollExtent)
+                          offSetActual = homeController.position.maxScrollExtent;
 
 
+                        homeController.animateTo(
+                          offSetActual, // change 0.0 {double offset} to corresponding widget position
+                          duration: Duration(seconds: 1),
+                          curve: Curves.easeOut,
+                        );
 
-
-        ),
+                      }),
+                ),
+              ]
+          )
+          )
       );
 
 
@@ -138,17 +173,26 @@ class ListaAlumnosState extends State<ListaAlumnos>{
 
             for(int i = 0; i < alumnos.length; i++)
               Container(
-                  constraints: BoxConstraints(maxWidth: 70,minWidth: 30),
+                  constraints: BoxConstraints(maxWidth: 80,minWidth: 30, maxHeight: 80),
                   margin: EdgeInsets.all(10),
                   decoration: BoxDecoration(
                       color: Colors.cyan,
                       borderRadius: BorderRadius.circular(20)),
                   alignment: Alignment.center,
                   child: ElevatedButton(
-                    child: Text(alumnos[i].nombre,
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+                    child: Column(
+                      children: [
+                        Text(alumnos[i].nombre,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+
+                        Image.network(alumnos[i].foto,width:100,
+                          height: 55,
+                          fit: BoxFit.fill,),
+                      ],
+
                     ),
                     onPressed: () {
                       Sesion.seleccion = alumnos[i];
