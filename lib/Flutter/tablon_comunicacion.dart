@@ -202,7 +202,6 @@ class TablonComunicacionState extends State<TablonComunicacion>{
         child:Column(
           children:[
 
-            Text("Eres un programador")
 
           ],
         ),

@@ -118,7 +118,6 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
         //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
           child:Column(
               children:[
-                        Text("Eres un alumno"),
 
                     ],
                   ),
@@ -139,7 +138,6 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
         child:Column(
           children:[
 
-            Text("Eres un profesor")
 
           ],
         ),

@@ -58,8 +58,6 @@ class PerfilProfesorState extends State<PerfilProfesor>{
 
     Sesion.paginaActual = this;
     cargarUsuario();
-    cargarTareas();
-
 
 
   }
@@ -118,7 +116,6 @@ class PerfilProfesorState extends State<PerfilProfesor>{
         //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
         child:Column(
           children:[
-            Text("Eres un alumno"),
 
           ],
         ),
@@ -139,7 +136,6 @@ class PerfilProfesorState extends State<PerfilProfesor>{
         child:Column(
           children:[
 
-            Text("Eres un profesor")
 
           ],
         ),
@@ -186,20 +182,8 @@ class PerfilProfesorState extends State<PerfilProfesor>{
   }
 
   cargarUsuario() async// EN sesion seleccion estara el id del usuario que se ha elegido
-      {
+   {
     usuarioPerfil = await base.consultarIDusuario(Sesion.seleccion.id);
-    await base.consultarTareasAsignadasAlumno(Sesion.seleccion.id,false);
-    actualizar();
-  }
-
-  cargarTareas() async
-  {
-    tareas = await base.consultarTodasLasTareas();
-
-    for(int i = 0; i < tareas.length; i++){
-      nombresTareas.add(tareas[i].nombre);
-    }
-
     actualizar();
   }
 

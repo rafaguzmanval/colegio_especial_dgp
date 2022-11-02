@@ -181,7 +181,6 @@ class VerTareasState extends State<VerTareas>{
       alignment: Alignment.center,
       child:Column(
         children:[
-          Text("Eres un alumno"),
 
 
           if(Sesion.tareas != null)...[
@@ -273,7 +272,6 @@ class VerTareasState extends State<VerTareas>{
         child:Column(
           children:[
 
-            Text("Eres un programador")
 
           ],
         ),

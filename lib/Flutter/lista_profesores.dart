@@ -135,7 +135,6 @@ class ListaProfesoresState extends State<ListaProfesores>{
         child:Column(
           children:[
 
-            Text("Eres un administrador"),
 
             for(int i = 0; i < profesores.length; i++)
               Container(
@@ -187,8 +186,6 @@ class ListaProfesoresState extends State<ListaProfesores>{
         //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
         child:Column(
           children:[
-
-            Text("Eres un programador")
 
           ],
         ),

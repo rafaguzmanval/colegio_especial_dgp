@@ -342,7 +342,7 @@ class AccesoBD{
           fromFirestore: Usuario.fromFirestore,
           toFirestore: (Usuario user, _) => user.toFirestore());
 
-      final consulta = await ref.where("rol", isEqualTo: "Rol.profesor").get();
+      final consulta = await ref.where("rol", isNotEqualTo: "Rol.alumno").get();
 
       consulta.docs.forEach((element) {
         final usuarioNuevo = element.data();

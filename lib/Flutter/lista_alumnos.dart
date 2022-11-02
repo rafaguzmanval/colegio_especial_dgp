@@ -39,7 +39,6 @@ class ListaAlumnosState extends State<ListaAlumnos>{
   double offSetActual = 0;
   ScrollController homeController = new ScrollController();
 
-
   AccesoBD base = new AccesoBD();
 
 
@@ -165,7 +164,6 @@ class ListaAlumnosState extends State<ListaAlumnos>{
         child:Column(
           children:[
 
-            Text("Eres un profesor"),
 
             for(int i = 0; i < alumnos.length; i++)
               Container(
@@ -216,7 +214,6 @@ class ListaAlumnosState extends State<ListaAlumnos>{
         child:Column(
           children:[
 
-            Text("Eres un programador")
 
           ],
         ),

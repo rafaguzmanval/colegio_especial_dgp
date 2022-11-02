@@ -174,7 +174,6 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
         child:Column(
           children:[
 
-            Text("Eres un administrador"),
 
             Text("\nRegistra un nuevo usuario:"),
 

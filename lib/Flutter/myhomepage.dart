@@ -27,7 +27,7 @@ import "package:image_picker/image_picker.dart";
 import "package:flutter_tts/flutter_tts.dart";
 
 import 'lista_alumnos.dart';
-import 'Lista_profesores.dart';
+import 'lista_profesores.dart';
 
 enum SeleccionImagen{
   camara,

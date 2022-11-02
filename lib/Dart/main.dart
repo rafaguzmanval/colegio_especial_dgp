@@ -12,6 +12,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 var user = "";
 
+var color = Colors.orange[200];
+
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
 
@@ -40,7 +42,7 @@ class App extends StatelessWidget{
         Locale('en','US')
       ],
       title: 'Proyecto Colegio Especial',
-      theme: ThemeData(primarySwatch: Colors.deepOrange),
+      theme: ThemeData(primarySwatch: Colors.orange),
       home: LoginPage(),
     );
   }
