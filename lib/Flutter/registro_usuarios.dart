@@ -240,7 +240,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
             ),
 
             ElevatedButton(
-                child: Text('Haz una foto para la imagen de perfil'),
+                child: Text('Haz una foto desde la cámara'),
                 onPressed: (){seleccionarImagen(SeleccionImagen.camara);}
             ),
             ElevatedButton(

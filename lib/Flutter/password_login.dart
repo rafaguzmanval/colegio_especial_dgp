@@ -71,7 +71,7 @@ class PasswordLoginState extends State<PasswordLogin>{
                   ElevatedButton(
                         child: Text("Enviar",
                           style: TextStyle(
-                            color: Colors.black54,
+                            color: Colors.white,
                           ),
                         ),
                         onPressed: () {

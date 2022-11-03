@@ -90,7 +90,10 @@ class MyHomePageState extends State<MyHomePage>{
 
         appBar:AppBar(
 
-          title: Text('Hola ${Sesion.nombre}'),
+          title: Column(
+            children: [Text('Menú principal'),
+          ]
+          ),
           automaticallyImplyLeading: false,
         ),
         body: Container(
