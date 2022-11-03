@@ -50,7 +50,6 @@ class ListaAlumnosState extends State<ListaAlumnos>{
 
     Sesion.seleccion = "";
     Sesion.tareas = [];
-    Sesion.controladoresVideo = [];
 
     if(Sesion.rol != Rol.alumno.toString())
     {

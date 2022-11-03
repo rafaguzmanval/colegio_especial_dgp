@@ -65,12 +65,16 @@ class VerTareasState extends State<VerTareas>{
   @override
   void dispose(){
 
-    for(int i = 0; i < Sesion.controladoresVideo.length;i++)
+    for(int i = 0; i < Sesion.tareas.length;i++)
       {
-        Sesion.controladoresVideo[i].dispose();
+        for(int j = 0; j < Sesion.tareas[i].controladoresVideo.length;j++)
+           {
+             Sesion.tareas[i].controladoresVideo[j].dispose();
+           }
+        Sesion.tareas[i].controladoresVideo.clear();
       }
 
-    Sesion.controladoresVideo.clear();
+
 
     super.dispose();
   }
@@ -85,7 +89,6 @@ class VerTareasState extends State<VerTareas>{
 
     Sesion.seleccion = "";
     Sesion.tareas = [];
-    Sesion.controladoresVideo = [];
 
 
     if(Sesion.rol == Rol.alumno.toString())

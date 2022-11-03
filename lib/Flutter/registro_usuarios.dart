@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:colegio_especial_dgp/Dart/passport_method.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/discapacidad.dart';
 import 'package:colegio_especial_dgp/Flutter/loginpage.dart';
@@ -312,7 +313,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
 
       Usuario usuario = Usuario();
       usuario.setUsuario(
-          nombre, apellidos, password, fechanacimiento, rol, "");
+          nombre, apellidos, password, fechanacimiento, rol, "",Passportmethod.text);
 
       var foto = null;
       if(fotoTomada != null)

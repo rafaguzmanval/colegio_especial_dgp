@@ -2,6 +2,7 @@
 import 'dart:ui';
 
 import 'package:colegio_especial_dgp/Dart/main.dart';
+import 'package:colegio_especial_dgp/Dart/passport_method.dart';
 import 'package:colegio_especial_dgp/Flutter/password_login.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../Dart/notificacion.dart';
@@ -43,7 +44,7 @@ class LoginPageState extends State<LoginPage>{
     obtenerAutenticacion();
     inicializar();
     Notificacion.initialize(flutterLocalNotificationsPlugin);
-    Notificacion.showBigTextNotification(title: "Bienvenio", body: "LA gran notificacion", fln: flutterLocalNotificationsPlugin);
+    //Notificacion.showBigTextNotification(title: "Bienvenio", body: "LA gran notificacion", fln: flutterLocalNotificationsPlugin);
     Sesion.reload();
     Sesion.paginaActual = this;
 
@@ -272,6 +273,7 @@ class LoginPageState extends State<LoginPage>{
                                   Sesion.id = usuarios[j].id;
                                   Sesion.nombre = usuarios[j].nombre;
                                   Sesion.rol = usuarios[j].rol;
+                                  Sesion.metodoLogin = usuarios[j].metodoLogeo != null? usuarios[j].metodoLogeo : Passportmethod.text.toString();
                                   SeleccionUsuario();
                                 },
 

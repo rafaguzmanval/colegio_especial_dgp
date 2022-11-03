@@ -54,13 +54,6 @@ class MyHomePageState extends State<MyHomePage>{
   @override
   void dispose(){
 
-    for(int i = 0; i < Sesion.controladoresVideo.length;i++)
-      {
-        Sesion.controladoresVideo[i].dispose();
-      }
-
-    Sesion.controladoresVideo.clear();
-
     super.dispose();
   }
 
@@ -74,7 +67,6 @@ class MyHomePageState extends State<MyHomePage>{
 
     Sesion.seleccion = "";
     Sesion.tareas = [];
-    Sesion.controladoresVideo = [];
 
 
   }

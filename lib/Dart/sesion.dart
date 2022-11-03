@@ -1,4 +1,6 @@
 
+import 'package:colegio_especial_dgp/Dart/passport_method.dart';
+
 class Sesion{
    static var id;
    static var credenciales;
@@ -7,7 +9,7 @@ class Sesion{
    static var tareas;
    static var seleccion;
    static var paginaActual;
-   static var controladoresVideo = [];
+   static var metodoLogin = "";
 
    static reload(){
       id = null;

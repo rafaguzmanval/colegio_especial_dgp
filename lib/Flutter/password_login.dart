@@ -1,6 +1,9 @@
 
+import 'dart:async';
+
 import 'package:colegio_especial_dgp/Dart/discapacidad.dart';
 import 'package:colegio_especial_dgp/Dart/main.dart';
+import 'package:colegio_especial_dgp/Dart/passport_method.dart';
 import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
 import '../Dart/clase.dart';
 import '../Dart/usuario.dart';
@@ -25,6 +28,16 @@ class PasswordLoginState extends State<PasswordLogin>{
 
   AccesoBD base = new AccesoBD();
   var usuarios;
+  var concatenacionPin = "";
+  var pulsaciones = 0;
+  var errorLog = "";
+  var error = false;
+  var temporizador;
+  var pictogramasPin = ["https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpin%2Fconejo.png?alt=media&token=b93aefd5-f2f8-4056-949d-863b6bbec317",
+    "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpin%2Fduende.png?alt=media&token=3fc18f70-ecce-4d23-8506-79a7bc048b87",
+    "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpin%2Fmariposa.png?alt=media&token=acb62a95-3373-4ec0-82e2-881fb5a8ab5e",
+    "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpin%2Fprincesa.png?alt=media&token=d890b321-1136-41e4-8317-0f7f2fb88689"];
+
 
 
   @override
@@ -43,6 +56,25 @@ class PasswordLoginState extends State<PasswordLogin>{
   }
 
 
+  void temporizadorPin([int milliseconds = 3000]) {
+    if(temporizador != null)temporizador.cancel();
+    temporizador = Timer(Duration(milliseconds:milliseconds),advertencia);
+  }
+
+
+  void advertencia(){
+    error = false;
+    errorLog = "El pin no es correcto, pulsa el botón si te has equivocado";
+    _actualizar();
+  }
+
+  void resetPin(){
+    concatenacionPin = "";
+    error = true;
+    errorLog = "Vuelve a introducir el pin";
+    _actualizar();
+  }
+
   @override
   Widget build(BuildContext context){
 
@@ -52,39 +84,124 @@ class PasswordLoginState extends State<PasswordLogin>{
 
       ),
       body:
-          Container(
-              margin:EdgeInsets.all(5),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+            Container(
+                  margin:EdgeInsets.all(5),
+                  child:
+                    vista()
+            )
 
-                children: [
-                  TextField(
-                    obscureText: true,
+    );
+  }
 
-                    decoration: InputDecoration(
-                      border:OutlineInputBorder(),
-                      hintText: 'Introduce la clave',
-                        ),
-                      controller: myController,
-                    ),
+  Widget vista()
+  {
 
-                  ElevatedButton(
-                        child: Text("Enviar",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        onPressed: () {
-                          ComprobarLogeo(Sesion.id, myController.text);
-                        },
+    if(Sesion.metodoLogin == Passportmethod.pin.toString())
+      {
+        return vistaPin();
+      }
+    else
+      {
+        return vistaClave();
+      }
+  }
 
 
-                      )
-                ],
-              )
+  Widget vistaClave()
+  {
+    return
+      Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+
+        children: [
+        TextField(
+        obscureText: true,
+
+        decoration: InputDecoration(
+        border:OutlineInputBorder(),
+        hintText: 'Introduce la clave',
+        ),
+        controller: myController,
+      ),
+
+          ElevatedButton(
+          child: Text("Enviar",
+          style: TextStyle(
+          color: Colors.white,
+          ),
+          ),
+          onPressed: () {
+          ComprobarLogeo(Sesion.id, myController.text);
+          },
+
 
         ),
+
+          Text(errorLog)
+        ]
     );
+  }
+
+  Widget vistaPin(){
+    return
+      Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+
+          children: [
+
+            Row(
+
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+
+                Expanded(
+                  flex: 2,
+                  child: Container(margin: EdgeInsets.all(20), child:ElevatedButton(onPressed: (){concatenarPin("conejo");}, child: Image.network(pictogramasPin[0]))),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Container(margin: EdgeInsets.all(20), child:ElevatedButton(onPressed: (){concatenarPin("duende");}, child: Image.network(pictogramasPin[1]))),
+                ),
+
+
+            ],),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  flex: 2,
+
+                  child: Container(margin: EdgeInsets.all(20), child:ElevatedButton(onPressed: (){concatenarPin("mariposa");}, child: Image.network(pictogramasPin[2]))),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: Container(margin: EdgeInsets.all(20), child:ElevatedButton(onPressed: (){concatenarPin("princesa");}, child: Image.network(pictogramasPin[3]))),
+                )
+
+
+            ],),
+
+
+            Text(errorLog,selectionColor: error?Colors.red:Colors.black54,),
+
+            ElevatedButton(onPressed: (){ resetPin();}, child: Text("Volver a introducir")),
+          ]
+      );
+
+  }
+
+  concatenarPin(nuevo)
+  {
+    pulsaciones ++;
+    concatenacionPin += nuevo;
+    ComprobarLogeo(Sesion.id, concatenacionPin);
+
+    if(pulsaciones > 2)
+      {
+        temporizadorPin();
+      }
+
   }
 
   inicializar() async{

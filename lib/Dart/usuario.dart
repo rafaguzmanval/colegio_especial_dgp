@@ -27,7 +27,7 @@ class Usuario{
   var rol;
   var foto;
   var tareas;
-  Passportmethod metodoLogeo = Passportmethod.free; // Si el usuario necesita algún otro método para meter contraseña
+  var metodoLogeo; // Si el usuario necesita algún otro método para meter contraseña
 
 
   Usuario({
@@ -38,7 +38,8 @@ class Usuario{
           this.fechanacimiento,
           this.rol,
           this.foto,
-          this.tareas});
+          this.tareas,
+          this.metodoLogeo});
 
 
   factory Usuario.fromFirestore(
@@ -54,6 +55,7 @@ class Usuario{
       rol: data?['rol'],
       foto: data?['foto'],
       tareas: data?['tareas'] is Iterable ? List.from(data?['tareas']) : null,
+      metodoLogeo : data?['metodoLogeo'],
     );
   }
 
@@ -66,11 +68,12 @@ class Usuario{
       if(foto != null) "foto" : foto,
       if (password != null) "password": password,
       if (tareas != null) "tareas": tareas,
+      if(metodoLogeo != null) "metodoLogeo" : metodoLogeo,
 
     };
   }
 
-  setUsuario(nombre,apellidos,password,fechanacimiento,rol,foto)
+  setUsuario(nombre,apellidos,password,fechanacimiento,rol,foto,metodoLogeo)
   {
     this.nombre = nombre;
     this.apellidos = apellidos;
@@ -78,6 +81,7 @@ class Usuario{
     this.fechanacimiento = fechanacimiento;
     this.rol = rol;
     this.foto = foto;
+    this.metodoLogeo = metodoLogeo;
 
   }
 
