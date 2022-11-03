@@ -87,8 +87,7 @@ class MyHomePageState extends State<MyHomePage>{
     return
       new WillPopScope(child: new Scaffold(
         appBar:AppBar(
-          leading: IconButton(icon: Icon(Icons.settings_power, color: Colors.white),onPressed: () => Navigator.push(context,
-              MaterialPageRoute(builder: (context) => LoginPage()))),
+          leading: IconButton(icon: Icon(Icons.settings_power, color: Colors.white),onPressed: () => _onBackPressed(context)),
 
           title: Column(
             children: [Text('Menú principal'),

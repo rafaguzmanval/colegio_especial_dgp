@@ -239,8 +239,8 @@ class VerTareasState extends State<VerTareas>{
 
 
                 Container(
-                  width: 200.0,
-                  height: 200.0,
+                  width: 500.0,
+                  height: 500.0,
                   decoration: BoxDecoration(
                       color: Colors.cyan,
                       borderRadius: BorderRadius.circular(20),
