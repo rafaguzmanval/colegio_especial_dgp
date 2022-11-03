@@ -1,3 +1,4 @@
+
 import 'dart:html';
 import 'dart:io';
 
@@ -58,8 +59,9 @@ class VerTareasState extends State<VerTareas>{
 
   var lenguajes;
 
+  bool verFlechaIzquierda = false;
+  bool verFlechaDerecha = true;
 
-  FlutterTts tts = new FlutterTts();
 
 
   ///Cuándo se pasa de página es necesario que todos los controladores de los formularios y de los reproductores de vídeo se destruyan.
@@ -119,8 +121,6 @@ class VerTareasState extends State<VerTareas>{
               children: [
 
                 if(Sesion.rol == Rol.alumno.toString())...[
-                  //BotonIzq(),
-                  //BotonDer(),
                   VistaAlumno(),
 
                 ]
@@ -182,103 +182,127 @@ class VerTareasState extends State<VerTareas>{
             ),
           );*/
 
-       ListView(
-          children: <Widget>[
-      if(Sesion.tareas != null)...[
-        Wrap(
-          //ROW 2
-          alignment: WrapAlignment.end,
-          //spacing: 800,
-          children: [
+       Column(
+              children: <Widget>[
 
-            Container(
-              child:
-              Text("${Sesion.nombre}",
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 20.0,
+            Wrap(
+              //ROW 2
+              alignment: WrapAlignment.end,
+              //spacing: 800,
+              children: [
+
+                Container(
+                  child:
+                  Text("${Sesion.nombre}",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20.0,
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
-        ),
-    Row(
-    //ROW 2
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            if(Sesion.tareas.length > 0)...[
 
-    children: [
-      Container(
-          margin: EdgeInsets.only(top: 100.0),
-          child: FloatingActionButton(
-              onPressed: (){
+              Row(
+              //ROW 2
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
-                if(tareaActual > 0){
-                  tareaActual--;
-                  resetIndicesTarea();
-                  actualizar();
-                }
-                print(tareaActual);
-              },
-              child: const Icon(Icons.arrow_left)
-          ),
-      ),
+              children: [
 
-      Container(
-        width: 500.0,
-        height: 500.0,
-        decoration: BoxDecoration(
-            color: Colors.cyan,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.blueAccent)
-        ),
-        margin: EdgeInsets.only(top: 50.0),
-        child: Column(
-          //mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(Sesion.tareas[tareaActual].nombre,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 30.0,
-              ),
-            ),
+                Visibility(child:
+                  Container(
+                      margin: EdgeInsets.only(top: 100.0),
+                      child: FloatingActionButton(
+                          onPressed: (){
 
-            SizedBox(height: 50),
+                            if(tareaActual > 0){
+                              tareaActual--;
+                              resetIndicesTarea();
+                              verFlechaDerecha = true;
 
-            Text("AQUI VA EL VIDEO",
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            SizedBox(height: 100),
-            Text("AQUI VA LA LISTA DE PASOS PARA COMPLETAR LA TAREA",
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ]
+                            }
+                            verFlechaIzquierda = tareaActual != 0;
 
-      ),
-      ),
 
-      Container(
-      margin: EdgeInsets.only(top: 100.0),
-      child:FloatingActionButton(
-          onPressed: (){
+                            actualizar();
 
-            if(tareaActual < Sesion.tareas.length -1){
-              tareaActual++;
-              resetIndicesTarea();
-              actualizar();
-            }
-            print(tareaActual);
-          },
-          child: const Icon(Icons.arrow_right)
-      ),
-      ),
-    ],
-  ),
-    ]
-      ]
+                          },
+                          child: const Icon(Icons.arrow_left)
+                      ),
+                  ),
+                  visible: verFlechaIzquierda,
+                ),
+
+
+
+
+
+                Container(
+                  width: 200.0,
+                  height: 200.0,
+                  decoration: BoxDecoration(
+                      color: Colors.cyan,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.blueAccent)
+                  ),
+                  margin: EdgeInsets.only(top: 50.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(Sesion.tareas[tareaActual].nombre,
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+
+                      resetIndicesTarea(),
+                      for(int j = 0; j < Sesion.tareas[tareaActual].orden.length; j++)
+                        LecturaTarea(Sesion.tareas[tareaActual].orden[j],tareaActual)
+                    ]
+
+                    ),
+                    ),
+
+                      Visibility(child:
+                      Container(
+                        margin: EdgeInsets.only(top: 100.0),
+                        child:FloatingActionButton(
+                            onPressed: (){
+
+                              if(tareaActual < Sesion.tareas.length ){
+                                tareaActual++;
+                                verFlechaIzquierda = true;
+                                resetIndicesTarea();
+
+                              }
+
+                              verFlechaDerecha = tareaActual != Sesion.tareas.length - 1;
+
+                              actualizar();
+                            },
+                            child: const Icon(Icons.arrow_right)
+                        ),
+                      ),
+                        visible: verFlechaDerecha,
+                      )
+                    ]
+
+
+
+                ),
+
+
+
+
+
+
+
+
+              ],
+
+        ]
+
       );
 
   }
@@ -298,7 +322,7 @@ class VerTareasState extends State<VerTareas>{
   * */
   Widget LecturaTarea(String valor, i){
 
-    if(valor == "T")
+    if(valor == "T" && Sesion.tareas[i].textos.length > indiceTextos)
       {
         String pathTexto = Sesion.tareas[i].textos[indiceTextos];
         incIndiceTextos();
@@ -309,17 +333,18 @@ class VerTareasState extends State<VerTareas>{
           )
         );
       }
-    else if(valor == "I")
+    else if(valor == "I" && Sesion.tareas[i].imagenes.length > indiceImagenes)
       {
+
         String pathImagen = Sesion.tareas[i].imagenes[indiceImagenes];
         incIndiceImagenes();
 
         return
           Image.network(pathImagen);
       }
-    else if(valor == "V" && Sesion.controladoresVideo.length > 0 )
+    else if(valor == "V" && Sesion.tareas[i].controladoresVideo.length > 0 )
       {
-        return  ReproductorVideo(Sesion.controladoresVideo[indiceVideos++]);
+        return  ReproductorVideo(Sesion.tareas[i].controladoresVideo[indiceVideos++]);
       }
 
     else return
@@ -344,9 +369,6 @@ class VerTareasState extends State<VerTareas>{
   Widget ReproductorVideo(controlador)
   {
     return
-          Column(
-              children:[
-
                 ElevatedButton(
 
                   onPressed: (){
@@ -379,26 +401,8 @@ class VerTareasState extends State<VerTareas>{
 
 
                   )
-                ),
+                );
 
-
-                /*
-                Container(
-                    child: VideoProgressIndicator(
-                        controlador,
-                        allowScrubbing: true,
-                        colors:VideoProgressColors(
-                          backgroundColor: Colors.black,
-                          playedColor: Colors.red,
-                          bufferedColor: Colors.grey,
-                        )
-                    )
-                ),*/
-
-              ]
-
-
-      );
   }
 
 
@@ -447,16 +451,11 @@ class VerTareasState extends State<VerTareas>{
   Widget resetIndicesTarea(){
     indiceImagenes = 0;
     indiceTextos = 0;
-
-
-    return Container();
-  }
-
-  Widget resetIndicesVideos(){
     indiceVideos = 0;
 
     return Container();
   }
+
   
   void incIndiceImagenes(){
     indiceImagenes++;
@@ -474,10 +473,6 @@ class VerTareasState extends State<VerTareas>{
  void actualizar() async
   {
     setState((){});
-  }
-
-  void _speak(text) async{
-    await tts.speak(text);
   }
 
 
