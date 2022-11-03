@@ -1,7 +1,4 @@
 
-import 'dart:html';
-import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/discapacidad.dart';
@@ -154,33 +151,6 @@ class VerTareasState extends State<VerTareas>{
   Widget VistaAlumno()
   {
     return
-          /*Container(
-            constraints: BoxConstraints(maxWidth: 200,minWidth: 200),
-            width: 50,
-            margin: EdgeInsets.all(100),
-            decoration: BoxDecoration(
-                color: Colors.cyan,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: Colors.blueAccent)
-            ),
-            alignment: FractionalOffset(0.5,0.5),
-
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(Sesion.tareas[TareaActual].nombre,
-                    style: const TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-
-                  resetIndicesTarea(),
-                  for(int j = 0; j < Sesion.tareas[TareaActual].orden.length; j++)
-                    LecturaTarea(Sesion.tareas[TareaActual].orden[j],TareaActual)
-                ]
-
-            ),
-          );*/
 
        Column(
               children: <Widget>[
@@ -195,7 +165,7 @@ class VerTareasState extends State<VerTareas>{
                   child:
                   Text("${Sesion.nombre}",
                     style: const TextStyle(
-                      color: Colors.black,
+                      color: Colors.black54,
                       fontSize: 20.0,
                     ),
                   ),
@@ -218,7 +188,6 @@ class VerTareasState extends State<VerTareas>{
 
                             if(tareaActual > 0){
                               tareaActual--;
-                              resetIndicesTarea();
                               verFlechaDerecha = true;
 
                             }
@@ -239,16 +208,9 @@ class VerTareasState extends State<VerTareas>{
 
 
                 Container(
-                  width: 500.0,
-                  height: 500.0,
-                  decoration: BoxDecoration(
-                      color: Colors.cyan,
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.blueAccent)
-                  ),
-                  margin: EdgeInsets.only(top: 50.0),
+
+                    color: Color.fromRGBO(143, 125, 178,1),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(Sesion.tareas[tareaActual].nombre,
                         style: const TextStyle(
@@ -262,7 +224,7 @@ class VerTareasState extends State<VerTareas>{
                     ]
 
                     ),
-                    ),
+                  ),
 
                       Visibility(child:
                       Container(
@@ -273,7 +235,6 @@ class VerTareasState extends State<VerTareas>{
                               if(tareaActual < Sesion.tareas.length ){
                                 tareaActual++;
                                 verFlechaIzquierda = true;
-                                resetIndicesTarea();
 
                               }
 
@@ -325,7 +286,7 @@ class VerTareasState extends State<VerTareas>{
     if(valor == "T" && Sesion.tareas[i].textos.length > indiceTextos)
       {
         String pathTexto = Sesion.tareas[i].textos[indiceTextos];
-        incIndiceTextos();
+        indiceTextos++;
         return
         Text(pathTexto
           ,style: TextStyle(
@@ -337,14 +298,14 @@ class VerTareasState extends State<VerTareas>{
       {
 
         String pathImagen = Sesion.tareas[i].imagenes[indiceImagenes];
-        incIndiceImagenes();
+        indiceImagenes++;
 
         return
-          Image.network(pathImagen);
+          Image.network(pathImagen, width: 200, height: 200);
       }
     else if(valor == "V" && Sesion.tareas[i].controladoresVideo.length > 0 )
       {
-        return  ReproductorVideo(Sesion.tareas[i].controladoresVideo[indiceVideos++]);
+        return Container( width: 200,height: 200, child:ReproductorVideo(Sesion.tareas[i].controladoresVideo[indiceVideos++]));
       }
 
     else return
@@ -383,7 +344,7 @@ class VerTareasState extends State<VerTareas>{
                   child: Column(
                     children: [
                       AspectRatio(
-                          aspectRatio: controlador.value.aspectRatio ,
+                          aspectRatio: 16.0/9.0 ,
                           child: VideoPlayer(controlador)
                       ),
                       Icon(
@@ -456,19 +417,7 @@ class VerTareasState extends State<VerTareas>{
     return Container();
   }
 
-  
-  void incIndiceImagenes(){
-    indiceImagenes++;
-  }
 
-
-  void incIndiceTextos(){
-    indiceTextos++;
-  }
-
-  void incIndiceVideos(){
-    indiceVideos++;
-  }
 
  void actualizar() async
   {
