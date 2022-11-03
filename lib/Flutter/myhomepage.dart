@@ -45,7 +45,7 @@ class MyHomePage extends StatefulWidget{
 class MyHomePageState extends State<MyHomePage>{
 
   var db = FirebaseFirestore.instance;
-
+  double offSetActual = 0;
   AccesoBD base = new AccesoBD();
 
 
@@ -85,10 +85,10 @@ class MyHomePageState extends State<MyHomePage>{
   Widget build(BuildContext context){
     
     return
-
       new WillPopScope(child: new Scaffold(
-
         appBar:AppBar(
+          leading: IconButton(icon: Icon(Icons.settings_power, color: Colors.white),onPressed: () => Navigator.push(context,
+              MaterialPageRoute(builder: (context) => LoginPage()))),
 
           title: Column(
             children: [Text('Menú principal'),
@@ -97,9 +97,9 @@ class MyHomePageState extends State<MyHomePage>{
           automaticallyImplyLeading: false,
         ),
         body: Container(
-
             padding: EdgeInsets.symmetric(vertical: 0, horizontal:  0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
 
 
@@ -137,38 +137,89 @@ class MyHomePageState extends State<MyHomePage>{
   {
     return
       Container(
-        child: ElevatedButton(
-            child: Text('Alumnos'),
-            onPressed: (){
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => ListaAlumnos()));
-            }
+        alignment: Alignment.center,
+        child:
+        Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ElevatedButton(
+                child: Column(
+                  children: [
+                    Text("Lista de alumnos",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+
+                    Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
+                      height: 55,
+                      fit: BoxFit.fill,),
+                  ],
+
+                ),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => ListaAlumnos()));
+                },
+              ),
+            ]
         ),
       );
+
   }
 
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
   Widget VistaAlumno()
   {
-
     return
-      Row(
-        children: [
-            ElevatedButton(
-            child: Text('Tareas'),
-            onPressed: (){
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => VerTareas()));
-            }
+      Container(
+        alignment: Alignment.center,
+        child:
+        Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ElevatedButton(
+                child: Column(
+                  children: [
+                    Text("Tablon de Comunicacion",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+
+                    Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
+                      height: 55,
+                      fit: BoxFit.fill,),
+                  ],
+
+                ),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => TablonComunicacion()));
+                },
+              ),
+
+              ElevatedButton(
+                child: Column(children: [
+                  Text("Lista de Tareas",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+
+                  Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
+                    height: 55,
+                    fit: BoxFit.fill,),
+                ],
+
+                ),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => VerTareas()));
+                },
+              ),
+            ]
         ),
-          ElevatedButton(
-              child: Text('Tablon Comunicación'),
-              onPressed: (){
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => TablonComunicacion()));
-              }
-          ),
-    ]
       );
   }
 
@@ -177,43 +228,98 @@ class MyHomePageState extends State<MyHomePage>{
   Widget VistaAdministrador()
   {
     return
+      Container(
+        alignment: Alignment.center,
+        child:
+          Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ElevatedButton(
+              child: Column(
+                children: [
+                  Text("Lista de alumnos",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
 
-        Row(
-            children: [
+                  Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
+                    height: 55,
+                    fit: BoxFit.fill,),
+                ],
 
-              ElevatedButton(
-                      child: Text('Alumnos'),
-                  onPressed: (){
+              ),
+              onPressed: () {
                 Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ListaAlumnos()));
-                }
-              ),
+                    MaterialPageRoute(builder: (context) => ListaAlumnos()));
+              },
+            ),
 
-              ElevatedButton(
-                  child: Text('Profesores'),
-                  onPressed: (){
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => ListaProfesores()));
-                  }
-              ),
+            ElevatedButton(
+              child: Column(children: [
+                Text("Lista de Profesores",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
 
-              ElevatedButton(
-                child: Text('Registro'),
-                onPressed: (){
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => RegistroUsuarios()));
-                }
-              ),
+                Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
+                  height: 55,
+                  fit: BoxFit.fill,),
+              ],
 
-              ElevatedButton(
-                  child: Text('Crear Tarea'),
-                  onPressed: (){
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => CrearTarea()));
-                  }
               ),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ListaProfesores()));
+              },
+            ),
+
+            ElevatedButton(
+              child: Column(
+                children: [
+                  Text("Registro de Usuario",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+
+                  Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
+                    height: 55,
+                    fit: BoxFit.fill,),
+                ],
+
+              ),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => RegistroUsuarios()));
+              },
+            ),
+
+            ElevatedButton(
+              child: Column(
+                children: [
+                  Text("Crear Tarea",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+
+                  Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
+                    height: 55,
+                    fit: BoxFit.fill,),
+                ],
+
+              ),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => CrearTarea()));
+              },
+            ),
           ]
-    );
+      ),
+      );
+
 
   }
 
