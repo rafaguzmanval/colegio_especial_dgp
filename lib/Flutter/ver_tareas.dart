@@ -1,3 +1,4 @@
+import 'dart:html';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,6 +46,8 @@ class VerTareasState extends State<VerTareas>{
   var indiceTextos = 0;
   var indiceImagenes = 0;
   var indiceVideos = 0;
+  int tareaActual = 0;
+
   double offSetActual = 0;
   ScrollController homeController = new ScrollController();
   var db = FirebaseFirestore.instance;
@@ -54,6 +57,7 @@ class VerTareasState extends State<VerTareas>{
   var controladoresVideo = [];
 
   var lenguajes;
+
 
   FlutterTts tts = new FlutterTts();
 
@@ -100,66 +104,39 @@ class VerTareasState extends State<VerTareas>{
   Widget build(BuildContext context){
     
     return
-
        new Scaffold(
-
         appBar:AppBar(
-
+          leading: IconButton(
+            icon: Icon(Icons.home, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
           title: Text('Tareas'),
         ),
-        body:
-                 Stack(
-                 children: [
-                 OrientationBuilder(builder: (context,orientation)=>
-          orientation == Orientation.portrait
-              ? buildPortrait()
-              : buildLandscape(),
+        body: Container(
 
+            padding: EdgeInsets.symmetric(vertical: 0, horizontal:  0),
+            child: Stack(
+              children: [
+
+                if(Sesion.rol == Rol.alumno.toString())...[
+                  //BotonIzq(),
+                  //BotonDer(),
+                  VistaAlumno(),
+
+                ]
+                else if(Sesion.rol == Rol.profesor.toString())...[
+                  VistaProfesor()
+                ]
+                else if(Sesion.rol == Rol.administrador.toString())...[
+                    VistaAdministrador()
+                  ]
+                  else if(Sesion.rol == Rol.programador.toString())...[
+                      VistaProgramador()
+                    ]
+              ],
+            )
           ),
-
-          Container(
-          alignment: FractionalOffset(0.98,0.01),
-          child: FloatingActionButton(
-          child: Icon(Icons.arrow_upward),
-          elevation: 1.0,
-          onPressed: (){
-
-          offSetActual -= 100.0;
-          if(offSetActual < homeController.position.minScrollExtent)
-          offSetActual = homeController.position.minScrollExtent;
-
-          homeController.animateTo(
-          offSetActual, // change 0.0 {double offset} to corresponding widget position
-          duration: Duration(seconds: 1),
-          curve: Curves.easeOut,
           );
-
-          }),
-          ),
-
-          Container(
-          alignment: FractionalOffset(0.98,0.99),
-          child: FloatingActionButton(
-          child: Icon(Icons.arrow_downward),
-          elevation: 1.0,
-          onPressed: (){
-          offSetActual += 100;
-
-          if(offSetActual > homeController.position.maxScrollExtent)
-          offSetActual = homeController.position.maxScrollExtent;
-
-
-          homeController.animateTo(
-          offSetActual, // change 0.0 {double offset} to corresponding widget position
-          duration: Duration(seconds: 1),
-          curve: Curves.easeOut,
-          );
-
-          }),
-          ),
-          ]
-          )
-      );
 
 
   }
@@ -172,54 +149,138 @@ class VerTareasState extends State<VerTareas>{
       );
   }
 
+
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
   Widget VistaAlumno()
   {
     return
-    Container(
-      //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-      alignment: Alignment.center,
-      child:Column(
-        children:[
+          /*Container(
+            constraints: BoxConstraints(maxWidth: 200,minWidth: 200),
+            width: 50,
+            margin: EdgeInsets.all(100),
+            decoration: BoxDecoration(
+                color: Colors.cyan,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: Colors.blueAccent)
+            ),
+            alignment: FractionalOffset(0.5,0.5),
 
-
-          if(Sesion.tareas != null)...[
-            for(int i = 0; i < Sesion.tareas.length; i++)
-            //TAREA
-              Container(
-                constraints: BoxConstraints(maxWidth: 200,minWidth: 200),
-                width: 50,
-                margin: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: Colors.cyan,
-                    borderRadius: BorderRadius.circular(20)),
-                alignment: Alignment.center,
-                child: Column(children: [
-
-
-                  Text(Sesion.tareas[i].nombre,
-                    style: TextStyle(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(Sesion.tareas[TareaActual].nombre,
+                    style: const TextStyle(
                       color: Colors.white,
-
                     ),
                   ),
 
                   resetIndicesTarea(),
-                  for(int j = 0; j < Sesion.tareas[i].orden.length; j++)
-                    LecturaTarea(Sesion.tareas[i].orden[j],i)
-
-
+                  for(int j = 0; j < Sesion.tareas[TareaActual].orden.length; j++)
+                    LecturaTarea(Sesion.tareas[TareaActual].orden[j],TareaActual)
                 ]
 
+            ),
+          );*/
+
+       ListView(
+          children: <Widget>[
+      if(Sesion.tareas != null)...[
+        Wrap(
+          //ROW 2
+          alignment: WrapAlignment.end,
+          //spacing: 800,
+          children: [
+
+            Container(
+              child:
+              Text("${Sesion.nombre}",
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 20.0,
                 ),
               ),
-            resetIndicesVideos()
+            ),
           ],
+        ),
+    Row(
+    //ROW 2
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
 
+    children: [
+      Container(
+          margin: EdgeInsets.only(top: 100.0),
+          child: FloatingActionButton(
+              onPressed: (){
 
-        ],
+                if(tareaActual > 0){
+                  tareaActual--;
+                  resetIndicesTarea();
+                  actualizar();
+                }
+                print(tareaActual);
+              },
+              child: const Icon(Icons.arrow_left)
+          ),
       ),
-    );
+
+      Container(
+        width: 500.0,
+        height: 500.0,
+        decoration: BoxDecoration(
+            color: Colors.cyan,
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.blueAccent)
+        ),
+        margin: EdgeInsets.only(top: 50.0),
+        child: Column(
+          //mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(Sesion.tareas[tareaActual].nombre,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 30.0,
+              ),
+            ),
+
+            SizedBox(height: 50),
+
+            Text("AQUI VA EL VIDEO",
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(height: 100),
+            Text("AQUI VA LA LISTA DE PASOS PARA COMPLETAR LA TAREA",
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ]
+
+      ),
+      ),
+
+      Container(
+      margin: EdgeInsets.only(top: 100.0),
+      child:FloatingActionButton(
+          onPressed: (){
+
+            if(tareaActual < Sesion.tareas.length -1){
+              tareaActual++;
+              resetIndicesTarea();
+              actualizar();
+            }
+            print(tareaActual);
+          },
+          child: const Icon(Icons.arrow_right)
+      ),
+      ),
+    ],
+  ),
+    ]
+      ]
+      );
+
   }
 
 
@@ -252,6 +313,7 @@ class VerTareasState extends State<VerTareas>{
       {
         String pathImagen = Sesion.tareas[i].imagenes[indiceImagenes];
         incIndiceImagenes();
+
         return
           Image.network(pathImagen);
       }
@@ -417,6 +479,7 @@ class VerTareasState extends State<VerTareas>{
   void _speak(text) async{
     await tts.speak(text);
   }
+
 
 }
 
