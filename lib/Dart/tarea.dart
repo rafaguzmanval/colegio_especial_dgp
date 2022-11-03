@@ -19,7 +19,9 @@ class Tarea{
   var textos;
   var imagenes;
   var videos;
+  var controladoresVideo = [];
   var orden;
+
 
   Tarea({
           this.id,
