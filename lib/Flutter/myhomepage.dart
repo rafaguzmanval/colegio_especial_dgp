@@ -45,8 +45,10 @@ class MyHomePage extends StatefulWidget{
 class MyHomePageState extends State<MyHomePage>{
 
   var db = FirebaseFirestore.instance;
-  double offSetActual = 0;
   AccesoBD base = new AccesoBD();
+  var maxUsuariosPorFila = 2;
+  double offSetActual = 0;
+  ScrollController homeController = new ScrollController();
 
 
 
@@ -87,7 +89,60 @@ class MyHomePageState extends State<MyHomePage>{
           ),
           automaticallyImplyLeading: false,
         ),
-        body: Container(
+        body: Stack(
+          alignment: Alignment.center,
+            children: [
+              OrientationBuilder(builder: (context,orientation)=>
+              orientation == Orientation.portrait
+                  ? buildPortrait()
+                  : buildLandscape(),
+
+              ),
+
+              Container(
+                alignment: FractionalOffset(0.98,0.01),
+                child: FloatingActionButton(
+                    child: Icon(Icons.arrow_upward),
+                    elevation: 1.0,
+                    onPressed: (){
+
+                      offSetActual -= 100.0;
+                      if(offSetActual < homeController.position.minScrollExtent)
+                        offSetActual = homeController.position.minScrollExtent;
+
+                      homeController.animateTo(
+                        offSetActual, // change 0.0 {double offset} to corresponding widget position
+                        duration: Duration(seconds: 1),
+                        curve: Curves.easeOut,
+                      );
+
+                    }),
+              ),
+
+              Container(
+                alignment: FractionalOffset(0.98,0.99),
+                child: FloatingActionButton(
+                    child: Icon(Icons.arrow_downward),
+                    elevation: 1.0,
+                    onPressed: (){
+                      offSetActual += 100;
+
+                      if(offSetActual > homeController.position.maxScrollExtent)
+                        offSetActual = homeController.position.maxScrollExtent;
+
+
+                      homeController.animateTo(
+                        offSetActual, // change 0.0 {double offset} to corresponding widget position
+                        duration: Duration(seconds: 1),
+                        curve: Curves.easeOut,
+                      );
+
+                    }),
+              ),
+            ]
+        )
+
+        /*Container(
             padding: EdgeInsets.symmetric(vertical: 0, horizontal:  0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -112,7 +167,7 @@ class MyHomePageState extends State<MyHomePage>{
 
 
 
-        ),
+        ),*/
       ),
           onWillPop: () async {
           final pop = await _onBackPressed(context);
@@ -363,6 +418,43 @@ Future<bool?> _onBackPressed(BuildContext context){
           );
         }
        );
+  }
+
+  vistaMenu(){
+    if(Sesion.rol == Rol.alumno.toString()){
+    return VistaAlumno();
+    }
+    else if(Sesion.rol == Rol.profesor.toString()) {
+      return VistaProfesor();
+    }
+    else if(Sesion.rol == Rol.administrador.toString()){
+    return VistaAdministrador();
+    }
+    else if(Sesion.rol == Rol.programador.toString()){
+    return VistaProgramador();
+    }
+  }
+
+  buildLandscape()
+  {
+    maxUsuariosPorFila = 5;
+    return
+      SingleChildScrollView(
+          controller: homeController,
+          child: vistaMenu()
+      );
+  }
+
+
+  buildPortrait()
+  {
+    maxUsuariosPorFila = 2;
+    return
+      SingleChildScrollView(
+          controller: homeController,
+          child: vistaMenu()
+      );
+
   }
 
  void actualizar() async
