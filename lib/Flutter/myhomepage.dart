@@ -274,6 +274,8 @@ class MyHomePageState extends State<MyHomePage>{
   Widget VistaAdministrador()
   {
     return
+    Column(
+    children: [
       Container(
         alignment: Alignment.center,
         child:
@@ -320,7 +322,15 @@ class MyHomePageState extends State<MyHomePage>{
                     MaterialPageRoute(builder: (context) => ListaProfesores()));
               },
             ),
-
+          ]
+          )
+      ),
+            Container(
+              padding: EdgeInsets.only(top: 50),
+              alignment:  Alignment.center,
+            child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
             ElevatedButton(
               child: Column(
                 children: [
@@ -364,7 +374,9 @@ class MyHomePageState extends State<MyHomePage>{
             ),
           ]
       ),
-      );
+      ),
+    ]
+    );
 
 
   }
@@ -437,7 +449,7 @@ Future<bool?> _onBackPressed(BuildContext context){
 
   buildLandscape()
   {
-    maxUsuariosPorFila = 5;
+    maxUsuariosPorFila = 3;
     return
       SingleChildScrollView(
           controller: homeController,
