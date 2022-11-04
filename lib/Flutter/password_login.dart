@@ -27,6 +27,7 @@ class PasswordLogin extends StatefulWidget{
 class PasswordLoginState extends State<PasswordLogin>{
 
   AccesoBD base = new AccesoBD();
+  var error_inicio = false;
   var usuarios;
   var concatenacionPin = "";
   var pulsaciones = 0;
@@ -114,15 +115,16 @@ class PasswordLoginState extends State<PasswordLogin>{
         mainAxisAlignment: MainAxisAlignment.center,
 
         children: [
-        TextField(
-        obscureText: true,
 
-        decoration: InputDecoration(
-        border:OutlineInputBorder(),
-        hintText: 'Introduce la clave',
+          TextField(
+          obscureText: true,
+
+          decoration: InputDecoration(
+          border:OutlineInputBorder(),
+          hintText: 'Introduce la clave',
+          ),
+          controller: myController,
         ),
-        controller: myController,
-      ),
 
           ElevatedButton(
           child: Text("Enviar",
@@ -131,7 +133,27 @@ class PasswordLoginState extends State<PasswordLogin>{
           ),
           ),
           onPressed: () {
-          ComprobarLogeo(Sesion.id, myController.text);
+            if(myController.text.length == 0){
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    behavior: SnackBarBehavior.floating,
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                    content: Container(
+                      padding: const EdgeInsets.all(16),
+                      height: 90,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFC72C41),
+                        borderRadius: BorderRadius.all(Radius.circular(29)),
+                      ),
+                      child: Text("La contraseña no puede estar vacia"),
+                    )
+                  ),
+              );
+            }else{
+              ComprobarLogeo(Sesion.id, myController.text);
+            }
+
           },
 
 
@@ -223,7 +245,22 @@ class PasswordLoginState extends State<PasswordLogin>{
     }
     else
       {
-
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              behavior: SnackBarBehavior.floating,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              content: Container(
+                padding: const EdgeInsets.all(16),
+                height: 90,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFC72C41),
+                  borderRadius: BorderRadius.all(Radius.circular(29)),
+                ),
+                child: Text("CONTRASEÑA INCORRECTA"),
+              )
+          ),
+        );
       }
   }
 
