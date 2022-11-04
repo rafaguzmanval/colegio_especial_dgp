@@ -111,12 +111,20 @@ class PasswordLoginState extends State<PasswordLogin>{
   Widget vistaClave()
   {
     return
+    Container(
+      margin: EdgeInsets.all(200),
+      child:
       Column(
+
         mainAxisAlignment: MainAxisAlignment.center,
+        //margin:EdgeInsets.all()
 
         children: [
-
+          Container(
+            padding: EdgeInsets.only(bottom: 30),
+            child:
           TextField(
+
           obscureText: true,
 
           decoration: InputDecoration(
@@ -125,6 +133,7 @@ class PasswordLoginState extends State<PasswordLogin>{
           ),
           controller: myController,
         ),
+          ),
 
           ElevatedButton(
           child: Text("Enviar",
@@ -149,8 +158,7 @@ class PasswordLoginState extends State<PasswordLogin>{
                       child: Text("La contraseña no puede estar vacia"),
                     )
                   ),
-              );
-            }else{
+              );        }else{
               ComprobarLogeo(Sesion.id, myController.text);
             }
 
@@ -160,7 +168,8 @@ class PasswordLoginState extends State<PasswordLogin>{
         ),
 
           Text(errorLog)
-        ]
+        ],
+      )
     );
   }
 
