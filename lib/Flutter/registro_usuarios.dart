@@ -171,41 +171,59 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
   {
     return
       Container(
+        alignment: Alignment.center,
         //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
         child:Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children:[
-
-
-            Text("\nRegistra un nuevo usuario:"),
-
-            TextField(
-              obscureText: false,
-              decoration: InputDecoration(
-                border:OutlineInputBorder(),
-                hintText: 'Introduce nombre',
-              ),
-              controller: controladorNombre,
+            SizedBox(
+              height: 5,
             ),
 
-            TextField(
-              obscureText: false,
-              decoration: InputDecoration(
-                border:OutlineInputBorder(),
-                hintText: 'Introduce apellidos',
+            SizedBox(
+              width: 500,
+              child: TextField(
+                obscureText: false,
+                maxLength: 20,
+                decoration: InputDecoration(
+                  border:OutlineInputBorder(),
+                  hintText: 'Introduce nombre *',
+                ),
+                controller: controladorNombre,
               ),
-              controller: controladorApellidos,
             ),
 
-            TextField(
-              obscureText: false,
-              decoration: InputDecoration(
-                border:OutlineInputBorder(),
-                hintText: 'Introduce contraseña',
+            SizedBox(
+              width: 500,
+              child:TextField(
+                obscureText: false,
+                maxLength: 40,
+                decoration: InputDecoration(
+                  border:OutlineInputBorder(),
+                  hintText: 'Introduce apellidos *',
+                ),
+                controller: controladorApellidos,
               ),
-              controller: controladorPassword,
             ),
 
-            Text("Introduce fecha de nacimiento:"),
+            SizedBox(
+              width: 500,
+              child: TextField(
+                obscureText: true,
+                maxLength: 20,
+                decoration: InputDecoration(
+                  border:OutlineInputBorder(),
+                  hintText: 'Introduce contraseña *',
+                ),
+                controller: controladorPassword,
+              ),
+            ),
+
+            const Text(
+              "Introduce fecha de nacimiento: *",
+              style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
+            ),
 
             ElevatedButton(onPressed: () async{
               await showDatePicker(context: context, locale: const Locale("es","ES"),initialDate: DateTime.now(), firstDate: DateTime(1940), lastDate: DateTime.now())
@@ -225,10 +243,13 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
               controller: controladorFechanacimiento,
             ),*/
 
+            const Text(
+              "Elige rol para el usuario: *",
+              style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
+            ),
 
             DropdownButton(
               value: rolElegido,
-
               items: [Rol.profesor.toString(), Rol.administrador.toString(), Rol.alumno.toString(), "ningun rol elegido"].map((String value){
                 return DropdownMenuItem(value: value,
                     child: Text(value),);
@@ -240,20 +261,39 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
               },
             ),
 
-            ElevatedButton(
-                child: Text('Haz una foto desde la cámara'),
-                onPressed: (){seleccionarImagen(SeleccionImagen.camara);}
+            const Text(
+              "Elige foto de perfil (opcional):",
+              style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
             ),
-            ElevatedButton(
-                child: Text('Elige una foto de la galería'),
-                onPressed: (){seleccionarImagen(SeleccionImagen.galeria);}
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                    child: Text('Haz una foto desde la cámara'),
+                    onPressed: (){seleccionarImagen(SeleccionImagen.camara);}
+                ),
+
+                SizedBox(
+                  width: 10,
+                ),
+
+                ElevatedButton(
+                    child: Text('Elige una foto de la galería'),
+                    onPressed: (){seleccionarImagen(SeleccionImagen.galeria);}
+                ),
+              ],
             ),
 
             SizedBox(
               height: 100,
               width: 100,
                 child: fotoTomada == null
-                  ? Center(child: Text('Ninguna foto tomada'))
+                  ? Center(child: Container(
+                  decoration: BoxDecoration(border:Border.all(color: Colors.black)),
+                  child: Text('Ninguna foto tomada'),
+                ))
                   : Center(child: Image.file(File(fotoTomada.path))),
             ),
 
@@ -263,10 +303,13 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
                 visible: !registrando,
                 child:
             TextButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(const Color.fromRGBO(143, 125, 178,1)),
+              ),
               child: Text("Registrar",
                 style: TextStyle(
-                    color: Colors.cyan,
-                    decorationColor: Colors.lightBlueAccent
+                    backgroundColor: Colors.transparent,
+                    color: Colors.white
                 ),
               ),
               onPressed: () {
@@ -339,6 +382,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
         }
         else {
           mensajeDeRegistro = "Fallo al registrar, inténtelo de nuevo";
+          mostrarError(mensajeDeRegistro);
         }
 
         actualizar();
@@ -346,9 +390,29 @@ class RegistroUsuariosState extends State<RegistroUsuarios>{
     }
     else
       {
-        mensajeDeRegistro = "Es necesario rellenar todos los campos";
+        mensajeDeRegistro = "Debe rellenar todos los campos";
+        mostrarError(mensajeDeRegistro);
         actualizar();
       }
+  }
+
+  mostrarError(mensaje){
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          content: Container(
+            padding: const EdgeInsets.all(16),
+            height: 90,
+            decoration: const BoxDecoration(
+              color: Color(0xFFC72C41),
+              borderRadius: BorderRadius.all(Radius.circular(29)),
+            ),
+            child: Text(mensaje),
+          )
+      ),
+    );
   }
   /*
   Future<Null> _selectDate(BuildContext context) async{
