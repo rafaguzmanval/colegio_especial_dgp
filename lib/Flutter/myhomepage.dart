@@ -274,112 +274,113 @@ class MyHomePageState extends State<MyHomePage>{
   Widget VistaAdministrador()
   {
     return
-    Column(
-    children: [
-      Container(
-        alignment: Alignment.center,
-        child:
-          Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+      Column(
           children: [
-            ElevatedButton(
-              child: Column(
-                children: [
-                  Text("Lista de alumnos",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
+            Container(
+                alignment: Alignment.center,
+                child:
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                        child: Column(
+                          children: [
+                            Text("Lista de alumnos",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
 
-                  Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
-                    height: 55,
-                    fit: BoxFit.fill,),
-                ],
+                            Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
+                              height: 55,
+                              fit: BoxFit.fill,),
+                          ],
 
-              ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ListaAlumnos()));
-              },
+                        ),
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => ListaAlumnos()));
+                        },
+                      ),
+
+                      ElevatedButton(
+                        child: Column(children: [
+                          Text("Lista de Profesores",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+
+                          Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
+                            height: 55,
+                            fit: BoxFit.fill,),
+                        ],
+
+                        ),
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => ListaProfesores()));
+                        },
+                      ),
+                    ]
+                )
             ),
-
-            ElevatedButton(
-              child: Column(children: [
-                Text("Lista de Profesores",
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-
-                Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
-                  height: 55,
-                  fit: BoxFit.fill,),
-              ],
-
-              ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ListaProfesores()));
-              },
-            ),
-          ]
-          )
-      ),
             Container(
               padding: EdgeInsets.only(top: 50),
               alignment:  Alignment.center,
-            child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-            ElevatedButton(
-              child: Column(
-                children: [
-                  Text("Registro de Usuario",
-                    style: TextStyle(
-                      color: Colors.white,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ElevatedButton(
+                      child: Column(
+                        children: [
+                          Text("Registro de Usuario",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+
+                          Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
+                            height: 55,
+                            fit: BoxFit.fill,),
+                        ],
+
+                      ),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => RegistroUsuarios()));
+                      },
                     ),
-                  ),
 
-                  Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
-                    height: 55,
-                    fit: BoxFit.fill,),
-                ],
+                    ElevatedButton(
+                      child: Column(
+                        children: [
+                          Text("Crear Tarea",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
 
-              ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => RegistroUsuarios()));
-              },
-            ),
+                          Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
+                            height: 55,
+                            fit: BoxFit.fill,),
+                        ],
 
-            ElevatedButton(
-              child: Column(
-                children: [
-                  Text("Crear Tarea",
-                    style: TextStyle(
-                      color: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => CrearTarea()));
+                      },
                     ),
-                  ),
-
-                  Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
-                    height: 55,
-                    fit: BoxFit.fill,),
-                ],
-
+                  ]
               ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CrearTarea()));
-              },
             ),
           ]
-      ),
-      ),
-    ]
-    );
+      );
 
 
   }
+
 
 
   /*

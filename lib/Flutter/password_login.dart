@@ -167,49 +167,65 @@ class PasswordLoginState extends State<PasswordLogin>{
   Widget vistaPin(){
     return
       Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.max,
+
 
           children: [
 
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child:
             Row(
-
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
 
-                Expanded(
-                  flex: 2,
-                  child: Container(margin: EdgeInsets.all(20), child:ElevatedButton(onPressed: (){concatenarPin("conejo");}, child: Image.network(pictogramasPin[0]))),
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Container(margin: EdgeInsets.all(10),child:ElevatedButton(onPressed: (){concatenarPin("conejo");}, child: Image.network(pictogramasPin[0]))),
                 ),
-                Expanded(
-                  flex: 2,
-                  child: Container(margin: EdgeInsets.all(20), child:ElevatedButton(onPressed: (){concatenarPin("duende");}, child: Image.network(pictogramasPin[1]))),
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Container(margin: EdgeInsets.all(10),child:ElevatedButton(onPressed: (){concatenarPin("duende");}, child: Image.network(pictogramasPin[1]))),
                 ),
 
 
             ],),
+            ),
 
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child:
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Expanded(
+                Flexible(
                   flex: 2,
+                  fit: FlexFit.tight,
 
-                  child: Container(margin: EdgeInsets.all(20), child:ElevatedButton(onPressed: (){concatenarPin("mariposa");}, child: Image.network(pictogramasPin[2]))),
+                  child: Container(margin: EdgeInsets.all(10), child:ElevatedButton(onPressed: (){concatenarPin("mariposa");}, child: Image.network(pictogramasPin[2]))),
                 ),
-                Expanded(
+                Flexible(
                   flex: 2,
-                  child: Container(margin: EdgeInsets.all(20), child:ElevatedButton(onPressed: (){concatenarPin("princesa");}, child: Image.network(pictogramasPin[3]))),
+                  fit: FlexFit.tight,
+                  child: Container(margin: EdgeInsets.all(10),child:ElevatedButton(onPressed: (){concatenarPin("princesa");}, child: Image.network(pictogramasPin[3]))),
                 )
 
 
             ],),
-
+            ),
 
             Text(errorLog,selectionColor: error?Colors.red:Colors.black54,),
 
             ElevatedButton(onPressed: (){ resetPin();}, child: Text("Volver a introducir")),
           ]
+
       );
+
 
   }
 
@@ -217,7 +233,7 @@ class PasswordLoginState extends State<PasswordLogin>{
   {
     pulsaciones ++;
     concatenacionPin += nuevo;
-    ComprobarLogeo(Sesion.id, concatenacionPin);
+    ComprobarPin(Sesion.id, concatenacionPin);
 
     if(pulsaciones > 2)
       {
@@ -231,6 +247,23 @@ class PasswordLoginState extends State<PasswordLogin>{
     _actualizar();
   }
 
+
+  ComprobarPin(id,password) async
+  {
+    var resul = await base.checkearPassword(id,password);
+
+    print(resul);
+
+    if(resul){
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => MyHomePage())
+      );
+    }
+    else
+    {
+
+    }
+  }
 
   ComprobarLogeo(id,password) async
   {
