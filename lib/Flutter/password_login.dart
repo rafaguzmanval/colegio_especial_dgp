@@ -186,6 +186,7 @@ class PasswordLoginState extends State<PasswordLogin>{
                   fit: FlexFit.tight,
                   child: Container(margin: EdgeInsets.all(10),child:ElevatedButton(onPressed: (){concatenarPin("conejo");}, child: Image.network(pictogramasPin[0]))),
                 ),
+
                 Flexible(
                   flex: 1,
                   fit: FlexFit.tight,
