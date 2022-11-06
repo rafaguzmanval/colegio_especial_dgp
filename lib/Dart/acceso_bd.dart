@@ -56,7 +56,7 @@ class AccesoBD{
               "fechanacimiento": usuario.fechanacimiento,
               "rol": usuario.rol,
               "foto": fotoURL,
-              "tareas": []
+              "metodoLogeo" : usuario.metodoLogeo
             };
             db.collection("usuarios").add(user);
 
@@ -71,7 +71,7 @@ class AccesoBD{
                 "fechanacimiento": usuario.fechanacimiento,
                 "rol": usuario.rol,
                 "foto": fotoDesconocido,
-                "tareas": []
+                "metodoLogeo" : usuario.metodoLogeo
               };
               db.collection("usuarios").add(user);
 

@@ -22,27 +22,20 @@ import "package:image_picker/image_picker.dart";
 
 import "package:flutter_tts/flutter_tts.dart";
 
-
-
-class ListaProfesores extends StatefulWidget{
-
+class ListaProfesores extends StatefulWidget {
   @override
   ListaProfesoresState createState() => ListaProfesoresState();
-
 }
 
-class ListaProfesoresState extends State<ListaProfesores>{
-
-
+class ListaProfesoresState extends State<ListaProfesores> {
   var profesores = [];
 
   var db = FirebaseFirestore.instance;
 
   AccesoBD base = new AccesoBD();
 
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
     Sesion.paginaActual = this;
@@ -50,164 +43,116 @@ class ListaProfesoresState extends State<ListaProfesores>{
     Sesion.seleccion = "";
     Sesion.tareas = [];
 
-    if(Sesion.rol != Rol.alumno.toString())
-    {
+    if (Sesion.rol != Rol.alumno.toString()) {
       cargarProfesores();
     }
-
   }
-
-
 
   /// Este es el build de la clase MyHomePage que devuelve toda la vista génerica más la vista especial de cada usuario.
   @override
-  Widget build(BuildContext context){
-
-    return
-
-      new Scaffold(
-
-        appBar:AppBar(
-
-          title: Text('Lista de Profesores'),
-        ),
-        body: Container(
-
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal:  0),
-            child: Column(
-              children: [
-
-
-                if(Sesion.rol == Rol.alumno.toString())...[
-                  VistaAlumno(),
-                ]
-                else if(Sesion.rol == Rol.profesor.toString())...[
-                  VistaProfesor()
-                ]
-                else if(Sesion.rol == Rol.administrador.toString())...[
-                    VistaAdministrador()
-                  ]
-                  else if(Sesion.rol == Rol.programador.toString())...[
-                      VistaProgramador()
-                    ]
-              ],
-            )
-
-
-
-
-        ),
-      );
-
-
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: AppBar(
+        title: Text('Lista de Profesores'),
+      ),
+      body: Container(
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+          child: Column(
+            children: [
+              if (Sesion.rol == Rol.alumno.toString()) ...[
+                VistaAlumno(),
+              ] else if (Sesion.rol == Rol.profesor.toString()) ...[
+                VistaProfesor()
+              ] else if (Sesion.rol == Rol.administrador.toString()) ...[
+                VistaAdministrador()
+              ] else if (Sesion.rol == Rol.programador.toString()) ...[
+                VistaProgramador()
+              ]
+            ],
+          )),
+    );
   }
 
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
-  Widget VistaProfesor()
-  {
+  Widget VistaProfesor() {
     return _listaProfesores();
   }
 
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
-  Widget VistaAlumno()
-  {
+  Widget VistaAlumno() {
     Navigator.pop(context);
-    return
-      Container(
-      );
+    return Container();
   }
 
-
   ///Este método devuelve toda la vista que va a ver el administrador en un Widget.
-  Widget VistaAdministrador()
-  {
+  Widget VistaAdministrador() {
     return _listaProfesores();
   }
 
-
-  Widget _listaProfesores()
-  {
-    return
-      Container(
-        alignment: Alignment.center,
-        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-        child:Column(
-          children:[
-
-
-            for(int i = 0; i < profesores.length; i++)
-              Container(
-                  constraints: BoxConstraints(maxWidth: 80,minWidth: 30, maxHeight: 80),
-                  margin: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      color: Colors.cyan,
-                      borderRadius: BorderRadius.circular(20)),
-                  alignment: Alignment.center,
-                  child: ElevatedButton(
-                    child: Column(
-                      children: [
-                        Text(profesores[i].nombre,
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
+  Widget _listaProfesores() {
+    return Container(
+      alignment: Alignment.center,
+      //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+      child: Column(
+        children: [
+          for (int i = 0; i < profesores.length; i++)
+            Container(
+                constraints:
+                    BoxConstraints(maxWidth: 80, minWidth: 30, maxHeight: 80),
+                margin: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: Colors.cyan,
+                    borderRadius: BorderRadius.circular(20)),
+                alignment: Alignment.center,
+                child: ElevatedButton(
+                  child: Column(
+                    children: [
+                      Text(
+                        profesores[i].nombre,
+                        style: TextStyle(
+                          color: Colors.white,
                         ),
-
-                        Image.network(profesores[i].foto,width:100,
-                          height: 55,
-                          fit: BoxFit.fill,),
-                      ],
-
-                    ),
-                    onPressed: () {
-                      Sesion.seleccion = profesores[i];
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => PerfilProfesor()));
-                    },
-
-
-
-
-                  )
-              )
-          ],
-        ),
-      );
+                      ),
+                      Image.network(
+                        profesores[i].foto,
+                        width: 100,
+                        height: 55,
+                        fit: BoxFit.fill,
+                      ),
+                    ],
+                  ),
+                  onPressed: () {
+                    Sesion.seleccion = profesores[i];
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PerfilProfesor()));
+                  },
+                ))
+        ],
+      ),
+    );
   }
 
   /*
   *
   * */
 
-  Widget VistaProgramador()
-  {
-    return
-      Container(
-        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-        child:Column(
-          children:[
-
-          ],
-        ),
-      );
+  Widget VistaProgramador() {
+    return Container(
+      //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+      child: Column(
+        children: [],
+      ),
+    );
   }
 
-  cargarProfesores() async{
+  cargarProfesores() async {
     profesores = await base.consultarTodosProfesores();
     actualizar();
   }
 
-
-  void actualizar() async
-  {
-    setState((){});
+  void actualizar() async {
+    setState(() {});
   }
-
 }
-
-
-
-
-
-
-
-

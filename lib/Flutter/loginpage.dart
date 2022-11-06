@@ -273,7 +273,7 @@ class LoginPageState extends State<LoginPage>{
                                   Sesion.id = usuarios[j].id;
                                   Sesion.nombre = usuarios[j].nombre;
                                   Sesion.rol = usuarios[j].rol;
-                                  Sesion.metodoLogin = usuarios[j].metodoLogeo != null? usuarios[j].metodoLogeo : Passportmethod.text.toString();
+                                  Sesion.metodoLogin = usuarios[j].metodoLogeo == Passportmethod.pin.toString()? Passportmethod.pin.toString() : Passportmethod.text.toString();
                                   SeleccionUsuario();
                                 },
 

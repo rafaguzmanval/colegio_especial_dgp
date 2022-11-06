@@ -26,7 +26,6 @@ class Usuario{
   var password; // contraseña hasheada
   var rol;
   var foto;
-  var tareas;
   var metodoLogeo; // Si el usuario necesita algún otro método para meter contraseña
 
 
@@ -38,7 +37,6 @@ class Usuario{
           this.fechanacimiento,
           this.rol,
           this.foto,
-          this.tareas,
           this.metodoLogeo});
 
 
@@ -54,7 +52,6 @@ class Usuario{
       fechanacimiento: data?['fechanacimiento'],
       rol: data?['rol'],
       foto: data?['foto'],
-      tareas: data?['tareas'] is Iterable ? List.from(data?['tareas']) : null,
       metodoLogeo : data?['metodoLogeo'],
     );
   }
@@ -67,7 +64,6 @@ class Usuario{
       if (rol != null) "rol": rol,
       if(foto != null) "foto" : foto,
       if (password != null) "password": password,
-      if (tareas != null) "tareas": tareas,
       if(metodoLogeo != null) "metodoLogeo" : metodoLogeo,
 
     };

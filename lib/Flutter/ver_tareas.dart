@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/discapacidad.dart';
@@ -20,17 +19,12 @@ import "package:image_picker/image_picker.dart";
 
 import "package:flutter_tts/flutter_tts.dart";
 
-
-class VerTareas extends StatefulWidget{
-
+class VerTareas extends StatefulWidget {
   @override
   VerTareasState createState() => VerTareasState();
-
 }
 
-class VerTareasState extends State<VerTareas>{
-
-
+class VerTareasState extends State<VerTareas> {
   var msg = "null";
   var imagen = null;
   var video = null;
@@ -59,30 +53,21 @@ class VerTareasState extends State<VerTareas>{
   bool verFlechaIzquierda = false;
   bool verFlechaDerecha = true;
 
-
-
   ///Cuándo se pasa de página es necesario que todos los controladores de los formularios y de los reproductores de vídeo se destruyan.
   @override
-  void dispose(){
-
-    for(int i = 0; i < Sesion.tareas.length;i++)
-      {
-        for(int j = 0; j < Sesion.tareas[i].controladoresVideo.length;j++)
-           {
-             Sesion.tareas[i].controladoresVideo[j].dispose();
-           }
-        Sesion.tareas[i].controladoresVideo.clear();
+  void dispose() {
+    for (int i = 0; i < Sesion.tareas.length; i++) {
+      for (int j = 0; j < Sesion.tareas[i].controladoresVideo.length; j++) {
+        Sesion.tareas[i].controladoresVideo[j].dispose();
       }
-
-
+      Sesion.tareas[i].controladoresVideo.clear();
+    }
 
     super.dispose();
   }
 
-
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
     Sesion.paginaActual = this;
@@ -90,329 +75,225 @@ class VerTareasState extends State<VerTareas>{
     Sesion.seleccion = "";
     Sesion.tareas = [];
 
-
-    if(Sesion.rol == Rol.alumno.toString())
-    {
+    if (Sesion.rol == Rol.alumno.toString()) {
       print("Cargando tareas");
       cargarTareas();
     }
-
-
   }
-
 
   /// Este es el build de la clase MyHomePage que devuelve toda la vista génerica más la vista especial de cada usuario.
   @override
-  Widget build(BuildContext context){
-    
-    return
-       new Scaffold(
-        appBar:AppBar(
-          leading: IconButton(
-            icon: Icon(Icons.home, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          title: Text('Tareas'),
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.home, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
         ),
-        body: Container(
-
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal:  0),
-            child: Stack(
-              children: [
-
-                if(Sesion.rol == Rol.alumno.toString())...[
-                  VistaAlumno(),
-
-                ]
-                else if(Sesion.rol == Rol.profesor.toString())...[
-                  VistaProfesor()
-                ]
-                else if(Sesion.rol == Rol.administrador.toString())...[
-                    VistaAdministrador()
-                  ]
-                  else if(Sesion.rol == Rol.programador.toString())...[
-                      VistaProgramador()
-                    ]
-              ],
-            )
-          ),
-          );
-
-
+        title: Text('Tareas'),
+      ),
+      body: Container(
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+          child: Stack(
+            children: [
+              if (Sesion.rol == Rol.alumno.toString()) ...[
+                VistaAlumno(),
+              ] else if (Sesion.rol == Rol.profesor.toString()) ...[
+                VistaProfesor()
+              ] else if (Sesion.rol == Rol.administrador.toString()) ...[
+                VistaAdministrador()
+              ] else if (Sesion.rol == Rol.programador.toString()) ...[
+                VistaProgramador()
+              ]
+            ],
+          )),
+    );
   }
 
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
-  Widget VistaProfesor()
-  {
-    return
-      Container(
-      );
+  Widget VistaProfesor() {
+    return Container();
   }
-
 
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
-  Widget VistaAlumno()
-  {
-    return
-
-       Column(
-              children: <Widget>[
-
-            Wrap(
-              //ROW 2
-              alignment: WrapAlignment.end,
-              //spacing: 800,
-              children: [
-
-                Container(
-                  child:
-                  Text("${Sesion.nombre}",
-                    style: const TextStyle(
-                      color: Colors.black54,
-                      fontSize: 20.0,
-                    ),
-                  ),
-                ),
-              ],
+  Widget VistaAlumno() {
+    return Column(children: <Widget>[
+      Wrap(
+        //ROW 2
+        alignment: WrapAlignment.end,
+        //spacing: 800,
+        children: [
+          Container(
+            child: Text(
+              "${Sesion.nombre}",
+              style: const TextStyle(
+                color: Colors.black54,
+                fontSize: 20.0,
+              ),
             ),
-            if(Sesion.tareas.length > 0)...[
+          ),
+        ],
+      ),
+      if (Sesion.tareas.length > 0) ...[
+        Row(
+            //ROW 2
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Visibility(
+                child: Container(
+                  margin: EdgeInsets.only(top: 100.0),
+                  child: FloatingActionButton(
+                      onPressed: () {
+                        if (tareaActual > 0) {
+                          tareaActual--;
+                          verFlechaDerecha = true;
+                        }
+                        verFlechaIzquierda = tareaActual != 0;
 
-              Row(
-              //ROW 2
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-              children: [
-
-                Visibility(child:
-                  Container(
-                      margin: EdgeInsets.only(top: 100.0),
-                      child: FloatingActionButton(
-                          onPressed: (){
-
-                            if(tareaActual > 0){
-                              tareaActual--;
-                              verFlechaDerecha = true;
-
-                            }
-                            verFlechaIzquierda = tareaActual != 0;
-
-
-                            actualizar();
-
-                          },
-                          child: const Icon(Icons.arrow_left)
-                      ),
-                  ),
-                  visible: verFlechaIzquierda,
+                        actualizar();
+                      },
+                      child: const Icon(Icons.arrow_left)),
                 ),
-
-
-
-
-
-                Container(
-
-                    color: Color.fromRGBO(143, 125, 178,1),
-                  child: Column(
-                    children: [
-                      Text(Sesion.tareas[tareaActual].nombre,
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-
-                      resetIndicesTarea(),
-                      for(int j = 0; j < Sesion.tareas[tareaActual].orden.length; j++)
-                        LecturaTarea(Sesion.tareas[tareaActual].orden[j],tareaActual)
-                    ]
-
+                visible: verFlechaIzquierda,
+              ),
+              Container(
+                color: Color.fromRGBO(143, 125, 178, 1),
+                child: Column(children: [
+                  Text(
+                    Sesion.tareas[tareaActual].nombre,
+                    style: const TextStyle(
+                      color: Colors.white,
                     ),
                   ),
+                  resetIndicesTarea(),
+                  for (int j = 0;
+                      j < Sesion.tareas[tareaActual].orden.length;
+                      j++)
+                    LecturaTarea(
+                        Sesion.tareas[tareaActual].orden[j], tareaActual)
+                ]),
+              ),
+              Visibility(
+                child: Container(
+                  margin: EdgeInsets.only(top: 100.0),
+                  child: FloatingActionButton(
+                      onPressed: () {
+                        if (tareaActual < Sesion.tareas.length) {
+                          tareaActual++;
+                          verFlechaIzquierda = true;
+                        }
 
-                      Visibility(child:
-                      Container(
-                        margin: EdgeInsets.only(top: 100.0),
-                        child:FloatingActionButton(
-                            onPressed: (){
+                        verFlechaDerecha =
+                            tareaActual != Sesion.tareas.length - 1;
 
-                              if(tareaActual < Sesion.tareas.length ){
-                                tareaActual++;
-                                verFlechaIzquierda = true;
-
-                              }
-
-                              verFlechaDerecha = tareaActual != Sesion.tareas.length - 1;
-
-                              actualizar();
-                            },
-                            child: const Icon(Icons.arrow_right)
-                        ),
-                      ),
-                        visible: verFlechaDerecha,
-                      )
-                    ]
-
-
-
+                        actualizar();
+                      },
+                      child: const Icon(Icons.arrow_right)),
                 ),
-
-
-
-
-
-
-
-
-              ],
-
-        ]
-
-      );
-
+                visible: verFlechaDerecha,
+              )
+            ]),
+      ],
+    ]);
   }
-
 
   ///Este método devuelve toda la vista que va a ver el administrador en un Widget.
-  Widget VistaAdministrador()
-  {
-    return
-      Container(
-        );
+  Widget VistaAdministrador() {
+    return Container();
   }
-
 
   /*
   *
   * */
-  Widget LecturaTarea(String valor, i){
+  Widget LecturaTarea(String valor, i) {
+    if (valor == "T" && Sesion.tareas[i].textos.length > indiceTextos) {
+      String pathTexto = Sesion.tareas[i].textos[indiceTextos];
+      indiceTextos++;
+      return Text(pathTexto,
+          style: TextStyle(
+            color: Colors.white,
+          ));
+    } else if (valor == "I" &&
+        Sesion.tareas[i].imagenes.length > indiceImagenes) {
+      String pathImagen = Sesion.tareas[i].imagenes[indiceImagenes];
+      indiceImagenes++;
 
-    if(valor == "T" && Sesion.tareas[i].textos.length > indiceTextos)
-      {
-        String pathTexto = Sesion.tareas[i].textos[indiceTextos];
-        indiceTextos++;
-        return
-        Text(pathTexto
-          ,style: TextStyle(
-          color: Colors.white,
-          )
-        );
-      }
-    else if(valor == "I" && Sesion.tareas[i].imagenes.length > indiceImagenes)
-      {
-
-        String pathImagen = Sesion.tareas[i].imagenes[indiceImagenes];
-        indiceImagenes++;
-
-        return
-          Image.network(pathImagen, width: 200, height: 200);
-      }
-    else if(valor == "V" && Sesion.tareas[i].controladoresVideo.length > 0 )
-      {
-        return Container( width: 200,height: 200, child:ReproductorVideo(Sesion.tareas[i].controladoresVideo[indiceVideos++]));
-      }
-
-    else return
-        Container();
+      return Image.network(pathImagen, width: 200, height: 200);
+    } else if (valor == "V" && Sesion.tareas[i].controladoresVideo.length > 0) {
+      return Container(
+          width: 200,
+          height: 200,
+          child: ReproductorVideo(
+              Sesion.tareas[i].controladoresVideo[indiceVideos++]));
+    } else
+      return Container();
   }
 
-  Widget VistaProgramador()
-  {
-    return
-      Container(
-        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-        child:Column(
-          children:[
-
-
-          ],
-        ),
-      );
+  Widget VistaProgramador() {
+    return Container(
+      //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+      child: Column(
+        children: [],
+      ),
+    );
   }
 
-
-  Widget ReproductorVideo(controlador)
-  {
-    return
-                ElevatedButton(
-
-                  onPressed: (){
-                    if(controlador.value.isPlaying){
-                      controlador.pause();
-                    }else{
-                      controlador.play();
-                    }
-                    setState(() {
-                    });
-                  },
-                  child: Column(
-                    children: [
-                      AspectRatio(
-                          aspectRatio: 16.0/9.0 ,
-                          child: VideoPlayer(controlador)
-                      ),
-                      Icon(
-                        controlador.value.isPlaying?Icons.pause:Icons.play_arrow,
-                        size: 20,
-                        semanticLabel: controlador.value.isPlaying?"Pausa":"Reanudar",
-                      ),
-
-
-                      Container( //duration of video
-                        child: Text("Total Duration: " + controlador.value.duration.toString()),
-                      ),
-
-                    ]
-
-
-                  )
-                );
-
+  Widget ReproductorVideo(controlador) {
+    return ElevatedButton(
+        onPressed: () {
+          if (controlador.value.isPlaying) {
+            controlador.pause();
+          } else {
+            controlador.play();
+          }
+          setState(() {});
+        },
+        child: Column(children: [
+          AspectRatio(aspectRatio: 16.0 / 9.0, child: VideoPlayer(controlador)),
+          Icon(
+            controlador.value.isPlaying ? Icons.pause : Icons.play_arrow,
+            size: 20,
+            semanticLabel: controlador.value.isPlaying ? "Pausa" : "Reanudar",
+          ),
+          Container(
+            //duration of video
+            child: Text(
+                "Total Duration: " + controlador.value.duration.toString()),
+          ),
+        ]));
   }
-
 
   cargarTareas() async {
-    await base.consultarTareasAsignadasAlumno(Sesion.id,true);
+    await base.consultarTareasAsignadasAlumno(Sesion.id, true);
   }
 
-  buildLandscape()
-  {
-    return
-      SingleChildScrollView(
-        controller: homeController,
-        child: VistaTareas(),
-      );
+  buildLandscape() {
+    return SingleChildScrollView(
+      controller: homeController,
+      child: VistaTareas(),
+    );
   }
 
-
-  buildPortrait()
-  {
-    return
-      SingleChildScrollView(
-        controller: homeController,
-        child: VistaTareas(),
-      );
-
+  buildPortrait() {
+    return SingleChildScrollView(
+      controller: homeController,
+      child: VistaTareas(),
+    );
   }
 
-  VistaTareas()
-  {
-            if(Sesion.rol == Rol.alumno.toString()) {
-              return VistaAlumno();
-             }
-            else if(Sesion.rol == Rol.profesor.toString()) {
-              return VistaProfesor();
-            }
-            else if(Sesion.rol == Rol.administrador.toString()) {
-              return VistaAdministrador();
-            }
-              else if(Sesion.rol == Rol.programador.toString()) {
-              return VistaProgramador();
-            }
-
+  VistaTareas() {
+    if (Sesion.rol == Rol.alumno.toString()) {
+      return VistaAlumno();
+    } else if (Sesion.rol == Rol.profesor.toString()) {
+      return VistaProfesor();
+    } else if (Sesion.rol == Rol.administrador.toString()) {
+      return VistaAdministrador();
+    } else if (Sesion.rol == Rol.programador.toString()) {
+      return VistaProgramador();
+    }
   }
 
-
-  Widget resetIndicesTarea(){
+  Widget resetIndicesTarea() {
     indiceImagenes = 0;
     indiceTextos = 0;
     indiceVideos = 0;
@@ -420,20 +301,7 @@ class VerTareasState extends State<VerTareas>{
     return Container();
   }
 
-
-
- void actualizar() async
-  {
-    setState((){});
+  void actualizar() async {
+    setState(() {});
   }
-
-
 }
-
-
-
-
-
-
-
-
