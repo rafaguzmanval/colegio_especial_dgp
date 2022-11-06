@@ -471,6 +471,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
             SnackBar(
                 behavior: SnackBarBehavior.floating,
                 backgroundColor: Colors.transparent,
+                duration: Duration(seconds:2),
                 elevation: 0,
                 content: Container(
                   padding: const EdgeInsets.all(16),
@@ -484,14 +485,14 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           );
 
         } else {
-          mensajeDeRegistro = "Fallo al registrar, inténtelo de nuevo";
+          mensajeDeRegistro = "Fallo en el proceso de registro, inténtelo de nuevo";
           mostrarError(mensajeDeRegistro);
         }
 
         actualizar();
       });
     } else {
-      mensajeDeRegistro = "Debe rellenar todos los campos";
+      mensajeDeRegistro = "Debe rellenar todos los campos con *";
       mostrarError(mensajeDeRegistro);
       actualizar();
     }
@@ -502,6 +503,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
       SnackBar(
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
+          duration: Duration(seconds:2),
           elevation: 0,
           content: Container(
             padding: const EdgeInsets.all(16),

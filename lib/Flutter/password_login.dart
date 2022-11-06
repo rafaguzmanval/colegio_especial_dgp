@@ -254,6 +254,7 @@ class PasswordLoginState extends State<PasswordLogin> {
         SnackBar(
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.transparent,
+            duration: Duration(seconds:2),
             elevation: 0,
             content: Container(
               padding: const EdgeInsets.all(16),
