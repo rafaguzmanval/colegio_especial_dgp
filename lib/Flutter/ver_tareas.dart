@@ -51,7 +51,7 @@ class VerTareasState extends State<VerTareas> {
   var lenguajes;
 
   bool verFlechaIzquierda = false;
-  bool verFlechaDerecha = true;
+  bool verFlechaDerecha = false;
 
   ///Cuándo se pasa de página es necesario que todos los controladores de los formularios y de los reproductores de vídeo se destruyan.
   @override
@@ -92,7 +92,7 @@ class VerTareasState extends State<VerTareas> {
         ),
         title: Text('Tareas'),
       ),
-      body: Container(
+      body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
           child: Stack(
             children: [
@@ -139,6 +139,9 @@ class VerTareasState extends State<VerTareas> {
             //ROW 2
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Flexible(
+                flex: 15,
+                  child:
               Visibility(
                 child: Container(
                   margin: EdgeInsets.only(top: 100.0),
@@ -155,10 +158,15 @@ class VerTareasState extends State<VerTareas> {
                       child: const Icon(Icons.arrow_left)),
                 ),
                 visible: verFlechaIzquierda,
-              ),
+              )),
+              Flexible(
+                flex: 70,
+                  child:
               Container(
                 color: Color.fromRGBO(143, 125, 178, 1),
                 child: Column(children: [
+
+                  if(Sesion.tareas.length > 0)...[
                   Text(
                     Sesion.tareas[tareaActual].nombre,
                     style: const TextStyle(
@@ -171,8 +179,15 @@ class VerTareasState extends State<VerTareas> {
                       j++)
                     LecturaTarea(
                         Sesion.tareas[tareaActual].orden[j], tareaActual)
+                ]else...
+                  [
+                    Text("BIEN. No tienes tareas que hacer")
+                  ]
                 ]),
-              ),
+              )),
+              Flexible(
+                flex: 15,
+                  child:
               Visibility(
                 child: Container(
                   margin: EdgeInsets.only(top: 100.0),
@@ -183,14 +198,14 @@ class VerTareasState extends State<VerTareas> {
                           verFlechaIzquierda = true;
                         }
 
-                        verFlechaDerecha =
-                            tareaActual != Sesion.tareas.length - 1;
+                        verFlechaDerecha = (tareaActual != Sesion.tareas.length - 1) ;
 
                         actualizar();
                       },
                       child: const Icon(Icons.arrow_right)),
                 ),
                 visible: verFlechaDerecha,
+              )
               )
             ]),
       ],
@@ -239,6 +254,14 @@ class VerTareasState extends State<VerTareas> {
   }
 
   Widget ReproductorVideo(controlador) {
+
+    /*
+    if(controlador.value.position == controlador.value.duration)
+      {
+        print("fin del video");
+        controlador.seekTo(Duration(minutes:0,seconds:0,milliseconds: 0));
+        controlador.pause();
+      }*/
     return ElevatedButton(
         onPressed: () {
           if (controlador.value.isPlaying) {
@@ -261,6 +284,7 @@ class VerTareasState extends State<VerTareas> {
                 "Total Duration: " + controlador.value.duration.toString()),
           ),
         ]));
+
   }
 
   cargarTareas() async {
@@ -302,6 +326,10 @@ class VerTareasState extends State<VerTareas> {
   }
 
   void actualizar() async {
+    if(Sesion.tareas.length > 1 && tareaActual == 0)
+    {
+      verFlechaDerecha = true;
+    }
     setState(() {});
   }
 }

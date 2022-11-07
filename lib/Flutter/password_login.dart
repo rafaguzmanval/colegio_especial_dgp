@@ -112,7 +112,7 @@ class PasswordLoginState extends State<PasswordLogin>{
   {
     return
     Container(
-      margin: EdgeInsets.all(200),
+      margin: EdgeInsets.all(20),
       child:
       Column(
 
@@ -155,7 +155,7 @@ class PasswordLoginState extends State<PasswordLogin>{
                         color: Color(0xFFC72C41),
                         borderRadius: BorderRadius.all(Radius.circular(29)),
                       ),
-                      child: Text("La contraseña no puede estar vacia"),
+                      child: Center(child:Text("La contraseña no puede estar vacia")),
                     )
                   ),
               );        }else{
@@ -301,7 +301,7 @@ class PasswordLoginState extends State<PasswordLogin>{
                   color: Color(0xFFC72C41),
                   borderRadius: BorderRadius.all(Radius.circular(29)),
                 ),
-                child: Text("CONTRASEÑA INCORRECTA"),
+                child: Center(child: Text("CONTRASEÑA INCORRECTA")),
               )
           ),
         );

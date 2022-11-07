@@ -213,10 +213,7 @@ class AccesoBD{
                           var nuevoControlador = VideoPlayerController.network(
                               Sesion.tareas[i].videos[j]);
                           Sesion.tareas[i].controladoresVideo.add(nuevoControlador);
-                          Sesion.tareas[i].controladoresVideo.last.initialize()
-                              .then((value) {
-
-                          });
+                          Sesion.tareas[i].controladoresVideo.last.initialize();
                         }
                       }
                       Sesion.paginaActual.actualizar();
