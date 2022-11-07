@@ -31,6 +31,8 @@ class ListaProfesoresState extends State<ListaProfesores> {
   var profesores = [];
 
   var db = FirebaseFirestore.instance;
+  double offSetActual = 0;
+  ScrollController homeController = new ScrollController();
 
   AccesoBD base = new AccesoBD();
 
@@ -55,21 +57,57 @@ class ListaProfesoresState extends State<ListaProfesores> {
       appBar: AppBar(
         title: Text('Lista de Profesores'),
       ),
-      body: Container(
-          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-          child: Column(
-            children: [
-              if (Sesion.rol == Rol.alumno.toString()) ...[
-                VistaAlumno(),
-              ] else if (Sesion.rol == Rol.profesor.toString()) ...[
-                VistaProfesor()
-              ] else if (Sesion.rol == Rol.administrador.toString()) ...[
-                VistaAdministrador()
-              ] else if (Sesion.rol == Rol.programador.toString()) ...[
-                VistaProgramador()
-              ]
-            ],
-          )),
+      body: Stack(
+          children: [
+            OrientationBuilder(builder: (context,orientation)=>
+            orientation == Orientation.portrait
+                ? buildPortrait()
+                : buildLandscape(),
+
+            ),
+
+            Container(
+              alignment: FractionalOffset(0.98,0.01),
+              child: FloatingActionButton(
+                  child: Icon(Icons.arrow_upward),
+                  elevation: 1.0,
+                  onPressed: (){
+
+                    offSetActual -= 100.0;
+                    if(offSetActual < homeController.position.minScrollExtent)
+                      offSetActual = homeController.position.minScrollExtent;
+
+                    homeController.animateTo(
+                      offSetActual, // change 0.0 {double offset} to corresponding widget position
+                      duration: Duration(seconds: 1),
+                      curve: Curves.easeOut,
+                    );
+
+                  }),
+            ),
+
+            Container(
+              alignment: FractionalOffset(0.98,0.99),
+              child: FloatingActionButton(
+                  child: Icon(Icons.arrow_downward),
+                  elevation: 1.0,
+                  onPressed: (){
+                    offSetActual += 100;
+
+                    if(offSetActual > homeController.position.maxScrollExtent)
+                      offSetActual = homeController.position.maxScrollExtent;
+
+
+                    homeController.animateTo(
+                      offSetActual, // change 0.0 {double offset} to corresponding widget position
+                      duration: Duration(seconds: 1),
+                      curve: Curves.easeOut,
+                    );
+
+                  }),
+            ),
+          ]
+      )
     );
   }
 
@@ -97,12 +135,9 @@ class ListaProfesoresState extends State<ListaProfesores> {
         children: [
           for (int i = 0; i < profesores.length; i++)
             Container(
-                constraints:
-                    BoxConstraints(maxWidth: 80, minWidth: 30, maxHeight: 80),
+                width:100,
+                height: 100,
                 margin: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: Colors.cyan,
-                    borderRadius: BorderRadius.circular(20)),
                 alignment: Alignment.center,
                 child: ElevatedButton(
                   child: Column(
@@ -116,7 +151,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
                       Image.network(
                         profesores[i].foto,
                         width: 100,
-                        height: 55,
+                        height: 70,
                         fit: BoxFit.fill,
                       ),
                     ],
@@ -145,6 +180,42 @@ class ListaProfesoresState extends State<ListaProfesores> {
         children: [],
       ),
     );
+  }
+
+  buildLandscape()
+  {
+    return
+      SingleChildScrollView(
+        controller: homeController,
+        child: lista(),
+      );
+  }
+
+
+  buildPortrait()
+  {
+    return
+      SingleChildScrollView(
+        controller: homeController,
+        child: lista(),
+      );
+
+  }
+
+  lista()
+  {
+    if(Sesion.rol == Rol.alumno.toString()) {
+      return VistaAlumno();
+    }
+    else if(Sesion.rol == Rol.profesor.toString()) {
+      return VistaProfesor();
+    }
+    else if(Sesion.rol == Rol.administrador.toString()) {
+      return  VistaAdministrador();
+    }
+    else if(Sesion.rol == Rol.programador.toString()) {
+      return VistaProgramador();
+    }
   }
 
   cargarProfesores() async {
