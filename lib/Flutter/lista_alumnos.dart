@@ -166,11 +166,9 @@ class ListaAlumnosState extends State<ListaAlumnos>{
 
             for(int i = 0; i < alumnos.length; i++)
               Container(
-                  constraints: BoxConstraints(maxWidth: 80,minWidth: 30, maxHeight: 80),
+                  width:100,
+                  height: 100,
                   margin: EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                      color: Colors.cyan,
-                      borderRadius: BorderRadius.circular(20)),
                   alignment: Alignment.center,
                   child: ElevatedButton(
                     child: Column(
@@ -182,7 +180,7 @@ class ListaAlumnosState extends State<ListaAlumnos>{
                         ),
 
                         Image.network(alumnos[i].foto,width:100,
-                          height: 55,
+                          height: 70,
                           fit: BoxFit.fill,),
                       ],
 
