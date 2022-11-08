@@ -263,13 +263,16 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              SizedBox(
+                height: 10,
+              ),
               ElevatedButton(
                   child: Text('Haz una foto desde la cámara'),
                   onPressed: () {
                     seleccionarImagen(SeleccionImagen.camara);
                   }),
               SizedBox(
-                width: 10,
+                height: 10,
               ),
               ElevatedButton(
                   child: Text('Elige una foto de la galería'),
