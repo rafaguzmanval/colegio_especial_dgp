@@ -123,9 +123,10 @@ class VerTareasState extends State<VerTareas> {
         alignment: WrapAlignment.end,
         //spacing: 800,
         children: [
+
           Container(
             child: Text(
-              "${Sesion.nombre}",
+              "${"\n"+Sesion.nombre+"\n"}",
               style: const TextStyle(
                 color: Colors.black54,
                 fontSize: 20.0,
@@ -160,19 +161,19 @@ class VerTareasState extends State<VerTareas> {
                 visible: verFlechaIzquierda,
               )),
               Flexible(
-                flex: 70,
+                flex: 20,
                   child:
               Container(
-                color: Color.fromRGBO(143, 125, 178, 1),
+                decoration: BoxDecoration(border: Border.all(width: 2),
+                  color: Color.fromRGBO(143, 125, 178, 1)),
                 child: Column(children: [
-
                   if(Sesion.tareas.length > 0)...[
-                  Text(
-                    Sesion.tareas[tareaActual].nombre,
+                  Center(child: Text(
+                    "\n"+Sesion.tareas[tareaActual].nombre+"\n",
                     style: const TextStyle(
                       color: Colors.white,
                     ),
-                  ),
+                  )),
                   resetIndicesTarea(),
                   for (int j = 0;
                       j < Sesion.tareas[tareaActual].orden.length;
@@ -208,7 +209,24 @@ class VerTareasState extends State<VerTareas> {
               )
               )
             ]),
-      ],
+      ]
+      else ...[
+        Container(
+          alignment: Alignment.center,
+          child:
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: 250,
+                width: 250,
+                decoration: BoxDecoration(border: Border.all(width: 2)),
+                child: Center(child: Text("No tienes ninguna Tarea Asignada"))
+                )
+                ],
+                )
+        )
+    ]
     ]);
   }
 
@@ -224,7 +242,7 @@ class VerTareasState extends State<VerTareas> {
     if (valor == "T" && Sesion.tareas[i].textos.length > indiceTextos) {
       String pathTexto = Sesion.tareas[i].textos[indiceTextos];
       indiceTextos++;
-      return Text(pathTexto,
+      return Text(pathTexto+"\n",
           style: TextStyle(
             color: Colors.white,
           ));
@@ -233,9 +251,14 @@ class VerTareasState extends State<VerTareas> {
       String pathImagen = Sesion.tareas[i].imagenes[indiceImagenes];
       indiceImagenes++;
 
-      return Image.network(pathImagen, width: 200, height: 200);
+      return Container(
+          decoration: BoxDecoration(border: Border.all(width: 2)),
+          margin: EdgeInsets.only(bottom: 15),
+          child: Image.network(pathImagen, width: 200, height: 200));
     } else if (valor == "V" && Sesion.tareas[i].controladoresVideo.length > 0) {
       return Container(
+          decoration: BoxDecoration(border: Border.all(width: 2)),
+          margin: EdgeInsets.only(bottom: 15),
           width: 200,
           height: 200,
           child: ReproductorVideo(
