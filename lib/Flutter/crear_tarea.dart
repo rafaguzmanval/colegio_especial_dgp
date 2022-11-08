@@ -90,7 +90,7 @@ class CrearTareaState extends State<CrearTarea>{
         );}
     else if(seleccion == SeleccionImagen.galeria)
       {
-        print("Se coger una foto de la galería");
+        print("Se va a coger una foto de la galería");
         fotoTomada =  await capturador.pickImage(
             source: ImageSource.gallery,
             imageQuality: 15);
@@ -133,9 +133,19 @@ class CrearTareaState extends State<CrearTarea>{
 
           title: Text('Crea una nueva tarea'),
         ),
-        body: Sesion.rol == Rol.administrador.toString()
-              ?VistaAdministrador()
-              :VistaProfesor()
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+        child: Column(
+        children: [
+        if (Sesion.rol == Rol.alumno.toString()) ...[
+        VistaAlumno(),
+        ] else if (Sesion.rol == Rol.profesor.toString()) ...[
+        VistaProfesor()
+        ] else if (Sesion.rol == Rol.administrador.toString()) ...[
+        VistaAdministrador()
+        ]
+        ],
+        )),
 
       );
 
@@ -165,66 +175,97 @@ class CrearTareaState extends State<CrearTarea>{
   Widget VistaAdministrador()
   {
     return
-      SingleChildScrollView(
+      Container(
         //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+        alignment: Alignment.center,
         child:Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-
-
-            Text("\nRegistra un nuevo usuario:"),
-
-            TextField(
-              obscureText: false,
-              decoration: InputDecoration(
-                border:OutlineInputBorder(),
-                hintText: 'Introduce nombre',
+            SizedBox(
+              height: 5,
+            ),
+            SizedBox(
+              width: 500,
+              child: TextField(
+                obscureText: false,
+                maxLength: 40,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Introduce el nombre de la tarea *',
+                ),
+                controller: controladorNombre,
               ),
-              controller: controladorNombre,
+            ),
+            SizedBox(
+              height: 5,
+            ),
+            SizedBox(
+              width: 500,
+              child: TextField(
+                obscureText: false,
+                maxLength: 60,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Introduce una Descripción *',
+                ),
+                controller: controladorTexto,
+              ),
             ),
 
-            TextField(
-              obscureText: false,
-              decoration: InputDecoration(
-                border:OutlineInputBorder(),
-                hintText: 'Introduce texto',
-              ),
-              controller: controladorTexto,
+            const Text(
+              "Elige una foto para la tarea: *",
+              style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
             ),
-
-
+            SizedBox(
+              height: 5,
+            ),
             ElevatedButton(
                 child: Text('Haz una foto'),
                 onPressed: (){seleccionarImagen(SeleccionImagen.camara);}
+            ),
+            const Text(
+              "Elige un pictograma para la tarea: *",
+              style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
+            ),
+            SizedBox(
+              height: 5,
             ),
             ElevatedButton(
                 child: Text('Elige un pictograma de tu galería'),
                 onPressed: (){seleccionarImagen(SeleccionImagen.galeria);}
             ),
-
+            const Text(
+              "Elige un videotutorial para la tarea: *",
+              style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
+            ),
+            SizedBox(
+              height: 5,
+            ),
             ElevatedButton(
                 child: Text('Haz un videotutorial'),
                 onPressed: (){seleccionarImagen(SeleccionImagen.video);}
             ),
-
-
+            SizedBox(
+              height: 10,
+            ),
             Container(
-              height: 100,
-              width: 100,
+              decoration: BoxDecoration(border: Border.all(width: 2)),
+              height: 120,
+              width: 200,
                 child: fotoTomada == null
-                  ? Center()
+                  ? Center(child: Text('Ninguna foto tomada ****'))
                   : Center(child: Image.file(File(fotoTomada.path))),
             ),
-
-
-            
-
-
-
             SizedBox(
+              height: 10,
+            ),
+            Container(
+              decoration: BoxDecoration(border: Border.all(width: 2)),
               height: 200,
               width: 200,
               child: videoTomado == null
-                  ? Center(child: Text('Ningun video tomado'))
+                  ? Center(child: Text('Ningun video tomado ****'))
                   : Center(child:ReproductorVideo(controladorVideo)),
             ),
 
@@ -236,11 +277,10 @@ class CrearTareaState extends State<CrearTarea>{
                 visible: !creando,
                 child:
 
-            TextButton(
+            ElevatedButton(
               child: Text("Crear nueva tarea",
                 style: TextStyle(
-                    color: Colors.cyan,
-                    decorationColor: Colors.lightBlueAccent
+                    color: Colors.white,
                 ),
               ),
               onPressed: () {
@@ -248,6 +288,10 @@ class CrearTareaState extends State<CrearTarea>{
               },
 
             )
+            ),
+
+            SizedBox(
+              height: 10,
             ),
 
 
