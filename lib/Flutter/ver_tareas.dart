@@ -126,9 +126,9 @@ class VerTareasState extends State<VerTareas> {
 
           Container(
             child: Text(
-              "${"\n"+Sesion.nombre+"\n"}",
+              "${"\nTareas de: "+Sesion.nombre+"\n"}",
               style: const TextStyle(
-                color: Colors.black54,
+                color: Colors.black,
                 fontSize: 20.0,
               ),
             ),
@@ -161,7 +161,7 @@ class VerTareasState extends State<VerTareas> {
                 visible: verFlechaIzquierda,
               )),
               Flexible(
-                flex: 20,
+                flex: 40,
                   child:
               Container(
                 decoration: BoxDecoration(border: Border.all(width: 2),
@@ -242,10 +242,11 @@ class VerTareasState extends State<VerTareas> {
     if (valor == "T" && Sesion.tareas[i].textos.length > indiceTextos) {
       String pathTexto = Sesion.tareas[i].textos[indiceTextos];
       indiceTextos++;
-      return Text(pathTexto+"\n",
+      return Center(child: Text(pathTexto+"\n",
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
-          ));
+          )));
     } else if (valor == "I" &&
         Sesion.tareas[i].imagenes.length > indiceImagenes) {
       String pathImagen = Sesion.tareas[i].imagenes[indiceImagenes];
@@ -294,8 +295,10 @@ class VerTareasState extends State<VerTareas> {
           }
           setState(() {});
         },
-        child: Column(children: [
-          AspectRatio(aspectRatio: 16.0 / 9.0, child: VideoPlayer(controlador)),
+        child: Container(
+          margin: EdgeInsets.only(top: 10),
+            child: Column(children: [
+          AspectRatio(aspectRatio: 12.0 / 9.0, child: VideoPlayer(controlador)),
           Icon(
             controlador.value.isPlaying ? Icons.pause : Icons.play_arrow,
             size: 20,
@@ -306,7 +309,7 @@ class VerTareasState extends State<VerTareas> {
             child: Text(
                 "Total Duration: " + controlador.value.duration.toString()),
           ),
-        ]));
+        ])));
 
   }
 
