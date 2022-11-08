@@ -156,10 +156,10 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
           children:[
 
             if(usuarioPerfil != null)...[
-              Text(usuarioPerfil.nombre),
-              Text(usuarioPerfil.apellidos),
-              Text(usuarioPerfil.fechanacimiento),
-              Text(usuarioPerfil.rol),
+              Text("Nombre: "+usuarioPerfil.nombre+"\n"),
+              Text("Apellidos: "+usuarioPerfil.apellidos+"\n"),
+              Text("Fecha de nacimiento: "+usuarioPerfil.fechanacimiento+"\n"),
+              Text("Imagen de perfil:\n"),
 
               Image(
                 width: 100,
@@ -167,7 +167,7 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
                 image: NetworkImage(usuarioPerfil.foto),
               )
               ,
-              Text("\nTAREAS:"),
+              Text("\nTAREAS ASIGNADAS:"),
 
 
               if(Sesion.tareas != null)...
@@ -177,8 +177,9 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
 
                   if(Sesion.tareas[i] is Tarea)...[
                     Container(
-
+                        alignment: Alignment.center,
                         child:Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
 
                             Text(Sesion.tareas[i].nombre),
@@ -205,7 +206,7 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
 
 
 
-              Text("\n Añadir Tarea: "),
+              Text("\n Añadir Tarea: \n"),
 
               /* TextField(
                 decoration: InputDecoration(
@@ -216,6 +217,7 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
               ),*/
 
               if(tareas != null && nombresTareas.length > 1)...[
+
                 DropdownButton(
 
                   value: tareaElegida,
@@ -254,10 +256,13 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
                   },
                 ),
 
+                SizedBox(
+                  height: 10,
+                ),
                 ElevatedButton(
                   child: Text("Añadir Tarea",
                     style: TextStyle(
-                      color: Colors.amberAccent,
+                      color: Colors.white,
                     ),
                   ),
                   onPressed: () {
