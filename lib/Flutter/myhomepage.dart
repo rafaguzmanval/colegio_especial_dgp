@@ -189,6 +189,9 @@ class MyHomePageState extends State<MyHomePage>{
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(160, 100), //////// HERE
+                ),
                 child: Column(
                   children: [
                     Text("Lista de alumnos",
@@ -197,8 +200,8 @@ class MyHomePageState extends State<MyHomePage>{
                       ),
                     ),
 
-                    Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
-                      height: 55,
+                    Image.asset("companeros.png",width:130,
+                      height: 80,
                       fit: BoxFit.fill,),
                   ],
 
@@ -225,6 +228,9 @@ class MyHomePageState extends State<MyHomePage>{
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(160, 100), //////// HERE
+                ),
                 child: Column(
                   children: [
                     Text("Tablon de Comunicacion",
@@ -233,8 +239,8 @@ class MyHomePageState extends State<MyHomePage>{
                       ),
                     ),
 
-                    Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
-                      height: 55,
+                    Image.asset("tableroDeComunicacion.png",width:130,
+                      height: 80,
                       fit: BoxFit.fill,),
                   ],
 
@@ -246,6 +252,9 @@ class MyHomePageState extends State<MyHomePage>{
               ),
 
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  minimumSize: Size(160, 100), //////// HERE
+                ),
                 child: Column(children: [
                   Text("Lista de Tareas",
                     style: TextStyle(
@@ -253,8 +262,8 @@ class MyHomePageState extends State<MyHomePage>{
                     ),
                   ),
 
-                  Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
-                    height: 55,
+                  Image.asset("lectoescritura.png",width:130,
+                    height: 80,
                     fit: BoxFit.fill,),
                 ],
 
@@ -283,6 +292,9 @@ class MyHomePageState extends State<MyHomePage>{
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(160, 100), //////// HERE
+                        ),
                         child: Column(
                           children: [
                             Text("Lista de alumnos",
@@ -291,8 +303,8 @@ class MyHomePageState extends State<MyHomePage>{
                               ),
                             ),
 
-                            Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
-                              height: 55,
+                            Image.asset("companeros.png",width:130,
+                              height: 80,
                               fit: BoxFit.fill,),
                           ],
 
@@ -304,6 +316,9 @@ class MyHomePageState extends State<MyHomePage>{
                       ),
 
                       ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(160, 100), //////// HERE
+                        ),
                         child: Column(children: [
                           Text("Lista de Profesores",
                             style: TextStyle(
@@ -311,8 +326,8 @@ class MyHomePageState extends State<MyHomePage>{
                             ),
                           ),
 
-                          Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
-                            height: 55,
+                          Image.asset("profesor.png",width:130,
+                            height: 80,
                             fit: BoxFit.fill,),
                         ],
 
@@ -332,6 +347,9 @@ class MyHomePageState extends State<MyHomePage>{
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(160, 100), //////// HERE
+                      ),
                       child: Column(
                         children: [
                           Text("Registro de Usuario",
@@ -340,8 +358,8 @@ class MyHomePageState extends State<MyHomePage>{
                             ),
                           ),
 
-                          Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
-                            height: 55,
+                          Image.asset("madurez.png",width:130,
+                            height: 80,
                             fit: BoxFit.fill,),
                         ],
 
@@ -353,6 +371,9 @@ class MyHomePageState extends State<MyHomePage>{
                     ),
 
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(160, 100), //////// HERE
+                      ),
                       child: Column(
                         children: [
                           Text("Crear Tarea",
@@ -361,8 +382,8 @@ class MyHomePageState extends State<MyHomePage>{
                             ),
                           ),
 
-                          Image.network("https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",width:100,
-                            height: 55,
+                          Image.asset("correcto.png",width:130,
+                            height: 80,
                             fit: BoxFit.fill,),
                         ],
 

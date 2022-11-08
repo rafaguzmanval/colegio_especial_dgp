@@ -104,20 +104,24 @@ class TablonComunicacionState extends State<TablonComunicacion> {
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
   Widget VistaAlumno() {
     return Container(
-      //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+      padding: EdgeInsets.all(10),
       alignment: Alignment.center,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           for (int i = 0; i < 3; i++)
             //TAREA
             ElevatedButton(
+              style: ButtonStyle(shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder( borderRadius: BorderRadius.circular(18.0))
+              )),
                 child: Container(
                   constraints: BoxConstraints(maxWidth: 100, minWidth: 60),
                   width: 10,
                   margin: EdgeInsets.all(20),
                   decoration: BoxDecoration(
                       color: Colors.lightGreenAccent,
-                      borderRadius: BorderRadius.circular(30)),
+                      borderRadius: BorderRadius.circular(20)),
                   alignment: Alignment.center,
                   child: Column(children: [
                     Image(image: NetworkImage(imagenes[i])),
