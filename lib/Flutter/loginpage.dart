@@ -32,6 +32,8 @@ class LoginPageState extends State<LoginPage>{
   var maxUsuariosPorFila = 2;
   double offSetActual = 0;
 
+  bool verBotonAbajo = false, verBotonArriba = false;
+
   FlutterLocalNotificationsPlugin notificaciones = new FlutterLocalNotificationsPlugin();
 
   ScrollController homeController = new ScrollController();
@@ -47,7 +49,6 @@ class LoginPageState extends State<LoginPage>{
     //Notificacion.showBigTextNotification(title: "Bienvenio", body: "LA gran notificacion", fln: flutterLocalNotificationsPlugin);
     Sesion.reload();
     Sesion.paginaActual = this;
-
   }
 
   obtenerAutenticacion() async{
@@ -82,6 +83,10 @@ class LoginPageState extends State<LoginPage>{
       body:   Stack(
           children: [
             ListaUsuarios(),
+
+            Visibility(
+              visible: verBotonArriba,
+              child:
             Container(
               alignment: FractionalOffset(0.98,0.01),
             child: FloatingActionButton(
@@ -89,9 +94,17 @@ class LoginPageState extends State<LoginPage>{
                 elevation: 1.0,
                 onPressed: (){
 
-                  offSetActual -= 100.0;
-                  if(offSetActual < homeController.position.minScrollExtent)
-                    offSetActual = homeController.position.minScrollExtent;
+                  verBotonAbajo = true;
+
+                  offSetActual -= 150.0;
+                  if(offSetActual <= homeController.position.minScrollExtent)
+                    {
+                      offSetActual = homeController.position.minScrollExtent;
+                      verBotonArriba = false;
+
+                    }
+
+                  _actualizar();
 
                   homeController.animateTo(
                     offSetActual, // change 0.0 {double offset} to corresponding widget position
@@ -101,18 +114,28 @@ class LoginPageState extends State<LoginPage>{
 
                 }),
             ),
+            ),
 
+
+            Visibility(
+              visible: verBotonAbajo,
+              child:
             Container(
               alignment: FractionalOffset(0.98,0.99),
               child: FloatingActionButton(
                   child: Icon(Icons.arrow_downward),
                   elevation: 1.0,
                   onPressed: (){
-                        offSetActual += 100;
+                        offSetActual += 150;
+                        verBotonArriba = true;
 
-                        if(offSetActual > homeController.position.maxScrollExtent)
-                          offSetActual = homeController.position.maxScrollExtent;
+                        if(offSetActual >= homeController.position.maxScrollExtent)
+                          {
+                            offSetActual = homeController.position.maxScrollExtent;
+                            verBotonAbajo = false;
+                          }
 
+                        _actualizar();
 
                         homeController.animateTo(
                           offSetActual, // change 0.0 {double offset} to corresponding widget position
@@ -122,33 +145,10 @@ class LoginPageState extends State<LoginPage>{
 
                   }),
             ),
+            ),
           ]
       )
 
-      /*
-      Container(
-
-
-        alignment: Alignment.center,
-
-        child: Column(
-
-          children: [
-
-            Text("Iniciar Sesión"),
-
-            ImagenUGR(),
-
-            Text('Créditos: Los mochileros'),
-            Text('Rafael Guzmán , Blanca Abril , Javier Mesa , José Paneque , Hicham Bouchemma , Emilio Vargas'),
-
-
-          ],
-        ),
-
-
-
-      )  */
     );
 
   }
@@ -157,6 +157,8 @@ class LoginPageState extends State<LoginPage>{
 
     usuarios = await base.consultarTodosUsuarios();
     imagenUgr = await lecturaImagen("AppStorage/ugr.png");
+    if(usuarios.length > 10)
+      verBotonAbajo = true;
     _actualizar();
   }
 
@@ -205,6 +207,8 @@ class LoginPageState extends State<LoginPage>{
         Text('Rafael Guzmán , Blanca Abril , Javier Mesa , José Paneque , Hicham Bouchemma , Emilio Vargas'),]
       );
     else {
+
+
       return
           OrientationBuilder(builder: (context,orientation)=>
             orientation == Orientation.portrait
@@ -289,6 +293,7 @@ class LoginPageState extends State<LoginPage>{
           ]
       );
   }
+
 
 
 
