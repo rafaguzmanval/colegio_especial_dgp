@@ -249,19 +249,20 @@ class LoginPageState extends State<LoginPage>{
           children: [
 
             for(int i = 0; i < usuarios.length/maxUsuariosPorFila; i++)
-              Container(
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
 
                       children: [
                         for(int j = i*maxUsuariosPorFila; j < (i*maxUsuariosPorFila) + maxUsuariosPorFila && j < usuarios.length; j++)
                           Container(
-                              width:100,
-                              height: 100,
-                              margin: EdgeInsets.all(20),
                               alignment: Alignment.center,
+                              margin: EdgeInsets.all(20),
+
                               child: ElevatedButton(
-                                child: Column(
+                              child:Container(
+                                padding: EdgeInsets.only(bottom: 10),
+                              child: Column(
+
                                   children: [
                                     Text(usuarios[j].nombre,
                                       style: TextStyle(
@@ -269,12 +270,12 @@ class LoginPageState extends State<LoginPage>{
                                       ),
                                     ),
 
-                                    Image.network(usuarios[j].foto,width:100,
+                                    Image.network(usuarios[j].foto,width:70,
                                       height: 70,
                                       fit: BoxFit.fill,),
                                   ],
 
-                                ),
+                                )),
                                 onPressed: () {
                                   Sesion.id = usuarios[j].id;
                                   Sesion.nombre = usuarios[j].nombre;
@@ -284,13 +285,10 @@ class LoginPageState extends State<LoginPage>{
                                 },
 
 
-                              )
 
-                          )]
+
+                              ))]
                   ),
-
-
-              ),
 
           ]
       );
