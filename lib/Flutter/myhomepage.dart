@@ -200,7 +200,7 @@ class MyHomePageState extends State<MyHomePage>{
                       ),
                     ),
 
-                    Image.asset("companeros.png",width:130,
+                    Image.asset("assets/companeros.png",width:130,
                       height: 80,
                       fit: BoxFit.fill,),
                   ],
@@ -239,7 +239,7 @@ class MyHomePageState extends State<MyHomePage>{
                       ),
                     ),
 
-                    Image.asset("tableroDeComunicacion.png",width:130,
+                    Image.asset("assets/tableroDeComunicacion.png",width:130,
                       height: 80,
                       fit: BoxFit.fill,),
                   ],
@@ -262,7 +262,7 @@ class MyHomePageState extends State<MyHomePage>{
                     ),
                   ),
 
-                  Image.asset("lectoescritura.png",width:130,
+                  Image.asset("assets/lectoescritura.png",width:130,
                     height: 80,
                     fit: BoxFit.fill,),
                 ],
@@ -303,7 +303,7 @@ class MyHomePageState extends State<MyHomePage>{
                               ),
                             ),
 
-                            Image.asset("companeros.png",width:130,
+                            Image.asset("assets/companeros.png",width:130,
                               height: 80,
                               fit: BoxFit.fill,),
                           ],
@@ -326,7 +326,7 @@ class MyHomePageState extends State<MyHomePage>{
                             ),
                           ),
 
-                          Image.asset("profesor.png",width:130,
+                          Image.asset("assets/profesor.png",width:130,
                             height: 80,
                             fit: BoxFit.fill,),
                         ],
@@ -358,7 +358,7 @@ class MyHomePageState extends State<MyHomePage>{
                             ),
                           ),
 
-                          Image.asset("madurez.png",width:130,
+                          Image.asset("assets/madurez.png",width:130,
                             height: 80,
                             fit: BoxFit.fill,),
                         ],
@@ -382,7 +382,7 @@ class MyHomePageState extends State<MyHomePage>{
                             ),
                           ),
 
-                          Image.asset("correcto.png",width:130,
+                          Image.asset("assets/correcto.png",width:130,
                             height: 80,
                             fit: BoxFit.fill,),
                         ],
