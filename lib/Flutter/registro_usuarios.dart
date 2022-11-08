@@ -259,7 +259,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
             "Elige foto de perfil (opcional):",
             style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
           ),
-          Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

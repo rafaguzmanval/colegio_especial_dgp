@@ -148,67 +148,68 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
   Widget perfilAlumno()
   {
     return
-      Container(
+      Expanded(
 
 
         //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-        child:Column(
-          children:[
+        child:SingleChildScrollView(
+          child: Column(
+            children:[
 
-            if(usuarioPerfil != null)...[
-              Text("Nombre: "+usuarioPerfil.nombre+"\n"),
-              Text("Apellidos: "+usuarioPerfil.apellidos+"\n"),
-              Text("Fecha de nacimiento: "+usuarioPerfil.fechanacimiento+"\n"),
-              Text("Imagen de perfil:\n"),
+              if(usuarioPerfil != null)...[
+                Text("Nombre: "+usuarioPerfil.nombre+"\n"),
+                Text("Apellidos: "+usuarioPerfil.apellidos+"\n"),
+                Text("Fecha de nacimiento: "+usuarioPerfil.fechanacimiento+"\n"),
+                Text("Imagen de perfil:\n"),
 
-              Image(
-                width: 100,
-                height: 100,
-                image: NetworkImage(usuarioPerfil.foto),
-              )
-              ,
-              Text("\nTAREAS ASIGNADAS:"),
-
-
-              if(Sesion.tareas != null)...
-              [
-
-                for(int i = 0; i < Sesion.tareas.length; i++)
-
-                  if(Sesion.tareas[i] is Tarea)...[
-                    Container(
-                        alignment: Alignment.center,
-                        child:Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-
-                            Text(Sesion.tareas[i].nombre),
-                            IconButton(onPressed: () {base.eliminarTareaAlumno(Sesion.tareas[i].idRelacion);esTareaEliminandose = true;tareaEliminandose = i; actualizar();},
-                                icon: Icon(Icons.delete)
-                            ),
-
-                            if(esTareaEliminandose && i == tareaEliminandose)...[
-                              new CircularProgressIndicator(),
-                            ]
+                Image(
+                  width: 100,
+                  height: 100,
+                  image: NetworkImage(usuarioPerfil.foto),
+                )
+                ,
+                Text("\nTAREAS ASIGNADAS:"),
 
 
-                          ],
-                        )
+                if(Sesion.tareas != null)...
+                [
 
-                    ),
-                  ]
-                  else...[
-                    new CircularProgressIndicator()
-                  ],
+                  for(int i = 0; i < Sesion.tareas.length; i++)
 
-              ],
+                    if(Sesion.tareas[i] is Tarea)...[
+                      Container(
+                          alignment: Alignment.center,
+                          child:Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+
+                              Text(Sesion.tareas[i].nombre),
+                              IconButton(onPressed: () {base.eliminarTareaAlumno(Sesion.tareas[i].idRelacion);esTareaEliminandose = true;tareaEliminandose = i; actualizar();},
+                                  icon: Icon(Icons.delete)
+                              ),
+
+                              if(esTareaEliminandose && i == tareaEliminandose)...[
+                                new CircularProgressIndicator(),
+                              ]
+
+
+                            ],
+                          )
+
+                      ),
+                    ]
+                    else...[
+                      new CircularProgressIndicator()
+                    ],
+
+                ],
 
 
 
 
-              Text("\n Añadir Tarea: \n"),
+                Text("\n Añadir Tarea: \n"),
 
-              /* TextField(
+                /* TextField(
                 decoration: InputDecoration(
                   border:OutlineInputBorder(),
                   hintText: 'Introduce nueva tarea',
@@ -216,84 +217,85 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
                 controller: myController,
               ),*/
 
-              if(tareas != null && nombresTareas.length > 1)...[
+                if(tareas != null && nombresTareas.length > 1)...[
 
-                DropdownButton(
-                  key: Key("Multiselección"),
-                  value: tareaElegida,
+                  DropdownButton(
+                    key: Key("Multiselección"),
+                    value: tareaElegida,
 
-                  items: nombresTareas.map((String value) {
-                    return DropdownMenuItem(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
+                    items: nombresTareas.map((String value) {
+                      return DropdownMenuItem(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
 
-                  onChanged: (String? value) {
-                    // This is called when the user selects an item.
-                    setState(() {
-                      tareaElegida = value!;
+                    onChanged: (String? value) {
+                      // This is called when the user selects an item.
+                      setState(() {
+                        tareaElegida = value!;
 
-                      if(tareaElegida == "Nada seleccionado"){
-                        idTareaElegida = null;
-                      }
-                      else
-                      {
-                        int i = 0;
-                        bool salir = false;
-                        while(i < tareas.length && !salir){
-
-                          if(tareas[i].nombre == tareaElegida){
-                            idTareaElegida = tareas[i].id;
-                            salir = true;
-                          }
-                          i++;
+                        if(tareaElegida == "Nada seleccionado"){
+                          idTareaElegida = null;
                         }
-                      }
+                        else
+                        {
+                          int i = 0;
+                          bool salir = false;
+                          while(i < tareas.length && !salir){
+
+                            if(tareas[i].nombre == tareaElegida){
+                              idTareaElegida = tareas[i].id;
+                              salir = true;
+                            }
+                            i++;
+                          }
+                        }
 
 
-                    });
-                  },
-                ),
-
-                SizedBox(
-                  height: 10,
-                ),
-                ElevatedButton(
-                  child: Text("Añadir Tarea",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
+                      });
+                    },
                   ),
-                  onPressed: () {
-                    if(idTareaElegida != null)
-                    {
-                      base.addTareaAlumno(Sesion.seleccion.id, idTareaElegida);
-                      esNuevaTareaCargando = true;
-                      actualizar();
-                    }
-                  },
+
+                  SizedBox(
+                    height: 10,
+                  ),
+                  ElevatedButton(
+                    child: Text("Añadir Tarea",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: () {
+                      if(idTareaElegida != null)
+                      {
+                        base.addTareaAlumno(Sesion.seleccion.id, idTareaElegida);
+                        esNuevaTareaCargando = true;
+                        actualizar();
+                      }
+                    },
 
 
-                ),
+                  ),
 
-                if(esNuevaTareaCargando)...[
-                  new CircularProgressIndicator()
-                ]
-              ],
-
-
+                  if(esNuevaTareaCargando)...[
+                    new CircularProgressIndicator()
+                  ]
+                ],
 
 
 
-            ]else ...[
-              new CircularProgressIndicator()
-            ]
+
+
+              ]else ...[
+                new CircularProgressIndicator()
+              ]
 
 
 
-          ],
-        ),
+            ],
+          ),
+        )
       );
   }
 
