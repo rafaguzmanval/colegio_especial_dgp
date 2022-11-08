@@ -90,6 +90,7 @@ class LoginPageState extends State<LoginPage>{
             Container(
               alignment: FractionalOffset(0.98,0.01),
             child: FloatingActionButton(
+                heroTag: "botonUp",
                 child: Icon(Icons.arrow_upward),
                 elevation: 1.0,
                 onPressed: (){
@@ -123,6 +124,7 @@ class LoginPageState extends State<LoginPage>{
             Container(
               alignment: FractionalOffset(0.98,0.99),
               child: FloatingActionButton(
+                  heroTag: "botonDown",
                   child: Icon(Icons.arrow_downward),
                   elevation: 1.0,
                   onPressed: (){

@@ -219,7 +219,7 @@ class PerfilAlumnoState extends State<PerfilAlumno>{
               if(tareas != null && nombresTareas.length > 1)...[
 
                 DropdownButton(
-
+                  key: Key("Multiselección"),
                   value: tareaElegida,
 
                   items: nombresTareas.map((String value) {
