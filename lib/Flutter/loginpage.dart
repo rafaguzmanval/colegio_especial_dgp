@@ -36,7 +36,7 @@ class LoginPageState extends State<LoginPage>{
 
   FlutterLocalNotificationsPlugin notificaciones = new FlutterLocalNotificationsPlugin();
 
-  ScrollController homeController = new ScrollController();
+  var homeController;
 
 
   @override
@@ -49,6 +49,52 @@ class LoginPageState extends State<LoginPage>{
     //Notificacion.showBigTextNotification(title: "Bienvenio", body: "LA gran notificacion", fln: flutterLocalNotificationsPlugin);
     Sesion.reload();
     Sesion.paginaActual = this;
+    homeController = new ScrollController();
+    homeController.addListener(_scrollListener);
+  }
+
+  _scrollListener()
+  {
+
+    if(homeController.position.maxScrollExtent > 0)
+      {
+        if (homeController.offset >= homeController.position.maxScrollExtent &&
+            !homeController.position.outOfRange) {
+          setState(() {
+            //Cuando llega al fondo del scroll
+            verBotonAbajo = false;
+            verBotonArriba = true;
+
+
+          });
+        }
+        if (homeController.offset <= homeController.position.minScrollExtent &&
+            !homeController.position.outOfRange) {
+          setState(() {
+
+            //Cuando está al empezar el scroll
+            verBotonArriba = false;
+            verBotonAbajo = true;
+
+          });
+        }
+
+        if(homeController.offset > homeController.position.minScrollExtent && homeController.offset < homeController.position.maxScrollExtent )
+        {
+          setState((){
+            verBotonArriba = true;
+            verBotonAbajo = true;
+          });
+        }
+      }
+    else
+      {
+        verBotonArriba = false;
+        verBotonAbajo = false;
+      }
+
+
+
   }
 
   obtenerAutenticacion() async{
@@ -95,14 +141,14 @@ class LoginPageState extends State<LoginPage>{
                 elevation: 1.0,
                 onPressed: (){
 
-                  verBotonAbajo = true;
-
                   offSetActual -= 150.0;
                   if(offSetActual <= homeController.position.minScrollExtent)
                     {
                       offSetActual = homeController.position.minScrollExtent;
-                      verBotonArriba = false;
-
+                    }
+                  else
+                    {
+                      verBotonAbajo = true;
                     }
 
                   _actualizar();
@@ -129,12 +175,14 @@ class LoginPageState extends State<LoginPage>{
                   elevation: 1.0,
                   onPressed: (){
                         offSetActual += 150;
-                        verBotonArriba = true;
 
                         if(offSetActual >= homeController.position.maxScrollExtent)
                           {
                             offSetActual = homeController.position.maxScrollExtent;
-                            verBotonAbajo = false;
+                          }
+                        else
+                          {
+                            verBotonArriba = true;
                           }
 
                         _actualizar();

@@ -29,482 +29,338 @@ import "package:flutter_tts/flutter_tts.dart";
 import 'lista_alumnos.dart';
 import 'lista_profesores.dart';
 
-enum SeleccionImagen{
-  camara,
-  galeria
-}
+enum SeleccionImagen { camara, galeria }
 
-
-class MyHomePage extends StatefulWidget{
-
+class MyHomePage extends StatefulWidget {
   @override
   MyHomePageState createState() => MyHomePageState();
-
 }
 
-class MyHomePageState extends State<MyHomePage>{
-
+class MyHomePageState extends State<MyHomePage> {
   var db = FirebaseFirestore.instance;
   AccesoBD base = new AccesoBD();
   var maxUsuariosPorFila = 2;
   double offSetActual = 0;
   ScrollController homeController = new ScrollController();
 
-
-
   ///Cuándo se pasa de página es necesario que todos los controladores de los formularios y de los reproductores de vídeo se destruyan.
   @override
-  void dispose(){
-
+  void dispose() {
     super.dispose();
   }
 
-
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
     Sesion.paginaActual = this;
 
     Sesion.seleccion = "";
     Sesion.tareas = [];
-
-
   }
-
 
   /// Este es el build de la clase MyHomePage que devuelve toda la vista génerica más la vista especial de cada usuario.
   @override
-  Widget build(BuildContext context){
-    
-    return
-      new WillPopScope(child: new Scaffold(
-        appBar:AppBar(
-          leading: IconButton(icon: Icon(Icons.settings_power, color: Colors.white),onPressed: () => _onBackPressed(context)),
-
-          title: Column(
-            children: [Text('Menú principal'),
-          ]
+  Widget build(BuildContext context) {
+    return new WillPopScope(
+      child: new Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+                icon: Icon(Icons.settings_power, color: Colors.white),
+                onPressed: () => _onBackPressed(context)),
+            title: Column(children: [
+              Text('Menú principal'),
+            ]),
+            automaticallyImplyLeading: false,
           ),
-          automaticallyImplyLeading: false,
-        ),
-        body: Stack(
-          alignment: Alignment.center,
-            children: [
-              OrientationBuilder(builder: (context,orientation)=>
-              orientation == Orientation.portrait
-                  ? buildPortrait()
-                  : buildLandscape(),
-
-              ),
-
-              Container(
-                alignment: FractionalOffset(0.98,0.01),
-                child: FloatingActionButton(
-                  heroTag: "botonUp",
-                    child: Icon(Icons.arrow_upward),
-                    elevation: 1.0,
-                    onPressed: (){
-
-                      offSetActual -= 100.0;
-                      if(offSetActual < homeController.position.minScrollExtent)
-                        offSetActual = homeController.position.minScrollExtent;
-
-                      homeController.animateTo(
-                        offSetActual, // change 0.0 {double offset} to corresponding widget position
-                        duration: Duration(seconds: 1),
-                        curve: Curves.easeOut,
-                      );
-
-                    }),
-              ),
-
-              Container(
-                alignment: FractionalOffset(0.98,0.99),
-                child: FloatingActionButton(
-                    heroTag: "botonDown",
-                    child: Icon(Icons.arrow_downward),
-                    elevation: 1.0,
-                    onPressed: (){
-                      offSetActual += 100;
-
-                      if(offSetActual > homeController.position.maxScrollExtent)
-                        offSetActual = homeController.position.maxScrollExtent;
-
-
-                      homeController.animateTo(
-                        offSetActual, // change 0.0 {double offset} to corresponding widget position
-                        duration: Duration(seconds: 1),
-                        curve: Curves.easeOut,
-                      );
-
-                    }),
-              ),
-            ]
-        )
-
-        /*Container(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal:  0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-
-
-                if(Sesion.rol == Rol.alumno.toString())...[
-                  VistaAlumno(),
-                ]
-                else if(Sesion.rol == Rol.profesor.toString())...[
-                  VistaProfesor()
-                ]
-                else if(Sesion.rol == Rol.administrador.toString())...[
-                    VistaAdministrador()
-                  ]
-                  else if(Sesion.rol == Rol.programador.toString())...[
-                      VistaProgramador()
-                    ]
-              ],
-            )
-
-
-
-
-        ),*/
-      ),
-          onWillPop: () async {
-          final pop = await _onBackPressed(context);
-          return pop ?? false;
-             },
-          );
-
-
+          body: Stack(alignment: Alignment.center, children: [
+            OrientationBuilder(
+              builder: (context, orientation) =>
+                  orientation == Orientation.portrait
+                      ? buildPortrait()
+                      : buildLandscape(),
+            ),
+          ])),
+      onWillPop: () async {
+        final pop = await _onBackPressed(context);
+        return pop ?? false;
+      },
+    );
   }
 
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
-  Widget VistaProfesor()
-  {
-    return
-      Container(
-        alignment: Alignment.center,
-        child:
-        Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+  Widget VistaProfesor() {
+    return Container(
+      alignment: Alignment.center,
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            minimumSize: Size(160, 100), //////// HERE
+          ),
+          child: Column(
             children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(160, 100), //////// HERE
+              Text(
+                "Lista de alumnos",
+                style: TextStyle(
+                  color: Colors.white,
                 ),
-                child: Column(
-                  children: [
-                    Text("Lista de alumnos",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-
-                    Image.asset("assets/companeros.png",width:130,
-                      height: 80,
-                      fit: BoxFit.fill,),
-                  ],
-
-                ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => ListaAlumnos()));
-                },
               ),
-            ]
+              Image.asset(
+                "assets/companeros.png",
+                width: 130,
+                height: 80,
+                fit: BoxFit.fill,
+              ),
+            ],
+          ),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ListaAlumnos()));
+          },
         ),
-      );
-
+      ]),
+    );
   }
 
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
-  Widget VistaAlumno()
-  {
-    return
-      Container(
-        alignment: Alignment.center,
-        child:
-        Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+  Widget VistaAlumno() {
+    return Container(
+      alignment: Alignment.center,
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            minimumSize: Size(160, 100), //////// HERE
+          ),
+          child: Column(
             children: [
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(160, 100), //////// HERE
+              Text(
+                "Tablon de Comunicacion",
+                style: TextStyle(
+                  color: Colors.white,
                 ),
-                child: Column(
-                  children: [
-                    Text("Tablon de Comunicacion",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-
-                    Image.asset("assets/tableroDeComunicacion.png",width:130,
-                      height: 80,
-                      fit: BoxFit.fill,),
-                  ],
-
-                ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => TablonComunicacion()));
-                },
               ),
-
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  minimumSize: Size(160, 100), //////// HERE
+              Image.asset(
+                "assets/tableroDeComunicacion.png",
+                width: 130,
+                height: 80,
+                fit: BoxFit.fill,
+              ),
+            ],
+          ),
+          onPressed: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => TablonComunicacion()));
+          },
+        ),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            minimumSize: Size(160, 100), //////// HERE
+          ),
+          child: Column(
+            children: [
+              Text(
+                "Lista de Tareas",
+                style: TextStyle(
+                  color: Colors.white,
                 ),
-                child: Column(children: [
-                  Text("Lista de Tareas",
+              ),
+              Image.asset(
+                "assets/lectoescritura.png",
+                width: 130,
+                height: 80,
+                fit: BoxFit.fill,
+              ),
+            ],
+          ),
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => VerTareas()));
+          },
+        ),
+      ]),
+    );
+  }
+
+  ///Este método devuelve toda la vista que va a ver el administrador en un Widget.
+  Widget VistaAdministrador() {
+    return Column(children: [
+      Container(
+          alignment: Alignment.center,
+          child:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(160, 100), //////// HERE
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    "Lista de alumnos",
                     style: TextStyle(
                       color: Colors.white,
                     ),
                   ),
-
-                  Image.asset("assets/lectoescritura.png",width:130,
+                  Image.asset(
+                    "assets/companeros.png",
+                    width: 130,
                     height: 80,
-                    fit: BoxFit.fill,),
+                    fit: BoxFit.fill,
+                  ),
                 ],
-
+              ),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ListaAlumnos()));
+              },
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(160, 100), //////// HERE
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    "Lista de Profesores",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  Image.asset(
+                    "assets/profesor.png",
+                    width: 130,
+                    height: 80,
+                    fit: BoxFit.fill,
+                  ),
+                ],
+              ),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ListaProfesores()));
+              },
+            ),
+          ])),
+      Container(
+        padding: EdgeInsets.only(top: 50),
+        alignment: Alignment.center,
+        child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(160, 100), //////// HERE
+            ),
+            child: Column(
+              children: [
+                Text(
+                  "Registro de Usuario",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => VerTareas()));
-                },
-              ),
-            ]
-        ),
-      );
-  }
-
-
-  ///Este método devuelve toda la vista que va a ver el administrador en un Widget.
-  Widget VistaAdministrador()
-  {
-    return
-      Column(
-          children: [
-            Container(
-                alignment: Alignment.center,
-                child:
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(160, 100), //////// HERE
-                        ),
-                        child: Column(
-                          children: [
-                            Text("Lista de alumnos",
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-
-                            Image.asset("assets/companeros.png",width:130,
-                              height: 80,
-                              fit: BoxFit.fill,),
-                          ],
-
-                        ),
-                        onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => ListaAlumnos()));
-                        },
-                      ),
-
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: Size(160, 100), //////// HERE
-                        ),
-                        child: Column(children: [
-                          Text("Lista de Profesores",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-
-                          Image.asset("assets/profesor.png",width:130,
-                            height: 80,
-                            fit: BoxFit.fill,),
-                        ],
-
-                        ),
-                        onPressed: () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => ListaProfesores()));
-                        },
-                      ),
-                    ]
-                )
+                Image.asset(
+                  "assets/madurez.png",
+                  width: 130,
+                  height: 80,
+                  fit: BoxFit.fill,
+                ),
+              ],
             ),
-            Container(
-              padding: EdgeInsets.only(top: 50),
-              alignment:  Alignment.center,
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(160, 100), //////// HERE
-                      ),
-                      child: Column(
-                        children: [
-                          Text("Registro de Usuario",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-
-                          Image.asset("assets/madurez.png",width:130,
-                            height: 80,
-                            fit: BoxFit.fill,),
-                        ],
-
-                      ),
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => RegistroUsuarios()));
-                      },
-                    ),
-
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(160, 100), //////// HERE
-                      ),
-                      child: Column(
-                        children: [
-                          Text("Crear Tarea",
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-
-                          Image.asset("assets/correcto.png",width:130,
-                            height: 80,
-                            fit: BoxFit.fill,),
-                        ],
-
-                      ),
-                      onPressed: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => CrearTarea()));
-                      },
-                    ),
-                  ]
-              ),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => RegistroUsuarios()));
+            },
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              minimumSize: Size(160, 100), //////// HERE
             ),
-          ]
-      );
-
-
+            child: Column(
+              children: [
+                Text(
+                  "Crear Tarea",
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                Image.asset(
+                  "assets/correcto.png",
+                  width: 130,
+                  height: 80,
+                  fit: BoxFit.fill,
+                ),
+              ],
+            ),
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => CrearTarea()));
+            },
+          ),
+        ]),
+      ),
+    ]);
   }
-
-
 
   /*
   *
   * */
 
-  Widget VistaProgramador()
-  {
-    return
-      Container(
-        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-        child:Column(
-          children:[
-
-
-          ],
-        ),
-      );
+  Widget VistaProgramador() {
+    return Container(
+      //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+      child: Column(
+        children: [],
+      ),
+    );
   }
-
-
-
 
   //Método para cambiar la funcionalidad del botón de volver atrás
 
-Future<bool?> _onBackPressed(BuildContext context){
-
+  Future<bool?> _onBackPressed(BuildContext context) {
     return showDialog(
         context: context,
-        builder : (context) {
-
+        builder: (context) {
           return AlertDialog(
             title: const Text('¿Seguro?'),
             content: Text('¿Quieres cerrar sesión?'),
-
             actions: [
-              ElevatedButton(onPressed: (){
-                Navigator.pop(context,false);
-
-              }, child: Text('No')),
-              ElevatedButton(onPressed: (){
-                Navigator.popUntil(context, (route) => route.isFirst);
-
-              }, child: Text('Sí')),
-
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: Text('No')),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                  },
+                  child: Text('Sí')),
             ],
-
           );
-        }
-       );
+        });
   }
 
-  vistaMenu(){
-    if(Sesion.rol == Rol.alumno.toString()){
-    return VistaAlumno();
-    }
-    else if(Sesion.rol == Rol.profesor.toString()) {
+  vistaMenu() {
+    if (Sesion.rol == Rol.alumno.toString()) {
+      return VistaAlumno();
+    } else if (Sesion.rol == Rol.profesor.toString()) {
       return VistaProfesor();
-    }
-    else if(Sesion.rol == Rol.administrador.toString()){
-    return VistaAdministrador();
-    }
-    else if(Sesion.rol == Rol.programador.toString()){
-    return VistaProgramador();
+    } else if (Sesion.rol == Rol.administrador.toString()) {
+      return VistaAdministrador();
+    } else if (Sesion.rol == Rol.programador.toString()) {
+      return VistaProgramador();
     }
   }
 
-  buildLandscape()
-  {
+  buildLandscape() {
     maxUsuariosPorFila = 3;
-    return
-      SingleChildScrollView(
-          controller: homeController,
-          child: vistaMenu()
-      );
+    return SingleChildScrollView(
+        controller: homeController, child: vistaMenu());
   }
 
-
-  buildPortrait()
-  {
+  buildPortrait() {
     maxUsuariosPorFila = 2;
-    return
-      SingleChildScrollView(
-          controller: homeController,
-          child: vistaMenu()
-      );
-
+    return SingleChildScrollView(
+        controller: homeController, child: vistaMenu());
   }
 
- void actualizar() async
-  {
-    setState((){});
+  void actualizar() async {
+    setState(() {});
   }
-
-
 }
-
-
-
-
-
-
-
-
