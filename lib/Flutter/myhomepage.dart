@@ -77,8 +77,8 @@ class MyHomePageState extends State<MyHomePage> {
             OrientationBuilder(
               builder: (context, orientation) =>
                   orientation == Orientation.portrait
-                      ? buildPortrait()
-                      : buildLandscape(),
+                      ? Center(child:buildPortrait())
+                      : Center(child:buildLandscape()),
             ),
           ])),
       onWillPop: () async {
