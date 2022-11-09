@@ -179,7 +179,7 @@ void test_gestion_alumnos(){
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
-      expect(find.text("gafas"),findsOneWidget);
+      expect(find.text("Jaime"),findsOneWidget);
     });
 
     testWidgets('Test de añadir tarea', (WidgetTester tester) async {
@@ -213,7 +213,7 @@ void test_gestion_alumnos(){
       await Future.delayed(const Duration(seconds: 2), (){});
 
       //Pulsamos el boton antonio
-      var botonAn = find.text("gafas");
+      var botonAn = find.text("Jaime");
       await tester.tap(botonAn);
       await tester.pump();
 
@@ -225,7 +225,7 @@ void test_gestion_alumnos(){
       await tester.pumpAndSettle();
 
       //Pulsamos el boton hacer fotocopia
-      await tester.tap(find.text("Haz un meme").last,warnIfMissed: false);
+      await tester.tap(find.text("Hacer fotocopia").last,warnIfMissed: false);
       await tester.pumpAndSettle();
 
       //Pulsamos el boton añadir tarea
@@ -235,7 +235,7 @@ void test_gestion_alumnos(){
 
       await Future.delayed(const Duration(seconds: 1), (){});
 
-      expect(find.text("Haz un meme"),findsAtLeastNWidgets(2));
+      expect(find.text("Hacer fotocopia"),findsAtLeastNWidgets(2));
     });
 
     testWidgets('Comprobar tarea en alumno', (WidgetTester tester) async {
@@ -245,7 +245,7 @@ void test_gestion_alumnos(){
       await Future.delayed(const Duration(seconds: 2), (){});
 
       //Pulsamos el boton
-      var boton = find.text("gafas");
+      var boton = find.text("Jaime");
       await tester.tap(boton);
       await tester.pump();
 
@@ -268,7 +268,7 @@ void test_gestion_alumnos(){
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
-      expect(find.text("Haz un meme"),findsOneWidget);
+      expect(find.text("Hacer fotocopia"),findsOneWidget);
 
       //Pulsamos el boton play
       await tester.tap(find.byType(ElevatedButton));
@@ -311,19 +311,19 @@ void test_gestion_alumnos(){
       await Future.delayed(const Duration(seconds: 2), (){});
 
       //Pulsamos el boton antonio
-      var botonAn = find.text("gafas");
+      var botonAn = find.text("Jaime");
       await tester.tap(botonAn);
       await tester.pump();
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
-      //Pulsamos el boton haz mates
+      //Pulsamos el boton hacer fotocopia
       await tester.tap(find.byType(IconButton).first,warnIfMissed: false);
       await tester.pumpAndSettle();
 
       await Future.delayed(const Duration(seconds: 1), (){});
 
-      expect(find.text("Haz mates"),findsOneWidget);
+      expect(find.text("Hacer fotocopia"),findsOneWidget);
     });
   });
 }
