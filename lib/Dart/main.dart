@@ -49,7 +49,7 @@ class App extends StatelessWidget{
     return MaterialApp(
 
       localizationsDelegates:GlobalMaterialLocalizations.delegates,
-
+      debugShowCheckedModeBanner: false,
 
       supportedLocales: [
         Locale('es','ES'),
