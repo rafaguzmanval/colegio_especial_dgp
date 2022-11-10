@@ -24,7 +24,7 @@ class Tarea{
   var controladoresVideo = [];
   var orden;
 
-
+  // Constructor
   Tarea({
           this.id,
           this.nombre,
@@ -34,7 +34,7 @@ class Tarea{
           this.orden
   });
 
-
+  // Obtiene los datos de la base de datos y los inserta en el objeto
   factory Tarea.fromFirestore(
       DocumentSnapshot<Map<String, dynamic>> snapshot,
       SnapshotOptions? options,
@@ -48,7 +48,8 @@ class Tarea{
       orden: data?['orden'] is Iterable ? List.from(data?['orden']) : null,
     );
   }
-
+  
+  // Obtiene los datos del objeto y los inserta en la base de datos
   Map<String, dynamic> toFirestore() {
     return {
       if (nombre != null) "nombre": nombre,
@@ -59,7 +60,8 @@ class Tarea{
 
     };
   }
-
+  
+  // Modificar una tarea
   setTarea(nombre,textos,imagenes,videos,orden)
   {
     this.nombre = nombre;
