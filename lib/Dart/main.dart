@@ -28,6 +28,7 @@ var user = "";
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
 
+// Establecer los colores de la pagina siguiendo la paleta de color
 Map<int, Color> color = {
   50: Color.fromRGBO(143, 125, 178,.1),
   100: Color.fromRGBO(143, 125, 178,.2),
@@ -43,6 +44,7 @@ Map<int, Color> color = {
 
 MaterialColor colorCustom = MaterialColor(Color.fromRGBO(143, 125, 178, 1).value,color );
 
+// Inicializar la app
 Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -52,6 +54,7 @@ Future<void> main() async{
   runApp(App());
 }
 
+// Inicializa la aplicacion indicando el idioma soportado
 class App extends StatelessWidget{
 
   @override
