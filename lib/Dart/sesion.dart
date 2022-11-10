@@ -20,7 +20,8 @@ class Sesion{
    static var seleccion;
    static var paginaActual;
    static var metodoLogin = "";
-
+   
+   // Sesion por defecto
    static reload(){
       id = null;
       nombre = null;
@@ -29,7 +30,7 @@ class Sesion{
       seleccion = null;
 
    }
-
+   // Constructor por defecto
    Sesion(){
       id = null;
       nombre = null;
