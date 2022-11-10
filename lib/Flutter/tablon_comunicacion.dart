@@ -1,14 +1,23 @@
-import 'dart:io';
+/*
+*   Archivo: tablon_comunicacion.dart
+*
+*   Descripción:
+*   Tablón de comunicacion de los alumnos a profesores con botones que emiten sonidos con significado.
+*   Includes:
+*   cloud_firestore.dart : Necesario para implementar los métodos que acceden a la base de datos
+*   sesion.dart : Contiene los datos de la sesion actual (sirve de puntero a la página actual donde se encuentra el usuario)
+*   rol.dart : Enumerado con los roles de usuarios que existen en la aplicacion.
+*   acceso_bd.dart: Metodos de acceso a la base de datos.
+*   material.dart: Se utiliza para dar colores y diseño a la aplicacion.
+*   flutter_tts.dart : Convertir un string en audio
+* */
 
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
-
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
-
 import "package:flutter_tts/flutter_tts.dart";
 
 class TablonComunicacion extends StatefulWidget {
@@ -53,6 +62,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
     initTTS();
   }
 
+  // Este metodo inicializa el text to speech con sus caracteristicas
   void initTTS() async {
     lenguajes = List<String>.from(await tts.getLanguages);
     await tts.setVolume(1.0);
@@ -144,12 +154,12 @@ class TablonComunicacionState extends State<TablonComunicacion> {
         children: [],
       ),
     );
-  }
-
+  } 
+  // Este metodo actualiza la pagina
   void actualizar() async {
     setState(() {});
   }
-
+  // Este metodo lee el texto y que se escuche por los altavoces
   void _speak(text) async {
     await tts.speak(text);
   }
