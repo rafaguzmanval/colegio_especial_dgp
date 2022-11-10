@@ -1,5 +1,19 @@
-
-import 'dart:ui';
+/*
+*   Archivo: loginpage.dart
+*
+*   Descripción:
+*   Pagina que consulta el alumno para ver la lista de tareas pendientes
+*   Includes:
+*   main.dart : Usar metodos que estan definidos.
+*   passport_method.dart : Enumeracion de los metodos de acceso.
+*   password_login.dart: Redirigirse a la pagina de password.
+*   flutter_local_notifications.dart : Notificaciones.
+*   notificacion.dart : Clase para construir las notificaciones.
+*   firebase_auth.dart : Acceso a la firebase para autentificación.
+*   sesion.dart : Contiene los datos de la sesion actual (sirve de puntero a la página actual donde se encuentra el usuario)
+*   acceso_bd.dart: Metodos de acceso a la base de datos.
+*   material.dart: Se utiliza para dar colores y diseño a la aplicacion.
+* */
 
 import 'package:colegio_especial_dgp/Dart/main.dart';
 import 'package:colegio_especial_dgp/Dart/passport_method.dart';
@@ -8,13 +22,9 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../Dart/notificacion.dart';
 import '../Dart/sesion.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 
-import 'package:video_player/video_player.dart';
 
 
 class LoginPage extends StatefulWidget{
@@ -96,7 +106,8 @@ class LoginPageState extends State<LoginPage>{
 
 
   }
-
+  
+  // Metodo para acceder a la autenticacion
   obtenerAutenticacion() async{
 
     try {
@@ -115,7 +126,7 @@ class LoginPageState extends State<LoginPage>{
 
 
   }
-
+  // Contructor de la estructura de la pagina
   @override
   Widget build(BuildContext context){
 
@@ -202,7 +213,8 @@ class LoginPageState extends State<LoginPage>{
     );
 
   }
-
+  
+  // Metodo para inicializar y cargar los datos necesarios
   inicializar() async{
 
     usuarios = await base.consultarTodosUsuarios();
@@ -222,6 +234,7 @@ class LoginPageState extends State<LoginPage>{
     inicializar();
   }
 
+  // Widget para cargar las imagenes que van en los creditos
   Widget ImagenUGR()
   {
     return Container(
@@ -246,7 +259,8 @@ class LoginPageState extends State<LoginPage>{
         )
     );
   }
-
+  
+  // Devuelve la lista de usuarios 
   Widget ListaUsuarios()
   {
     if(usuarios == null)
@@ -290,7 +304,8 @@ class LoginPageState extends State<LoginPage>{
       );
 
   }
-
+  
+  // Construye la lista de usuarios
   buildLista(){
     return
       Column(
@@ -344,14 +359,14 @@ class LoginPageState extends State<LoginPage>{
 
 
 
-
+  // Metodo para leer la imagen
   lecturaImagen(path) async
   {
     return await base.leerImagen(path);
   }
 
 
-
+  // Metodo para actualizar la pagina
   void _actualizar() async
   {
     //maxUsuariosPorFila = MediaQuery.of(this.context).orientation == Orientation.portrait? 2 : 4;
