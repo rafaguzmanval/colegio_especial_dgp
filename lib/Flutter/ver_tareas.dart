@@ -145,14 +145,17 @@ class VerTareasState extends State<VerTareas> {
       if (Sesion.tareas.length > 0) ...[
         Row(
             //ROW 2
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Flexible(
-                flex: 15,
+                flex: 20,
                   child:
               Visibility(
                 child: Container(
-                  margin: EdgeInsets.only(top: 100.0),
+                  height: 80,
+                  width: 80,
+                  margin: EdgeInsets.only(top: 100.0,left:20.0),
+                  child: FittedBox(
                   child: FloatingActionButton(
                       onPressed: () {
                         if (tareaActual > 0) {
@@ -165,12 +168,14 @@ class VerTareasState extends State<VerTareas> {
                       },
                       child: const Icon(Icons.arrow_left)),
                 ),
+                ),
                 visible: verFlechaIzquierda,
               )),
               Flexible(
                 flex: 40,
                   child:
               Container(
+
                 decoration: BoxDecoration(border: Border.all(width: 2),
                   color: Color.fromRGBO(143, 125, 178, 1)),
                 child: Column(children: [
@@ -194,11 +199,14 @@ class VerTareasState extends State<VerTareas> {
                 ]),
               )),
               Flexible(
-                flex: 15,
+                flex: 20,
                   child:
               Visibility(
                 child: Container(
-                  margin: EdgeInsets.only(top: 100.0),
+                  height: 80,
+                  width: 80,
+                  margin: EdgeInsets.only(top: 100.0, right: 20.0),
+                  child: FittedBox(
                   child: FloatingActionButton(
                       onPressed: () {
                         if (tareaActual < Sesion.tareas.length) {
@@ -211,6 +219,7 @@ class VerTareasState extends State<VerTareas> {
                         actualizar();
                       },
                       child: const Icon(Icons.arrow_right)),
+                ),
                 ),
                 visible: verFlechaDerecha,
               )
