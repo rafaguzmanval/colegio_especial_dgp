@@ -1,26 +1,26 @@
+
+/*
+*   Archivo: lista_profesores.dart
+*
+*   Descripción:
+*   Pagina para consultar la lista de profesores y acceder a sus perfiles
+*   Includes:
+*   cloud_firestore.dart : Necesario para implementar los métodos que acceden a la base de datos
+*   sesion.dart : Contiene los datos de la sesion actual (sirve de puntero a la página actual donde se encuentra el usuario)
+*   rol.dart : Enumerado con los roles de usuarios que existen en la aplicacion.
+*   acceso_bd.dart: Metodos de acceso a la base de datos.
+*   material.dart: Se utiliza para dar colores y diseño a la aplicacion.
+*   perfil_profesor.dart : Para acceder al perfil del profeosr
+* */
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
-import 'package:colegio_especial_dgp/Dart/discapacidad.dart';
-import 'package:colegio_especial_dgp/Flutter/loginpage.dart';
-import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
-import 'package:colegio_especial_dgp/Flutter/perfil_alumno.dart';
 import 'package:colegio_especial_dgp/Flutter/perfil_profesor.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
-import 'package:colegio_especial_dgp/Dart/clase.dart';
-import 'package:colegio_especial_dgp/Dart/usuario.dart';
-
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
-
-import 'package:video_player/video_player.dart';
-
-import "package:image_picker/image_picker.dart";
-
-import "package:flutter_tts/flutter_tts.dart";
 
 class ListaProfesores extends StatefulWidget {
   @override
@@ -128,7 +128,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
   Widget VistaAdministrador() {
     return _listaProfesores();
   }
-
+  // Este metodo devuelve una lista con todos los profesores
   Widget _listaProfesores() {
     return Container(
       alignment: Alignment.center,
@@ -203,7 +203,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
       );
 
   }
-
+  // segun el tipo de usuario devuelve diferentes tipos de listas
   lista()
   {
     if(Sesion.rol == Rol.alumno.toString()) {
@@ -219,12 +219,13 @@ class ListaProfesoresState extends State<ListaProfesores> {
       return VistaProgramador();
     }
   }
-
+  
+  // metodo para cargar la lista de profesores
   cargarProfesores() async {
     profesores = await base.consultarTodosProfesores();
     actualizar();
   }
-
+  // metodo para actualizar la pagina
   void actualizar() async {
     setState(() {});
   }

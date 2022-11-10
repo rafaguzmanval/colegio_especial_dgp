@@ -1,25 +1,24 @@
-import 'dart:io';
+/*
+*   Archivo: lista_alumnos.dart
+*
+*   Descripción:
+*   Pagina para consultar la lista de alumnos y acceder a sus perfiles
+*   Includes:
+*   cloud_firestore.dart : Necesario para implementar los métodos que acceden a la base de datos
+*   sesion.dart : Contiene los datos de la sesion actual (sirve de puntero a la página actual donde se encuentra el usuario)
+*   rol.dart : Enumerado con los roles de usuarios que existen en la aplicacion.
+*   acceso_bd.dart: Metodos de acceso a la base de datos.
+*   material.dart: Se utiliza para dar colores y diseño a la aplicacion.
+*   perfil_alumno.dart: Para redireccionar a la pagina de perfil del alumno
+* */
 
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
-import 'package:colegio_especial_dgp/Dart/discapacidad.dart';
-import 'package:colegio_especial_dgp/Flutter/loginpage.dart';
-import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
 import 'package:colegio_especial_dgp/Flutter/perfil_alumno.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
-import 'package:colegio_especial_dgp/Dart/clase.dart';
-import 'package:colegio_especial_dgp/Dart/usuario.dart';
-
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
-
-import 'package:video_player/video_player.dart';
-
-import "package:image_picker/image_picker.dart";
-
-import "package:flutter_tts/flutter_tts.dart";
 
 
 
@@ -155,7 +154,7 @@ class ListaAlumnosState extends State<ListaAlumnos>{
     return _listaAlumnos();
   }
 
-
+  // Metodo que muestra la lista de los alumnos
   Widget _listaAlumnos()
   {
     return
@@ -201,9 +200,8 @@ class ListaAlumnosState extends State<ListaAlumnos>{
       );
   }
 
-  /*
-  *
-  * */
+  
+  // Vista programador. No uso
 
   Widget VistaProgramador()
   {
@@ -218,7 +216,8 @@ class ListaAlumnosState extends State<ListaAlumnos>{
         ),
       );
   }
-
+  
+  // Obtiene la lista de alumnos y actualiza la pagina
   cargarAlumnos() async{
     alumnos = await base.consultarTodosAlumnos();
     actualizar();
@@ -243,7 +242,8 @@ class ListaAlumnosState extends State<ListaAlumnos>{
       );
 
   }
-
+  
+  // dependiendo del rol, adapta la vida
   lista()
   {
       if(Sesion.rol == Rol.alumno.toString()) {
@@ -260,7 +260,7 @@ class ListaAlumnosState extends State<ListaAlumnos>{
       }
   }
 
-
+  // Actualizar
  void actualizar() async
   {
     setState((){});

@@ -1,3 +1,21 @@
+/*
+*   Archivo: acceso_bd.dart
+*
+*   Descripción:
+*   Realiza la comunicación con la base de datos del firebase y de storage de firebase. Fundamentalmente se accede a la información de los usuarios
+*   y de las tareas. 
+*   Includes:
+*   cloud_firestore.dart : Necesario para implementar los métodos que acceden a la base de datos
+*   passport_method.dart : Contiene el enum que indica el tipo de contraseña que va a usarse (clave, pin,...)
+*   sesion.dart : Contiene los datos de la sesion actual (sirve de puntero a la página actual donde se encuentra el usuario)
+*   tarea.dart : Contiene los métodos para convertir la información de la base de datos al objeto del modelo. 
+*   usuario.dart : Contiene los métodos para convertir la información de la base de datos al objeto del modelo. 
+*   firebase_storage.dart : Contiene los métodos para acceder al almacenamiento de archivos del servidor. 
+*   crypto.dart : Contiene los métodos para realizar encriptación en Sha256 de los datos.
+*   video_player.dart : Necesario para cargar los videos del storage y cargarlos en el controlador de los reproductores de video. 
+* */
+
+
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
@@ -5,14 +23,10 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/tarea.dart';
-import 'package:colegio_especial_dgp/Flutter/perfil_alumno.dart';
 
-import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/usuario.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:crypto/crypto.dart';
-import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 
@@ -32,7 +46,7 @@ class AccesoBD{
 
   var fotoDesconocido = "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fperfiles%2Fdesconocido.png?alt=media&token=98ba72ac-776e-4f83-9aaa-57761589c974";
 
-
+  // Metodo para registrar usuario
   registrarUsuario(usuario,foto) async{
 
     try {
@@ -87,7 +101,7 @@ class AccesoBD{
 
   }
 
-
+  // Metodo para crear una tarea
   crearTarea(tarea) async{
 
     try {
@@ -158,7 +172,7 @@ class AccesoBD{
 
   }
 
-
+  // Metodo al que le pasas por parametro la id del usuario, comprueba si existe y te devuelve el objeto usuario
   consultarIDusuario(id) async{
 
     try {
@@ -183,7 +197,9 @@ class AccesoBD{
       print(e);
     }
   }
-
+  
+  // Metodo para consultar las tareas asignadas a un usuario según el id pasado por parametro y te devuelve las tareas que tiene insertandolas en la 
+  // sesion
   consultarTareasAsignadasAlumno(id,cargarVideos) async
   {
 
@@ -244,7 +260,7 @@ class AccesoBD{
 
   }
 
-
+  // Metodo para añadir una tarea con el id de tarea a un usuario en especifico con id de usuario
   addTareaAlumno(idUsuario,idTarea) async{
     try {
 
@@ -265,7 +281,8 @@ class AccesoBD{
     }
 
   }
-
+  
+  // Metodo para eliminar una tarea de un usuario pasandole el id de la relacion entre el usuario y la tarea
   eliminarTareaAlumno(id) async{
 
     try{
@@ -281,6 +298,8 @@ class AccesoBD{
     }
 
   }
+  
+  // Metodo que te devuelve todos los usuarios de la base de datos
   consultarTodosUsuarios() async
   {
     try{
@@ -306,7 +325,7 @@ class AccesoBD{
 
   }
 
-
+  // Metodos que te devuelve todos los alumnos de la base de datos
   consultarTodosAlumnos() async
   {
     try {
@@ -329,7 +348,8 @@ class AccesoBD{
       print(e);
     }
   }
-
+  
+  // Metodo que te devuelve todos los profesores de la base de datos
   consultarTodosProfesores() async
   {
     try {
@@ -353,7 +373,7 @@ class AccesoBD{
     }
   }
 
-
+  // Metodo que te devuelve todas las tareas del usuario
   consultarTodasLasTareas() async{
     try {
       final ref = db.collection("Tareas").withConverter(
@@ -377,6 +397,7 @@ class AccesoBD{
     }
   }
 
+   // Metodo que te devuelve la tarea segun el id de esta
   consultarIDTarea(id) async{
 
     try {
@@ -403,7 +424,8 @@ class AccesoBD{
       print(e);
     }
   }
-
+  
+  // Metodo que comprueba la contraseña introducida con la guardada en la base de datos
   checkearPassword(id,password) async
   {
     try {
@@ -422,6 +444,7 @@ class AccesoBD{
     }
   }
 
+   // Metodo que te devuelve la URL según el PATH que tenga la imagen en el servidor
   leerImagen(path) async{
 
     final imagen = storageRef.child(path);
@@ -440,7 +463,8 @@ class AccesoBD{
     }
 
   }
-
+  
+  // Metodo que te devuelve la URL según el PATH que tenga el video en el servidor
   leerVideo(path) async{
 
     final video = storageRef.child(path);

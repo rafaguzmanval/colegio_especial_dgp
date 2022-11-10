@@ -1,9 +1,17 @@
-
+/*
+*   Archivo: notificacion.dart
+*
+*   Descripción: 
+*   Clase que contiene los métodos para que aparezcan notificaciones en los dispositivos. 
+*   
+*   Includes:
+*   flutter_local_notifications.dart : Se utiliza para inicializar notificaciones.
+* */
 
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class Notificacion{
-
+  // Constructor
   static Future initialize(FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
     var androidInitialize = new AndroidInitializationSettings('mipmap/ic_launcher');
     var iOSInitialize = new DarwinInitializationSettings();
@@ -12,8 +20,9 @@ class Notificacion{
     await flutterLocalNotificationsPlugin.initialize(initializationsSettings);
 
 
-  }
 
+  }
+  // Metodo para mostrar la notificación de textp
   static Future showBigTextNotification({var id =0,required String title, required String body,
     var payload, required FlutterLocalNotificationsPlugin fln
   } ) async {

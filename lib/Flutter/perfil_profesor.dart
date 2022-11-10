@@ -1,8 +1,6 @@
 
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
-import 'package:colegio_especial_dgp/Dart/discapacidad.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
-import '../Dart/clase.dart';
 import '../Dart/tarea.dart';
 import '../Dart/usuario.dart';
 

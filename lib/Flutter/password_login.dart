@@ -1,10 +1,9 @@
+
 import 'dart:async';
 
-import 'package:colegio_especial_dgp/Dart/discapacidad.dart';
 import 'package:colegio_especial_dgp/Dart/main.dart';
 import 'package:colegio_especial_dgp/Dart/passport_method.dart';
 import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
-import '../Dart/clase.dart';
 import '../Dart/usuario.dart';
 import '../Dart/sesion.dart';
 
@@ -83,6 +82,7 @@ class PasswordLoginState extends State<PasswordLogin> {
     }
   }
 
+
   Widget vistaClave()
   {
     return
@@ -90,10 +90,12 @@ class PasswordLoginState extends State<PasswordLogin> {
         //margin: EdgeInsets.all(200),
           alignment: Alignment.center,
           child: Column(
+
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
 
             children: [
+
               SizedBox(
                 width: 500,
                 child:
@@ -107,10 +109,16 @@ class PasswordLoginState extends State<PasswordLogin> {
                   controller: myController,
                 ),
               ),
+              SizedBox(
+                height: 10,
+              ),
+              SizedBox(
 
+                child:
                 ElevatedButton(
                 child: Text("Enviar",
                   style: TextStyle(
+                    fontSize: 30,
                     color: Colors.white,
                   ),
                 ),
@@ -139,7 +147,7 @@ class PasswordLoginState extends State<PasswordLogin> {
 
 
               ),
-
+              ),
               Text(errorLog)
             ],
 
