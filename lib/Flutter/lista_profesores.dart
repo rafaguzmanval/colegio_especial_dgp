@@ -128,7 +128,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
   Widget VistaAdministrador() {
     return _listaProfesores();
   }
-
+  // Este metodo devuelve una lista con todos los profesores
   Widget _listaProfesores() {
     return Container(
       alignment: Alignment.center,
@@ -203,7 +203,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
       );
 
   }
-
+  // segun el tipo de usuario devuelve diferentes tipos de listas
   lista()
   {
     if(Sesion.rol == Rol.alumno.toString()) {

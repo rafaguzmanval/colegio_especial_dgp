@@ -268,7 +268,7 @@ void test_gestion_alumnos(){
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
-      expect(find.text("Hacer fotocopia"),findsOneWidget);
+      expect(find.text("\nHacer fotocopia\n"),findsOneWidget);
 
       //Pulsamos el boton play
       await tester.tap(find.byType(ElevatedButton));
