@@ -1,28 +1,34 @@
+/*
+*   Archivo: ver_tareas.dart
+*
+*   Descripción:
+*   Pagina que consulta el alumno para ver la lista de tareas pendientes
+*   Includes:
+*   cloud_firestore.dart : Necesario para implementar los métodos que acceden a la base de datos
+*   sesion.dart : Contiene los datos de la sesion actual (sirve de puntero a la página actual donde se encuentra el usuario)
+*   video_player.dart : Necesario para cargar los videos del storage y cargarlos en el controlador de los reproductores de video. 
+*   rol.dart : Enumerado con los roles de usuarios que existen en la aplicacion.
+*   acceso_bd.dart: Metodos de acceso a la base de datos.
+*   material.dart: Se utiliza para dar colores y diseño a la aplicacion.
+*   image_picker.dart : Libreria para acceder a la cámara y a la galería de imagenes del dispositivo.
+* */
+
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
-import 'package:colegio_especial_dgp/Flutter/loginpage.dart';
-import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
-import 'package:colegio_especial_dgp/Flutter/perfil_alumno.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
-import 'package:colegio_especial_dgp/Dart/aula.dart';
-import 'package:colegio_especial_dgp/Dart/usuario.dart';
-
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:video_player/video_player.dart';
-
 import "package:image_picker/image_picker.dart";
 
-import "package:flutter_tts/flutter_tts.dart";
 
 class VerTareas extends StatefulWidget {
   @override
   VerTareasState createState() => VerTareasState();
 }
 
+// Clase que construye la pagina
 class VerTareasState extends State<VerTareas> {
   var msg = "null";
   var imagen = null;
@@ -64,6 +70,8 @@ class VerTareasState extends State<VerTareas> {
 
     super.dispose();
   }
+  
+  // Inicializar antes de construir la página
 
   @override
   void initState() {
@@ -234,9 +242,7 @@ class VerTareasState extends State<VerTareas> {
     return Container();
   }
 
-  /*
-  *
-  * */
+  // Este metodo itera sobre las tareas que tiene el usuario y las muestra
   Widget LecturaTarea(String valor, i) {
     if (valor == "T" && Sesion.tareas[i].textos.length > indiceTextos) {
       String pathTexto = Sesion.tareas[i].textos[indiceTextos];
@@ -266,7 +272,8 @@ class VerTareasState extends State<VerTareas> {
     } else
       return Container();
   }
-
+  
+  // Vista del programador sin uso
   Widget VistaProgramador() {
     return Container(
       //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
@@ -275,7 +282,8 @@ class VerTareasState extends State<VerTareas> {
       ),
     );
   }
-
+  
+  // Widget que se encarga de construir un reproductor de video
   Widget ReproductorVideo(controlador) {
 
     /*
@@ -311,25 +319,26 @@ class VerTareasState extends State<VerTareas> {
         ])));
 
   }
-
+  
+  // Accede a las tareas de la base de datos 
   cargarTareas() async {
     await base.consultarTareasAsignadasAlumno(Sesion.id, true);
   }
-
+  // Muestra la vista en horizontal
   buildLandscape() {
     return SingleChildScrollView(
       controller: homeController,
       child: VistaTareas(),
     );
   }
-
+  // Muestra la vista en vertical
   buildPortrait() {
     return SingleChildScrollView(
       controller: homeController,
       child: VistaTareas(),
     );
   }
-
+  // Muestra las tareas segun el rol del usuario
   VistaTareas() {
     if (Sesion.rol == Rol.alumno.toString()) {
       return VistaAlumno();
@@ -341,7 +350,7 @@ class VerTareasState extends State<VerTareas> {
       return VistaProgramador();
     }
   }
-
+  // Cada vez que se cambia de tarea, hay que resetear los indices 
   Widget resetIndicesTarea() {
     indiceImagenes = 0;
     indiceTextos = 0;
@@ -349,7 +358,7 @@ class VerTareasState extends State<VerTareas> {
 
     return Container();
   }
-
+  // Actualizar la pagina
   void actualizar() async {
     if(Sesion.tareas.length > 1 && tareaActual == 0)
     {
