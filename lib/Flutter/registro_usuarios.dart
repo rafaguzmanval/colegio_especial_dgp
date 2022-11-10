@@ -1,14 +1,27 @@
-import 'dart:io';
 
+/*
+*   Archivo: registro_usuarios.dart
+*
+*   Descripción:
+*   Formulario de registro de usuarios
+*   Includes:
+*   cloud_firestore.dart : Necesario para implementar los métodos que acceden a la base de datos
+*   sesion.dart : Contiene los datos de la sesion actual (sirve de puntero a la página actual donde se encuentra el usuario)
+*   rol.dart : Enumerado con los roles de usuarios que existen en la aplicacion.
+*   acceso_bd.dart: Metodos de acceso a la base de datos.
+*   material.dart: Se utiliza para dar colores y diseño a la aplicacion.
+*   passport_method.dart: Enumeracion de los metodos de acceso.
+*   usuario.dart: Objeto usuario que va a introducirse en la base de datos.
+*   image_picker.dart : Libreria para acceder a la cámara y a la galería de imagenes del dispositivo.
+* */
+
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/passport_method.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/usuario.dart';
-
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 import "package:image_picker/image_picker.dart";
 import 'package:intl/intl.dart';
@@ -527,7 +540,8 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
         controladorFechanacimiento.text = DateFormat.yMd().format(fechaElegida);
       });
   }*/
-
+  
+  // Metodo para actualizar la pagina
   void actualizar() async {
     setState(() {});
   }
