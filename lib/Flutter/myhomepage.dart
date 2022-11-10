@@ -1,29 +1,35 @@
-import 'dart:io';
+/*
+*   Archivo: myhomepage.dart
+*
+*   Descripción:
+*   Muestra el menú principal de la aplicacion
+*   Includes:
+*   cloud_firestore.dart : Necesario para implementar los métodos que acceden a la base de datos
+*   sesion.dart : Contiene los datos de la sesion actual (sirve de puntero a la página actual donde se encuentra el usuario)
+*   video_player.dart : Necesario para cargar los videos del storage y cargarlos en el controlador de los reproductores de video. 
+*   rol.dart : Enumerado con los roles de usuarios que existen en la aplicacion.
+*   acceso_bd.dart: Metodos de acceso a la base de datos.
+*   material.dart: Se utiliza para dar colores y diseño a la aplicacion.
+*   crear_tarea.dart : Redirecciona al formulario de crear tarea.
+*   registro_usuarios.dart : Redirecciona al formulario de registro de usuarios.
+*   tablon_comunicacion.dart : Redirecciona a la pagina del tablon de comunicacion.
+*   ver_tareas.dart : Redirecciona a la pagina de lista de tareas.
+*   lista_alumnos.dart: Redirecciona a la pagina de lista de alumnos.
+*   lista_profesores.dart :  Redirecciona a la pagina de lista de profesores.
+*   image_picker.dart : Libreria para acceder a la cámara y a la galería de imagenes del dispositivo.
+* */
+
+
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Flutter/crear_tarea.dart';
-import 'package:colegio_especial_dgp/Flutter/loginpage.dart';
-import 'package:colegio_especial_dgp/Flutter/perfil_alumno.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
-import 'package:colegio_especial_dgp/Dart/usuario.dart';
-
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:colegio_especial_dgp/Flutter/registro_usuarios.dart';
 import 'package:colegio_especial_dgp/Flutter/tablon_comunicacion.dart';
 import 'package:colegio_especial_dgp/Flutter/ver_tareas.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
-
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-import 'package:video_player/video_player.dart';
-
-import "package:image_picker/image_picker.dart";
-
-import "package:flutter_tts/flutter_tts.dart";
-
 import 'lista_alumnos.dart';
 import 'lista_profesores.dart';
 
@@ -333,7 +339,7 @@ class MyHomePageState extends State<MyHomePage> {
           );
         });
   }
-
+  // Vista del menu dependiendo del rol
   vistaMenu() {
     if (Sesion.rol == Rol.alumno.toString()) {
       return VistaAlumno();
@@ -345,19 +351,19 @@ class MyHomePageState extends State<MyHomePage> {
       return VistaProgramador();
     }
   }
-
+  // Vista horizontal
   buildLandscape() {
     maxUsuariosPorFila = 3;
     return SingleChildScrollView(
         controller: homeController, child: vistaMenu());
   }
-
+  // Vista vertical
   buildPortrait() {
     maxUsuariosPorFila = 2;
     return SingleChildScrollView(
         controller: homeController, child: vistaMenu());
   }
-
+  // Metodo para actualizar la pagina
   void actualizar() async {
     setState(() {});
   }
