@@ -98,7 +98,7 @@ class PasswordLoginState extends State<PasswordLogin> {
                 width: 500,
                 child:
                 TextField(
-
+                  key: Key("campoContraseña"),
                   obscureText: true,
                   decoration: InputDecoration(
                     border:OutlineInputBorder(),

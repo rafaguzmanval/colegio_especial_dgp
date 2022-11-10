@@ -335,80 +335,85 @@ Historias probadas:
 */
 
 void test_lista_profesores(){
-  testWidgets('Test de carga de profesores', (WidgetTester tester) async {
 
-    await tester.pumpWidget(App());
-    await tester.pumpAndSettle();
+  group('Gestión de profesores como administrador/profesor', () {
 
-    await Future.delayed(const Duration(seconds: 2), (){});
+    testWidgets('Test de carga de profesores', (WidgetTester tester) async {
 
-    //Pulsamos el boton
-    var boton = find.text("Emilio");
-    await tester.tap(boton);
-    await tester.pump();
+      await tester.pumpWidget(App());
+      await tester.pumpAndSettle();
 
-    await Future.delayed(const Duration(seconds: 1), (){});
+      await Future.delayed(const Duration(seconds: 2), (){});
 
-    //Introducimos la contraseña
-    var contrasenia = "123";
-    await tester.enterText(find.byKey(Key("campoContraseña")), contrasenia);
+      //Pulsamos el boton
+      var boton = find.text("Emilio");
+      await tester.tap(boton);
+      await tester.pump();
 
-    var botonEnviar = find.text("Enviar");
-    await tester.tap(botonEnviar);
-    await tester.pump();
+      await Future.delayed(const Duration(seconds: 1), (){});
 
-    await Future.delayed(const Duration(seconds: 2), (){});
+      //Introducimos la contraseña
+      var contrasenia = "123";
+      await tester.enterText(find.byKey(Key("campoContraseña")), contrasenia);
 
-    //Pulsamos el boton profesores
-    var botonP = find.text("Lista de Profesores");
-    await tester.tap(botonP);
-    await tester.pump();
+      var botonEnviar = find.text("Enviar");
+      await tester.tap(botonEnviar);
+      await tester.pump();
 
-    await Future.delayed(const Duration(seconds: 2), (){});
+      await Future.delayed(const Duration(seconds: 2), (){});
 
-    expect(find.text("Flavia"),findsOneWidget);
-  });
+      //Pulsamos el boton profesores
+      var botonP = find.text("Lista de Profesores");
+      await tester.tap(botonP);
+      await tester.pump();
 
-  testWidgets('Datos correctos', (WidgetTester tester) async {
-    await tester.pumpWidget(App());
-    await tester.pumpAndSettle();
+      await Future.delayed(const Duration(seconds: 2), (){});
 
-    await Future.delayed(const Duration(seconds: 2), (){});
+      expect(find.text("Flavia"),findsOneWidget);
+    });
 
-    //Pulsamos el boton
-    var boton = find.text("Emilio");
-    await tester.tap(boton);
-    await tester.pump();
+    testWidgets('Datos correctos', (WidgetTester tester) async {
+      await tester.pumpWidget(App());
+      await tester.pumpAndSettle();
 
-    await Future.delayed(const Duration(seconds: 1), (){});
+      await Future.delayed(const Duration(seconds: 2), (){});
 
-    //Introducimos la contraseña
-    var contrasenia = "123";
-    await tester.enterText(find.byKey(Key("campoContraseña")), contrasenia);
+      //Pulsamos el boton
+      var boton = find.text("Emilio");
+      await tester.tap(boton);
+      await tester.pump();
 
-    var botonEnviar = find.text("Enviar");
-    await tester.tap(botonEnviar);
-    await tester.pump();
+      await Future.delayed(const Duration(seconds: 1), (){});
 
-    await Future.delayed(const Duration(seconds: 2), (){});
+      //Introducimos la contraseña
+      var contrasenia = "123";
+      await tester.enterText(find.byKey(Key("campoContraseña")), contrasenia);
 
-    //Pulsamos el boton profesores
-    var botonP= find.text("Lista de Profesores");
-    await tester.tap(botonP);
-    await tester.pump();
+      var botonEnviar = find.text("Enviar");
+      await tester.tap(botonEnviar);
+      await tester.pump();
 
-    await Future.delayed(const Duration(seconds: 2), (){});
+      await Future.delayed(const Duration(seconds: 2), (){});
 
-    //Pulsamos el boton antonio
-    var botonF = find.text("Flavia");
-    await tester.tap(botonF);
-    await tester.pump();
+      //Pulsamos el boton profesores
+      var botonP= find.text("Lista de Profesores");
+      await tester.tap(botonP);
+      await tester.pump();
 
-    await Future.delayed(const Duration(seconds: 2), (){});
+      await Future.delayed(const Duration(seconds: 2), (){});
 
-    expect(find.text("Nombre: Flavia\n"),findsOneWidget);
-    expect(find.text("Apellidos: Viño\n"),findsOneWidget);
-    expect(find.text("Fecha de nacimiento: 3/7/1986\n"),findsOneWidget);
+      //Pulsamos el boton antonio
+      var botonF = find.text("Flavia");
+      await tester.tap(botonF);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
+      expect(find.text("Nombre: Flavia\n"),findsOneWidget);
+      expect(find.text("Apellidos: Viño\n"),findsOneWidget);
+      expect(find.text("Fecha de nacimiento: 3/7/1986\n"),findsOneWidget);
+    });
+
   });
 }
 
