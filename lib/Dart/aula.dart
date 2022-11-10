@@ -6,7 +6,7 @@
 *   Se implementará en un futuro. Contiene los métodos para realizar un filtrado de usuarios para los listados de profesores y alumnos. 
 
 * */
-
+// Constructor por parametros en defecto
 class Aula{
   var idClase = "";
   var nombreClase = "";
