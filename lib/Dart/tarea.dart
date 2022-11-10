@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 /*
 * Archivo: tarea.dart
@@ -10,6 +10,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 * Includes :
 *   cloud_firestore.dart : Para que los métodos puedan acceder a la base de datos para leer las tareas.
 * */
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 
 class Tarea{
