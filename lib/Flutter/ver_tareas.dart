@@ -142,34 +142,36 @@ class VerTareasState extends State<VerTareas> {
       if (Sesion.tareas.length > 0) ...[
         Row(
             //ROW 2
-            //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Flexible(
-                  flex: 20,
-                  child: Visibility(
-                    child: Container(
-                      height: 80,
-                      width: 80,
-                      margin: EdgeInsets.only(top: 100.0, left: 20.0),
-                      child: FittedBox(
-                        child: FloatingActionButton(
-                            onPressed: () {
-                              if (tareaActual > 0) {
-                                tareaActual--;
-                                verFlechaDerecha = true;
-                              }
-                              verFlechaIzquierda = tareaActual != 0;
+              Container(
+                  height: 60,
+                  width: 60,
+                  margin: EdgeInsets.only(top: 100.0, left: 10.0, right: 10),
+                  child: Flexible(
+                      flex: 20,
+                      child: Visibility(
+                        child: Container(
+                          child: FittedBox(
+                            child: FloatingActionButton(
+                                onPressed: () {
+                                  if (tareaActual > 0) {
+                                    tareaActual--;
+                                    verFlechaDerecha = true;
+                                  }
+                                  verFlechaIzquierda = tareaActual != 0;
 
-                              actualizar();
-                            },
-                            child: const Icon(Icons.arrow_left)),
-                      ),
-                    ),
-                    visible: verFlechaIzquierda,
-                  )),
+                                  actualizar();
+                                },
+                                child: const Icon(Icons.arrow_left)),
+                          ),
+                        ),
+                        visible: verFlechaIzquierda,
+                      ))),
               Flexible(
                   flex: 40,
                   child: Container(
+                    alignment: Alignment.center,
                     decoration: BoxDecoration(
                         border: Border.all(width: 2),
                         color: Color.fromRGBO(143, 125, 178, 1)),
@@ -193,31 +195,32 @@ class VerTareasState extends State<VerTareas> {
                       ]
                     ]),
                   )),
-              Flexible(
-                  flex: 20,
-                  child: Visibility(
-                    child: Container(
-                      height: 80,
-                      width: 80,
-                      margin: EdgeInsets.only(top: 100.0, right: 20.0),
-                      child: FittedBox(
-                        child: FloatingActionButton(
-                            onPressed: () {
-                              if (tareaActual < Sesion.tareas.length) {
-                                tareaActual++;
-                                verFlechaIzquierda = true;
-                              }
+              Container(
+                  height: 60,
+                  width: 60,
+                  margin: EdgeInsets.only(top: 100.0, left: 10.0, right: 10),
+                  child: Flexible(
+                      flex: 20,
+                      child: Visibility(
+                        child: Container(
+                          child: FittedBox(
+                            child: FloatingActionButton(
+                                onPressed: () {
+                                  if (tareaActual < Sesion.tareas.length) {
+                                    tareaActual++;
+                                    verFlechaIzquierda = true;
+                                  }
 
-                              verFlechaDerecha =
-                                  (tareaActual != Sesion.tareas.length - 1);
+                                  verFlechaDerecha =
+                                      (tareaActual != Sesion.tareas.length - 1);
 
-                              actualizar();
-                            },
-                            child: const Icon(Icons.arrow_right)),
-                      ),
-                    ),
-                    visible: verFlechaDerecha,
-                  ))
+                                  actualizar();
+                                },
+                                child: const Icon(Icons.arrow_right)),
+                          ),
+                        ),
+                        visible: verFlechaDerecha,
+                      )))
             ]),
       ] else ...[
         Container(
