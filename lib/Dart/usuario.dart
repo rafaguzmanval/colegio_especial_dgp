@@ -18,32 +18,32 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/passport_method.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 
-class Usuario{
+class Usuario {
   var id;
   var nombre;
-  var apellidos ;
+  var apellidos;
   var fechanacimiento; // fecha de nacimiento de la que se calculará la edad
   var password; // contraseña hasheada
   var rol;
   var foto;
   var metodoLogeo; // Si el usuario necesita algún otro método para meter contraseña
 
-  // Constructor 
-  Usuario({
-          this.id,
-          this.nombre,
-          this.apellidos,
-          this.password,
-          this.fechanacimiento,
-          this.rol,
-          this.foto,
-          this.metodoLogeo});
+  // Constructor
+  Usuario(
+      {this.id,
+      this.nombre,
+      this.apellidos,
+      this.password,
+      this.fechanacimiento,
+      this.rol,
+      this.foto,
+      this.metodoLogeo});
 
   // Transferir datos de la base de datos al objeto
   factory Usuario.fromFirestore(
-      DocumentSnapshot<Map<String, dynamic>> snapshot,
-      SnapshotOptions? options,
-      ) {
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) {
     final data = snapshot.data();
     return Usuario(
       nombre: data?['nombre'],
@@ -52,10 +52,10 @@ class Usuario{
       fechanacimiento: data?['fechanacimiento'],
       rol: data?['rol'],
       foto: data?['foto'],
-      metodoLogeo : data?['metodoLogeo'],
+      metodoLogeo: data?['metodoLogeo'],
     );
   }
-  
+
   // Transferir datos desde el objeto al modelo
   Map<String, dynamic> toFirestore() {
     return {
@@ -63,16 +63,15 @@ class Usuario{
       if (apellidos != null) "apellidos": apellidos,
       if (fechanacimiento != null) "fechanacimiento": fechanacimiento,
       if (rol != null) "rol": rol,
-      if(foto != null) "foto" : foto,
+      if (foto != null) "foto": foto,
       if (password != null) "password": password,
-      if(metodoLogeo != null) "metodoLogeo" : metodoLogeo,
-
+      if (metodoLogeo != null) "metodoLogeo": metodoLogeo,
     };
   }
-  
+
   // Modificar el usuario con los datos introducidos por parametro
-  setUsuario(nombre,apellidos,password,fechanacimiento,rol,foto,metodoLogeo)
-  {
+  setUsuario(
+      nombre, apellidos, password, fechanacimiento, rol, foto, metodoLogeo) {
     this.nombre = nombre;
     this.apellidos = apellidos;
     this.password = password;
@@ -80,7 +79,5 @@ class Usuario{
     this.rol = rol;
     this.foto = foto;
     this.metodoLogeo = metodoLogeo;
-
   }
-
 }

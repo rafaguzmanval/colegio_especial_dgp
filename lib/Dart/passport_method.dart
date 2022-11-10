@@ -6,7 +6,7 @@
 
 * */
 
-enum Passportmethod{
+enum Passportmethod {
   text, // clave de texto
   pin, // clave de imagenes
   free // sin clave

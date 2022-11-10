@@ -1,27 +1,16 @@
-
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
-import '../Dart/tarea.dart';
-import '../Dart/usuario.dart';
-
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 
-import 'package:video_player/video_player.dart';
-
-
-class PerfilProfesor extends StatefulWidget{
-
+class PerfilProfesor extends StatefulWidget {
   @override
   PerfilProfesorState createState() => PerfilProfesorState();
-
 }
 
-class PerfilProfesorState extends State<PerfilProfesor>{
-
-
+class PerfilProfesorState extends State<PerfilProfesor> {
   AccesoBD base = new AccesoBD();
 
   var usuarioPerfil;
@@ -45,161 +34,109 @@ class PerfilProfesorState extends State<PerfilProfesor>{
   final myController = TextEditingController();
 
   @override
-  void dispose(){
+  void dispose() {
     myController.dispose();
     super.dispose();
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
 
     Sesion.paginaActual = this;
     cargarUsuario();
-
-
   }
 
   @override
-  Widget build(BuildContext context){
-
-
-
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar:AppBar(
+      appBar: AppBar(
         title: Text('Perfil de ${Sesion.seleccion.nombre}'
             ''),
       ),
       body: Container(
-          padding: EdgeInsets.symmetric(vertical: 0, horizontal:  10),
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
           alignment: Alignment.center,
           child: Column(
-
             children: [
-
-
-              if(Sesion.rol == Rol.alumno.toString())...[
+              if (Sesion.rol == Rol.alumno.toString()) ...[
                 VistaAlumno()
-              ]
-              else if(Sesion.rol == Rol.profesor.toString())...[
+              ] else if (Sesion.rol == Rol.profesor.toString()) ...[
                 VistaProfesor()
+              ] else if (Sesion.rol == Rol.administrador.toString()) ...[
+                VistaAdministrador()
+              ] else if (Sesion.rol == Rol.programador.toString()) ...[
+                VistaProgramador()
               ]
-              else if(Sesion.rol == Rol.administrador.toString())...[
-                  VistaAdministrador()
-                ]
-                else if(Sesion.rol == Rol.programador.toString())...[
-                    VistaProgramador()
-                  ]
             ],
-          )
+          )),
+    );
+  }
 
+  Widget VistaProfesor() {
+    return perfilProfesor();
+  }
 
+  Widget VistaAlumno() {
+    Navigator.pop(context);
+    return Container(
+      //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+      child: Column(
+        children: [],
       ),
     );
   }
 
-
-  Widget VistaProfesor()
-  {
-    return perfilProfesor();
-
-  }
-
-
-  Widget VistaAlumno()
-  {
-    Navigator.pop(context);
-    return
-      Container(
-        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-        child:Column(
-          children:[
-
-          ],
-        ),
-      );
-  }
-
-
-  Widget VistaAdministrador()
-  {
+  Widget VistaAdministrador() {
     return perfilProfesor();
   }
 
-  Widget VistaProgramador()
-  {
-    return
-      Container(
-        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-        child:Column(
-          children:[
-
-
-          ],
-        ),
-      );
+  Widget VistaProgramador() {
+    return Container(
+      //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+      child: Column(
+        children: [],
+      ),
+    );
   }
 
+  Widget perfilProfesor() {
+    return Container(
+      //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+      child: Column(
+        children: [
+          if (usuarioPerfil != null) ...[
+            Text("Nombre: " + usuarioPerfil.nombre + "\n"),
+            Text("Apellidos: " + usuarioPerfil.apellidos + "\n"),
+            Text(
+                "Fecha de nacimiento: " + usuarioPerfil.fechanacimiento + "\n"),
+            Text("Imagen de perfil:\n"),
+            Image(
+              width: 100,
+              height: 100,
+              image: NetworkImage(usuarioPerfil.foto),
+            ),
 
-  Widget perfilProfesor()
-  {
-    return
-      Container(
-
-
-        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-        child:Column(
-          children:[
-
-            if(usuarioPerfil != null)...[
-              Text("Nombre: "+usuarioPerfil.nombre+"\n"),
-              Text("Apellidos: "+usuarioPerfil.apellidos+"\n"),
-              Text("Fecha de nacimiento: "+usuarioPerfil.fechanacimiento+"\n"),
-              Text("Imagen de perfil:\n"),
-
-              Image(
-                width: 100,
-                height: 100,
-                image: NetworkImage(usuarioPerfil.foto),
-              )
-              ,
-
-              /* TextField(
+            /* TextField(
                 decoration: InputDecoration(
                   border:OutlineInputBorder(),
                   hintText: 'Introduce nueva tarea',
                 ),
                 controller: myController,
               ),*/
-
-
-            ]
-          ],
-        ),
-      );
+          ]
+        ],
+      ),
+    );
   }
 
-  cargarUsuario() async// EN sesion seleccion estara el id del usuario que se ha elegido
-   {
+  cargarUsuario() async // EN sesion seleccion estara el id del usuario que se ha elegido
+  {
     usuarioPerfil = await base.consultarIDusuario(Sesion.seleccion.id);
     actualizar();
   }
 
-
-  void actualizar()
-  {
-
-    setState(() {
-
-    });
+  void actualizar() {
+    setState(() {});
   }
-
 }
-
-
-
-
-
-
-
-

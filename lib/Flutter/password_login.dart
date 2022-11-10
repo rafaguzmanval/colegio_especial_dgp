@@ -1,4 +1,3 @@
-
 /*
 *   Archivo: password_login.dart
 *
@@ -13,7 +12,6 @@
 *   acceso_bd.dart: Metodos de acceso a la base de datos.
 *   material.dart: Se utiliza para dar colores y diseño a la aplicacion.
 * */
-
 
 import 'dart:async';
 import 'package:colegio_especial_dgp/Dart/passport_method.dart';
@@ -55,19 +53,19 @@ class PasswordLoginState extends State<PasswordLogin> {
     myController.dispose();
     super.dispose();
   }
-  
+
   // Metodo para que una vez se ha introducido el pin, tarda un tiempo en dar un mensaje de advertencia si está equivocado
   void temporizadorPin([int milliseconds = 3000]) {
     if (temporizador != null) temporizador.cancel();
     temporizador = Timer(Duration(milliseconds: milliseconds), advertencia);
   }
-  
+
   // Crear el mensaje de advertencia
   void advertencia() {
     errorLog = "El pin no es correcto, pulsa el botón si te has equivocado";
     _actualizar();
   }
-  
+
   // Borrar el pin introducido si ha sido fallido
   void resetPin() {
     errorLog = "Vuelve a introducir";
@@ -84,7 +82,7 @@ class PasswordLoginState extends State<PasswordLogin> {
         ),
         body: Container(margin: EdgeInsets.all(5), child: vista()));
   }
-  
+
   // Crear la vista dependiendo del metodo de clave que se quiere
   Widget vista() {
     if (Sesion.metodoLogin == Passportmethod.pin.toString()) {
@@ -95,47 +93,40 @@ class PasswordLoginState extends State<PasswordLogin> {
   }
 
   // Vista para meter un clave pin
-  Widget vistaClave()
-  {
-    return
-      Container(
+  Widget vistaClave() {
+    return Container(
         //margin: EdgeInsets.all(200),
-          alignment: Alignment.center,
-          child: Column(
-
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-
-            children: [
-
-              SizedBox(
-                width: 500,
-                child:
-                TextField(
-                  key: Key("campoContraseña"),
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    border:OutlineInputBorder(),
-                    hintText: 'Introduce la clave',
-                  ),
-                  controller: myController,
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 500,
+              child: TextField(
+                key: Key("campoContraseña"),
+                obscureText: true,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: 'Introduce la clave',
                 ),
+                controller: myController,
               ),
-              SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-
-                child:
-                ElevatedButton(
-                child: Text("Enviar",
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              child: ElevatedButton(
+                child: Text(
+                  "Enviar",
                   style: TextStyle(
                     fontSize: 30,
                     color: Colors.white,
                   ),
                 ),
                 onPressed: () {
-                  if(myController.text.length == 0){
+                  if (myController.text.length == 0) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                           behavior: SnackBarBehavior.floating,
@@ -146,27 +137,23 @@ class PasswordLoginState extends State<PasswordLogin> {
                             height: 90,
                             decoration: const BoxDecoration(
                               color: Color(0xFFC72C41),
-                              borderRadius: BorderRadius.all(Radius.circular(29)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(29)),
                             ),
                             child: Text("La contraseña no puede estar vacia"),
-                          )
-                      ),
-                    );        }else{
+                          )),
+                    );
+                  } else {
                     ComprobarLogeo(Sesion.id, myController.text);
                   }
-
                 },
-
-
               ),
-              ),
-              Text(errorLog)
-            ],
-
-          )
-      );
+            ),
+            Text(errorLog)
+          ],
+        ));
   }
-  
+
   // vista para crear una clave con imagenes
   Widget vistaPin() {
     return Column(
@@ -246,7 +233,7 @@ class PasswordLoginState extends State<PasswordLogin> {
               child: Text("Volver a introducir")),
         ]);
   }
-  
+
   // Metodo para ir generando la clave al pulsar las imagenes o pin
   concatenarPin(nuevo) {
     pulsaciones++;
@@ -269,7 +256,7 @@ class PasswordLoginState extends State<PasswordLogin> {
           context, MaterialPageRoute(builder: (context) => MyHomePage()));
     } else {}
   }
-  
+
   // Metodo para comprobar si la contraseña es correcta
   ComprobarLogeo(id, password) async {
     var resul = await base.checkearPassword(id, password);
@@ -284,7 +271,7 @@ class PasswordLoginState extends State<PasswordLogin> {
         SnackBar(
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.transparent,
-            duration: Duration(seconds:2),
+            duration: Duration(seconds: 2),
             elevation: 0,
             content: Container(
               padding: const EdgeInsets.all(16),
@@ -298,8 +285,7 @@ class PasswordLoginState extends State<PasswordLogin> {
       );
     }
   }
-  
-  
+
   // Actualizar pagina
   void _actualizar() async {
     //var reloj = 1;
@@ -307,4 +293,3 @@ class PasswordLoginState extends State<PasswordLogin> {
     setState(() {});
   }
 }
-

@@ -19,8 +19,6 @@
 *   image_picker.dart : Libreria para acceder a la cámara y a la galería de imagenes del dispositivo.
 * */
 
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Flutter/crear_tarea.dart';
@@ -81,8 +79,8 @@ class MyHomePageState extends State<MyHomePage> {
             OrientationBuilder(
               builder: (context, orientation) =>
                   orientation == Orientation.portrait
-                      ? Center(child:buildPortrait())
-                      : Center(child:buildLandscape()),
+                      ? Center(child: buildPortrait())
+                      : Center(child: buildLandscape()),
             ),
           ])),
       onWillPop: () async {
@@ -339,6 +337,7 @@ class MyHomePageState extends State<MyHomePage> {
           );
         });
   }
+
   // Vista del menu dependiendo del rol
   vistaMenu() {
     if (Sesion.rol == Rol.alumno.toString()) {
@@ -351,18 +350,21 @@ class MyHomePageState extends State<MyHomePage> {
       return VistaProgramador();
     }
   }
+
   // Vista horizontal
   buildLandscape() {
     maxUsuariosPorFila = 3;
     return SingleChildScrollView(
         controller: homeController, child: vistaMenu());
   }
+
   // Vista vertical
   buildPortrait() {
     maxUsuariosPorFila = 2;
     return SingleChildScrollView(
         controller: homeController, child: vistaMenu());
   }
+
   // Metodo para actualizar la pagina
   void actualizar() async {
     setState(() {});

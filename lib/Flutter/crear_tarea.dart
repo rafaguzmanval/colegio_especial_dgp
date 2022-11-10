@@ -311,7 +311,7 @@ class CrearTareaState extends State<CrearTarea> {
       actualizar();
     }
   }
-  
+
   // Widget para insertar el reproductor de video
   Widget ReproductorVideo(controlador) {
     return Container(
@@ -354,7 +354,7 @@ class CrearTareaState extends State<CrearTarea> {
                 ),*/
     ]));
   }
-  
+
   // Actualizar las páginas
   void actualizar() async {
     setState(() {});

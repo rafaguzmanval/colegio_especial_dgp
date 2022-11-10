@@ -3,9 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/passport_method.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
-import 'package:colegio_especial_dgp/Flutter/loginpage.dart';
-import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
-import 'package:colegio_especial_dgp/Flutter/perfil_alumno.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/usuario.dart';
 
@@ -13,12 +10,7 @@ import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
-
-import 'package:video_player/video_player.dart';
-
 import "package:image_picker/image_picker.dart";
-
-import "package:flutter_tts/flutter_tts.dart";
 import 'package:intl/intl.dart';
 
 enum SeleccionImagen { camara, galeria }
@@ -57,8 +49,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
   var metodos = ["clave", "pin"];
   var metodoElegido = "clave";
   var pulsaciones = 0;
-  var ordenPin = ["","","",""];
-
+  var ordenPin = ["", "", "", ""];
 
   ///Cuándo se pasa de página es necesario que todos los controladores de los formularios y de los reproductores de vídeo se destruyan.
   @override
@@ -333,11 +324,12 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                       margin: EdgeInsets.all(10),
                       child: ElevatedButton(
                           onPressed: () {
-                            concatenarPin("conejo",0);
+                            concatenarPin("conejo", 0);
                           },
-                          child: Column(
-                              children: [Text(ordenPin[0]),
-                              Image.network(pictogramasPin[0])]))),
+                          child: Column(children: [
+                            Text(ordenPin[0]),
+                            Image.network(pictogramasPin[0])
+                          ]))),
                 ),
                 Flexible(
                   flex: 1,
@@ -346,11 +338,12 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                       margin: EdgeInsets.all(10),
                       child: ElevatedButton(
                           onPressed: () {
-                            concatenarPin("duende",1);
+                            concatenarPin("duende", 1);
                           },
-                          child: Column(
-                              children: [Text(ordenPin[1]),
-                                Image.network(pictogramasPin[1])]))),
+                          child: Column(children: [
+                            Text(ordenPin[1]),
+                            Image.network(pictogramasPin[1])
+                          ]))),
                 ),
               ],
             ),
@@ -368,11 +361,12 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                       margin: EdgeInsets.all(10),
                       child: ElevatedButton(
                           onPressed: () {
-                            concatenarPin("mariposa",2);
+                            concatenarPin("mariposa", 2);
                           },
-                          child: Column(
-                              children: [Text(ordenPin[2]),
-                                Image.network(pictogramasPin[2])]))),
+                          child: Column(children: [
+                            Text(ordenPin[2]),
+                            Image.network(pictogramasPin[2])
+                          ]))),
                 ),
                 Flexible(
                   flex: 2,
@@ -381,11 +375,12 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                       margin: EdgeInsets.all(10),
                       child: ElevatedButton(
                           onPressed: () {
-                            concatenarPin("princesa",3);
+                            concatenarPin("princesa", 3);
                           },
-                          child: Column(
-                              children: [Text(ordenPin[3]),
-                                Image.network(pictogramasPin[3])]))),
+                          child: Column(children: [
+                            Text(ordenPin[3]),
+                            Image.network(pictogramasPin[3])
+                          ]))),
                 ),
               ],
             ),
@@ -401,14 +396,14 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
   resetPin() {
     controladorPassword.text = "";
     pulsaciones = 0;
-    ordenPin = ["","","",""];
+    ordenPin = ["", "", "", ""];
     actualizar();
   }
 
-  concatenarPin(String nuevo,id) {
+  concatenarPin(String nuevo, id) {
     pulsaciones++;
     controladorPassword.text += nuevo;
-    ordenPin[id] +=" " + pulsaciones.toString();
+    ordenPin[id] += " " + pulsaciones.toString();
     actualizar();
   }
 
@@ -459,7 +454,6 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           controladorApellidos.text = "";
           controladorPassword.text = "";
 
-
           fotoTomada = null;
           resetPin();
           metodoElegido = "clave";
@@ -472,7 +466,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
             SnackBar(
                 behavior: SnackBarBehavior.floating,
                 backgroundColor: Colors.transparent,
-                duration: Duration(seconds:2),
+                duration: Duration(seconds: 2),
                 elevation: 0,
                 content: Container(
                   padding: const EdgeInsets.all(16),
@@ -481,12 +475,12 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                     color: Color(0xFF6BFF67),
                     borderRadius: BorderRadius.all(Radius.circular(29)),
                   ),
-                  child: Text(mensajeDeRegistro,selectionColor:Colors.black),
+                  child: Text(mensajeDeRegistro, selectionColor: Colors.black),
                 )),
           );
-
         } else {
-          mensajeDeRegistro = "Fallo en el proceso de registro, inténtelo de nuevo";
+          mensajeDeRegistro =
+              "Fallo en el proceso de registro, inténtelo de nuevo";
           mostrarError(mensajeDeRegistro);
         }
 
@@ -504,7 +498,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
       SnackBar(
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.transparent,
-          duration: Duration(seconds:2),
+          duration: Duration(seconds: 2),
           elevation: 0,
           content: Container(
             padding: const EdgeInsets.all(16),

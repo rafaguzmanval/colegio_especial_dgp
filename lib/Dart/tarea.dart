@@ -1,5 +1,3 @@
-
-
 /*
 * Archivo: tarea.dart
 *
@@ -13,8 +11,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-
-class Tarea{
+class Tarea {
   var id;
   var idRelacion;
   var nombre;
@@ -25,30 +22,30 @@ class Tarea{
   var orden;
 
   // Constructor
-  Tarea({
-          this.id,
-          this.nombre,
-          this.textos,
-          this.imagenes,
-          this.videos,
-          this.orden
-  });
+  Tarea(
+      {this.id,
+      this.nombre,
+      this.textos,
+      this.imagenes,
+      this.videos,
+      this.orden});
 
   // Obtiene los datos de la base de datos y los inserta en el objeto
   factory Tarea.fromFirestore(
-      DocumentSnapshot<Map<String, dynamic>> snapshot,
-      SnapshotOptions? options,
-      ) {
+    DocumentSnapshot<Map<String, dynamic>> snapshot,
+    SnapshotOptions? options,
+  ) {
     final data = snapshot.data();
     return Tarea(
       nombre: data?['nombre'],
       textos: data?['textos'] is Iterable ? List.from(data?['textos']) : null,
-      imagenes: data?['imagenes'] is Iterable ? List.from(data?['imagenes']) : null,
+      imagenes:
+          data?['imagenes'] is Iterable ? List.from(data?['imagenes']) : null,
       videos: data?['videos'] is Iterable ? List.from(data?['videos']) : null,
       orden: data?['orden'] is Iterable ? List.from(data?['orden']) : null,
     );
   }
-  
+
   // Obtiene los datos del objeto y los inserta en la base de datos
   Map<String, dynamic> toFirestore() {
     return {
@@ -57,19 +54,15 @@ class Tarea{
       if (imagenes != null) "imagenes": imagenes,
       if (videos != null) "videos": videos,
       if (orden != null) "orden": orden,
-
     };
   }
-  
+
   // Modificar una tarea
-  setTarea(nombre,textos,imagenes,videos,orden)
-  {
+  setTarea(nombre, textos, imagenes, videos, orden) {
     this.nombre = nombre;
     this.textos = textos;
     this.imagenes = imagenes;
     this.videos = videos;
     this.orden = orden;
-
   }
-
 }

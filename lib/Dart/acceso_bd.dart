@@ -15,7 +15,6 @@
 *   video_player.dart : Necesario para cargar los videos del storage y cargarlos en el controlador de los reproductores de video. 
 * */
 
-
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
@@ -29,81 +28,71 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:video_player/video_player.dart';
 
-
-String encriptacionSha256(String password)
-{
+String encriptacionSha256(String password) {
   var data = utf8.encode(password);
   var hashvalue = sha256.convert(data);
 
   return hashvalue.toString();
 }
 
-
-class AccesoBD{
-
+class AccesoBD {
   var db = FirebaseFirestore.instance;
   var storageRef = FirebaseStorage.instance.ref();
 
-  var fotoDesconocido = "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fperfiles%2Fdesconocido.png?alt=media&token=98ba72ac-776e-4f83-9aaa-57761589c974";
+  var fotoDesconocido =
+      "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fperfiles%2Fdesconocido.png?alt=media&token=98ba72ac-776e-4f83-9aaa-57761589c974";
 
   // Metodo para registrar usuario
-  registrarUsuario(usuario,foto) async{
-
+  registrarUsuario(usuario, foto) async {
     try {
       //Se encripta la contaseña
       var nuevaPassword = encriptacionSha256(usuario.password);
-      var nombrehaseao = encriptacionSha256(usuario.apellidos + usuario.fechanacimiento);
+      var nombrehaseao =
+          encriptacionSha256(usuario.apellidos + usuario.fechanacimiento);
 
       var fotoPath = null;
-      if(foto != null)
-        {
-          fotoPath = "Imágenes/perfiles/${usuario.nombre+usuario.apellidos+nombrehaseao}";
+      if (foto != null) {
+        fotoPath =
+            "Imágenes/perfiles/${usuario.nombre + usuario.apellidos + nombrehaseao}";
 
+        return await storageRef.child(fotoPath).putFile(foto).then((p0) async {
+          var fotoURL = await leerImagen(fotoPath);
 
-          return await storageRef.child(fotoPath).putFile(foto).then((p0) async {
-            var fotoURL = await leerImagen(fotoPath);
+          var user = <String, dynamic>{
+            "nombre": usuario.nombre,
+            "apellidos": usuario.apellidos,
+            "password": nuevaPassword,
+            "fechanacimiento": usuario.fechanacimiento,
+            "rol": usuario.rol,
+            "foto": fotoURL,
+            "metodoLogeo": usuario.metodoLogeo
+          };
+          db.collection("usuarios").add(user);
 
-            var user = <String, dynamic>{
-              "nombre": usuario.nombre,
-              "apellidos": usuario.apellidos,
-              "password": nuevaPassword,
-              "fechanacimiento": usuario.fechanacimiento,
-              "rol": usuario.rol,
-              "foto": fotoURL,
-              "metodoLogeo" : usuario.metodoLogeo
-            };
-            db.collection("usuarios").add(user);
+          return true;
+        });
+      } else {
+        var user = <String, dynamic>{
+          "nombre": usuario.nombre,
+          "apellidos": usuario.apellidos,
+          "password": nuevaPassword,
+          "fechanacimiento": usuario.fechanacimiento,
+          "rol": usuario.rol,
+          "foto": fotoDesconocido,
+          "metodoLogeo": usuario.metodoLogeo
+        };
+        db.collection("usuarios").add(user);
 
-            return true;
-            });
-          }else{
-
-              var user = <String, dynamic>{
-                "nombre": usuario.nombre,
-                "apellidos": usuario.apellidos,
-                "password": nuevaPassword,
-                "fechanacimiento": usuario.fechanacimiento,
-                "rol": usuario.rol,
-                "foto": fotoDesconocido,
-                "metodoLogeo" : usuario.metodoLogeo
-              };
-              db.collection("usuarios").add(user);
-
-              return true;
-
-          }
-
-    }
-    catch(e){
+        return true;
+      }
+    } catch (e) {
       print(e);
       return false;
     }
-
   }
 
   // Metodo para crear una tarea
-  crearTarea(tarea) async{
-
+  crearTarea(tarea) async {
     try {
       //Se encripta la contaseña
 
@@ -115,66 +104,62 @@ class AccesoBD{
       int i = 0;
 
       log("Se meten imagenes");
-      if(tarea.imagenes.length > 0)
-        {
-
-          var fotoPath = "Imágenes/pictogramas/"+encriptacionSha256(tarea.imagenes[0].path);
-          await storageRef.child(fotoPath).putFile(tarea.imagenes[0]).then( (d0) async {
-            log("Se está comprobando que la imagen se ha subido correctamente");
-            await leerImagen(fotoPath).then((value){
-              log(value);
-              imagenes.add(value);
-              log("Se añadio la imagen al array");
-              i++;
-            });
-            log("Se leido lo de await leerImagen");
-          }
-          );
-        }
+      if (tarea.imagenes.length > 0) {
+        var fotoPath = "Imágenes/pictogramas/" +
+            encriptacionSha256(tarea.imagenes[0].path);
+        await storageRef
+            .child(fotoPath)
+            .putFile(tarea.imagenes[0])
+            .then((d0) async {
+          log("Se está comprobando que la imagen se ha subido correctamente");
+          await leerImagen(fotoPath).then((value) {
+            log(value);
+            imagenes.add(value);
+            log("Se añadio la imagen al array");
+            i++;
+          });
+          log("Se leido lo de await leerImagen");
+        });
+      }
 
       log("Se meten videos");
-      if(tarea.videos.length > 0)
-        {
-          var videoPath = "Vídeos/"+encriptacionSha256(tarea.videos[0].path);
+      if (tarea.videos.length > 0) {
+        var videoPath = "Vídeos/" + encriptacionSha256(tarea.videos[0].path);
 
-          await storageRef.child(videoPath).putFile(tarea.videos[0]).then((p0) async {
-            await leerVideo(videoPath).then((value) {
-              videos.add(value);
-              i++;
-
-            });
-
-
+        await storageRef
+            .child(videoPath)
+            .putFile(tarea.videos[0])
+            .then((p0) async {
+          await leerVideo(videoPath).then((value) {
+            videos.add(value);
+            i++;
           });
-        }
+        });
+      }
 
-      while( i != tarea.imagenes.length + tarea.videos.length){};
+      while (i != tarea.imagenes.length + tarea.videos.length) {}
+      ;
 
-        log("Todos los futures se han completado");
-        var nuevaTarea = <String, dynamic>{
-          "nombre": tarea.nombre,
-          "textos": tarea.textos,
-          "imagenes": imagenes,
-          "videos": videos,
-          "orden": tarea.orden
-        };
+      log("Todos los futures se han completado");
+      var nuevaTarea = <String, dynamic>{
+        "nombre": tarea.nombre,
+        "textos": tarea.textos,
+        "imagenes": imagenes,
+        "videos": videos,
+        "orden": tarea.orden
+      };
 
-        db.collection("Tareas").add(nuevaTarea);
+      db.collection("Tareas").add(nuevaTarea);
 
-        return true;
-
-    }
-    catch(e){
-
+      return true;
+    } catch (e) {
       log(e.toString());
       return false;
     }
-
   }
 
   // Metodo al que le pasas por parametro la id del usuario, comprueba si existe y te devuelve el objeto usuario
-  consultarIDusuario(id) async{
-
+  consultarIDusuario(id) async {
     try {
       final ref = db.collection("usuarios");
 
@@ -190,119 +175,100 @@ class AccesoBD{
         usuario?.id = docSnap.id;
       }
 
-
       return usuario;
-    }
-    catch(e){
+    } catch (e) {
       print(e);
     }
   }
-  
-  // Metodo para consultar las tareas asignadas a un usuario según el id pasado por parametro y te devuelve las tareas que tiene insertandolas en la 
-  // sesion
-  consultarTareasAsignadasAlumno(id,cargarVideos) async
-  {
 
+  // Metodo para consultar las tareas asignadas a un usuario según el id pasado por parametro y te devuelve las tareas que tiene insertandolas en la
+  // sesion
+  consultarTareasAsignadasAlumno(id, cargarVideos) async {
     try {
       final ref = db.collection("usuarioTieneTareas");
 
-      await ref.where("idUsuario",isEqualTo: id).orderBy("fechainicio")..snapshots().listen((e) async{
-
-        var nuevasTareas = [];
-        for(int i = 0; i < e.docs.length; i++)
-          {
+      await ref.where("idUsuario", isEqualTo: id).orderBy("fechainicio")
+        ..snapshots().listen((e) async {
+          var nuevasTareas = [];
+          for (int i = 0; i < e.docs.length; i++) {
             var idTarea = e.docs[i].get("idTarea");
 
-            await consultarIDTarea(idTarea).then( (nuevaTarea) {
-
+            await consultarIDTarea(idTarea).then((nuevaTarea) {
               nuevaTarea.idRelacion = e.docs[i].id;
               nuevasTareas.add(nuevaTarea);
 
-              if(nuevasTareas.length == e.docs.length)
-                {
-                  Sesion.tareas = nuevasTareas;
-                  if(cargarVideos)
-                  {
-                    try {
-                      for (int i = 0; i < Sesion.tareas.length; i++) {
-                        for (int j = 0; j < Sesion.tareas[i].videos.length; j++) {
-                          var nuevoControlador = VideoPlayerController.network(
-                              Sesion.tareas[i].videos[j]);
-                          Sesion.tareas[i].controladoresVideo.add(nuevoControlador);
-                          Sesion.tareas[i].controladoresVideo.last.initialize();
-                        }
+              if (nuevasTareas.length == e.docs.length) {
+                Sesion.tareas = nuevasTareas;
+                if (cargarVideos) {
+                  try {
+                    for (int i = 0; i < Sesion.tareas.length; i++) {
+                      for (int j = 0; j < Sesion.tareas[i].videos.length; j++) {
+                        var nuevoControlador = VideoPlayerController.network(
+                            Sesion.tareas[i].videos[j]);
+                        Sesion.tareas[i].controladoresVideo
+                            .add(nuevoControlador);
+                        Sesion.tareas[i].controladoresVideo.last.initialize();
                       }
-                      Sesion.paginaActual.actualizar();
-
                     }
-                    catch(e){print(e);};
+                    Sesion.paginaActual.actualizar();
+                  } catch (e) {
+                    print(e);
+                  }
+                  ;
                 }
-                  Sesion.paginaActual.actualizar();
-                  return;
+                Sesion.paginaActual.actualizar();
+                return;
+              }
+            });
+          }
 
-            }});
-
-        }
-
-        if(e.docs.length == 0)
-          Sesion.tareas = [];
-
-
-      });
-
-
-
-    }
-    catch(e){
+          if (e.docs.length == 0) Sesion.tareas = [];
+        });
+    } catch (e) {
       print(e);
       return false;
     }
-
   }
 
   // Metodo para añadir una tarea con el id de tarea a un usuario en especifico con id de usuario
-  addTareaAlumno(idUsuario,idTarea) async{
+  addTareaAlumno(idUsuario, idTarea) async {
     try {
-
       var tar = <String, dynamic>{
         "idUsuario": idUsuario,
         "idTarea": idTarea,
-        "fechainicio" : DateTime.now().millisecondsSinceEpoch
+        "fechainicio": DateTime.now().millisecondsSinceEpoch
       };
 
       await db.collection("usuarioTieneTareas").add(tar).then((value) {
         Sesion.paginaActual.esNuevaTareaCargando = false;
         Sesion.paginaActual.actualizar();
       });
-
-    }
-    catch(e){
+    } catch (e) {
       print(e);
     }
-
   }
-  
-  // Metodo para eliminar una tarea de un usuario pasandole el id de la relacion entre el usuario y la tarea
-  eliminarTareaAlumno(id) async{
 
-    try{
-      if(Sesion.tareas != null && Sesion.tareas != [])
-      {
-        await db.collection("usuarioTieneTareas").doc(id).delete().then((value) {
+  // Metodo para eliminar una tarea de un usuario pasandole el id de la relacion entre el usuario y la tarea
+  eliminarTareaAlumno(id) async {
+    try {
+      if (Sesion.tareas != null && Sesion.tareas != []) {
+        await db
+            .collection("usuarioTieneTareas")
+            .doc(id)
+            .delete()
+            .then((value) {
           Sesion.paginaActual.esTareaEliminandose = false;
           Sesion.paginaActual.actualizar();
         });
       }
-    }catch(e){
+    } catch (e) {
       print(e);
     }
-
   }
-  
+
   // Metodo que te devuelve todos los usuarios de la base de datos
-  consultarTodosUsuarios() async
-  {
-    try{
+  consultarTodosUsuarios() async {
+    try {
       var usuarios = [];
 
       final ref = db.collection("usuarios").withConverter(
@@ -311,7 +277,6 @@ class AccesoBD{
 
       final consulta = await ref.get();
 
-
       consulta.docs.forEach((element) {
         final usuarioNuevo = element.data();
         usuarioNuevo.id = element.id;
@@ -319,15 +284,13 @@ class AccesoBD{
       });
 
       return usuarios;
-    }catch(e){
+    } catch (e) {
       print(e);
     }
-
   }
 
   // Metodos que te devuelve todos los alumnos de la base de datos
-  consultarTodosAlumnos() async
-  {
+  consultarTodosAlumnos() async {
     try {
       var usuarios = [];
 
@@ -344,14 +307,13 @@ class AccesoBD{
       });
 
       return usuarios;
-    }catch(e){
+    } catch (e) {
       print(e);
     }
   }
-  
+
   // Metodo que te devuelve todos los profesores de la base de datos
-  consultarTodosProfesores() async
-  {
+  consultarTodosProfesores() async {
     try {
       var usuarios = [];
 
@@ -368,17 +330,17 @@ class AccesoBD{
       });
 
       return usuarios;
-    }catch(e){
+    } catch (e) {
       print(e);
     }
   }
 
   // Metodo que te devuelve todas las tareas del usuario
-  consultarTodasLasTareas() async{
+  consultarTodasLasTareas() async {
     try {
       final ref = db.collection("Tareas").withConverter(
           fromFirestore: Tarea.fromFirestore,
-          toFirestore: (Tarea tarea,_) => tarea.toFirestore());
+          toFirestore: (Tarea tarea, _) => tarea.toFirestore());
 
       final consulta = await ref.get();
 
@@ -391,15 +353,13 @@ class AccesoBD{
       });
 
       return lista;
-    }
-    catch (e) {
-    print(e);
+    } catch (e) {
+      print(e);
     }
   }
 
-   // Metodo que te devuelve la tarea segun el id de esta
-  consultarIDTarea(id) async{
-
+  // Metodo que te devuelve la tarea segun el id de esta
+  consultarIDTarea(id) async {
     try {
       final ref = db.collection("Tareas");
 
@@ -409,44 +369,36 @@ class AccesoBD{
 
       final docSnap = await consulta.get();
 
-
       var tarea = null;
       if (docSnap != null) {
-
         tarea = docSnap.data();
         tarea?.id = docSnap.id;
       }
 
-
       return tarea;
-    }
-    catch(e){
+    } catch (e) {
       print(e);
     }
   }
-  
+
   // Metodo que comprueba la contraseña introducida con la guardada en la base de datos
-  checkearPassword(id,password) async
-  {
+  checkearPassword(id, password) async {
     try {
       var resultado = await consultarIDusuario(id);
 
       var PassEncriptada = encriptacionSha256(password);
 
       if (PassEncriptada == resultado.password) {
-
         return true;
-      }
-      else
+      } else
         return false;
-    }catch(e){
+    } catch (e) {
       print(e);
     }
   }
 
-   // Metodo que te devuelve la URL según el PATH que tenga la imagen en el servidor
-  leerImagen(path) async{
-
+  // Metodo que te devuelve la URL según el PATH que tenga la imagen en el servidor
+  leerImagen(path) async {
     final imagen = storageRef.child(path);
 
     print("intentando cargar imagen");
@@ -457,16 +409,13 @@ class AccesoBD{
       return data;
       // Data for "images/island.jpg" is returned, use this as needed.
     } on FirebaseException catch (e) {
-
       print("ERROR:" + e.toString());
       // Handle any errors.
     }
-
   }
-  
-  // Metodo que te devuelve la URL según el PATH que tenga el video en el servidor
-  leerVideo(path) async{
 
+  // Metodo que te devuelve la URL según el PATH que tenga el video en el servidor
+  leerVideo(path) async {
     final video = storageRef.child(path);
 
     print("intentando cargar video");
@@ -477,12 +426,8 @@ class AccesoBD{
       return data;
       // Data for "images/island.jpg" is returned, use this as needed.
     } on FirebaseException catch (e) {
-
       print("ERROR:" + e.toString());
       // Handle any errors.
     }
-
   }
-
-
 }
