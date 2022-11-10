@@ -1,7 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:colegio_especial_dgp/Dart/passport_method.dart';
-import 'package:colegio_especial_dgp/Dart/rol.dart';
-
 /*
 *   Archivo: usuario.dart
 *
@@ -18,6 +14,10 @@ import 'package:colegio_especial_dgp/Dart/rol.dart';
 *
 * */
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:colegio_especial_dgp/Dart/passport_method.dart';
+import 'package:colegio_especial_dgp/Dart/rol.dart';
+
 class Usuario{
   var id;
   var nombre;
@@ -28,7 +28,7 @@ class Usuario{
   var foto;
   var metodoLogeo; // Si el usuario necesita algún otro método para meter contraseña
 
-
+  // Constructor 
   Usuario({
           this.id,
           this.nombre,
@@ -39,7 +39,7 @@ class Usuario{
           this.foto,
           this.metodoLogeo});
 
-
+  // Transferir datos de la base de datos al objeto
   factory Usuario.fromFirestore(
       DocumentSnapshot<Map<String, dynamic>> snapshot,
       SnapshotOptions? options,
@@ -55,7 +55,8 @@ class Usuario{
       metodoLogeo : data?['metodoLogeo'],
     );
   }
-
+  
+  // Transferir datos desde el objeto al modelo
   Map<String, dynamic> toFirestore() {
     return {
       if (nombre != null) "nombre": nombre,
@@ -68,7 +69,8 @@ class Usuario{
 
     };
   }
-
+  
+  // Modificar el usuario con los datos introducidos por parametro
   setUsuario(nombre,apellidos,password,fechanacimiento,rol,foto,metodoLogeo)
   {
     this.nombre = nombre;
