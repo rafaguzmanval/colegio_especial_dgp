@@ -2,12 +2,10 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
-import 'package:colegio_especial_dgp/Dart/discapacidad.dart';
 import 'package:colegio_especial_dgp/Flutter/loginpage.dart';
 import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
 import 'package:colegio_especial_dgp/Flutter/perfil_alumno.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
-import 'package:colegio_especial_dgp/Dart/clase.dart';
 import 'package:colegio_especial_dgp/Dart/usuario.dart';
 
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';

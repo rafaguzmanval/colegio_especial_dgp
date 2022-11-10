@@ -12,6 +12,7 @@ class Notificacion{
     await flutterLocalNotificationsPlugin.initialize(initializationsSettings);
 
 
+
   }
 
   static Future showBigTextNotification({var id =0,required String title, required String body,

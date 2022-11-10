@@ -1,10 +1,9 @@
+
 import 'dart:async';
 
-import 'package:colegio_especial_dgp/Dart/discapacidad.dart';
 import 'package:colegio_especial_dgp/Dart/main.dart';
 import 'package:colegio_especial_dgp/Dart/passport_method.dart';
 import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
-import '../Dart/clase.dart';
 import '../Dart/usuario.dart';
 import '../Dart/sesion.dart';
 
@@ -82,6 +81,7 @@ class PasswordLoginState extends State<PasswordLogin> {
       return vistaClave();
     }
   }
+
 
   Widget vistaClave()
   {
