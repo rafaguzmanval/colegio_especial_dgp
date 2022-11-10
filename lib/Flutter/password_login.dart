@@ -90,10 +90,12 @@ class PasswordLoginState extends State<PasswordLogin> {
         //margin: EdgeInsets.all(200),
           alignment: Alignment.center,
           child: Column(
+
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
 
             children: [
+
               SizedBox(
                 width: 500,
                 child:
@@ -107,10 +109,16 @@ class PasswordLoginState extends State<PasswordLogin> {
                   controller: myController,
                 ),
               ),
+              SizedBox(
+                height: 10,
+              ),
+              SizedBox(
 
+                child:
                 ElevatedButton(
                 child: Text("Enviar",
                   style: TextStyle(
+                    fontSize: 30,
                     color: Colors.white,
                   ),
                 ),
@@ -139,7 +147,7 @@ class PasswordLoginState extends State<PasswordLogin> {
 
 
               ),
-
+              ),
               Text(errorLog)
             ],
 
