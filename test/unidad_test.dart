@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:colegio_especial_dgp/Dart/tarea.dart';
 import 'package:colegio_especial_dgp/Dart/usuario.dart';
-import 'package:colegio_especial_dgp/Dart/clase.dart';
+import 'package:colegio_especial_dgp/Dart/aula.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main () {
@@ -33,7 +33,7 @@ void main () {
       var alumno = new Usuario();
       alumno.setUsuario("NombreA", "ApellidosA", "2345", "01/01/2005", "Alumno", null,null);
 
-      var clase = new Clase("Prueba",[profesor],[alumno]);
+      var clase = new Aula("Prueba",[profesor],[alumno]);
 
       expect ( clase.nombreClase , "Prueba");
       expect ( clase.profesores[0] , profesor);
