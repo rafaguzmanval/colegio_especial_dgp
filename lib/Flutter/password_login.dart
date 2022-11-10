@@ -1,18 +1,26 @@
 
-import 'dart:async';
+/*
+*   Archivo: password_login.dart
+*
+*   Descripción:
+*   Pagina para iniciar sesion introduciendo una clave
+*
+*   Includes:
+*   myhomepage.dart : Redirige al menu principal
+*   passport_method.dart : Enumeracion de los metodos de acceso.
+*   notificacion.dart : Clase para construir las notificaciones.
+*   sesion.dart : Contiene los datos de la sesion actual (sirve de puntero a la página actual donde se encuentra el usuario)
+*   acceso_bd.dart: Metodos de acceso a la base de datos.
+*   material.dart: Se utiliza para dar colores y diseño a la aplicacion.
+* */
 
-import 'package:colegio_especial_dgp/Dart/main.dart';
+
+import 'dart:async';
 import 'package:colegio_especial_dgp/Dart/passport_method.dart';
 import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
-import '../Dart/usuario.dart';
 import '../Dart/sesion.dart';
-
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
-
-import 'package:video_player/video_player.dart';
 
 class PasswordLogin extends StatefulWidget {
   @override
@@ -47,17 +55,20 @@ class PasswordLoginState extends State<PasswordLogin> {
     myController.dispose();
     super.dispose();
   }
-
+  
+  // Metodo para que una vez se ha introducido el pin, tarda un tiempo en dar un mensaje de advertencia si está equivocado
   void temporizadorPin([int milliseconds = 3000]) {
     if (temporizador != null) temporizador.cancel();
     temporizador = Timer(Duration(milliseconds: milliseconds), advertencia);
   }
-
+  
+  // Crear el mensaje de advertencia
   void advertencia() {
     errorLog = "El pin no es correcto, pulsa el botón si te has equivocado";
     _actualizar();
   }
-
+  
+  // Borrar el pin introducido si ha sido fallido
   void resetPin() {
     errorLog = "Vuelve a introducir";
     concatenacionPin = "";
@@ -73,7 +84,8 @@ class PasswordLoginState extends State<PasswordLogin> {
         ),
         body: Container(margin: EdgeInsets.all(5), child: vista()));
   }
-
+  
+  // Crear la vista dependiendo del metodo de clave que se quiere
   Widget vista() {
     if (Sesion.metodoLogin == Passportmethod.pin.toString()) {
       return vistaPin();
@@ -82,7 +94,7 @@ class PasswordLoginState extends State<PasswordLogin> {
     }
   }
 
-
+  // Vista para meter un clave pin
   Widget vistaClave()
   {
     return
@@ -112,7 +124,6 @@ class PasswordLoginState extends State<PasswordLogin> {
               SizedBox(
                 height: 10,
               ),
-
               SizedBox(
 
                 child:
@@ -155,7 +166,8 @@ class PasswordLoginState extends State<PasswordLogin> {
           )
       );
   }
-
+  
+  // vista para crear una clave con imagenes
   Widget vistaPin() {
     return Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -234,7 +246,8 @@ class PasswordLoginState extends State<PasswordLogin> {
               child: Text("Volver a introducir")),
         ]);
   }
-
+  
+  // Metodo para ir generando la clave al pulsar las imagenes o pin
   concatenarPin(nuevo) {
     pulsaciones++;
     concatenacionPin += nuevo;
@@ -245,11 +258,7 @@ class PasswordLoginState extends State<PasswordLogin> {
     }
   }
 
-  inicializar() async {
-    usuarios = await base.consultarTodosUsuarios();
-    _actualizar();
-  }
-
+  // Metodo para comprobar el pin introducido
   ComprobarPin(id, password) async {
     var resul = await base.checkearPassword(id, password);
 
@@ -260,7 +269,8 @@ class PasswordLoginState extends State<PasswordLogin> {
           context, MaterialPageRoute(builder: (context) => MyHomePage()));
     } else {}
   }
-
+  
+  // Metodo para comprobar si la contraseña es correcta
   ComprobarLogeo(id, password) async {
     var resul = await base.checkearPassword(id, password);
 
@@ -288,10 +298,13 @@ class PasswordLoginState extends State<PasswordLogin> {
       );
     }
   }
-
+  
+  
+  // Actualizar pagina
   void _actualizar() async {
     //var reloj = 1;
     //await Future.delayed(Duration(seconds:reloj));
     setState(() {});
   }
 }
+
