@@ -1,10 +1,21 @@
+/*
+*   Archivo: perfil_alumno.dart
+*
+*   Descripción:
+*   Pagina para ver el perfil del alumno
+*
+*   Includes:
+*   rol.dart : Enumerado con los roles de usuarios que existen en la aplicacion.
+*   sesion.dart : Contiene los datos de la sesion actual (sirve de puntero a la página actual donde se encuentra el usuario)
+*   acceso_bd.dart: Metodos de acceso a la base de datos.
+*   material.dart: Se utiliza para dar colores y diseño a la aplicacion.
+*   tarea.dart : Carga la tarea desde la base de datos
+* */
+
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import '../Dart/tarea.dart';
-
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 
 class PerfilAlumno extends StatefulWidget {
@@ -75,7 +86,8 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
           )),
     );
   }
-
+  
+  // Carga el perfil del alumno
   Widget VistaProfesor() {
     return perfilAlumno();
   }
@@ -89,7 +101,8 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
       ),
     );
   }
-
+  
+  // Carga el perfil del alumno
   Widget VistaAdministrador() {
     return perfilAlumno();
   }
@@ -102,7 +115,8 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
       ),
     );
   }
-
+  
+  // Carga el perfil del alumno
   Widget perfilAlumno() {
     return Expanded(
 
@@ -225,7 +239,8 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
     await base.consultarTareasAsignadasAlumno(Sesion.seleccion.id, false);
     actualizar();
   }
-
+  
+  // Metodo que carga las tareas del alumno
   cargarTareas() async {
     tareas = await base.consultarTodasLasTareas();
 
@@ -235,7 +250,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
 
     actualizar();
   }
-
+  // Actualizar la pagina
   void actualizar() {
     setState(() {});
   }
