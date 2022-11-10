@@ -1,8 +1,19 @@
+/*
+*   Archivo: perfil_profesor.dart
+*
+*   Descripción:
+*   Pagina para ver el perfil del profesor
+*
+*   Includes:
+*   rol.dart : Enumerado con los roles de usuarios que existen en la aplicacion.
+*   sesion.dart : Contiene los datos de la sesion actual (sirve de puntero a la página actual donde se encuentra el usuario)
+*   acceso_bd.dart: Metodos de acceso a la base de datos.
+*   material.dart: Se utiliza para dar colores y diseño a la aplicacion.
+* */
+
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
 
 class PerfilProfesor extends StatefulWidget {
@@ -72,11 +83,12 @@ class PerfilProfesorState extends State<PerfilProfesor> {
           )),
     );
   }
-
+  // Carga el perfil del profesor
   Widget VistaProfesor() {
     return perfilProfesor();
   }
-
+  
+ 
   Widget VistaAlumno() {
     Navigator.pop(context);
     return Container(
@@ -86,11 +98,11 @@ class PerfilProfesorState extends State<PerfilProfesor> {
       ),
     );
   }
-
+  // Carga el perfil del profesor
   Widget VistaAdministrador() {
     return perfilProfesor();
   }
-
+ 
   Widget VistaProgramador() {
     return Container(
       //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
@@ -99,7 +111,8 @@ class PerfilProfesorState extends State<PerfilProfesor> {
       ),
     );
   }
-
+  
+  /// Carga el perfil del profesor
   Widget perfilProfesor() {
     return Container(
       //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
@@ -129,13 +142,14 @@ class PerfilProfesorState extends State<PerfilProfesor> {
       ),
     );
   }
-
+  
+  /// Carga el usuario del profesor
   cargarUsuario() async // EN sesion seleccion estara el id del usuario que se ha elegido
   {
     usuarioPerfil = await base.consultarIDusuario(Sesion.seleccion.id);
     actualizar();
   }
-
+  /// Actualiza la pagina
   void actualizar() {
     setState(() {});
   }
