@@ -1,22 +1,28 @@
+/*
+*   Archivo: crear_tarea.dart
+*
+*   Descripción:
+*   Formulario para crear una tarea para el usuario
+*   Includes:
+*   cloud_firestore.dart : Necesario para implementar los métodos que acceden a la base de datos
+*   sesion.dart : Contiene los datos de la sesion actual (sirve de puntero a la página actual donde se encuentra el usuario)
+*   video_player.dart : Necesario para cargar los videos del storage y cargarlos en el controlador de los reproductores de video. 
+*   rol.dart : Enumerado con los roles de usuarios que existen en la aplicacion.
+*   acceso_bd.dart: Metodos de acceso a la base de datos.
+*   material.dart: Se utiliza para dar colores y diseño a la aplicacion.
+*   image_picker.dart : Libreria para acceder a la cámara y a la galería de imagenes del dispositivo.
+*   tarea.dart: Se utiliza para construir el objeto tarea y enviarlo a la base de datos
+* */
+
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
-
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
-
 import 'package:video_player/video_player.dart';
-
 import "package:image_picker/image_picker.dart";
-
-import "package:flutter_tts/flutter_tts.dart";
-
-import '../Dart/main.dart';
-import '../Dart/notificacion.dart';
 import '../Dart/tarea.dart';
 
 enum SeleccionImagen { camara, galeria, video }
@@ -26,6 +32,7 @@ class CrearTarea extends StatefulWidget {
   CrearTareaState createState() => CrearTareaState();
 }
 
+// Clase para crear tarea
 class CrearTareaState extends State<CrearTarea> {
   var db = FirebaseFirestore.instance;
 
@@ -304,7 +311,8 @@ class CrearTareaState extends State<CrearTarea> {
       actualizar();
     }
   }
-
+  
+  // Widget para insertar el reproductor de video
   Widget ReproductorVideo(controlador) {
     return Container(
         //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
@@ -346,7 +354,8 @@ class CrearTareaState extends State<CrearTarea> {
                 ),*/
     ]));
   }
-
+  
+  // Actualizar las páginas
   void actualizar() async {
     setState(() {});
   }
