@@ -1,3 +1,21 @@
+/*
+*   Archivo: acceso_bd.dart
+*
+*   Descripción:
+*   Realiza la comunicación con la base de datos del firebase y de storage de firebase. Fundamentalmente se accede a la información de los usuarios
+*   y de las tareas. 
+*   Includes:
+*   cloud_firestore.dart : Necesario para implementar los métodos que acceden a la base de datos
+*   passport_method.dart : Contiene el enum que indica el tipo de contraseña que va a usarse (clave, pin,...)
+*   sesion.dart : Contiene los datos de la sesion actual (sirve de puntero a la página actual donde se encuentra el usuario)
+*   tarea.dart : Contiene los métodos para convertir la información de la base de datos al objeto del modelo. 
+*   usuario.dart : Contiene los métodos para convertir la información de la base de datos al objeto del modelo. 
+*   firebase_storage.dart : Contiene los métodos para acceder al almacenamiento de archivos del servidor. 
+*   crypto.dart : Contiene los métodos para realizar encriptación en Sha256 de los datos.
+*   video_player.dart : Necesario para cargar los videos del storage y cargarlos en el controlador de los reproductores de video. 
+* */
+
+
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
@@ -5,14 +23,10 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/tarea.dart';
-import 'package:colegio_especial_dgp/Flutter/perfil_alumno.dart';
 
-import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/usuario.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:crypto/crypto.dart';
-import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 
