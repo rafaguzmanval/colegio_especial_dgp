@@ -12,6 +12,8 @@
 *   firebase_options.dart : Se utiliza para acceder con nuestro token a nuestro servidor. 
 *   notificacion.dart : Se utiliza para crear notificaciones y que aparezcan en el dispositivo.
 *   flutter_localizations.dart : Se utiliza para traducir widgets al español.
+*   http.dart : Se usa para acceder a webs y concretamente para acceder a la API de emailjs que se encarga de enviar los emails
+*   covert: Se usa para codificar los JSON
 * */
 
 import 'package:flutter/material.dart';
@@ -21,6 +23,8 @@ import 'firebase_options.dart';
 import '../Flutter/loginpage.dart';
 import 'notificacion.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 var user = "";
 
@@ -52,6 +56,27 @@ Future<void> main() async{
   );
 
   runApp(App());
+}
+
+//Función para mandar un email.
+Future sendEmail(String name, String email, String message) async {
+  final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+  const serviceId = 'servicioCorreo';
+  const templateId = 'template_xxh3jhv';
+  const userId = 'cQtG7913Sa6aZX2Xz';
+  final response = await http.post(url,
+      headers: {'Content-Type': 'application/json'},//This line makes sure it works for all platforms.
+      body: json.encode({
+        'service_id': serviceId,
+        'template_id': templateId,
+        'user_id': userId,
+        'template_params': {
+          'from_name': name,
+          'to_email': email,
+          'message': message
+        }
+      }));
+  return response.statusCode;
 }
 
 // Inicializa la aplicacion indicando el idioma soportado
