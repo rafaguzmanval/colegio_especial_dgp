@@ -14,6 +14,7 @@
 *   tarea.dart: Se utiliza para construir el objeto tarea y enviarlo a la base de datos
 * */
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -46,10 +47,20 @@ class CrearTareaState extends State<CrearTarea> {
   ImagePicker capturador = new ImagePicker();
 
   var creando = false;
-  var mensajeDeValidacion = "";
 
   final controladorNombre = TextEditingController();
   final controladorTexto = TextEditingController();
+
+  var busqueda = "";
+  var busquedaPrevia = "";
+
+  StreamController<String> controladorStream = StreamController<String>.broadcast();
+
+
+  var controladorBusqueda = TextEditingController();
+
+
+
 
   ///Cuándo se pasa de página es necesario que todos los controladores de los formularios y de los reproductores de vídeo se destruyan.
   @override
@@ -58,12 +69,39 @@ class CrearTareaState extends State<CrearTarea> {
     controladorVideo.dispose();
     controladorNombre.dispose();
     controladorTexto.dispose();
+    controladorStream.close();
+    controladorBusqueda.dispose();
+
   }
 
   @override
   void initState() {
     super.initState();
     //Notificacion.showBigTextNotification(title: "Vaya vaya", body: "¿Que dices? ¿creando tu primera tarea?", fln: flutterLocalNotificationsPlugin);
+
+    /*
+    controladorStream.stream.listen((event) async{
+
+
+
+    });*/
+
+    controladorBusqueda.addListener(() async{
+
+      if(controladorBusqueda.text.isNotEmpty)
+        {
+          await http.get(Uri.parse("https://api.arasaac.org/api/pictograms/es/search/" + controladorBusqueda.text)).then((r){
+            controladorStream.add(r.body);
+          });
+        }
+      else
+        {
+          controladorStream.add("");
+        }
+
+
+
+    });
 
     Sesion.paginaActual = this;
   }
@@ -127,6 +165,67 @@ class CrearTareaState extends State<CrearTarea> {
   }
 
 
+  ///Dialogo con el buscador de imagenes online de ARASAAC
+  buscadorArasaac(){
+    return Dialog(
+      child:SingleChildScrollView(
+        child: StreamBuilder(
+            stream: controladorStream.stream,
+            initialData: "",
+            builder: (BuildContext context,
+                AsyncSnapshot snapshot) {
+
+
+                  var msg = snapshot.data.toString() != "" ? json.decode(snapshot.data.toString()) : "";
+                  var longitud = msg.length;
+
+                  return Column(children: [
+                    TextField(controller: controladorBusqueda
+                      ,decoration: InputDecoration(
+                        border: OutlineInputBorder(),
+                        hintText: 'Buscar ...',
+                      ),),
+                    if(snapshot.data.toString() != "")...[
+
+                      for (int i = 0; i < longitud && i < 20; i++)
+                        buscarARASAAC(msg, i)
+                      ]
+                  ]);
+
+
+
+            }
+        )
+      )
+
+    );
+
+}
+
+buscarARASAAC(mensaje,i){
+  return Container(
+      width: 100,
+      height: 100,
+      child: 
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
+            ),
+              onPressed: (){
+                fotoTomada = "https://api.arasaac.org/api/pictograms/" +
+                    mensaje[i]["_id"].toString();
+                actualizar();
+                Navigator.pop(context, false);
+              },
+              child: Image.network(
+                  "https://api.arasaac.org/api/pictograms/" +
+                      mensaje[i]["_id"].toString())),
+              
+          );
+
+}
+
+
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
   Widget VistaProfesor() {
     Navigator.pop(context);
@@ -158,7 +257,7 @@ class CrearTareaState extends State<CrearTarea> {
               maxLength: 40,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: 'Introduce el nombre de la tarea *',
+                hintText: 'Introduce el título *',
               ),
               controller: controladorNombre,
             ),
@@ -173,7 +272,7 @@ class CrearTareaState extends State<CrearTarea> {
               maxLength: 60,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: 'Introduce una Descripción *',
+                hintText: 'Introduce una descripción *',
               ),
               controller: controladorTexto,
             ),
@@ -203,30 +302,20 @@ class CrearTareaState extends State<CrearTarea> {
                 seleccionarImagen(SeleccionImagen.galeria);
               }),
           ElevatedButton(
-              child: Text('Elige un pictograma desde la web de ARAASAC'),
-              onPressed: () async{
-                await http.get(Uri.parse("https://api.arasaac.org/api/pictograms/es/search/hola")).then((r)
-                  {
-                    var mensaje = json.decode(r.body);
-                    var id = mensaje[0]["_id"].toString();
-                    var enlace = "https://api.arasaac.org/api/pictograms/"+id;
-                    showDialog(context: context, builder: (context) {
-                      return
-                        Dialog(
+              child: Text('Elige un pictograma desde la web de ARASAAC'),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    builder: (context)
+                      {
+                      return buscadorArasaac();
+                      }
+                    );
+            }
 
-                          child: Container(
-                            child: Image.network(enlace),
-
-                          ),
-
-                        );
-                    });
-                  }
-                );
+              ),
 
 
-              }
-          ),
           const Text(
             "Elige un videotutorial para la tarea: *",
             style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
@@ -248,7 +337,7 @@ class CrearTareaState extends State<CrearTarea> {
             width: 190,
             child: fotoTomada == null
                 ? Center(child: Text('Ninguna foto tomada ****'))
-                : Center(child: Image.file(File(fotoTomada.path))),
+                : Center(child: fotoTomada.startsWith("http") ? Image.network(fotoTomada): Image.file(File(fotoTomada.path)) ),
           ),
           SizedBox(
             height: 10,
@@ -268,7 +357,6 @@ class CrearTareaState extends State<CrearTarea> {
                         top: 10, bottom: 10, right: 10, left: 10),
                   ),
           ),
-          Text(mensajeDeValidacion),
           Visibility(
               visible: !creando,
               child: Container(
@@ -293,26 +381,49 @@ class CrearTareaState extends State<CrearTarea> {
     );
   }
 
-  //Método para registrar usuario
+  //Método para crear tarea
   crearTarea() async {
-    if (controladorNombre.text.isNotEmpty &&
-        videoTomado != null &&
-        fotoTomada != null) {
+    if (controladorNombre.text.isNotEmpty) {
       creando = true;
       actualizar();
 
       var nombre = "" + controladorNombre.text;
       var texto = "" + controladorTexto.text;
 
+      var orden = [];
+
       var textos = [];
-      textos.add(texto);
+      if(texto != "")
+        {
+          textos.add(texto);
+          orden.add("T");
+        }
       var imagenes = [];
-      imagenes.add(File(fotoTomada.path));
+      if(fotoTomada != null)
+        {
+          if(fotoTomada is String)
+            {
+              if(fotoTomada.startsWith("http"))
+                {
+                  imagenes.add(fotoTomada);
+                }
+            }
+          else
+            {
+              imagenes.add(File(fotoTomada.path));
+            }
+
+          orden.add("I");
+        }
 
       var videos = [];
-      videos.add(File(videoTomado.path));
+      if(videoTomado != null)
+        {
+          videos.add(File(videoTomado.path));
+          orden.add("V");
+        }
 
-      var orden = ["T", "I", "V"];
+
 
       Tarea tarea = Tarea();
       tarea.setTarea(nombre, textos, imagenes, videos, orden);
@@ -326,18 +437,37 @@ class CrearTareaState extends State<CrearTarea> {
           fotoTomada = null;
           videoTomado = null;
 
-          mensajeDeValidacion =
-              "Tarea creada correctamente\nPuedes volver a crear otra tarea:";
+          displayMensajeValidacion("Tarea creada correctamente\nPuedes volver a crear otra tarea:");
         } else {
-          mensajeDeValidacion = "Fallo al crear tarea, inténtelo de nuevo";
+          displayMensajeValidacion("Fallo al crear tarea, inténtelo de nuevo");
         }
 
         actualizar();
       });
     } else {
-      mensajeDeValidacion = "Es necesario rellenar todos los campos";
+      displayMensajeValidacion("Es necesario rellenar todos los campos");
       actualizar();
     }
+  }
+
+  displayMensajeValidacion(mensajeDeValidacion)
+  {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.transparent,
+          duration: Duration(seconds: 2),
+          elevation: 0,
+          content: Container(
+            padding: const EdgeInsets.all(16),
+            height: 90,
+            decoration: const BoxDecoration(
+              color: Color(0xFF6BFF67),
+              borderRadius: BorderRadius.all(Radius.circular(29)),
+            ),
+            child: Center(child:Text(mensajeDeValidacion, selectionColor: Colors.black)),
+          )),
+    );
   }
 
   // Widget para insertar el reproductor de video

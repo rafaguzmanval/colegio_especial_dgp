@@ -103,23 +103,36 @@ class AccesoBD {
 
       int i = 0;
 
-      log("Se meten imagenes");
       if (tarea.imagenes.length > 0) {
-        var fotoPath = "Imágenes/pictogramas/" +
-            encriptacionSha256(tarea.imagenes[0].path);
-        await storageRef
-            .child(fotoPath)
-            .putFile(tarea.imagenes[0])
-            .then((d0) async {
-          log("Se está comprobando que la imagen se ha subido correctamente");
-          await leerImagen(fotoPath).then((value) {
-            log(value);
-            imagenes.add(value);
-            log("Se añadio la imagen al array");
-            i++;
-          });
-          log("Se leido lo de await leerImagen");
-        });
+
+
+        if(tarea.imagenes[0] is String)
+          {
+            if(tarea.imagenes[0].startsWith("http"))
+              {
+                imagenes.add(tarea.imagenes[0]);
+                i++;
+              }
+          }
+        else
+          {
+            var fotoPath = "Imágenes/pictogramas/" +
+                encriptacionSha256(tarea.imagenes[0].path);
+            await storageRef
+                .child(fotoPath)
+                .putFile(tarea.imagenes[0])
+                .then((d0) async {
+              log("Se está comprobando que la imagen se ha subido correctamente");
+              await leerImagen(fotoPath).then((value) {
+                log(value);
+                imagenes.add(value);
+                log("Se añadio la imagen al array");
+                i++;
+              });
+              log("Se leido lo de await leerImagen");
+            });
+          }
+
       }
 
       log("Se meten videos");
