@@ -24,6 +24,8 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import "package:image_picker/image_picker.dart";
 import '../Dart/tarea.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 enum SeleccionImagen { camara, galeria, video }
 
@@ -124,6 +126,7 @@ class CrearTareaState extends State<CrearTarea> {
     );
   }
 
+
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
   Widget VistaProfesor() {
     Navigator.pop(context);
@@ -199,6 +202,31 @@ class CrearTareaState extends State<CrearTarea> {
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.galeria);
               }),
+          ElevatedButton(
+              child: Text('Elige un pictograma desde la web de ARAASAC'),
+              onPressed: () async{
+                await http.get(Uri.parse("https://api.arasaac.org/api/pictograms/es/search/hola")).then((r)
+                  {
+                    var mensaje = json.decode(r.body);
+                    var id = mensaje[0]["_id"].toString();
+                    var enlace = "https://api.arasaac.org/api/pictograms/"+id;
+                    showDialog(context: context, builder: (context) {
+                      return
+                        Dialog(
+
+                          child: Container(
+                            child: Image.network(enlace),
+
+                          ),
+
+                        );
+                    });
+                  }
+                );
+
+
+              }
+          ),
           const Text(
             "Elige un videotutorial para la tarea: *",
             style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
