@@ -44,7 +44,11 @@ _estructura(context) {
                     : "";
                 var longitud = msg.length;
 
-                return Column(children: [
+                return
+                  Container(
+                    width: MediaQuery.of(context).size.width - 300,
+                  child:
+                  Column(children: [
                   TextField(
                     controller: controladorBusqueda,
                     decoration: InputDecoration(
@@ -67,7 +71,8 @@ _estructura(context) {
                         ],
                       ))
                   ]
-                ]);
+                ])
+                  );
               })));
 }
 

@@ -208,6 +208,7 @@ class AccesoBD {
 
             await consultarIDTarea(idTarea).then((nuevaTarea) {
               nuevaTarea.idRelacion = e.docs[i].id;
+              nuevaTarea.terminada = e.docs[i].get("terminada");
               nuevasTareas.add(nuevaTarea);
 
               if (nuevasTareas.length == e.docs.length) {

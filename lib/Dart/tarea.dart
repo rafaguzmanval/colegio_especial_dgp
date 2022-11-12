@@ -20,6 +20,7 @@ class Tarea {
   var videos;
   var controladoresVideo = [];
   var orden;
+  var terminada;
 
   // Constructor
   Tarea(

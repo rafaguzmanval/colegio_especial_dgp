@@ -223,12 +223,17 @@ class VerTareasState extends State<VerTareas> {
                       )))
             ]),
 
+        Visibility(
+          visible: !Sesion.tareas[tareaActual].terminada,
+            child:
         FloatingActionButton(
             child:Icon(Icons.check),
             onPressed: (){
+              Sesion.tareas[tareaActual].terminada = true;
               base.completarTarea(Sesion.tareas[tareaActual].idRelacion);
+              actualizar();
 
-        })
+        }))
 
       ] else ...[
         Container(
