@@ -14,7 +14,6 @@
 *   tarea.dart: Se utiliza para construir el objeto tarea y enviarlo a la base de datos
 * */
 
-import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -228,7 +227,7 @@ class CrearTareaState extends State<CrearTarea> {
           ElevatedButton(
               child: Text('Elige un pictograma desde la web de ARASAAC'),
               onPressed: () async {
-                    fotoTomada =  await buscadorArasaac(context);
+                    fotoTomada =  await buscadorArasaac(context: context);
                     actualizar();
             }
 
@@ -356,21 +355,22 @@ class CrearTareaState extends State<CrearTarea> {
           fotoTomada = null;
           videoTomado = null;
 
-          displayMensajeValidacion("Tarea creada correctamente\nPuedes volver a crear otra tarea:");
+          displayMensajeValidacion("Tarea creada correctamente\nPuedes volver a crear otra tarea:",false);
         } else {
-          displayMensajeValidacion("Fallo al crear tarea, inténtelo de nuevo");
+          displayMensajeValidacion("Fallo al crear tarea, inténtelo de nuevo",true);
         }
 
         actualizar();
       });
     } else {
-      displayMensajeValidacion("Es necesario rellenar todos los campos");
+      displayMensajeValidacion("Es necesario rellenar todos los campos",true);
       actualizar();
     }
   }
 
-  displayMensajeValidacion(mensajeDeValidacion)
+  displayMensajeValidacion(mensajeDeValidacion,error)
   {
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
           behavior: SnackBarBehavior.floating,
@@ -380,8 +380,8 @@ class CrearTareaState extends State<CrearTarea> {
           content: Container(
             padding: const EdgeInsets.all(16),
             height: 90,
-            decoration: const BoxDecoration(
-              color: Color(0xFF6BFF67),
+            decoration:  BoxDecoration(
+              color: Color(error?0xFFC72C41:0xFF6BFF67),
               borderRadius: BorderRadius.all(Radius.circular(29)),
             ),
             child: Center(child:Text(mensajeDeValidacion, selectionColor: Colors.black)),
@@ -417,18 +417,6 @@ class CrearTareaState extends State<CrearTarea> {
         child: Text("Total Duration: " + controlador.value.duration.toString()),
       ),
 
-      /*
-                Container(
-                    child: VideoProgressIndicator(
-                        controlador,
-                        allowScrubbing: true,
-                        colors:VideoProgressColors(
-                          backgroundColor: Colors.black,
-                          playedColor: Colors.red,
-                          bufferedColor: Colors.grey,
-                        )
-                    )
-                ),*/
     ]));
   }
 

@@ -494,19 +494,19 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
         } else {
           mensajeDeRegistro =
               "Fallo en el proceso de registro, inténtelo de nuevo";
-          mostrarError(mensajeDeRegistro);
+          mostrarError(mensajeDeRegistro,true);
         }
 
         actualizar();
       });
     } else {
       mensajeDeRegistro = "Debe rellenar todos los campos con *";
-      mostrarError(mensajeDeRegistro);
+      mostrarError(mensajeDeRegistro,true);
       actualizar();
     }
   }
 
-  mostrarError(mensaje) {
+  mostrarError(mensaje,error) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
           behavior: SnackBarBehavior.floating,
@@ -516,8 +516,8 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           content: Container(
             padding: const EdgeInsets.all(16),
             height: 90,
-            decoration: const BoxDecoration(
-              color: Color(0xFFC72C41),
+            decoration:  BoxDecoration(
+              color: Color(error?0xFFC72C41:0xFF6BFF67),
               borderRadius: BorderRadius.all(Radius.circular(29)),
             ),
             child: Text(mensaje),
