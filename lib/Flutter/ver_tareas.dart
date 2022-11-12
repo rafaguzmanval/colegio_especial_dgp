@@ -222,6 +222,14 @@ class VerTareasState extends State<VerTareas> {
                         visible: verFlechaDerecha,
                       )))
             ]),
+
+        FloatingActionButton(
+            child:Icon(Icons.check),
+            onPressed: (){
+              base.completarTarea(Sesion.tareas[tareaActual].idRelacion);
+
+        })
+
       ] else ...[
         Container(
             alignment: Alignment.center,

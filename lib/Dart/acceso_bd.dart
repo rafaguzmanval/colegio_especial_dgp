@@ -249,16 +249,32 @@ class AccesoBD {
       var tar = <String, dynamic>{
         "idUsuario": idUsuario,
         "idTarea": idTarea,
-        "fechainicio": DateTime.now().millisecondsSinceEpoch
+        "fechainicio": DateTime.now().millisecondsSinceEpoch,
+        "terminada" : false
       };
 
-      await db.collection("usuarioTieneTareas").add(tar).then((value) {
-        Sesion.paginaActual.esNuevaTareaCargando = false;
-        Sesion.paginaActual.actualizar();
-      });
+      await db.collection("usuarioTieneTareas").add(tar);
+      Sesion.paginaActual.esNuevaTareaCargando = false;
+      Sesion.paginaActual.actualizar();
+
     } catch (e) {
       print(e);
     }
+  }
+
+  completarTarea(idTareaAsignada) async
+  {
+    try
+    {
+      final ref = db.collection("usuarioTieneTareas");
+      return await ref.doc(idTareaAsignada).update({"terminada" : true});
+
+    }catch(e){
+      log(e.toString());
+      return false;
+    }
+
+
   }
 
   // Metodo para eliminar una tarea de un usuario pasandole el id de la relacion entre el usuario y la tarea
