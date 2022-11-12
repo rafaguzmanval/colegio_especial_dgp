@@ -18,6 +18,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:colegio_especial_dgp/Dart/arasaac.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
@@ -25,8 +26,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import "package:image_picker/image_picker.dart";
 import '../Dart/tarea.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+
 
 enum SeleccionImagen { camara, galeria, video }
 
@@ -54,10 +54,8 @@ class CrearTareaState extends State<CrearTarea> {
   var busqueda = "";
   var busquedaPrevia = "";
 
-  StreamController<String> controladorStream = StreamController<String>.broadcast();
 
 
-  var controladorBusqueda = TextEditingController();
 
 
 
@@ -75,9 +73,6 @@ class CrearTareaState extends State<CrearTarea> {
     if(controladorTexto != null)
     controladorTexto.dispose();
 
-    if(controladorBusqueda != null)
-      controladorBusqueda.dispose();
-
   }
 
   @override
@@ -92,22 +87,6 @@ class CrearTareaState extends State<CrearTarea> {
 
     });*/
 
-    controladorBusqueda.addListener(() async{
-
-      if(controladorBusqueda.text.isNotEmpty)
-        {
-          await http.get(Uri.parse("https://api.arasaac.org/api/pictograms/es/search/" + controladorBusqueda.text)).then((r){
-            controladorStream.add(r.body);
-          });
-        }
-      else
-        {
-          controladorStream.add("");
-        }
-
-
-
-    });
 
     Sesion.paginaActual = this;
   }
@@ -169,91 +148,7 @@ class CrearTareaState extends State<CrearTarea> {
           )),
     );
   }
-
-
-  ///Dialogo con el buscador de imagenes online de ARASAAC
-  buscadorArasaac(){
-    return Dialog(
-      child:SingleChildScrollView(
-        child: StreamBuilder(
-            stream: controladorStream.stream,
-            initialData: "",
-            builder: (BuildContext context,
-                AsyncSnapshot snapshot) {
-
-
-                  var msg = snapshot.data.toString() != "" ? json.decode(snapshot.data.toString()) : "";
-                  var longitud = msg.length;
-
-                  return Column(children: [
-                    TextField(controller: controladorBusqueda
-                      ,decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        hintText: 'Buscar ...',
-                      ),),
-                    if(snapshot.data.toString() != "")...[
-
-                      for (int i = 0; i < longitud && i < 20; i=i+2)
-
-                        Container(child:
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            for(int j = i; j < i+2 && j < longitud; j++)
-                          if(!msg[i]["sex"] && !msg[i]["violence"])...[
-                            Flexible(flex: 50,
-                                child:
-                            buscarARASAAC(msg, j))
-
-                          ]
-                        ],)
-                       )
-
-
-                      ]
-                  ]);
-
-
-
-            }
-        )
-      )
-
-    );
-
-}
-
-buscarARASAAC(mensaje,i){
-
-  return Container(
-      child: 
-          ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.transparent),
-            ),
-              onPressed: (){
-                fotoTomada = "https://api.arasaac.org/api/pictograms/" +
-                    mensaje[i]["_id"].toString();
-                actualizar();
-                Navigator.pop(context, false);
-              },
-              child:
-                  Column(
-                    children:[
-                      Center(child:Text(mensaje[i]["keywords"][0]["keyword"],style: TextStyle(color: Colors.black),)),
-                      Image.network(
-                          "https://api.arasaac.org/api/pictograms/" +
-                              mensaje[i]["_id"].toString()),
-                    ]
-                  )
-
-              
-          )
-  );
-
-}
-
+  
 
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
   Widget VistaProfesor() {
@@ -332,14 +227,9 @@ buscarARASAAC(mensaje,i){
               }),
           ElevatedButton(
               child: Text('Elige un pictograma desde la web de ARASAAC'),
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    builder: (context)
-                      {
-                      return buscadorArasaac();
-                      }
-                    );
+              onPressed: () async {
+                    fotoTomada =  await buscadorArasaac(context);
+                    actualizar();
             }
 
               ),

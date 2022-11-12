@@ -27,6 +27,8 @@ import 'dart:convert';
 
 var user = "";
 
+bool cambioColor = true;
+
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -92,7 +94,7 @@ class App extends StatelessWidget {
       supportedLocales: [Locale('es', 'ES'), Locale('en', 'US')],
       title: 'Proyecto Colegio Especial',
       theme:
-          ThemeData(primarySwatch: colorCustom, bottomAppBarColor: colorCustom),
+          ThemeData(primarySwatch: cambioColor?colorCustom:Colors.orange),
       home: LoginPage(),
     );
   }
