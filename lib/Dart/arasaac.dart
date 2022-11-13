@@ -34,6 +34,7 @@ _estructura(context) {
           .then((r) {
 
             //este if sirve para comprobar que la petición es la última que se ha hecho
+        // (la petición que desea el usuario es la última que escribe, no la que tarda más)
             if(r.request?.url.toString() == ultimaPeticion && controladorBusqueda.text != "")
               controladorStream.add(r.body);
             print(r.request?.url.toString());
@@ -42,6 +43,8 @@ _estructura(context) {
     }
     else
       {
+        //si no hay nada se manda al stream un string vacio para no hacer perder
+        // el tiempo al servidor de arasaac
         controladorStream.add("");
       }
   });
@@ -62,6 +65,7 @@ _estructura(context) {
                     width: MediaQuery.of(context).size.width - 300,
                   child:
                   Column(children: [
+                    //Textfield donde el usuario introduce la imágen que quiere buscar
                   TextField(
                     controller: controladorBusqueda,
                     decoration: InputDecoration(
@@ -70,12 +74,16 @@ _estructura(context) {
                     ),
                   ),
                   if (snapshot.data.toString() != "" ) ...[
-                    for (int i = 0; i < longitud && i < 20; i = i + 2)
+                    //Se fija como mucho 10 imágenes por motivos de rápidez y para
+                    //no sobrecargar la búsqueda de arasaac
+                    for (int i = 0; i < longitud && i < 10; i = i + 2)
                       Container(
                           child: Row(
+                            //en una fila se ponen dos imágenes
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           for (int j = i; j < i + 2 && j < longitud; j++)
+                            //Se censuran los resultados con sexo o violencia
                             if (!msg[j]["sex"] && !msg[j]["violence"]) ...[
                               Flexible(
                                   flex: 50,
