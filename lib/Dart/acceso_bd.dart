@@ -35,6 +35,35 @@ String encriptacionSha256(String password) {
   return hashvalue.toString();
 }
 
+String formatoFechafinalizado(minutos)
+{
+  log(minutos.toString());
+  if(minutos <= 2)
+  {
+    return "ahora mismo";
+  }
+  else if( minutos < 60)
+  {
+    return "hace " + minutos.toString() + " minutos";
+  }
+  else if(minutos == 60)
+  {
+    return "hace " + minutos.toString() + " hora";
+  }
+  else if( minutos < 24*60)
+  {
+    return "hace " + (minutos/60).toString() + " horas";
+  }
+  else if(minutos < 2*24*60)
+  {
+    return "hace " + ((minutos/60)/24).toString() + " día";
+  }
+  else
+  {
+    return  "hace " + ((minutos/60)/24).toString() + " días";
+  }
+}
+
 class AccesoBD {
   var db = FirebaseFirestore.instance;
   var storageRef = FirebaseStorage.instance.ref();
@@ -209,6 +238,13 @@ class AccesoBD {
             await consultarIDTarea(idTarea).then((nuevaTarea) {
               nuevaTarea.idRelacion = e.docs[i].id;
               nuevaTarea.terminada = e.docs[i].get("terminada");
+              if(nuevaTarea.terminada)
+                {
+                  var tiempo =  DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch - e.docs[i].get("fechaentrega") as int).minute;
+
+                  nuevaTarea.fechaentrega = formatoFechafinalizado(tiempo);
+
+                }
               nuevasTareas.add(nuevaTarea);
 
               if (nuevasTareas.length == e.docs.length) {
@@ -251,7 +287,10 @@ class AccesoBD {
         "idUsuario": idUsuario,
         "idTarea": idTarea,
         "fechainicio": DateTime.now().millisecondsSinceEpoch,
-        "terminada" : false
+        "fechafinal" : "",
+        "terminada" : false,
+        "fechaentrega" : 0
+
       };
 
       await db.collection("usuarioTieneTareas").add(tar);
@@ -268,13 +307,12 @@ class AccesoBD {
     try
     {
       final ref = db.collection("usuarioTieneTareas");
-      return await ref.doc(idTareaAsignada).update({"terminada" : true});
+      return await ref.doc(idTareaAsignada).update({"terminada" : true, "fechaentrega" : DateTime.now().millisecondsSinceEpoch});
 
     }catch(e){
       log(e.toString());
       return false;
     }
-
 
   }
 

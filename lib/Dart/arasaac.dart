@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+///función con el dialog para encontrar imágenes de arasaac
 buscadorArasaac({required BuildContext context}) {
   return showDialog(
       context: context,
@@ -20,17 +21,29 @@ _estructura(context) {
 
   var controladorBusqueda = TextEditingController();
 
+  var ultimaPeticion = "";
+
+
   controladorBusqueda.addListener(() async {
-    if (controladorBusqueda.text.isNotEmpty) {
+
+    if (controladorBusqueda.text != "" && controladorBusqueda.text.isNotEmpty) {
+      ultimaPeticion = "https://api.arasaac.org/api/pictograms/es/search/" +
+    controladorBusqueda.text;
       await http
-          .get(Uri.parse("https://api.arasaac.org/api/pictograms/es/search/" +
-              controladorBusqueda.text))
+          .get(Uri.parse(ultimaPeticion))
           .then((r) {
-        controladorStream.add(r.body);
+
+            //este if sirve para comprobar que la petición es la última que se ha hecho
+            if(r.request?.url.toString() == ultimaPeticion && controladorBusqueda.text != "")
+              controladorStream.add(r.body);
+            print(r.request?.url.toString());
+
       });
-    } else {
-      controladorStream.add("");
     }
+    else
+      {
+        controladorStream.add("");
+      }
   });
 
   return Dialog(
@@ -56,7 +69,7 @@ _estructura(context) {
                       hintText: 'Buscar ...',
                     ),
                   ),
-                  if (snapshot.data.toString() != "") ...[
+                  if (snapshot.data.toString() != "" ) ...[
                     for (int i = 0; i < longitud && i < 20; i = i + 2)
                       Container(
                           child: Row(
@@ -71,6 +84,10 @@ _estructura(context) {
                         ],
                       ))
                   ]
+                    else...
+                      [
+                        Container()
+                      ]
                 ])
                   );
               })));

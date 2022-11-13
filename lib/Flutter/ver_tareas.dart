@@ -148,11 +148,8 @@ class VerTareasState extends State<VerTareas> {
                   height: 60,
                   width: 60,
                   margin: EdgeInsets.only(top: 100.0, left: 10.0, right: 10),
-                  child: Flexible(
-                      flex: 20,
-                      child: Visibility(
-                        child: Container(
-                          child: FittedBox(
+                        child: FittedBox(
+                          child: Visibility(
                             child: FloatingActionButton(
                                 onPressed: () {
                                   if (tareaActual > 0) {
@@ -164,13 +161,14 @@ class VerTareasState extends State<VerTareas> {
                                   actualizar();
                                 },
                                 child: const Icon(Icons.arrow_left)),
+                                visible: verFlechaIzquierda,
                           ),
-                        ),
-                        visible: verFlechaIzquierda,
-                      ))),
+
+
+                      )),
               Flexible(
                   flex: 40,
-                  child: Container(
+                   child:Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                         border: Border.all(width: 2),
@@ -199,11 +197,9 @@ class VerTareasState extends State<VerTareas> {
                   height: 60,
                   width: 60,
                   margin: EdgeInsets.only(top: 100.0, left: 10.0, right: 10),
-                  child: Flexible(
-                      flex: 20,
-                      child: Visibility(
-                        child: Container(
+
                           child: FittedBox(
+                            child: Visibility(
                             child: FloatingActionButton(
                                 onPressed: () {
                                   if (tareaActual < Sesion.tareas.length) {
@@ -217,10 +213,10 @@ class VerTareasState extends State<VerTareas> {
                                   actualizar();
                                 },
                                 child: const Icon(Icons.arrow_right)),
+                              visible: verFlechaDerecha,
                           ),
-                        ),
-                        visible: verFlechaDerecha,
-                      )))
+
+                      ))
             ]),
 
         Visibility(
@@ -229,11 +225,16 @@ class VerTareasState extends State<VerTareas> {
         FloatingActionButton(
             child:Icon(Icons.check),
             onPressed: (){
-              Sesion.tareas[tareaActual].terminada = true;
+
               base.completarTarea(Sesion.tareas[tareaActual].idRelacion);
               actualizar();
 
-        }))
+        })),
+
+        Visibility(
+            visible: Sesion.tareas[tareaActual].terminada,
+            child:Text("Tarea terminada " + Sesion.tareas[tareaActual].fechaentrega.toString()),
+        )
 
       ] else ...[
         Container(
