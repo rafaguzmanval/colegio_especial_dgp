@@ -37,7 +37,7 @@ _estructura(context) {
         // (la petición que desea el usuario es la última que escribe, no la que tarda más)
             if(r.request?.url.toString() == ultimaPeticion && controladorBusqueda.text != "")
               controladorStream.add(r.body);
-            print(r.request?.url.toString());
+            //print(r.request?.url.toString());
 
       });
     }
@@ -101,6 +101,7 @@ _estructura(context) {
               })));
 }
 
+//Se genera la imágen dentro de cada fila individualmente
 _buscarImagen(context, mensaje, i) {
   return Container(
       child: ElevatedButton(

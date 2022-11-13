@@ -43,7 +43,10 @@ class PasswordLoginState extends State<PasswordLogin> {
   @override
   void initState() {
     super.initState();
+
+
     Sesion.paginaActual = this;
+
   }
 
   final myController = TextEditingController();
@@ -85,6 +88,7 @@ class PasswordLoginState extends State<PasswordLogin> {
 
   // Crear la vista dependiendo del metodo de clave que se quiere
   Widget vista() {
+
     if (Sesion.metodoLogin == Passportmethod.pin.toString()) {
       return vistaPin();
     } else {

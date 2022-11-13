@@ -253,6 +253,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
             }).toList(),
             onChanged: (String? value) {
               setState(() {
+                controladorPassword.text = "";
                 rolElegido = value!;
               });
             },

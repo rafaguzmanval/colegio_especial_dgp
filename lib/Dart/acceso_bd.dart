@@ -44,23 +44,23 @@ String formatoFechafinalizado(minutos)
   }
   else if( minutos < 60)
   {
-    return "hace " + minutos.toString() + " minutos";
+    return "hace " + (minutos~/1).toString() + " minutos";
   }
-  else if(minutos == 60)
+  else if(minutos >= 60 && minutos < 60*2)
   {
-    return "hace " + minutos.toString() + " hora";
+    return "hace " + (minutos~/60).toString() + " hora";
   }
   else if( minutos < 24*60)
   {
-    return "hace " + (minutos/60).toString() + " horas";
+    return "hace " + (minutos~/60).toString() + " horas";
   }
   else if(minutos < 2*24*60)
   {
-    return "hace " + ((minutos/60)/24).toString() + " día";
+    return "hace " + ((minutos~/60)~/24).toString() + " día";
   }
   else
   {
-    return  "hace " + ((minutos/60)/24).toString() + " días";
+    return  "hace " + ((minutos~/60)~/24).toString() + " días";
   }
 }
 
@@ -238,9 +238,10 @@ class AccesoBD {
             await consultarIDTarea(idTarea).then((nuevaTarea) {
               nuevaTarea.idRelacion = e.docs[i].id;
               nuevaTarea.terminada = e.docs[i].get("terminada");
+              nuevaTarea.fallida = e.docs[i].get("fallida");
               if(nuevaTarea.terminada)
                 {
-                  var tiempo =  DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch - e.docs[i].get("fechaentrega") as int).minute;
+                  var tiempo =  (DateTime.now().millisecondsSinceEpoch - e.docs[i].get("fechaentrega"))/(1000*60);
 
                   nuevaTarea.fechaentrega = formatoFechafinalizado(tiempo);
 
@@ -281,24 +282,25 @@ class AccesoBD {
   }
 
   // Metodo para añadir una tarea con el id de tarea a un usuario en especifico con id de usuario
-  addTareaAlumno(idUsuario, idTarea) async {
+  addTareaAlumno(idUsuario, idTarea,fechafinal) async {
     try {
+
       var tar = <String, dynamic>{
         "idUsuario": idUsuario,
         "idTarea": idTarea,
         "fechainicio": DateTime.now().millisecondsSinceEpoch,
-        "fechafinal" : "",
+        "fechafinal" : fechafinal,
         "terminada" : false,
+        "fallida" : false,
         "fechaentrega" : 0
 
       };
 
-      await db.collection("usuarioTieneTareas").add(tar);
-      Sesion.paginaActual.esNuevaTareaCargando = false;
-      Sesion.paginaActual.actualizar();
+      await db.collection("usuarioTieneTareas").add(tar).then((value) { return true;});
 
     } catch (e) {
       print(e);
+      return false;
     }
   }
 
@@ -308,6 +310,21 @@ class AccesoBD {
     {
       final ref = db.collection("usuarioTieneTareas");
       return await ref.doc(idTareaAsignada).update({"terminada" : true, "fechaentrega" : DateTime.now().millisecondsSinceEpoch});
+
+    }catch(e){
+      log(e.toString());
+      return false;
+    }
+
+  }
+
+
+  fallarTarea(idTareaAsignada) async
+  {
+    try
+    {
+      final ref = db.collection("usuarioTieneTareas");
+      return await ref.doc(idTareaAsignada).update({"fallida" : true, "fechaentrega" : DateTime.now().millisecondsSinceEpoch});
 
     }catch(e){
       log(e.toString());

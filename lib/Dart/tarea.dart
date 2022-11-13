@@ -21,7 +21,10 @@ class Tarea {
   var controladoresVideo = [];
   var orden;
   var terminada;
+  var fallida;
+  var fechalimite;
   var fechaentrega;
+
 
   // Constructor
   Tarea(

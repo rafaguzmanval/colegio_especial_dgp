@@ -17,6 +17,7 @@
 
 import 'package:colegio_especial_dgp/Dart/main.dart';
 import 'package:colegio_especial_dgp/Dart/passport_method.dart';
+import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
 import 'package:colegio_especial_dgp/Flutter/password_login.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../Dart/notificacion.dart';
@@ -180,8 +181,18 @@ class LoginPageState extends State<LoginPage> {
   }
 
   SeleccionUsuario() async {
-    await Navigator.push(
-        context, MaterialPageRoute(builder: (context) => PasswordLogin()));
+
+    if(Sesion.metodoLogin == "free")
+    {
+      await Navigator.push(
+          context, MaterialPageRoute(builder: (context) => MyHomePage()));
+    }
+    else
+      {
+        await Navigator.push(
+            context, MaterialPageRoute(builder: (context) => PasswordLogin()));
+      }
+
 
     inicializar();
   }
@@ -267,10 +278,17 @@ class LoginPageState extends State<LoginPage> {
                     Sesion.id = usuarios[j].id;
                     Sesion.nombre = usuarios[j].nombre;
                     Sesion.rol = usuarios[j].rol;
-                    Sesion.metodoLogin =
+                    if(usuarios[j].metodoLogeo == Passportmethod.free.toString())
+                      {
+                        Sesion.metodoLogin = "free";
+                      }
+                    else
+                      {
+                        Sesion.metodoLogin =
                         usuarios[j].metodoLogeo == Passportmethod.pin.toString()
                             ? Passportmethod.pin.toString()
                             : Passportmethod.text.toString();
+                      }
                     SeleccionUsuario();
                   },
                 ))

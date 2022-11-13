@@ -33,6 +33,7 @@ class VerTareasState extends State<VerTareas> {
   var video = null;
   var alumnos = [];
   var fotoTomada;
+  var mostrarBotones = true;
   ImagePicker capturador = new ImagePicker();
 
   var registrando = false;
@@ -89,6 +90,10 @@ class VerTareasState extends State<VerTareas> {
   /// Este es el build de la clase MyHomePage que devuelve toda la vista génerica más la vista especial de cada usuario.
   @override
   Widget build(BuildContext context) {
+
+    //Si se borra la última tarea mientras el usuario la está viendo entonces es
+    // necesario que se le redirija a la penúltima
+
     return new Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -144,6 +149,8 @@ class VerTareasState extends State<VerTareas> {
             //ROW 2
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+
+              ///FLECHA IZQUIERDA
               Container(
                   height: 60,
                   width: 60,
@@ -154,6 +161,7 @@ class VerTareasState extends State<VerTareas> {
                                 onPressed: () {
                                   if (tareaActual > 0) {
                                     tareaActual--;
+                                    mostrarBotones = !Sesion.tareas[tareaActual].terminada && !Sesion.tareas[tareaActual].fallida;
                                     verFlechaDerecha = true;
                                   }
                                   verFlechaIzquierda = tareaActual != 0;
@@ -166,6 +174,9 @@ class VerTareasState extends State<VerTareas> {
 
 
                       )),
+
+              ///CONTENEDOR DE LA TAREA
+
               Flexible(
                   flex: 40,
                    child:Container(
@@ -193,6 +204,9 @@ class VerTareasState extends State<VerTareas> {
                       ]
                     ]),
                   )),
+
+              ///FLECHA DERECHA
+
               Container(
                   height: 60,
                   width: 60,
@@ -204,6 +218,7 @@ class VerTareasState extends State<VerTareas> {
                                 onPressed: () {
                                   if (tareaActual < Sesion.tareas.length) {
                                     tareaActual++;
+                                    mostrarBotones = !Sesion.tareas[tareaActual].terminada && !Sesion.tareas[tareaActual].fallida;
                                     verFlechaIzquierda = true;
                                   }
 
@@ -219,21 +234,49 @@ class VerTareasState extends State<VerTareas> {
                       ))
             ]),
 
-        Visibility(
-          visible: !Sesion.tareas[tareaActual].terminada,
-            child:
-        FloatingActionButton(
-            child:Icon(Icons.check),
-            onPressed: (){
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
 
-              base.completarTarea(Sesion.tareas[tareaActual].idRelacion);
-              actualizar();
+          Visibility(
+              visible: !Sesion.tareas[tareaActual].fallida && !Sesion.tareas[tareaActual].terminada && mostrarBotones,
+              child:
+              FloatingActionButton(
+                  child:Icon(Icons.cancel_outlined),
+                  onPressed: (){
 
-        })),
+                    base.fallarTarea(Sesion.tareas[tareaActual].idRelacion);
+                    mostrarBotones = false;
+                    actualizar();
+
+                  })),
+
+          Visibility(
+              visible: !Sesion.tareas[tareaActual].terminada && !Sesion.tareas[tareaActual].fallida && mostrarBotones,
+              child:
+              FloatingActionButton(
+                  child:Icon(Icons.check),
+                  onPressed: (){
+
+                    base.completarTarea(Sesion.tareas[tareaActual].idRelacion);
+                    mostrarBotones = false;
+                    actualizar();
+
+                  })),
+
+
+
+        ],),
+
 
         Visibility(
             visible: Sesion.tareas[tareaActual].terminada,
-            child:Text("Tarea terminada " + Sesion.tareas[tareaActual].fechaentrega.toString()),
+            child:Text("Tarea terminada " + Sesion.tareas[tareaActual].fechaentrega.toString() + " :)"),
+        ),
+
+        Visibility(
+          visible: Sesion.tareas[tareaActual].fallida,
+          child:Text("Tarea sin poder completar :("),
         )
 
       ] else ...[
@@ -385,6 +428,10 @@ class VerTareasState extends State<VerTareas> {
   void actualizar() async {
     if (Sesion.tareas.length > 1 && tareaActual == 0) {
       verFlechaDerecha = true;
+    }
+    if(tareaActual >= Sesion.tareas.length && Sesion.tareas.length > 0)
+    {
+      tareaActual = Sesion.tareas.length - 1;
     }
     setState(() {});
   }
