@@ -35,34 +35,7 @@ String encriptacionSha256(String password) {
   return hashvalue.toString();
 }
 
-String formatoFechafinalizado(minutos)
-{
-  log(minutos.toString());
-  if(minutos <= 2)
-  {
-    return "ahora mismo";
-  }
-  else if( minutos < 60)
-  {
-    return "hace " + (minutos~/1).toString() + " minutos";
-  }
-  else if(minutos >= 60 && minutos < 60*2)
-  {
-    return "hace " + (minutos~/60).toString() + " hora";
-  }
-  else if( minutos < 24*60)
-  {
-    return "hace " + (minutos~/60).toString() + " horas";
-  }
-  else if(minutos < 2*24*60)
-  {
-    return "hace " + ((minutos~/60)~/24).toString() + " día";
-  }
-  else
-  {
-    return  "hace " + ((minutos~/60)~/24).toString() + " días";
-  }
-}
+
 
 class AccesoBD {
   var db = FirebaseFirestore.instance;
@@ -239,12 +212,11 @@ class AccesoBD {
               nuevaTarea.idRelacion = e.docs[i].id;
               nuevaTarea.terminada = e.docs[i].get("terminada");
               nuevaTarea.fallida = e.docs[i].get("fallida");
-              if(nuevaTarea.terminada)
+              nuevaTarea.fechafinal = e.docs[i].get("fechafinal");
+              if(nuevaTarea.terminada || nuevaTarea.fallida)
                 {
-                  var tiempo =  (DateTime.now().millisecondsSinceEpoch - e.docs[i].get("fechaentrega"))/(1000*60);
-
-                  nuevaTarea.fechaentrega = formatoFechafinalizado(tiempo);
-
+                  nuevaTarea.fechaentrega =  (DateTime.now().millisecondsSinceEpoch - e.docs[i].get("fechaentrega"))/(1000*60);
+                  print("nuevos minutos " + nuevaTarea.fechaentrega.toString());
                 }
               nuevasTareas.add(nuevaTarea);
 

@@ -20,6 +20,7 @@ import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import "package:image_picker/image_picker.dart";
+import 'dart:async';
 
 class VerTareas extends StatefulWidget {
   @override
@@ -34,10 +35,12 @@ class VerTareasState extends State<VerTareas> {
   var alumnos = [];
   var fotoTomada;
   var mostrarBotones = true;
+
   ImagePicker capturador = new ImagePicker();
 
   var registrando = false;
   var mensajeDeRegistro = "";
+
 
   var indiceTextos = 0;
   var indiceImagenes = 0;
@@ -56,6 +59,8 @@ class VerTareasState extends State<VerTareas> {
 
   bool verFlechaIzquierda = false;
   bool verFlechaDerecha = false;
+  var temporizador = null;
+  var mensajeTemporizador = "";
 
   ///Cuándo se pasa de página es necesario que todos los controladores de los formularios y de los reproductores de vídeo se destruyan.
   @override
@@ -67,6 +72,8 @@ class VerTareasState extends State<VerTareas> {
       Sesion.tareas[i].controladoresVideo.clear();
     }
 
+    if(temporizador != null)
+      temporizador.cancel();
     super.dispose();
   }
 
@@ -91,8 +98,6 @@ class VerTareasState extends State<VerTareas> {
   @override
   Widget build(BuildContext context) {
 
-    //Si se borra la última tarea mientras el usuario la está viendo entonces es
-    // necesario que se le redirija a la penúltima
 
     return new Scaffold(
       appBar: AppBar(
@@ -120,6 +125,83 @@ class VerTareasState extends State<VerTareas> {
     );
   }
 
+  formatTiempoRestante()
+  {
+
+    if(Sesion.tareas[tareaActual].terminada || Sesion.tareas[tareaActual].fallida)
+      {
+        mensajeTemporizador = "";
+        actualizar();
+        return;
+      }
+
+      var tiempoRestante = DateTime.fromMillisecondsSinceEpoch(Sesion.tareas[tareaActual].fechafinal).difference(DateTime.now());
+      mensajeTemporizador = "Te quedan: ";
+      if(tiempoRestante.isNegative)
+      {
+        mensajeTemporizador = "Te has retrasado ";
+
+      }
+
+    var diasRestantes ;
+    var horasRestantes ;
+    var minutosRestantes ;
+    var segundosRestantes ;
+
+
+
+    diasRestantes = (tiempoRestante.inDays).abs();
+    if(diasRestantes != 0)
+      mensajeTemporizador += " " + diasRestantes.toString() + (diasRestantes > 1?" días": " día");
+
+    horasRestantes = (tiempoRestante.inHours - tiempoRestante.inDays * 24).abs();
+    if(horasRestantes != 0)
+      mensajeTemporizador += " " + horasRestantes.toString() + (horasRestantes > 1?" horas": " hora");
+
+    minutosRestantes = (tiempoRestante.inMinutes - tiempoRestante.inHours*60).abs();
+    if(minutosRestantes != 0)
+      mensajeTemporizador += " " + minutosRestantes.toString() + (minutosRestantes > 1 ? " minutos" : " minuto");
+
+    segundosRestantes = (tiempoRestante.inSeconds- tiempoRestante.inMinutes*60).abs();
+    if(segundosRestantes != 0)
+      mensajeTemporizador += " " + segundosRestantes.toString() + (segundosRestantes > 1?" segundos": " segundo");
+
+
+
+    temporizador = Timer(Duration(milliseconds: 1000),formatTiempoRestante);
+
+    actualizar();
+  }
+
+
+  String formatoFechafinalizado(minutos)
+  {
+    if(minutos <= 2)
+    {
+      return "ahora mismo";
+    }
+    else if( minutos < 60)
+    {
+      return "hace " + (minutos~/1).toString() + " minutos";
+    }
+    else if(minutos >= 60 && minutos < 60*2)
+    {
+      return "hace " + (minutos~/60).toString() + " hora";
+    }
+    else if( minutos < 24*60)
+    {
+      return "hace " + (minutos~/60).toString() + " horas";
+    }
+    else if(minutos < 2*24*60)
+    {
+      return "hace " + ((minutos~/60)~/24).toString() + " día";
+    }
+    else
+    {
+      return  "hace " + ((minutos~/60)~/24).toString() + " días";
+    }
+  }
+
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
   Widget VistaProfesor() {
     return Container();
@@ -127,24 +209,44 @@ class VerTareasState extends State<VerTareas> {
 
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
   Widget VistaAlumno() {
+
+
+    if (Sesion.tareas.length > 0)
+      {
+
+        if(temporizador == null)
+          {
+            print("inicializacion formatTiempoRestante");
+            temporizador = "";
+            formatTiempoRestante();
+          }
+
+
+      }
+
     return Column(children: <Widget>[
-      Wrap(
-        //ROW 2
-        alignment: WrapAlignment.end,
-        //spacing: 800,
-        children: [
-          Container(
-            child: Text(
-              "${"\nTareas de: " + Sesion.nombre + "\n"}",
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 20.0,
+
+      if (Sesion.tareas.length > 0) ...[
+        Wrap(
+          //ROW 2
+          alignment: WrapAlignment.end,
+          //spacing: 800,
+          children: [
+            Container(
+              child: Text(
+
+                //"${"\nTareas de: " + Sesion.nombre + "\n"}",
+                //DateFormat('d/M/y HH:mm').format(DateTime.fromMillisecondsSinceEpoch(Sesion.tareas[tareaActual].fechafinal)).toString(),
+                mensajeTemporizador,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 20.0,
+                ),
               ),
             ),
-          ),
-        ],
-      ),
-      if (Sesion.tareas.length > 0) ...[
+
+          ],
+        ),
         Row(
             //ROW 2
             mainAxisAlignment: MainAxisAlignment.center,
@@ -162,6 +264,7 @@ class VerTareasState extends State<VerTareas> {
                                   if (tareaActual > 0) {
                                     tareaActual--;
                                     mostrarBotones = !Sesion.tareas[tareaActual].terminada && !Sesion.tareas[tareaActual].fallida;
+                                    formatTiempoRestante();
                                     verFlechaDerecha = true;
                                   }
                                   verFlechaIzquierda = tareaActual != 0;
@@ -219,6 +322,7 @@ class VerTareasState extends State<VerTareas> {
                                   if (tareaActual < Sesion.tareas.length) {
                                     tareaActual++;
                                     mostrarBotones = !Sesion.tareas[tareaActual].terminada && !Sesion.tareas[tareaActual].fallida;
+                                    formatTiempoRestante();
                                     verFlechaIzquierda = true;
                                   }
 
@@ -271,7 +375,7 @@ class VerTareasState extends State<VerTareas> {
 
         Visibility(
             visible: Sesion.tareas[tareaActual].terminada,
-            child:Text("Tarea terminada " + Sesion.tareas[tareaActual].fechaentrega.toString() + " :)"),
+            child:Text("Tarea terminada " + formatoFechafinalizado(Sesion.tareas[tareaActual].fechaentrega) + " :)"),
         ),
 
         Visibility(
@@ -432,6 +536,7 @@ class VerTareasState extends State<VerTareas> {
     if(tareaActual >= Sesion.tareas.length && Sesion.tareas.length > 0)
     {
       tareaActual = Sesion.tareas.length - 1;
+      formatTiempoRestante();
     }
     setState(() {});
   }

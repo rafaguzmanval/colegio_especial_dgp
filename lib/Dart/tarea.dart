@@ -22,7 +22,7 @@ class Tarea {
   var orden;
   var terminada;
   var fallida;
-  var fechalimite;
+  var fechafinal;
   var fechaentrega;
 
 
