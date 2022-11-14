@@ -33,7 +33,6 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
   var usuarioPerfil;
 
   var imagenPerfil;
-  
 
   //Tareas del alumno que están asignadas y se muestran en su perfil
   var tareasAlumno = [];
@@ -41,7 +40,6 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
   //Todas las tareas que el profesor selecciona para asignar al alumno
   var tareas = [];
   var nombresTareas = ["Nada seleccionado"];
-
 
   bool esTareaEliminandose = false;
 
@@ -90,7 +88,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
           )),
     );
   }
-  
+
   // Carga el perfil del alumno
   Widget VistaProfesor() {
     return perfilAlumno();
@@ -105,7 +103,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
       ),
     );
   }
-  
+
   // Carga el perfil del alumno
   Widget VistaAdministrador() {
     return perfilAlumno();
@@ -119,7 +117,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
       ),
     );
   }
-  
+
   // Carga el perfil del alumno
   Widget perfilAlumno() {
     return Expanded(
@@ -144,21 +142,23 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
               for (int i = 0; i < Sesion.tareas.length; i++)
                 if (Sesion.tareas[i] is Tarea) ...[
                   Container(
+                      margin: EdgeInsets.only(top: 10),
                       alignment: Alignment.center,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton(
-
-                            onPressed: () async{
-                            Sesion.argumentos.add(i);
-                            await Navigator.push(context,  MaterialPageRoute(builder: (context) => VerTareas()));
-                            Sesion.paginaActual = this;
-                          }, child:
-                          Text(Sesion.tareas[i].nombre),
+                            onPressed: () async {
+                              Sesion.argumentos.add(i);
+                              await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => VerTareas()));
+                              Sesion.paginaActual = this;
+                            },
+                            child: Text(Sesion.tareas[i].nombre),
                           ),
                           IconButton(
-
                               onPressed: () async {
                                 await base.eliminarTareaAlumno(
                                     Sesion.tareas[i].idRelacion);
@@ -178,16 +178,13 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                   new CircularProgressIndicator()
                 ],
             ],
-
-
             if (tareas != null && nombresTareas.length > 1) ...[
-
-              FloatingActionButton(
-                heroTag: "addtarea",
-                  onPressed: () => addTarea(context: context),
-                child:Icon(Icons.add)
-              )
-
+              Container(
+                  margin: EdgeInsets.only(top: 20),
+                  child: FloatingActionButton(
+                      heroTag: "addtarea",
+                      onPressed: () => addTarea(context: context),
+                      child: Icon(Icons.add)))
             ],
           ] else ...[
             new CircularProgressIndicator()
@@ -203,7 +200,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
     await base.consultarTareasAsignadasAlumno(Sesion.seleccion.id, false);
     actualizar();
   }
-  
+
   // Metodo que carga las tareas del alumno
   cargarTareas() async {
     tareas = await base.consultarTodasLasTareas();
@@ -214,16 +211,14 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
 
     actualizar();
   }
+
   // Actualizar la pagina
   void actualizar() {
-
     setState(() {});
     esTareaEliminandose = false;
   }
 
-
   addTarea({required BuildContext context}) {
-
     var tareaElegida = "Nada seleccionado";
     var idTareaElegida = null;
     var fechafinal = null;
@@ -235,160 +230,141 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
         context: context,
         builder: (context) {
           return Dialog(
-            child: StreamBuilder(
-            stream: controladorStream.stream,
-            initialData: "",
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              child: StreamBuilder(
+                  stream: controladorStream.stream,
+                  initialData: "",
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    return Container(
+                        height: MediaQuery.of(context).size.height - 100,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin:
+                                  EdgeInsets.only(top: 10, left: 10),
+                              child: DropdownButton(
+                                key: Key("Multiselección"),
+                                value: tareaElegida,
+                                items: nombresTareas.map((String value) {
+                                  return DropdownMenuItem(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                                onChanged: (String? value) {
+                                  // This is called when the user selects an item.
 
+                                  tareaElegida = value!;
 
-              return
-                  Container(
-                      height: MediaQuery.of(context).size.height - 100,
-                  child: Column(
+                                  if (tareaElegida == "Nada seleccionado") {
+                                    idTareaElegida = null;
+                                  } else {
+                                    int i = 0;
+                                    bool salir = false;
+                                    while (i < tareas.length && !salir) {
+                                      if (tareas[i].nombre == tareaElegida) {
+                                        idTareaElegida = tareas[i].id;
+                                        salir = true;
+                                      }
+                                      i++;
+                                    }
+                                  }
 
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(top: 10),
-                      child:
-                    DropdownButton(
-                      key: Key("Multiselección"),
-                      value: tareaElegida,
-                      items: nombresTareas.map((String value) {
-                        return DropdownMenuItem(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String? value) {
-                        // This is called when the user selects an item.
+                                  controladorStream.add("");
+                                },
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 5),
+                              child: ElevatedButton(
+                                  onPressed: () async {
+                                    await showDatePicker(
+                                            context: context,
+                                            locale: const Locale("es", "ES"),
+                                            initialDate: DateTime.now(),
+                                            firstDate: DateTime.now(),
+                                            lastDate: DateTime(2100))
+                                        .then((e) {
+                                      fechafinal = e;
+                                      controladorStream.add("");
+                                    });
+                                  },
+                                  child: Text((fechafinal == null)
+                                      ? "Elige fecha de entrega límite"
+                                      : DateFormat('d/M/y')
+                                          .format(fechafinal))),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 5),
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  await showTimePicker(
+                                    context: context,
+                                    initialTime: TimeOfDay.now(),
+                                  ).then((e) {
+                                    horafinal = e;
+                                    controladorStream.add("");
+                                  });
+                                },
+                                child: Text((horafinal == null)
+                                    ? "Elige hora de entrega límite"
+                                    : horafinal.hour.toString() +
+                                        ":" +
+                                        ((horafinal.minute > 9)
+                                            ? horafinal.minute.toString()
+                                            : "0" +
+                                                horafinal.minute.toString())),
+                              ),
+                            ),
+                            Visibility(
+                              visible: tareaElegida != "Nada seleccionado",
+                              child: Container(
+                                margin: EdgeInsets.only(bottom: 10),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.orange),
+                                  child: Text(
+                                    "Añadir Tarea",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    if (idTareaElegida != null) {
+                                      if (fechafinal == null)
+                                        fechafinal = DateTime.now();
+                                      if (horafinal == null)
+                                        horafinal =
+                                            TimeOfDay(hour: 23, minute: 59);
 
-                          tareaElegida = value!;
-
-                          if (tareaElegida == "Nada seleccionado") {
-                            idTareaElegida = null;
-                          } else {
-                            int i = 0;
-                            bool salir = false;
-                            while (i < tareas.length && !salir) {
-                              if (tareas[i].nombre == tareaElegida) {
-                                idTareaElegida = tareas[i].id;
-                                salir = true;
-                              }
-                              i++;
-                            }
-                          }
-
-
-                          controladorStream.add("");
-                      },
-                    ),
-                    ),
-
-                    Container(
-                      margin: EdgeInsets.only(top: 5),
-                      child:
-                    ElevatedButton(
-                        onPressed: () async {
-                          await showDatePicker(
-                              context: context,
-                              locale: const Locale("es", "ES"),
-                              initialDate: DateTime.now(),
-                              firstDate: DateTime.now(),
-                              lastDate: DateTime(2100))
-                              .then((e) {
-                            fechafinal = e;
-                            controladorStream.add("");
-                          });
-                        },
-                        child: Text((fechafinal == null)
-                            ? "Elige fecha de entrega límite"
-                            : DateFormat('d/M/y').format(fechafinal))),
-                    ),
-
-
-                    Container(
-                      margin: EdgeInsets.only(top: 5),
-                    child:
-                    ElevatedButton(
-                      onPressed: () async {
-                        await showTimePicker(
-                          context: context,
-                          initialTime: TimeOfDay.now(),
-                        )
-                            .then((e) {
-                          horafinal = e;
-                          controladorStream.add("");
-                        });
-                      },
-                      child: Text((horafinal == null)
-                          ? "Elige hora de entrega límite"
-                          : horafinal.hour.toString() + ":" + ((horafinal
-                          .minute > 9) ? horafinal.minute.toString() : "0" +
-                          horafinal.minute.toString())),
-                    ),
-                    ),
-
-                    Visibility(
-                      visible: tareaElegida != "Nada seleccionado",
-                      child:
-                          Container(
-
-
-                            child:
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
-
-                        child: Text(
-                          "Añadir Tarea",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        onPressed: () async {
-                          if (idTareaElegida != null) {
-                            if (fechafinal == null)
-                              fechafinal = DateTime.now();
-                            if (horafinal == null)
-                              horafinal = TimeOfDay(hour: 23, minute: 59);
-
-                            var tiempoFinal = DateTime(
-                                fechafinal.year, fechafinal.month, fechafinal.day,
-                                horafinal.hour, horafinal.minute)
-                                .millisecondsSinceEpoch;
-                            await base.addTareaAlumno(
-                                Sesion.seleccion.id, idTareaElegida, tiempoFinal).then((valor){
-                                  esNuevaTareaCargando = false;
-                                  Navigator.pop(
-                                      context);
-                            });
-                            esNuevaTareaCargando = true;
-                            controladorStream.add("");
-                          }
-                        },
-                      ),
-                    ),
-                    ),
-                    if (esNuevaTareaCargando) ...[
-                      new CircularProgressIndicator()
-                    ]
-                  ],
-
-                )
-                  );
-
-
-            }
-          )
-
-          )
-          ;
+                                      var tiempoFinal = DateTime(
+                                              fechafinal.year,
+                                              fechafinal.month,
+                                              fechafinal.day,
+                                              horafinal.hour,
+                                              horafinal.minute)
+                                          .millisecondsSinceEpoch;
+                                      await base
+                                          .addTareaAlumno(Sesion.seleccion.id,
+                                              idTareaElegida, tiempoFinal)
+                                          .then((valor) {
+                                        esNuevaTareaCargando = false;
+                                        Navigator.pop(context);
+                                      });
+                                      esNuevaTareaCargando = true;
+                                      controladorStream.add("");
+                                    }
+                                  },
+                                ),
+                              ),
+                            ),
+                            if (esNuevaTareaCargando) ...[
+                              new CircularProgressIndicator()
+                            ]
+                          ],
+                        ));
+                  }));
         });
   }
-
-
-
-
 }
-
