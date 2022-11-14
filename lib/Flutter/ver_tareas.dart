@@ -364,14 +364,15 @@ class VerTareasState extends State<VerTareas> {
                       Sesion.tareas[tareaActual].estado == "sinFinalizar" &&
                           mostrarBotones,
                   child: Container(
-                    margin: EdgeInsets.all(20),
-                    width: 100,
-                    height: 100,
-                    decoration: BoxDecoration(border: Border.all(width: 1)),
+                      margin: EdgeInsets.all(15),
+                      width: 150,
+                      height: 150,
                       child: FloatingActionButton(
                           heroTag: "Cancelar tarea",
                           child: Image.asset(
-                          "assets/tachar.png",
+                            "assets/tachar.png",
+                            height: 100,
+                            width: 100,
                           ),
                           onPressed: () {
                             dialogCompletarTarea(false);
@@ -380,12 +381,22 @@ class VerTareasState extends State<VerTareas> {
                   visible:
                       Sesion.tareas[tareaActual].estado == "sinFinalizar" &&
                           mostrarBotones,
-                  child: FloatingActionButton(
-                      heroTag: "aceptarTarea",
-                      child: Icon(Icons.check),
-                      onPressed: () {
-                        dialogCompletarTarea(true);
-                      })),
+                  child: Container(
+                      margin: EdgeInsets.all(15),
+                      width: 150,
+                      height: 150,
+                      child: FloatingActionButton(
+                          heroTag: "aceptarTarea",
+                          child: Flexible(
+                              flex: 1,
+                              child: Image.asset(
+                                "assets/correcto.png",
+                                height: 100,
+                                width: 100,
+                              )),
+                          onPressed: () {
+                            dialogCompletarTarea(true);
+                          }))),
             ],
           ),
         ],
@@ -609,39 +620,61 @@ class VerTareasState extends State<VerTareas> {
         builder: (context) {
           return Dialog(
             child: Column(children: [
-              Text("Seguro que quieres " +
-                  (estado ? "terminar" : "cancelar") +
-                  "la tarea"),
-              Text("Introduce un comentario opcional:"),
+              Text("\nIntroduce un comentario opcional:"),
               TextField(
                 controller: controladorRespuesta,
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('No')),
-              ElevatedButton(
-                  onPressed: () {
-                    if (estado) {
-                      base.completarTarea(
-                          Sesion.tareas[tareaActual].idRelacion);
-                    } else {
-                      base.fallarTarea(Sesion.tareas[tareaActual].idRelacion);
-                    }
+              Text("\nSeguro que quieres " +
+                  (estado ? "terminar" : "cancelar") +
+                  " la tarea"),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Container(
+                    margin: EdgeInsets.all(10),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Column(children: [
+                          Text('\nNo'),
+                          Image.asset(
+                            "assets/no.png",
+                            height: 100,
+                            width: 100,
+                          )
+                        ]))),
+                Container(
+                  margin: EdgeInsets.all(10),
+                  child: ElevatedButton(
+                      onPressed: () {
+                        if (estado) {
+                          base.completarTarea(
+                              Sesion.tareas[tareaActual].idRelacion);
+                        } else {
+                          base.fallarTarea(
+                              Sesion.tareas[tareaActual].idRelacion);
+                        }
 
-                    if (controladorRespuesta.text != null) {
-                      base.addRespuestaTarea(
-                          Sesion.tareas[tareaActual].idRelacion,
-                          controladorRespuesta.text);
-                    }
+                        if (controladorRespuesta.text != null) {
+                          base.addRespuestaTarea(
+                              Sesion.tareas[tareaActual].idRelacion,
+                              controladorRespuesta.text);
+                        }
 
-                    mostrarBotones = false;
-                    actualizar();
+                        mostrarBotones = false;
+                        actualizar();
 
-                    Navigator.pop(context);
-                  },
-                  child: Text('Enviar')),
+                        Navigator.pop(context);
+                      },
+                      child: Column(children: [
+                        Text('\nEnviar'),
+                        Image.asset(
+                          "assets/enviarunemail.png",
+                          height: 100,
+                          width: 100,
+                        )
+                      ])),
+                )
+              ])
             ]),
           );
         });
