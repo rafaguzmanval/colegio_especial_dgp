@@ -75,14 +75,7 @@ class MyHomePageState extends State<MyHomePage> {
             ]),
             automaticallyImplyLeading: false,
           ),
-          body: Stack(alignment: Alignment.center, children: [
-            OrientationBuilder(
-              builder: (context, orientation) =>
-                  orientation == Orientation.portrait
-                      ? Center(child: buildPortrait())
-                      : Center(child: buildLandscape()),
-            ),
-          ])),
+          body: Container(margin: EdgeInsets.all(5), child: vistaMenu())),
       onWillPop: () async {
         final pop = await _onBackPressed(context);
         return pop ?? false;
@@ -92,212 +85,295 @@ class MyHomePageState extends State<MyHomePage> {
 
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
   Widget VistaProfesor() {
-    return Container(
-      alignment: Alignment.center,
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            minimumSize: Size(160, 100), //////// HERE
-          ),
-          child: Column(
-            children: [
-              Text(
-                "Lista de alumnos",
-                style: TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-              Image.asset(
-                "assets/companeros.png",
-                width: 130,
-                height: 80,
-                fit: BoxFit.fill,
-              ),
-            ],
-          ),
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ListaAlumnos()));
-          },
-        ),
-      ]),
-    );
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: Flexible(
+                        flex: 1,
+                        fit: FlexFit.tight,
+                        //margin: EdgeInsets.all(10),
+                        child: Container(
+                          margin: EdgeInsets.all(50),
+                          child: ElevatedButton(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Lista de alumnos",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Flexible(
+                                    flex: 1,
+                                    child: Image.asset(
+                                      "assets/companeros.png",
+                                    )),
+                              ],
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ListaAlumnos()));
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                  ]))
+        ]);
   }
 
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
   Widget VistaAlumno() {
-    return Container(
-      alignment: Alignment.center,
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            minimumSize: Size(160, 100), //////// HERE
-          ),
-          child: Column(
-            children: [
-              Text(
-                "Tablon de Comunicacion",
-                style: TextStyle(
-                  color: Colors.white,
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Flexible(
+            flex: 1,
+            fit: FlexFit.tight,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Flexible(
+                    flex: 1,
+                    fit: FlexFit.tight,
+                    //margin: EdgeInsets.all(10),
+                    child: Container(
+                      margin: EdgeInsets.all(10),
+                      child: ElevatedButton(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Tablon de Comunicacion",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            Flexible(
+                                flex: 1,
+                                child: Image.asset(
+                                  "assets/tableroDeComunicacion.png",
+                                )),
+                          ],
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TablonComunicacion()));
+                        },
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              Image.asset(
-                "assets/tableroDeComunicacion.png",
-                width: 130,
-                height: 80,
-                fit: BoxFit.fill,
-              ),
-            ],
-          ),
-          onPressed: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => TablonComunicacion()));
-          },
-        ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            minimumSize: Size(160, 100), //////// HERE
-          ),
-          child: Column(
-            children: [
-              Text(
-                "Lista de Tareas",
-                style: TextStyle(
-                  color: Colors.white,
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    child: ElevatedButton(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Lista de Tareas",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          Flexible(
+                              flex: 1,
+                              child: Image.asset(
+                                "assets/lectoescritura.png",
+                              )),
+                        ],
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => VerTareas()));
+                      },
+                    ),
+                  ),
                 ),
-              ),
-              Image.asset(
-                "assets/lectoescritura.png",
-                width: 130,
-                height: 80,
-                fit: BoxFit.fill,
-              ),
-            ],
+              ],
+            ),
           ),
-          onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => VerTareas()));
-          },
-        ),
-      ]),
-    );
+        ]);
   }
 
   ///Este método devuelve toda la vista que va a ver el administrador en un Widget.
   Widget VistaAdministrador() {
-    return Column(children: [
-      Container(
-          alignment: Alignment.center,
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(160, 100), //////// HERE
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    "Lista de alumnos",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  Image.asset(
-                    "assets/companeros.png",
-                    width: 130,
-                    height: 80,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ListaAlumnos()));
-              },
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                minimumSize: Size(160, 100), //////// HERE
-              ),
-              child: Column(
-                children: [
-                  Text(
-                    "Lista de Profesores",
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  Image.asset(
-                    "assets/profesor.png",
-                    width: 130,
-                    height: 80,
-                    fit: BoxFit.fill,
-                  ),
-                ],
-              ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ListaProfesores()));
-              },
-            ),
-          ])),
-      Container(
-        padding: EdgeInsets.only(top: 50),
-        alignment: Alignment.center,
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              minimumSize: Size(160, 100), //////// HERE
-            ),
-            child: Column(
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Flexible(
+            flex: 1,
+            fit: FlexFit.tight,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text(
-                  "Registro de Usuario",
-                  style: TextStyle(
-                    color: Colors.white,
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Flexible(
+                    flex: 1,
+                    fit: FlexFit.tight,
+                    //margin: EdgeInsets.all(10),
+                    child: Container(
+                      margin: EdgeInsets.all(10),
+                      child: ElevatedButton(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Lista de alumnos",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            Flexible(
+                                flex: 1,
+                                child: Image.asset(
+                                  "assets/companeros.png",
+                                )),
+                          ],
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ListaAlumnos()));
+                        },
+                      ),
+                    ),
                   ),
                 ),
-                Image.asset(
-                  "assets/madurez.png",
-                  width: 130,
-                  height: 80,
-                  fit: BoxFit.fill,
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    child: ElevatedButton(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Lista de Profesores",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          Flexible(
+                              flex: 1,
+                              child: Image.asset(
+                                "assets/profesor.png",
+                              )),
+                        ],
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ListaProfesores()));
+                      },
+                    ),
+                  ),
                 ),
               ],
             ),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => RegistroUsuarios()));
-            },
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              minimumSize: Size(160, 100), //////// HERE
-            ),
-            child: Column(
+          Flexible(
+            flex: 1,
+            fit: FlexFit.tight,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Text(
-                  "Crear Tarea",
-                  style: TextStyle(
-                    color: Colors.white,
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    child: ElevatedButton(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Registrar Usuarios",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          Flexible(
+                              flex: 1,
+                              child: Image.asset(
+                                "assets/madurez.png",
+                              )),
+                        ],
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RegistroUsuarios()));
+                      },
+                    ),
                   ),
                 ),
-                Image.asset(
-                  "assets/correcto.png",
-                  width: 130,
-                  height: 80,
-                  fit: BoxFit.fill,
-                ),
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    child: ElevatedButton(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Crear Tareas",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          Flexible(
+                              flex: 1,
+                              child: Image.asset(
+                                "assets/correcto.png",
+                              )),
+                        ],
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CrearTarea()));
+                      },
+                    ),
+                  ),
+                )
               ],
             ),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => CrearTarea()));
-            },
           ),
-        ]),
-      ),
-    ]);
+        ]);
   }
 
   /*
