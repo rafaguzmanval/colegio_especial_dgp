@@ -202,8 +202,9 @@ class AccesoBD {
     try {
       final ref = db.collection("usuarioTieneTareas");
 
-      await ref.where("idUsuario", isEqualTo: id).orderBy("fechainicio")
-        ..snapshots().listen((e) async {
+
+      await ref.where("idUsuario", isEqualTo: id).orderBy("fechainicio") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
+        ..snapshots().listen((e) async {      //Escucha de los cambios en el servidor
           var nuevasTareas = [];
           for (int i = 0; i < e.docs.length; i++) {
             var idTarea = e.docs[i].get("idTarea");
@@ -216,7 +217,7 @@ class AccesoBD {
               if(nuevaTarea.terminada || nuevaTarea.fallida)
                 {
                   nuevaTarea.fechaentrega =  (DateTime.now().millisecondsSinceEpoch - e.docs[i].get("fechaentrega"))/(1000*60);
-                  print("nuevos minutos " + nuevaTarea.fechaentrega.toString());
+                  //print("nuevos minutos " + nuevaTarea.fechaentrega.toString());
                 }
               nuevasTareas.add(nuevaTarea);
 
@@ -264,7 +265,9 @@ class AccesoBD {
         "fechafinal" : fechafinal,
         "terminada" : false,
         "fallida" : false,
-        "fechaentrega" : 0
+        "fechaentrega" : 0,
+        "respuesta":"",
+        "retroalimentacion":"",
 
       };
 
@@ -306,19 +309,17 @@ class AccesoBD {
   }
 
   // Metodo para eliminar una tarea de un usuario pasandole el id de la relacion entre el usuario y la tarea
-  eliminarTareaAlumno(id) async {
+  Future eliminarTareaAlumno(id) async {
     try {
       if (Sesion.tareas != null && Sesion.tareas != []) {
         await db
             .collection("usuarioTieneTareas")
             .doc(id)
-            .delete()
-            .then((value) {
-          Sesion.paginaActual.esTareaEliminandose = false;
-          Sesion.paginaActual.actualizar();
-        });
+            .delete();
+        return true;
       }
     } catch (e) {
+      return false;
       print(e);
     }
   }

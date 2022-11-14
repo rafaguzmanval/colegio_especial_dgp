@@ -47,6 +47,8 @@ class VerTareasState extends State<VerTareas> {
   var indiceVideos = 0;
   int tareaActual = 0;
 
+  var iconoAtras = Icons.home;
+
   double offSetActual = 0;
   ScrollController homeController = new ScrollController();
   var db = FirebaseFirestore.instance;
@@ -69,11 +71,15 @@ class VerTareasState extends State<VerTareas> {
       for (int j = 0; j < Sesion.tareas[i].controladoresVideo.length; j++) {
         Sesion.tareas[i].controladoresVideo[j].dispose();
       }
-      Sesion.tareas[i].controladoresVideo.clear();
+      //Sesion.tareas[i].controladoresVideo.clear();
     }
 
     if(temporizador != null)
-      temporizador.cancel();
+      {
+        temporizador.cancel();
+        temporizador = false;
+      }
+
     super.dispose();
   }
 
@@ -85,29 +91,55 @@ class VerTareasState extends State<VerTareas> {
 
     Sesion.paginaActual = this;
 
-    Sesion.seleccion = "";
     Sesion.tareas = [];
 
+    if(Sesion.argumentos.length == 1)
+      {
+        tareaActual = Sesion.argumentos[0];
+        iconoAtras = Icons.arrow_back;
+        Sesion.argumentos = [];
+      }
     if (Sesion.rol == Rol.alumno.toString()) {
       print("Cargando tareas");
-      cargarTareas();
-    }
+      cargarTareas(Sesion.id);
+
+    }else
+      {
+        cargarTareas(Sesion.seleccion.id);
+      }
   }
 
   /// Este es el build de la clase MyHomePage que devuelve toda la vista génerica más la vista especial de cada usuario.
   @override
   Widget build(BuildContext context) {
 
+    var dragInicial = 0.0;
+    var distancia = 0.0;
+
 
     return new Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.home, color: Colors.white),
+          icon: Icon(iconoAtras, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text('Tareas'),
       ),
-      body: SingleChildScrollView(
+      body: GestureDetector(
+        onPanStart: (DragStartDetails details){dragInicial = details.globalPosition.dx;},
+        onPanUpdate: (details){distancia = details.globalPosition.dx - dragInicial;},
+        onPanEnd: (details){dragInicial = 0;
+        if(Sesion.tareas.length>0) {
+          if (distancia > 100) {
+            desplazarIzquierda();
+            actualizar();
+          } else if(distancia < -100){
+            desplazarDerecha();
+            actualizar();
+          }
+        }
+        },
+        child:SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
           child: Stack(
             children: [
@@ -122,6 +154,7 @@ class VerTareasState extends State<VerTareas> {
               ]
             ],
           )),
+      )
     );
   }
 
@@ -136,10 +169,10 @@ class VerTareasState extends State<VerTareas> {
       }
 
       var tiempoRestante = DateTime.fromMillisecondsSinceEpoch(Sesion.tareas[tareaActual].fechafinal).difference(DateTime.now());
-      mensajeTemporizador = "Te quedan: ";
+      mensajeTemporizador = "Quedan: ";
       if(tiempoRestante.isNegative)
       {
-        mensajeTemporizador = "Te has retrasado ";
+        mensajeTemporizador = "Tarea retrasada ";
 
       }
 
@@ -168,14 +201,17 @@ class VerTareasState extends State<VerTareas> {
 
 
 
-    temporizador = Timer(Duration(milliseconds: 1000),formatTiempoRestante);
-
+    //temporizador = Timer(Duration(milliseconds: 1000),formatTiempoRestante);
     actualizar();
+
   }
 
 
   String formatoFechafinalizado(minutos)
   {
+    if(!Sesion.tareas[tareaActual].terminada)
+      return "";
+
     if(minutos <= 2)
     {
       return "ahora mismo";
@@ -202,9 +238,35 @@ class VerTareasState extends State<VerTareas> {
     }
   }
 
+  desplazarDerecha()
+  {
+    if (tareaActual < Sesion.tareas.length - 1) {
+      tareaActual++;
+      mostrarBotones = !Sesion.tareas[tareaActual].terminada && !Sesion.tareas[tareaActual].fallida;
+      formatTiempoRestante();
+      verFlechaIzquierda = true;
+    }
+
+    verFlechaDerecha =
+    (tareaActual != Sesion.tareas.length - 1);
+
+  }
+
+  desplazarIzquierda()
+  {
+
+    if (tareaActual > 0) {
+      tareaActual--;
+      mostrarBotones = !Sesion.tareas[tareaActual].terminada && !Sesion.tareas[tareaActual].fallida;
+      formatTiempoRestante();
+      verFlechaDerecha = true;
+    }
+    verFlechaIzquierda = tareaActual != 0;
+
+  }
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
   Widget VistaProfesor() {
-    return Container();
+    return VistaAlumno();
   }
 
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
@@ -217,171 +279,168 @@ class VerTareasState extends State<VerTareas> {
         if(temporizador == null)
           {
             print("inicializacion formatTiempoRestante");
-            temporizador = "";
-            formatTiempoRestante();
+            temporizador = Timer.periodic(Duration(seconds: 1), (timer) {  formatTiempoRestante();});
+
+           ;
           }
 
 
       }
 
+
     return Column(children: <Widget>[
 
       if (Sesion.tareas.length > 0) ...[
-        Wrap(
-          //ROW 2
-          alignment: WrapAlignment.end,
-          //spacing: 800,
-          children: [
-            Container(
-              child: Text(
 
-                //"${"\nTareas de: " + Sesion.nombre + "\n"}",
-                //DateFormat('d/M/y HH:mm').format(DateTime.fromMillisecondsSinceEpoch(Sesion.tareas[tareaActual].fechafinal)).toString(),
-                mensajeTemporizador,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 20.0,
-                ),
+
+              Wrap(
+                //ROW 2
+                alignment: WrapAlignment.end,
+                //spacing: 800,
+                children: [
+                  Container(
+                    child: Text(
+
+                      //"${"\nTareas de: " + Sesion.nombre + "\n"}",
+                      //DateFormat('d/M/y HH:mm').format(DateTime.fromMillisecondsSinceEpoch(Sesion.tareas[tareaActual].fechafinal)).toString(),
+                      mensajeTemporizador,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 20.0,
+                      ),
+                    ),
+                  ),
+
+                ],
               ),
-            ),
+              Row(
+                  //ROW 2
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
 
-          ],
-        ),
-        Row(
-            //ROW 2
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-
-              ///FLECHA IZQUIERDA
-              Container(
-                  height: 60,
-                  width: 60,
-                  margin: EdgeInsets.only(top: 100.0, left: 10.0, right: 10),
-                        child: FittedBox(
-                          child: Visibility(
-                            child: FloatingActionButton(
-                                onPressed: () {
-                                  if (tareaActual > 0) {
-                                    tareaActual--;
-                                    mostrarBotones = !Sesion.tareas[tareaActual].terminada && !Sesion.tareas[tareaActual].fallida;
-                                    formatTiempoRestante();
-                                    verFlechaDerecha = true;
-                                  }
-                                  verFlechaIzquierda = tareaActual != 0;
-
-                                  actualizar();
-                                },
-                                child: const Icon(Icons.arrow_left)),
-                                visible: verFlechaIzquierda,
-                          ),
+                    ///FLECHA IZQUIERDA
+                    Container(
+                        height: 60,
+                        width: 60,
+                        margin: EdgeInsets.only(top: 100.0, left: 10.0, right: 10),
+                              child: FittedBox(
+                                child: Visibility(
+                                  child: FloatingActionButton(
+                                      heroTag: "flechaIzquierda",
+                                      onPressed: () {
+                                        desplazarIzquierda();
+                                        actualizar();
+                                      },
+                                      child: const Icon(Icons.arrow_left)),
+                                      visible: verFlechaIzquierda,
+                                ),
 
 
-                      )),
+                            )),
 
-              ///CONTENEDOR DE LA TAREA
+                    ///CONTENEDOR DE LA TAREA
 
-              Flexible(
-                  flex: 40,
-                   child:Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        border: Border.all(width: 2),
-                        color: Color.fromRGBO(143, 125, 178, 1)),
-                    child: Column(children: [
-                      if (Sesion.tareas.length > 0) ...[
-                        Center(
-                            child: Text(
-                          "\n" + Sesion.tareas[tareaActual].nombre + "\n",
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        )),
-                        resetIndicesTarea(),
-                        for (int j = 0;
-                            j < Sesion.tareas[tareaActual].orden.length;
-                            j++)
-                          LecturaTarea(
-                              Sesion.tareas[tareaActual].orden[j], tareaActual)
-                      ] else ...[
-                        Text("BIEN. No tienes tareas que hacer")
-                      ]
-                    ]),
-                  )),
+                    Flexible(
+                        flex: 40,
 
-              ///FLECHA DERECHA
+                         child:Container(
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              border: Border.all(width: 2),
+                              color: Color.fromRGBO(143, 125, 178, 1)),
+                          child: Column(children: [
+                            if (Sesion.tareas.length > 0) ...[
+                              Center(
+                                  child: Text(
+                                "\n" + Sesion.tareas[tareaActual].nombre + "\n",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              )),
+                              resetIndicesTarea(),
+                              for (int j = 0;
+                                  j < Sesion.tareas[tareaActual].orden.length;
+                                  j++)
+                                LecturaTarea(
+                                    Sesion.tareas[tareaActual].orden[j], tareaActual)
+                            ] else ...[
+                              Text("BIEN. No tienes tareas que hacer")
+                            ]
+                          ]),
+                        )
+                    ),
 
-              Container(
-                  height: 60,
-                  width: 60,
-                  margin: EdgeInsets.only(top: 100.0, left: 10.0, right: 10),
+                    ///FLECHA DERECHA
 
-                          child: FittedBox(
-                            child: Visibility(
-                            child: FloatingActionButton(
-                                onPressed: () {
-                                  if (tareaActual < Sesion.tareas.length) {
-                                    tareaActual++;
-                                    mostrarBotones = !Sesion.tareas[tareaActual].terminada && !Sesion.tareas[tareaActual].fallida;
-                                    formatTiempoRestante();
-                                    verFlechaIzquierda = true;
-                                  }
+                    Container(
+                        height: 60,
+                        width: 60,
+                        margin: EdgeInsets.only(top: 100.0, left: 10.0, right: 10),
 
-                                  verFlechaDerecha =
-                                      (tareaActual != Sesion.tareas.length - 1);
+                                child: FittedBox(
+                                  child: Visibility(
+                                  child: FloatingActionButton(
+                                    heroTag: "flechaDerecha",
+                                      onPressed: () {
+                                        desplazarDerecha();
+                                        actualizar();
+                                      },
+                                      child: const Icon(Icons.arrow_right)),
+                                    visible: verFlechaDerecha,
+                                ),
 
-                                  actualizar();
-                                },
-                                child: const Icon(Icons.arrow_right)),
-                              visible: verFlechaDerecha,
-                          ),
+                            ))
+                  ]),
 
-                      ))
-            ]),
+              if(Sesion.rol == Rol.alumno.toString())...[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
 
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
+                Visibility(
+                    visible: !Sesion.tareas[tareaActual].fallida && !Sesion.tareas[tareaActual].terminada && mostrarBotones,
+                    child:
+                    FloatingActionButton(
+                      heroTag: "Cancelar tarea",
+                        child:Icon(Icons.cancel_outlined),
+                        onPressed: (){
 
-          Visibility(
-              visible: !Sesion.tareas[tareaActual].fallida && !Sesion.tareas[tareaActual].terminada && mostrarBotones,
-              child:
-              FloatingActionButton(
-                  child:Icon(Icons.cancel_outlined),
-                  onPressed: (){
+                          base.fallarTarea(Sesion.tareas[tareaActual].idRelacion);
+                          mostrarBotones = false;
+                          actualizar();
 
-                    base.fallarTarea(Sesion.tareas[tareaActual].idRelacion);
-                    mostrarBotones = false;
-                    actualizar();
+                        })),
 
-                  })),
+                Visibility(
+                    visible: !Sesion.tareas[tareaActual].terminada && !Sesion.tareas[tareaActual].fallida && mostrarBotones,
+                    child:
+                    FloatingActionButton(
+                      heroTag: "aceptarTarea",
+                        child:Icon(Icons.check),
+                        onPressed: (){
 
-          Visibility(
-              visible: !Sesion.tareas[tareaActual].terminada && !Sesion.tareas[tareaActual].fallida && mostrarBotones,
-              child:
-              FloatingActionButton(
-                  child:Icon(Icons.check),
-                  onPressed: (){
+                          base.completarTarea(Sesion.tareas[tareaActual].idRelacion);
+                          mostrarBotones = false;
+                          actualizar();
 
-                    base.completarTarea(Sesion.tareas[tareaActual].idRelacion);
-                    mostrarBotones = false;
-                    actualizar();
-
-                  })),
+                        })),
 
 
 
-        ],),
+              ],),
+              ],
 
 
-        Visibility(
-            visible: Sesion.tareas[tareaActual].terminada,
-            child:Text("Tarea terminada " + formatoFechafinalizado(Sesion.tareas[tareaActual].fechaentrega) + " :)"),
-        ),
+              Visibility(
+                  visible: Sesion.tareas[tareaActual].terminada,
+                  child:Text("Tarea terminada " + formatoFechafinalizado(Sesion.tareas[tareaActual].fechaentrega) + " :)"),
+              ),
 
-        Visibility(
-          visible: Sesion.tareas[tareaActual].fallida,
-          child:Text("Tarea sin poder completar :("),
-        )
+              Visibility(
+                visible: Sesion.tareas[tareaActual].fallida,
+                child:Text("Tarea sin poder completar :("),
+              )
+
 
       ] else ...[
         Container(
@@ -403,7 +462,7 @@ class VerTareasState extends State<VerTareas> {
 
   ///Este método devuelve toda la vista que va a ver el administrador en un Widget.
   Widget VistaAdministrador() {
-    return Container();
+    return VistaProfesor();
   }
 
   // Este metodo itera sobre las tareas que tiene el usuario y las muestra
@@ -432,8 +491,8 @@ class VerTareasState extends State<VerTareas> {
           margin: EdgeInsets.only(bottom: 15),
           width: 200,
           height: 200,
-          child: ReproductorVideo(
-              Sesion.tareas[i].controladoresVideo[indiceVideos++]));
+          child: Container());//ReproductorVideo(
+              //Sesion.tareas[i].controladoresVideo[indiceVideos++]));
     } else
       return Container();
   }
@@ -486,8 +545,8 @@ class VerTareasState extends State<VerTareas> {
   }
 
   // Accede a las tareas de la base de datos
-  cargarTareas() async {
-    await base.consultarTareasAsignadasAlumno(Sesion.id, true);
+  cargarTareas(id) async {
+    await base.consultarTareasAsignadasAlumno(id, true);
   }
 
   // Muestra la vista en horizontal
@@ -533,11 +592,22 @@ class VerTareasState extends State<VerTareas> {
     if (Sesion.tareas.length > 1 && tareaActual == 0) {
       verFlechaDerecha = true;
     }
+    else if(Sesion.tareas.length > 2 && tareaActual > 0 && tareaActual < Sesion.tareas.length - 1)
+      {
+        verFlechaIzquierda = true;
+        verFlechaDerecha = true;
+      }
+    else if(Sesion.tareas.length > 1  && tareaActual == Sesion.tareas.length-1)
+      {
+        verFlechaIzquierda = true;
+      }
+
     if(tareaActual >= Sesion.tareas.length && Sesion.tareas.length > 0)
     {
       tareaActual = Sesion.tareas.length - 1;
       formatTiempoRestante();
     }
+    if(!mounted) return;
     setState(() {});
   }
 }

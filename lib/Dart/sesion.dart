@@ -19,6 +19,7 @@ class Sesion {
   static var seleccion;
   static var paginaActual;
   static var metodoLogin = "";
+  static var argumentos = [];
 
   // Sesion por defecto
   static reload() {

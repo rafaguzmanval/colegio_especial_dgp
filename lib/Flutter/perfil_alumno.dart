@@ -16,6 +16,7 @@ import 'dart:async';
 
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
+import 'package:colegio_especial_dgp/Flutter/ver_tareas.dart';
 import '../Dart/tarea.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:flutter/material.dart';
@@ -147,11 +148,21 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          ElevatedButton(
+
+                            onPressed: () async{
+                            Sesion.argumentos.add(i);
+                            await Navigator.push(context,  MaterialPageRoute(builder: (context) => VerTareas()));
+                            Sesion.paginaActual = this;
+                          }, child:
                           Text(Sesion.tareas[i].nombre),
+                          ),
                           IconButton(
-                              onPressed: () {
-                                base.eliminarTareaAlumno(
+
+                              onPressed: () async {
+                                await base.eliminarTareaAlumno(
                                     Sesion.tareas[i].idRelacion);
+
                                 esTareaEliminandose = true;
                                 tareaEliminandose = i;
                                 actualizar();
@@ -171,7 +182,9 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
 
             if (tareas != null && nombresTareas.length > 1) ...[
 
-              FloatingActionButton(onPressed: () => addTarea(context: context),
+              FloatingActionButton(
+                heroTag: "addtarea",
+                  onPressed: () => addTarea(context: context),
                 child:Icon(Icons.add)
               )
 
@@ -203,7 +216,9 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
   }
   // Actualizar la pagina
   void actualizar() {
+
     setState(() {});
+    esTareaEliminandose = false;
   }
 
 
@@ -228,7 +243,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
 
               return
                   Container(
-                      height: MediaQuery.of(context).size.height - 500,
+                      height: MediaQuery.of(context).size.height - 100,
                   child: Column(
 
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
