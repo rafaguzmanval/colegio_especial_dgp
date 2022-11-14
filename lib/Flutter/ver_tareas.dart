@@ -41,7 +41,6 @@ class VerTareasState extends State<VerTareas> {
   var registrando = false;
   var mensajeDeRegistro = "";
 
-
   var indiceTextos = 0;
   var indiceImagenes = 0;
   var indiceVideos = 0;
@@ -74,11 +73,10 @@ class VerTareasState extends State<VerTareas> {
       //Sesion.tareas[i].controladoresVideo.clear();
     }
 
-    if(temporizador != null)
-      {
-        temporizador.cancel();
-        temporizador = false;
-      }
+    if (temporizador != null) {
+      temporizador.cancel();
+      temporizador = false;
+    }
 
     super.dispose();
   }
@@ -93,177 +91,160 @@ class VerTareasState extends State<VerTareas> {
 
     Sesion.tareas = [];
 
-    if(Sesion.argumentos.length == 1)
-      {
-        tareaActual = Sesion.argumentos[0];
-        iconoAtras = Icons.arrow_back;
-        Sesion.argumentos = [];
-      }
+    if (Sesion.argumentos.length == 1) {
+      tareaActual = Sesion.argumentos[0];
+      iconoAtras = Icons.arrow_back;
+      Sesion.argumentos = [];
+    }
     if (Sesion.rol == Rol.alumno.toString()) {
       print("Cargando tareas");
       cargarTareas(Sesion.id);
-
-    }else
-      {
-        cargarTareas(Sesion.seleccion.id);
-      }
+    } else {
+      cargarTareas(Sesion.seleccion.id);
+    }
   }
 
   /// Este es el build de la clase MyHomePage que devuelve toda la vista génerica más la vista especial de cada usuario.
   @override
   Widget build(BuildContext context) {
-
     var dragInicial = 0.0;
     var distancia = 0.0;
 
-
     return new Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(iconoAtras, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(iconoAtras, color: Colors.white),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: Text('Tareas'),
         ),
-        title: Text('Tareas'),
-      ),
-      body: GestureDetector(
-        onPanStart: (DragStartDetails details){dragInicial = details.globalPosition.dx;},
-        onPanUpdate: (details){distancia = details.globalPosition.dx - dragInicial;},
-        onPanEnd: (details){dragInicial = 0;
-        if(Sesion.tareas.length>0) {
-          if (distancia > 100) {
-            desplazarIzquierda();
-            actualizar();
-          } else if(distancia < -100){
-            desplazarDerecha();
-            actualizar();
-          }
-        }
-        },
-        child:SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-          child: Stack(
-            children: [
-              if (Sesion.rol == Rol.alumno.toString()) ...[
-                VistaAlumno(),
-              ] else if (Sesion.rol == Rol.profesor.toString()) ...[
-                VistaProfesor()
-              ] else if (Sesion.rol == Rol.administrador.toString()) ...[
-                VistaAdministrador()
-              ] else if (Sesion.rol == Rol.programador.toString()) ...[
-                VistaProgramador()
-              ]
-            ],
-          )),
-      )
-    );
+        body: GestureDetector(
+          onPanStart: (DragStartDetails details) {
+            dragInicial = details.globalPosition.dx;
+          },
+          onPanUpdate: (details) {
+            distancia = details.globalPosition.dx - dragInicial;
+          },
+          onPanEnd: (details) {
+            dragInicial = 0;
+            if (Sesion.tareas.length > 0) {
+              if (distancia > 100) {
+                desplazarIzquierda();
+                actualizar();
+              } else if (distancia < -100) {
+                desplazarDerecha();
+                actualizar();
+              }
+            }
+          },
+          child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+              child: Stack(
+                children: [
+                  if (Sesion.rol == Rol.alumno.toString()) ...[
+                    VistaAlumno(),
+                  ] else if (Sesion.rol == Rol.profesor.toString()) ...[
+                    VistaProfesor()
+                  ] else if (Sesion.rol == Rol.administrador.toString()) ...[
+                    VistaAdministrador()
+                  ] else if (Sesion.rol == Rol.programador.toString()) ...[
+                    VistaProgramador()
+                  ]
+                ],
+              )),
+        ));
   }
 
-  formatTiempoRestante()
-  {
+  formatTiempoRestante() {
+    if (Sesion.tareas[tareaActual].estado != "sinFinalizar") {
+      mensajeTemporizador = "";
+      actualizar();
+      return;
+    }
 
-    if(Sesion.tareas[tareaActual].estado != "sinFinalizar")
-      {
-        mensajeTemporizador = "";
-        actualizar();
-        return;
-      }
+    var tiempoRestante = DateTime.fromMillisecondsSinceEpoch(
+            Sesion.tareas[tareaActual].fechafinal)
+        .difference(DateTime.now());
+    mensajeTemporizador = "Quedan: ";
+    if (tiempoRestante.isNegative) {
+      mensajeTemporizador = "Tarea retrasada ";
+    }
 
-      var tiempoRestante = DateTime.fromMillisecondsSinceEpoch(Sesion.tareas[tareaActual].fechafinal).difference(DateTime.now());
-      mensajeTemporizador = "Quedan: ";
-      if(tiempoRestante.isNegative)
-      {
-        mensajeTemporizador = "Tarea retrasada ";
-
-      }
-
-    var diasRestantes ;
-    var horasRestantes ;
-    var minutosRestantes ;
-    var segundosRestantes ;
-
-
+    var diasRestantes;
+    var horasRestantes;
+    var minutosRestantes;
+    var segundosRestantes;
 
     diasRestantes = (tiempoRestante.inDays).abs();
-    if(diasRestantes != 0)
-      mensajeTemporizador += " " + diasRestantes.toString() + (diasRestantes > 1?" días": " día");
+    if (diasRestantes != 0)
+      mensajeTemporizador += " " +
+          diasRestantes.toString() +
+          (diasRestantes > 1 ? " días" : " día");
 
-    horasRestantes = (tiempoRestante.inHours - tiempoRestante.inDays * 24).abs();
-    if(horasRestantes != 0)
-      mensajeTemporizador += " " + horasRestantes.toString() + (horasRestantes > 1?" horas": " hora");
+    horasRestantes =
+        (tiempoRestante.inHours - tiempoRestante.inDays * 24).abs();
+    if (horasRestantes != 0)
+      mensajeTemporizador += " " +
+          horasRestantes.toString() +
+          (horasRestantes > 1 ? " horas" : " hora");
 
-    minutosRestantes = (tiempoRestante.inMinutes - tiempoRestante.inHours*60).abs();
-    if(minutosRestantes != 0)
-      mensajeTemporizador += " " + minutosRestantes.toString() + (minutosRestantes > 1 ? " minutos" : " minuto");
+    minutosRestantes =
+        (tiempoRestante.inMinutes - tiempoRestante.inHours * 60).abs();
+    if (minutosRestantes != 0)
+      mensajeTemporizador += " " +
+          minutosRestantes.toString() +
+          (minutosRestantes > 1 ? " minutos" : " minuto");
 
-    segundosRestantes = (tiempoRestante.inSeconds- tiempoRestante.inMinutes*60).abs();
-    if(segundosRestantes != 0)
-      mensajeTemporizador += " " + segundosRestantes.toString() + (segundosRestantes > 1?" segundos": " segundo");
-
-
+    segundosRestantes =
+        (tiempoRestante.inSeconds - tiempoRestante.inMinutes * 60).abs();
+    if (segundosRestantes != 0)
+      mensajeTemporizador += " " +
+          segundosRestantes.toString() +
+          (segundosRestantes > 1 ? " segundos" : " segundo");
 
     //temporizador = Timer(Duration(milliseconds: 1000),formatTiempoRestante);
     actualizar();
-
   }
 
+  String formatoFechafinalizado(minutos) {
+    if (Sesion.tareas[tareaActual].estado == "sinFinalizar") return "";
 
-  String formatoFechafinalizado(minutos)
-  {
-    if(Sesion.tareas[tareaActual].estado == "sinFinalizar")
-      return "";
-
-    if(minutos <= 2)
-    {
+    if (minutos <= 2) {
       return "ahora mismo";
-    }
-    else if( minutos < 60)
-    {
-      return "hace " + (minutos~/1).toString() + " minutos";
-    }
-    else if(minutos >= 60 && minutos < 60*2)
-    {
-      return "hace " + (minutos~/60).toString() + " hora";
-    }
-    else if( minutos < 24*60)
-    {
-      return "hace " + (minutos~/60).toString() + " horas";
-    }
-    else if(minutos < 2*24*60)
-    {
-      return "hace " + ((minutos~/60)~/24).toString() + " día";
-    }
-    else
-    {
-      return  "hace " + ((minutos~/60)~/24).toString() + " días";
+    } else if (minutos < 60) {
+      return "hace " + (minutos ~/ 1).toString() + " minutos";
+    } else if (minutos >= 60 && minutos < 60 * 2) {
+      return "hace " + (minutos ~/ 60).toString() + " hora";
+    } else if (minutos < 24 * 60) {
+      return "hace " + (minutos ~/ 60).toString() + " horas";
+    } else if (minutos < 2 * 24 * 60) {
+      return "hace " + ((minutos ~/ 60) ~/ 24).toString() + " día";
+    } else {
+      return "hace " + ((minutos ~/ 60) ~/ 24).toString() + " días";
     }
   }
 
-  desplazarDerecha()
-  {
+  desplazarDerecha() {
     if (tareaActual < Sesion.tareas.length - 1) {
       tareaActual++;
-      mostrarBotones = Sesion.tareas[tareaActual].estado == "sinFinalizar" ;
+      mostrarBotones = Sesion.tareas[tareaActual].estado == "sinFinalizar";
       formatTiempoRestante();
       verFlechaIzquierda = true;
     }
 
-    verFlechaDerecha =
-    (tareaActual != Sesion.tareas.length - 1);
-
+    verFlechaDerecha = (tareaActual != Sesion.tareas.length - 1);
   }
 
-  desplazarIzquierda()
-  {
-
+  desplazarIzquierda() {
     if (tareaActual > 0) {
       tareaActual--;
-      mostrarBotones = Sesion.tareas[tareaActual].estado == "sinFinalizar" ;
+      mostrarBotones = Sesion.tareas[tareaActual].estado == "sinFinalizar";
       formatTiempoRestante();
       verFlechaDerecha = true;
     }
     verFlechaIzquierda = tareaActual != 0;
-
   }
+
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
   Widget VistaProfesor() {
     return VistaAlumno();
@@ -271,209 +252,189 @@ class VerTareasState extends State<VerTareas> {
 
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
   Widget VistaAlumno() {
+    if (Sesion.tareas.length > 0) {
+      if (temporizador == null) {
+        print("inicializacion formatTiempoRestante");
+        temporizador = Timer.periodic(Duration(seconds: 1), (timer) {
+          formatTiempoRestante();
+        });
 
-
-    if (Sesion.tareas.length > 0)
-      {
-
-        if(temporizador == null)
-          {
-            print("inicializacion formatTiempoRestante");
-            temporizador = Timer.periodic(Duration(seconds: 1), (timer) {  formatTiempoRestante();});
-
-           ;
-          }
-
-
+        ;
       }
-
+    }
 
     return Column(children: <Widget>[
-
       if (Sesion.tareas.length > 0) ...[
-
-
-              Wrap(
-                //ROW 2
-                alignment: WrapAlignment.end,
-                //spacing: 800,
-                children: [
-                  Container(
-                    child: Text(
-
-                      //"${"\nTareas de: " + Sesion.nombre + "\n"}",
-                      //DateFormat('d/M/y HH:mm').format(DateTime.fromMillisecondsSinceEpoch(Sesion.tareas[tareaActual].fechafinal)).toString(),
-                      mensajeTemporizador,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 20.0,
-                      ),
-                    ),
-                  ),
-
-                ],
-              ),
-              Row(
-                  //ROW 2
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-
-                    ///FLECHA IZQUIERDA
-                    Container(
-                        height: 60,
-                        width: 60,
-                        margin: EdgeInsets.only(top: 100.0, left: 10.0, right: 10),
-                              child: FittedBox(
-                                child: Visibility(
-                                  child: FloatingActionButton(
-                                      heroTag: "flechaIzquierda",
-                                      onPressed: () {
-                                        desplazarIzquierda();
-                                        actualizar();
-                                      },
-                                      child: const Icon(Icons.arrow_left)),
-                                      visible: verFlechaIzquierda,
-                                ),
-
-
-                            )),
-
-                    ///CONTENEDOR DE LA TAREA
-
-                    Flexible(
-                        flex: 40,
-
-                         child:Container(
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              border: Border.all(width: 2),
-                              color: Color.fromRGBO(143, 125, 178, 1)),
-                          child: Column(children: [
-                            if (Sesion.tareas.length > 0) ...[
-                              Center(
-                                  child: Text(
-                                "\n" + Sesion.tareas[tareaActual].nombre + "\n",
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                ),
-                              )),
-                              resetIndicesTarea(),
-                              for (int j = 0;
-                                  j < Sesion.tareas[tareaActual].orden.length;
-                                  j++)
-                                LecturaTarea(
-                                    Sesion.tareas[tareaActual].orden[j], tareaActual)
-                            ] else ...[
-                              Text("BIEN. No tienes tareas que hacer")
-                            ]
-                          ]),
-                        )
-                    ),
-
-                    ///FLECHA DERECHA
-
-                    Container(
-                        height: 60,
-                        width: 60,
-                        margin: EdgeInsets.only(top: 100.0, left: 10.0, right: 10),
-
-                                child: FittedBox(
-                                  child: Visibility(
-                                  child: FloatingActionButton(
-                                    heroTag: "flechaDerecha",
-                                      onPressed: () {
-                                        desplazarDerecha();
-                                        actualizar();
-                                      },
-                                      child: const Icon(Icons.arrow_right)),
-                                    visible: verFlechaDerecha,
-                                ),
-
-                            ))
-                  ]),
-
-              if(Sesion.rol == Rol.alumno.toString())...[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-
-                Visibility(
-                    visible: Sesion.tareas[tareaActual].estado == "sinFinalizar" && mostrarBotones,
-                    child:
-                    FloatingActionButton(
-                      heroTag: "Cancelar tarea",
-                        child:Icon(Icons.cancel_outlined),
-                        onPressed: (){
-
-                                dialogCompletarTarea(false);
-
-                        })),
-
-                Visibility(
-                    visible: Sesion.tareas[tareaActual].estado == "sinFinalizar" && mostrarBotones,
-                    child:
-                    FloatingActionButton(
-                      heroTag: "aceptarTarea",
-                        child:Icon(Icons.check),
-                        onPressed: (){
-                                dialogCompletarTarea(true);
-                        })),
-
-
-
-              ],),
-              ],
-
-
-              Visibility(
-                  visible: Sesion.tareas[tareaActual].estado == "completada",
-                  child:Text("Tarea terminada " + formatoFechafinalizado(Sesion.tareas[tareaActual].fechaentrega) + " :)"),
-              ),
-
-              Visibility(
-                visible: Sesion.tareas[tareaActual].estado == "cancelada",
-                child:Text("Tarea sin poder completar :("),
-              ),
-
-              Visibility(
-                visible: Sesion.tareas[tareaActual].respuesta != "",
-                child:Text("\nComentario de " +
-    (Sesion.rol == Rol.alumno.toString()?Sesion.nombre : Sesion.seleccion.nombre)
-                    + "\n" +Sesion.tareas[tareaActual].respuesta),
-              ),
-
-              if(Sesion.rol != Rol.alumno.toString() && Sesion.tareas[tareaActual].retroalimentacion == "")...[
-              Visibility(
-                visible:Sesion.tareas[tareaActual].estado != "sinFinalizar",
-                child:
-                    ElevatedButton(
-                    onPressed: (){dialogRetroalimentacion();},
-                      child: Text("Enviar retroalimentación"),
-
-                    )
-
-              ),
-              ],
-
-              Visibility(
-                visible: Sesion.tareas[tareaActual].retroalimentacion != "",
-                child:Text("\n Retroalimentacion: \n"+ Sesion.tareas[tareaActual].retroalimentacion),
-              ),
-
-              if(Sesion.rol != Rol.alumno.toString() && Sesion.tareas[tareaActual].retroalimentacion != "")...[
-                Visibility(
-                    visible:Sesion.tareas[tareaActual].estado != "sinFinalizar",
-                    child:
-                    ElevatedButton(
-                      onPressed: (){dialogRetroalimentacion();},
-                      child: Text("Editar retroalimentación"),
-
-                    )
-
+        Wrap(
+          //ROW 2
+          alignment: WrapAlignment.end,
+          //spacing: 800,
+          children: [
+            Container(
+              child: Text(
+                "${"\nTareas de: " + Sesion.nombre + "\n" + "\n" + mensajeTemporizador + "\n"}",
+                //DateFormat('d/M/y HH:mm').format(DateTime.fromMillisecondsSinceEpoch(Sesion.tareas[tareaActual].fechafinal)).toString(),
+                //mensajeTemporizador,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 20.0,
                 ),
-              ],
+              ),
+            ),
+          ],
+        ),
+        Row(
+            //ROW 2
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ///FLECHA IZQUIERDA
+              Container(
+                  height: 60,
+                  width: 60,
+                  margin: EdgeInsets.only(top: 100.0, left: 10.0, right: 10),
+                  child: FittedBox(
+                    child: Visibility(
+                      child: FloatingActionButton(
+                          heroTag: "flechaIzquierda",
+                          onPressed: () {
+                            desplazarIzquierda();
+                            actualizar();
+                          },
+                          child: const Icon(Icons.arrow_left)),
+                      visible: verFlechaIzquierda,
+                    ),
+                  )),
 
+              ///CONTENEDOR DE LA TAREA
 
+              Flexible(
+                  flex: 40,
+                  child: Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        border: Border.all(width: 2),
+                        color: Color.fromRGBO(143, 125, 178, 1)),
+                    child: Column(children: [
+                      if (Sesion.tareas.length > 0) ...[
+                        Center(
+                            child: Text(
+                          "\n" + Sesion.tareas[tareaActual].nombre + "\n",
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                        )),
+                        resetIndicesTarea(),
+                        for (int j = 0;
+                            j < Sesion.tareas[tareaActual].orden.length;
+                            j++)
+                          LecturaTarea(
+                              Sesion.tareas[tareaActual].orden[j], tareaActual)
+                      ] else ...[
+                        Text("BIEN. No tienes tareas que hacer")
+                      ]
+                    ]),
+                  )),
+
+              ///FLECHA DERECHA
+
+              Container(
+                  height: 60,
+                  width: 60,
+                  margin: EdgeInsets.only(top: 100.0, left: 10.0, right: 10),
+                  child: FittedBox(
+                    child: Visibility(
+                      child: FloatingActionButton(
+                          heroTag: "flechaDerecha",
+                          onPressed: () {
+                            desplazarDerecha();
+                            actualizar();
+                          },
+                          child: const Icon(Icons.arrow_right)),
+                      visible: verFlechaDerecha,
+                    ),
+                  ))
+            ]),
+        if (Sesion.rol == Rol.alumno.toString()) ...[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Visibility(
+                  visible:
+                      Sesion.tareas[tareaActual].estado == "sinFinalizar" &&
+                          mostrarBotones,
+                  child: Container(
+                    margin: EdgeInsets.all(20),
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(border: Border.all(width: 1)),
+                      child: FloatingActionButton(
+                          heroTag: "Cancelar tarea",
+                          child: Image.asset(
+                          "assets/tachar.png",
+                          ),
+                          onPressed: () {
+                            dialogCompletarTarea(false);
+                          }))),
+              Visibility(
+                  visible:
+                      Sesion.tareas[tareaActual].estado == "sinFinalizar" &&
+                          mostrarBotones,
+                  child: FloatingActionButton(
+                      heroTag: "aceptarTarea",
+                      child: Icon(Icons.check),
+                      onPressed: () {
+                        dialogCompletarTarea(true);
+                      })),
+            ],
+          ),
+        ],
+        Visibility(
+          visible: Sesion.tareas[tareaActual].estado == "completada",
+          child: Text("Tarea terminada " +
+              formatoFechafinalizado(Sesion.tareas[tareaActual].fechaentrega) +
+              " :)"),
+        ),
+        Visibility(
+          visible: Sesion.tareas[tareaActual].estado == "cancelada",
+          child: Text("Tarea sin poder completar :("),
+        ),
+        Visibility(
+          visible: Sesion.tareas[tareaActual].respuesta != "",
+          child: Text("\nComentario de " +
+              (Sesion.rol == Rol.alumno.toString()
+                  ? Sesion.nombre
+                  : Sesion.seleccion.nombre) +
+              "\n" +
+              Sesion.tareas[tareaActual].respuesta),
+        ),
+        if (Sesion.rol != Rol.alumno.toString() &&
+            Sesion.tareas[tareaActual].retroalimentacion == "") ...[
+          Visibility(
+              visible: Sesion.tareas[tareaActual].estado != "sinFinalizar",
+              child: ElevatedButton(
+                onPressed: () {
+                  dialogRetroalimentacion();
+                },
+                child: Text("Enviar retroalimentación"),
+              )),
+        ],
+        Visibility(
+          visible: Sesion.tareas[tareaActual].retroalimentacion != "",
+          child: Text("\n Retroalimentacion: \n" +
+              Sesion.tareas[tareaActual].retroalimentacion),
+        ),
+        if (Sesion.rol != Rol.alumno.toString() &&
+            Sesion.tareas[tareaActual].retroalimentacion != "") ...[
+          Visibility(
+              visible: Sesion.tareas[tareaActual].estado != "sinFinalizar",
+              child: ElevatedButton(
+                onPressed: () {
+                  dialogRetroalimentacion();
+                },
+                child: Text("Editar retroalimentación"),
+              )),
+        ],
       ] else ...[
         Container(
             alignment: Alignment.center,
@@ -484,8 +445,8 @@ class VerTareasState extends State<VerTareas> {
                     height: 250,
                     width: 250,
                     decoration: BoxDecoration(border: Border.all(width: 2)),
-                    child:
-                        Center(child: Text("¡¡¡Bien!!!  \nNo tienes ninguna tarea")))
+                    child: Center(
+                        child: Text("¡¡¡Bien!!!  \nNo tienes ninguna tarea")))
               ],
             ))
       ]
@@ -523,8 +484,8 @@ class VerTareasState extends State<VerTareas> {
           margin: EdgeInsets.only(bottom: 15),
           width: 200,
           height: 200,
-          child: Container());//ReproductorVideo(
-              //Sesion.tareas[i].controladoresVideo[indiceVideos++]));
+          child: Container()); //ReproductorVideo(
+      //Sesion.tareas[i].controladoresVideo[indiceVideos++]));
     } else
       return Container();
   }
@@ -623,125 +584,103 @@ class VerTareasState extends State<VerTareas> {
   void actualizar() async {
     if (Sesion.tareas.length > 1 && tareaActual == 0) {
       verFlechaDerecha = true;
+    } else if (Sesion.tareas.length > 2 &&
+        tareaActual > 0 &&
+        tareaActual < Sesion.tareas.length - 1) {
+      verFlechaIzquierda = true;
+      verFlechaDerecha = true;
+    } else if (Sesion.tareas.length > 1 &&
+        tareaActual == Sesion.tareas.length - 1) {
+      verFlechaIzquierda = true;
     }
-    else if(Sesion.tareas.length > 2 && tareaActual > 0 && tareaActual < Sesion.tareas.length - 1)
-      {
-        verFlechaIzquierda = true;
-        verFlechaDerecha = true;
-      }
-    else if(Sesion.tareas.length > 1  && tareaActual == Sesion.tareas.length-1)
-      {
-        verFlechaIzquierda = true;
-      }
 
-    if(tareaActual >= Sesion.tareas.length && Sesion.tareas.length > 0)
-    {
+    if (tareaActual >= Sesion.tareas.length && Sesion.tareas.length > 0) {
       tareaActual = Sesion.tareas.length - 1;
       formatTiempoRestante();
     }
-    if(!mounted) return;
+    if (!mounted) return;
     setState(() {});
   }
 
-  dialogCompletarTarea(estado)
-  {
+  dialogCompletarTarea(estado) {
     var controladorRespuesta = TextEditingController();
-    showDialog(context: context, builder: (context){
-      return Dialog(
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Column(children: [
+              Text("Seguro que quieres " +
+                  (estado ? "terminar" : "cancelar") +
+                  "la tarea"),
+              Text("Introduce un comentario opcional:"),
+              TextField(
+                controller: controladorRespuesta,
+              ),
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('No')),
+              ElevatedButton(
+                  onPressed: () {
+                    if (estado) {
+                      base.completarTarea(
+                          Sesion.tareas[tareaActual].idRelacion);
+                    } else {
+                      base.fallarTarea(Sesion.tareas[tareaActual].idRelacion);
+                    }
 
-        child: Column(children:[
+                    if (controladorRespuesta.text != null) {
+                      base.addRespuestaTarea(
+                          Sesion.tareas[tareaActual].idRelacion,
+                          controladorRespuesta.text);
+                    }
 
-          Text("Seguro que quieres " + (estado?"terminar":"cancelar") + "la tarea"),
-          Text("Introduce un comentario opcional:"),
-          TextField(controller: controladorRespuesta,
+                    mostrarBotones = false;
+                    actualizar();
 
-          ),
-
-          ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text('No')),
-          ElevatedButton(
-              onPressed: () {
-
-                if(estado)
-                  {
-                    base.completarTarea(Sesion.tareas[tareaActual].idRelacion);
-                  }
-                else
-                  {
-                    base.fallarTarea(Sesion.tareas[tareaActual].idRelacion);
-                  }
-
-                if(controladorRespuesta.text != null)
-                  {
-                    base.addRespuestaTarea(Sesion.tareas[tareaActual].idRelacion, controladorRespuesta.text);
-                  }
-
-                mostrarBotones = false;
-                actualizar();
-
-                Navigator.pop(context);
-              },
-              child: Text('Enviar')),
-
-        ]),
-
-
-      );
-
-    }
-
-    );
+                    Navigator.pop(context);
+                  },
+                  child: Text('Enviar')),
+            ]),
+          );
+        });
   }
 
-
-  dialogRetroalimentacion()
-  {
+  dialogRetroalimentacion() {
     var controlador = TextEditingController();
-    showDialog(context: context, builder: (context){
-      return Dialog(
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: Column(children: [
+              TextField(
+                controller: controlador,
+              ),
+              Row(
+                children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('Salir')),
+                  ElevatedButton(
+                      onPressed: () {
+                        if (controlador.text != null) {
+                          base.addFeedbackTarea(
+                              Sesion.tareas[tareaActual].idRelacion,
+                              controlador.text);
+                        }
 
-        child: Column(children:[
+                        actualizar();
 
-          TextField(controller: controlador,
-
-          ),
-
-          Row(children: [
-
-            ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Salir')),
-            ElevatedButton(
-                onPressed: () {
-
-                  if(controlador.text != null)
-                  {
-                    base.addFeedbackTarea(Sesion.tareas[tareaActual].idRelacion, controlador.text);
-                  }
-
-                  actualizar();
-
-                  Navigator.pop(context);
-                },
-                child: Text('Enviar')),
-
-          ],)
-
-
-        ]),
-
-
-      );
-
-    }
-
-    );
+                        Navigator.pop(context);
+                      },
+                      child: Text('Enviar')),
+                ],
+              )
+            ]),
+          );
+        });
   }
-
-
 }
