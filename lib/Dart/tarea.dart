@@ -20,10 +20,11 @@ class Tarea {
   var videos;
   var controladoresVideo = [];
   var orden;
-  var terminada;
-  var fallida;
+  var estado;
   var fechafinal;
   var fechaentrega;
+  var respuesta;
+  var retroalimentacion;
 
 
   // Constructor

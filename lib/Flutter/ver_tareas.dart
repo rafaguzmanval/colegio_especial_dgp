@@ -161,7 +161,7 @@ class VerTareasState extends State<VerTareas> {
   formatTiempoRestante()
   {
 
-    if(Sesion.tareas[tareaActual].terminada || Sesion.tareas[tareaActual].fallida)
+    if(Sesion.tareas[tareaActual].estado != "sinFinalizar")
       {
         mensajeTemporizador = "";
         actualizar();
@@ -209,7 +209,7 @@ class VerTareasState extends State<VerTareas> {
 
   String formatoFechafinalizado(minutos)
   {
-    if(!Sesion.tareas[tareaActual].terminada)
+    if(Sesion.tareas[tareaActual].estado == "sinFinalizar")
       return "";
 
     if(minutos <= 2)
@@ -242,7 +242,7 @@ class VerTareasState extends State<VerTareas> {
   {
     if (tareaActual < Sesion.tareas.length - 1) {
       tareaActual++;
-      mostrarBotones = !Sesion.tareas[tareaActual].terminada && !Sesion.tareas[tareaActual].fallida;
+      mostrarBotones = Sesion.tareas[tareaActual].estado == "sinFinalizar" ;
       formatTiempoRestante();
       verFlechaIzquierda = true;
     }
@@ -257,7 +257,7 @@ class VerTareasState extends State<VerTareas> {
 
     if (tareaActual > 0) {
       tareaActual--;
-      mostrarBotones = !Sesion.tareas[tareaActual].terminada && !Sesion.tareas[tareaActual].fallida;
+      mostrarBotones = Sesion.tareas[tareaActual].estado == "sinFinalizar" ;
       formatTiempoRestante();
       verFlechaDerecha = true;
     }
@@ -398,31 +398,25 @@ class VerTareasState extends State<VerTareas> {
                 children: [
 
                 Visibility(
-                    visible: !Sesion.tareas[tareaActual].fallida && !Sesion.tareas[tareaActual].terminada && mostrarBotones,
+                    visible: Sesion.tareas[tareaActual].estado == "sinFinalizar" && mostrarBotones,
                     child:
                     FloatingActionButton(
                       heroTag: "Cancelar tarea",
                         child:Icon(Icons.cancel_outlined),
                         onPressed: (){
 
-                          base.fallarTarea(Sesion.tareas[tareaActual].idRelacion);
-                          mostrarBotones = false;
-                          actualizar();
+                                dialogCompletarTarea(false);
 
                         })),
 
                 Visibility(
-                    visible: !Sesion.tareas[tareaActual].terminada && !Sesion.tareas[tareaActual].fallida && mostrarBotones,
+                    visible: Sesion.tareas[tareaActual].estado == "sinFinalizar" && mostrarBotones,
                     child:
                     FloatingActionButton(
                       heroTag: "aceptarTarea",
                         child:Icon(Icons.check),
                         onPressed: (){
-
-                          base.completarTarea(Sesion.tareas[tareaActual].idRelacion);
-                          mostrarBotones = false;
-                          actualizar();
-
+                                dialogCompletarTarea(true);
                         })),
 
 
@@ -432,14 +426,52 @@ class VerTareasState extends State<VerTareas> {
 
 
               Visibility(
-                  visible: Sesion.tareas[tareaActual].terminada,
+                  visible: Sesion.tareas[tareaActual].estado == "completada",
                   child:Text("Tarea terminada " + formatoFechafinalizado(Sesion.tareas[tareaActual].fechaentrega) + " :)"),
               ),
 
               Visibility(
-                visible: Sesion.tareas[tareaActual].fallida,
+                visible: Sesion.tareas[tareaActual].estado == "cancelada",
                 child:Text("Tarea sin poder completar :("),
-              )
+              ),
+
+              Visibility(
+                visible: Sesion.tareas[tareaActual].respuesta != "",
+                child:Text("\nComentario de " +
+    (Sesion.rol == Rol.alumno.toString()?Sesion.nombre : Sesion.seleccion.nombre)
+                    + "\n" +Sesion.tareas[tareaActual].respuesta),
+              ),
+
+              if(Sesion.rol != Rol.alumno.toString() && Sesion.tareas[tareaActual].retroalimentacion == "")...[
+              Visibility(
+                visible:Sesion.tareas[tareaActual].estado != "sinFinalizar",
+                child:
+                    ElevatedButton(
+                    onPressed: (){dialogRetroalimentacion();},
+                      child: Text("Enviar retroalimentación"),
+
+                    )
+
+              ),
+              ],
+
+              Visibility(
+                visible: Sesion.tareas[tareaActual].retroalimentacion != "",
+                child:Text("\n Retroalimentacion: \n"+ Sesion.tareas[tareaActual].retroalimentacion),
+              ),
+
+              if(Sesion.rol != Rol.alumno.toString() && Sesion.tareas[tareaActual].retroalimentacion != "")...[
+                Visibility(
+                    visible:Sesion.tareas[tareaActual].estado != "sinFinalizar",
+                    child:
+                    ElevatedButton(
+                      onPressed: (){dialogRetroalimentacion();},
+                      child: Text("Editar retroalimentación"),
+
+                    )
+
+                ),
+              ],
 
 
       ] else ...[
@@ -453,7 +485,7 @@ class VerTareasState extends State<VerTareas> {
                     width: 250,
                     decoration: BoxDecoration(border: Border.all(width: 2)),
                     child:
-                        Center(child: Text("No tienes ninguna Tarea Asignada")))
+                        Center(child: Text("¡¡¡Bien!!!  \nNo tienes ninguna tarea")))
               ],
             ))
       ]
@@ -610,4 +642,106 @@ class VerTareasState extends State<VerTareas> {
     if(!mounted) return;
     setState(() {});
   }
+
+  dialogCompletarTarea(estado)
+  {
+    var controladorRespuesta = TextEditingController();
+    showDialog(context: context, builder: (context){
+      return Dialog(
+
+        child: Column(children:[
+
+          Text("Seguro que quieres " + (estado?"terminar":"cancelar") + "la tarea"),
+          Text("Introduce un comentario opcional:"),
+          TextField(controller: controladorRespuesta,
+
+          ),
+
+          ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('No')),
+          ElevatedButton(
+              onPressed: () {
+
+                if(estado)
+                  {
+                    base.completarTarea(Sesion.tareas[tareaActual].idRelacion);
+                  }
+                else
+                  {
+                    base.fallarTarea(Sesion.tareas[tareaActual].idRelacion);
+                  }
+
+                if(controladorRespuesta.text != null)
+                  {
+                    base.addRespuestaTarea(Sesion.tareas[tareaActual].idRelacion, controladorRespuesta.text);
+                  }
+
+                mostrarBotones = false;
+                actualizar();
+
+                Navigator.pop(context);
+              },
+              child: Text('Enviar')),
+
+        ]),
+
+
+      );
+
+    }
+
+    );
+  }
+
+
+  dialogRetroalimentacion()
+  {
+    var controlador = TextEditingController();
+    showDialog(context: context, builder: (context){
+      return Dialog(
+
+        child: Column(children:[
+
+          TextField(controller: controlador,
+
+          ),
+
+          Row(children: [
+
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Salir')),
+            ElevatedButton(
+                onPressed: () {
+
+                  if(controlador.text != null)
+                  {
+                    base.addFeedbackTarea(Sesion.tareas[tareaActual].idRelacion, controlador.text);
+                  }
+
+                  actualizar();
+
+                  Navigator.pop(context);
+                },
+                child: Text('Enviar')),
+
+          ],)
+
+
+        ]),
+
+
+      );
+
+    }
+
+    );
+  }
+
+
 }

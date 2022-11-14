@@ -47,6 +47,7 @@ class AccesoBD {
   // Metodo para registrar usuario
   registrarUsuario(usuario, foto) async {
     try {
+
       //Se encripta la contaseña
       var nuevaPassword = encriptacionSha256(usuario.password);
       var nombrehaseao =
@@ -211,10 +212,11 @@ class AccesoBD {
 
             await consultarIDTarea(idTarea).then((nuevaTarea) {
               nuevaTarea.idRelacion = e.docs[i].id;
-              nuevaTarea.terminada = e.docs[i].get("terminada");
-              nuevaTarea.fallida = e.docs[i].get("fallida");
+              nuevaTarea.estado = e.docs[i].get("estado");
               nuevaTarea.fechafinal = e.docs[i].get("fechafinal");
-              if(nuevaTarea.terminada || nuevaTarea.fallida)
+              nuevaTarea.respuesta = e.docs[i].get("respuesta");
+              nuevaTarea.retroalimentacion = e.docs[i].get("retroalimentacion");
+              if(nuevaTarea.estado != "sinFinalizar")
                 {
                   nuevaTarea.fechaentrega =  (DateTime.now().millisecondsSinceEpoch - e.docs[i].get("fechaentrega"))/(1000*60);
                   //print("nuevos minutos " + nuevaTarea.fechaentrega.toString());
@@ -263,8 +265,7 @@ class AccesoBD {
         "idTarea": idTarea,
         "fechainicio": DateTime.now().millisecondsSinceEpoch,
         "fechafinal" : fechafinal,
-        "terminada" : false,
-        "fallida" : false,
+        "estado" : "sinFinalizar",
         "fechaentrega" : 0,
         "respuesta":"",
         "retroalimentacion":"",
@@ -284,7 +285,7 @@ class AccesoBD {
     try
     {
       final ref = db.collection("usuarioTieneTareas");
-      return await ref.doc(idTareaAsignada).update({"terminada" : true, "fechaentrega" : DateTime.now().millisecondsSinceEpoch});
+      return await ref.doc(idTareaAsignada).update({"estado" : "completada", "fechaentrega" : DateTime.now().millisecondsSinceEpoch});
 
     }catch(e){
       log(e.toString());
@@ -299,7 +300,35 @@ class AccesoBD {
     try
     {
       final ref = db.collection("usuarioTieneTareas");
-      return await ref.doc(idTareaAsignada).update({"fallida" : true, "fechaentrega" : DateTime.now().millisecondsSinceEpoch});
+      return await ref.doc(idTareaAsignada).update({"estado" : true, "cancelada" : DateTime.now().millisecondsSinceEpoch});
+
+    }catch(e){
+      log(e.toString());
+      return false;
+    }
+
+  }
+
+  addRespuestaTarea(idTareaAsignada,comentario) async
+  {
+    try
+    {
+      final ref = db.collection("usuarioTieneTareas");
+      return await ref.doc(idTareaAsignada).update({"respuesta" : comentario});
+
+    }catch(e){
+      log(e.toString());
+      return false;
+    }
+
+  }
+
+  addFeedbackTarea(idTareaAsignada,retroalimentacion) async
+  {
+    try
+    {
+      final ref = db.collection("usuarioTieneTareas");
+      return await ref.doc(idTareaAsignada).update({"retroalimentacion" : retroalimentacion});
 
     }catch(e){
       log(e.toString());
