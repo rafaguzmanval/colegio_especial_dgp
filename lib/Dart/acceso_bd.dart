@@ -300,7 +300,7 @@ class AccesoBD {
     try
     {
       final ref = db.collection("usuarioTieneTareas");
-      return await ref.doc(idTareaAsignada).update({"estado" : true, "cancelada" : DateTime.now().millisecondsSinceEpoch});
+      return await ref.doc(idTareaAsignada).update({"estado" : "cancelada", "fechaentrega" : DateTime.now().millisecondsSinceEpoch});
 
     }catch(e){
       log(e.toString());

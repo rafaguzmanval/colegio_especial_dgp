@@ -95,10 +95,7 @@ class MyHomePageState extends State<MyHomePage> {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Flexible(
-                      flex: 1,
-                      fit: FlexFit.tight,
-                      child: Flexible(
+                        Flexible(
                         flex: 1,
                         fit: FlexFit.tight,
                         //margin: EdgeInsets.all(10),
@@ -130,7 +127,7 @@ class MyHomePageState extends State<MyHomePage> {
                           ),
                         ),
                       ),
-                    ),
+
                   ]))
         ]);
   }
@@ -147,10 +144,7 @@ class MyHomePageState extends State<MyHomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: Flexible(
+                  Flexible(
                     flex: 1,
                     fit: FlexFit.tight,
                     //margin: EdgeInsets.all(10),
@@ -181,7 +175,7 @@ class MyHomePageState extends State<MyHomePage> {
                         },
                       ),
                     ),
-                  ),
+
                 ),
                 Flexible(
                   flex: 1,
@@ -232,10 +226,7 @@ class MyHomePageState extends State<MyHomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: Flexible(
+                  Flexible(
                     flex: 1,
                     fit: FlexFit.tight,
                     //margin: EdgeInsets.all(10),
@@ -266,7 +257,6 @@ class MyHomePageState extends State<MyHomePage> {
                         },
                       ),
                     ),
-                  ),
                 ),
                 Flexible(
                   flex: 1,
