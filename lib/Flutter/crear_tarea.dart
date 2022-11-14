@@ -224,6 +224,9 @@ class CrearTareaState extends State<CrearTarea> {
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.galeria);
               }),
+          SizedBox(
+            height: 15,
+          ),
           ElevatedButton(
               child: Text('Elige un pictograma desde la web de ARASAAC'),
               onPressed: () async {
