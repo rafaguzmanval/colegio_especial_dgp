@@ -402,38 +402,49 @@ class VerTareasState extends State<VerTareas> {
         ],
         Visibility(
           visible: Sesion.tareas[tareaActual].estado == "completada",
-          child: Text("Tarea terminada " +
+          child: Text("\nTarea terminada " +
               formatoFechafinalizado(Sesion.tareas[tareaActual].fechaentrega) +
               " :)"),
         ),
         Visibility(
           visible: Sesion.tareas[tareaActual].estado == "cancelada",
-          child: Text("Tarea sin poder completar :("),
+          child: Text("\nTarea sin poder completar :("),
         ),
         Visibility(
           visible: Sesion.tareas[tareaActual].respuesta != "",
-          child: Text("\nComentario de " +
-              (Sesion.rol == Rol.alumno.toString()
-                  ? Sesion.nombre
-                  : Sesion.seleccion.nombre) +
-              "\n" +
-              Sesion.tareas[tareaActual].respuesta),
+          child: Column(children: [
+            Text(
+              "\nComentario de " +
+                  (Sesion.rol == Rol.alumno.toString()
+                      ? Sesion.nombre + ":\n"
+                      : Sesion.seleccion.nombre + ":\n"),
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Text(Sesion.tareas[tareaActual].respuesta),
+          ]),
         ),
         if (Sesion.rol != Rol.alumno.toString() &&
             Sesion.tareas[tareaActual].retroalimentacion == "") ...[
           Visibility(
               visible: Sesion.tareas[tareaActual].estado != "sinFinalizar",
-              child: ElevatedButton(
-                onPressed: () {
-                  dialogRetroalimentacion();
-                },
-                child: Text("Enviar retroalimentación"),
-              )),
+              child: Container(
+                  margin: EdgeInsets.all(10),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      dialogRetroalimentacion();
+                    },
+                    child: Text("Enviar retroalimentación"),
+                  ))),
         ],
         Visibility(
           visible: Sesion.tareas[tareaActual].retroalimentacion != "",
-          child: Text("\n Retroalimentacion: \n" +
-              Sesion.tareas[tareaActual].retroalimentacion),
+          child: Column(children: [
+            Text("\n Retroalimentacion: \n",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.bold)),
+            Text(Sesion.tareas[tareaActual].retroalimentacion + "\n")
+          ]),
         ),
         if (Sesion.rol != Rol.alumno.toString() &&
             Sesion.tareas[tareaActual].retroalimentacion != "") ...[
@@ -687,29 +698,51 @@ class VerTareasState extends State<VerTareas> {
         builder: (context) {
           return Dialog(
             child: Column(children: [
+              Text("\nIntroduce una realimentacion para el alumno:"),
               TextField(
                 controller: controlador,
               ),
+              Text("\nSeguro que quieres dar" + " esa realimentacion?"),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: Text('Salir')),
-                  ElevatedButton(
-                      onPressed: () {
-                        if (controlador.text != null) {
-                          base.addFeedbackTarea(
-                              Sesion.tareas[tareaActual].idRelacion,
-                              controlador.text);
-                        }
+                  Container(
+                      margin: EdgeInsets.all(10),
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Column(children: [
+                            Text('\nSalir'),
+                            Image.asset(
+                              "assets/cerrar.png",
+                              height: 100,
+                              width: 100,
+                            )
+                          ]))),
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          if (controlador.text != null) {
+                            base.addFeedbackTarea(
+                                Sesion.tareas[tareaActual].idRelacion,
+                                controlador.text);
+                          }
 
-                        actualizar();
+                          actualizar();
 
-                        Navigator.pop(context);
-                      },
-                      child: Text('Enviar')),
+                          Navigator.pop(context);
+                        },
+                        child: Column(children: [
+                          Text('\nEnviar'),
+                          Image.asset(
+                            "assets/enviarunemail.png",
+                            height: 100,
+                            width: 100,
+                          )
+                        ])),
+                  )
                 ],
               )
             ]),
