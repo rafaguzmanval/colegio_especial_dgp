@@ -118,9 +118,11 @@ class VerTareasState extends State<VerTareas> {
             icon: Icon(iconoAtras, color: Colors.white),
             onPressed: () => Navigator.of(context).pop(),
           ),
-          title: Center(child:Text('Tareas de ' + (Sesion.rol == Rol.alumno.toString()
-              ? Sesion.nombre
-              : Sesion.seleccion.nombre ))),
+          title: Center(
+              child: Text('Tareas de ' +
+                  (Sesion.rol == Rol.alumno.toString()
+                      ? Sesion.nombre
+                      : Sesion.seleccion.nombre))),
         ),
         body: GestureDetector(
           onPanStart: (DragStartDetails details) {
@@ -320,39 +322,53 @@ class VerTareasState extends State<VerTareas> {
                         border: Border.all(width: 2),
                         color: Color.fromRGBO(143, 125, 178, 1)),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                      if (Sesion.tareas.length > 0) ...[
-                        Center(
-                            child: Text(
-                          "\n" + Sesion.tareas[tareaActual].nombre + "\n",
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        )),
-                        resetIndicesTarea(),
-                        for (int j = 0;
-                            j < Sesion.tareas[tareaActual].orden.length;
-                            j++)
-                          LecturaTarea(
-                              Sesion.tareas[tareaActual].orden[j], tareaActual),
-
-
-                        if(Sesion.tareas[tareaActual].formularios!= null)...[
-
-                        for(int i = 0; i < Sesion.tareas[tareaActual].formularios.length; i = i + 2 + (Sesion.tareas[tareaActual].formularios[i+1] as int) * 3)
-                          Container(child:Column(children: [
-                            Text(Sesion.tareas[tareaActual].formularios[i]),
-
-
-                          for(int j = i + 2; j < i+2+(Sesion.tareas[tareaActual].formularios[i+1] as int)*3; j= j+3)
-                                  comanda(j)
-                          ],)
-                          )
-
-                    ]
-                     ]]),
-
+                          if (Sesion.tareas.length > 0) ...[
+                            Center(
+                                child: Text(
+                              "\n" + Sesion.tareas[tareaActual].nombre + "\n",
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),
+                            )),
+                            resetIndicesTarea(),
+                            for (int j = 0;
+                                j < Sesion.tareas[tareaActual].orden.length;
+                                j++)
+                              LecturaTarea(Sesion.tareas[tareaActual].orden[j],
+                                  tareaActual),
+                            if (Sesion.tareas[tareaActual].formularios !=
+                                null) ...[
+                              for (int i = 0;
+                                  i <
+                                      Sesion.tareas[tareaActual].formularios
+                                          .length;
+                                  i = i +
+                                      2 +
+                                      (Sesion.tareas[tareaActual]
+                                              .formularios[i + 1] as int) *
+                                          3)
+                                Container(
+                                    child: Column(
+                                  children: [
+                                    Text(Sesion
+                                        .tareas[tareaActual].formularios[i]),
+                                    for (int j = i + 2;
+                                        j <
+                                            i +
+                                                2 +
+                                                (Sesion.tareas[tareaActual]
+                                                            .formularios[i + 1]
+                                                        as int) *
+                                                    3;
+                                        j = j + 3)
+                                      comanda(j)
+                                  ],
+                                ))
+                            ]
+                          ]
+                        ]),
                   )),
 
               ///FLECHA DERECHA
@@ -375,7 +391,6 @@ class VerTareasState extends State<VerTareas> {
                   ))
             ]),
         if (Sesion.rol == Rol.alumno.toString()) ...[
-
           ///BOTONES DE COMPLETAR O RECHAZAR TAREA QUE VE SOLO EL ALUMNO
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -399,24 +414,23 @@ class VerTareasState extends State<VerTareas> {
                             dialogCompletarTarea(false);
                           }))),
               Visibility(
-                  visible:
-                      Sesion.tareas[tareaActual].estado == "sinFinalizar" &&
-                          mostrarBotones,
-                  child: Container(
-                      margin: EdgeInsets.all(15),
-                      width: 150,
-                      height: 150,
-                      child: FloatingActionButton(
-                          heroTag: "aceptarTarea",
-                              child: Image.asset(
-                                "assets/correcto.png",
-                                height: 100,
-                                width: 100,
-                              ),
-                          onPressed: () {
-                            dialogCompletarTarea(true);
-                          }),
-              ),
+                visible: Sesion.tareas[tareaActual].estado == "sinFinalizar" &&
+                    mostrarBotones,
+                child: Container(
+                  margin: EdgeInsets.all(15),
+                  width: 150,
+                  height: 150,
+                  child: FloatingActionButton(
+                      heroTag: "aceptarTarea",
+                      child: Image.asset(
+                        "assets/correcto.png",
+                        height: 100,
+                        width: 100,
+                      ),
+                      onPressed: () {
+                        dialogCompletarTarea(true);
+                      }),
+                ),
               ),
             ],
           ),
@@ -467,12 +481,11 @@ class VerTareasState extends State<VerTareas> {
                 onPressed: () {
                   dialogRetroalimentacion();
                 },
-                child: Text(
-                    (Sesion.tareas[tareaActual].retroalimentacion != ""? "Editar retroalimentación": "Enviar retroalimentación")),
+                child: Text((Sesion.tareas[tareaActual].retroalimentacion != ""
+                    ? "Editar retroalimentación"
+                    : "Enviar retroalimentación")),
               )),
         ],
-
-
       ] else ...[
         Container(
             alignment: Alignment.center,
@@ -674,7 +687,9 @@ class VerTareasState extends State<VerTareas> {
                   child: ElevatedButton(
                       onPressed: () {
                         if (estado) {
-                          base.updateComanda(Sesion.tareas[tareaActual].idRelacion, Sesion.tareas[tareaActual].formularios);
+                          base.updateComanda(
+                              Sesion.tareas[tareaActual].idRelacion,
+                              Sesion.tareas[tareaActual].formularios);
                           base.completarTarea(
                               Sesion.tareas[tareaActual].idRelacion);
                         } else {
@@ -767,46 +782,68 @@ class VerTareasState extends State<VerTareas> {
         });
   }
 
-  Widget comanda(j)
-  {
-    return
-      Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Flexible(child:
-          Text(Sesion.tareas[tareaActual].formularios[j]),
-          ),
-          Flexible(child:
-          Image.network(Sesion.tareas[tareaActual].formularios[j+1],
-            width: 100,
-            height: 100,
-            fit: BoxFit.fill,
-          ),
-          ),
-          if(Sesion.tareas[tareaActual].estado == "sinFinalizar")...[
-          Flexible(child:
-          TextFormField(keyboardType: TextInputType.number,onChanged: (nuevoNumero){
-            if(nuevoNumero == null)
-              {
-                Sesion.tareas[tareaActual].formularios[j+2] = 0;
-              }
-            else
-              {
-                Sesion.tareas[tareaActual].formularios[j+2] = nuevoNumero;
-              }
-
-            print(Sesion.tareas[tareaActual].formularios[j+2].toString());
-          },)
-          ),
-          ]
-          else...[
-            Flexible(child:
-            Text(Sesion.tareas[tareaActual].formularios[j+2].toString())
+  Widget comanda(j) {
+    return Container(
+        decoration: BoxDecoration(border: Border.all(width: 2)),
+        margin: EdgeInsets.all(10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: Text(Sesion.tareas[tareaActual].formularios[j]),
             ),
-          ]
-        ],);
+            Flexible(
+              child: Container(
+                  margin: EdgeInsets.only(right: 20, left: 10),
+                  child: Image.network(
+                    Sesion.tareas[tareaActual].formularios[j + 1],
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.fill,
+                  )),
+            ),
+            if (Sesion.tareas[tareaActual].estado == "sinFinalizar") ...[
+              Flexible(
+                  child: Container(
+                      margin: EdgeInsets.only(left: 20),
+                      child: TextFormField(
+                        textAlign: TextAlign.center,
+                        initialValue: "0",
+                        keyboardType: TextInputType.number,
+                        onChanged: (nuevoNumero) {
+                          if (nuevoNumero == null) {
+                            Sesion.tareas[tareaActual].formularios[j + 2] = 0;
+                          } else {
+                            Sesion.tareas[tareaActual].formularios[j + 2] =
+                                nuevoNumero;
+                          }
+
+                          print(Sesion.tareas[tareaActual].formularios[j + 2]
+                              .toString());
+                        },
+                      ))),
+              Flexible(
+                  child: Container(
+                      decoration: BoxDecoration(border: Border.all(width: 2)),
+                      margin: EdgeInsets.only(left: 25),
+                      child: ElevatedButton(
+                        child: Icon(Icons.plus_one),
+                        onPressed: () {},
+                      ))),
+              Flexible(
+                  child: Container(
+                      decoration: BoxDecoration(border: Border.all(width: 2)),
+                      margin: EdgeInsets.only(left: 25),
+                      child: ElevatedButton(
+                        child: Icon(Icons.exposure_minus_1),
+                        onPressed: () {},
+                      )))
+            ] else ...[
+              Flexible(
+                  child: Text(Sesion.tareas[tareaActual].formularios[j + 2]
+                      .toString())),
+            ]
+          ],
+        ));
   }
-
-
-
 }
