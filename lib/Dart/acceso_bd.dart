@@ -121,27 +121,28 @@ class AccesoBD {
           {
             var fotoPath = "Imágenes/pictogramas/" +
                 encriptacionSha256(tarea.imagenes[0].path);
+
+            //se introduce la imágen dentro del storage y cuando se comrpueba que se ha cargado entronces se incrementa 'i' para que se pueda salir del bucle de espera
             await storageRef
                 .child(fotoPath)
                 .putFile(tarea.imagenes[0])
                 .then((d0) async {
-              log("Se está comprobando que la imagen se ha subido correctamente");
-              await leerImagen(fotoPath).then((value) {
-                log(value);
-                imagenes.add(value);
-                log("Se añadio la imagen al array");
-                i++;
-              });
-              log("Se leido lo de await leerImagen");
-            });
+                      await leerImagen(fotoPath).then((value) {
+                        log(value);
+                        imagenes.add(value);
+                        log("Se añadio la imagen al array");
+                        i++;
+                      });
+                      log("Se leido lo de await leerImagen");
+                    });
           }
 
       }
 
-      log("Se meten videos");
       if (tarea.videos.length > 0) {
         var videoPath = "Vídeos/" + encriptacionSha256(tarea.videos[0].path);
 
+        // se espera a que se introduzca el video correctamente en el storage para después salir del bucle de espera
         await storageRef
             .child(videoPath)
             .putFile(tarea.videos[0])
@@ -153,15 +154,21 @@ class AccesoBD {
         });
       }
 
+      //bucle de espera  para que las imágenes y los vídeos estén cargados
       while (i != tarea.imagenes.length + tarea.videos.length) {}
       ;
 
+      //Cuando se han cargado todas las imágenes y vídeos entonces se sube a la base de datos
+      //la nueva tarea con todas las urls de las imágenes y vídeos
+
       log("Todos los futures se han completado");
+
       var nuevaTarea = <String, dynamic>{
         "nombre": tarea.nombre,
         "textos": tarea.textos,
         "imagenes": imagenes,
         "videos": videos,
+        "formularios":tarea.formularios,
         "orden": tarea.orden
       };
 
@@ -456,10 +463,12 @@ class AccesoBD {
 
       final docSnap = await consulta.get();
 
+
       var tarea = null;
       if (docSnap != null) {
         tarea = docSnap.data();
         tarea?.id = docSnap.id;
+
       }
 
       return tarea;

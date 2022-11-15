@@ -18,6 +18,7 @@ class Tarea {
   var textos;
   var imagenes;
   var videos;
+  var formularios;
   var controladoresVideo = [];
   var orden;
   var estado;
@@ -34,6 +35,7 @@ class Tarea {
       this.textos,
       this.imagenes,
       this.videos,
+      this.formularios,
       this.orden});
 
   // Obtiene los datos de la base de datos y los inserta en el objeto
@@ -48,6 +50,7 @@ class Tarea {
       imagenes:
           data?['imagenes'] is Iterable ? List.from(data?['imagenes']) : null,
       videos: data?['videos'] is Iterable ? List.from(data?['videos']) : null,
+      formularios: data?['formularios'] is Iterable? List.from(data?['formularios']):null,
       orden: data?['orden'] is Iterable ? List.from(data?['orden']) : null,
     );
   }
@@ -59,16 +62,18 @@ class Tarea {
       if (textos != null) "textos": textos,
       if (imagenes != null) "imagenes": imagenes,
       if (videos != null) "videos": videos,
+      if(formularios != null) "formularios" : formularios,
       if (orden != null) "orden": orden,
     };
   }
 
   // Modificar una tarea
-  setTarea(nombre, textos, imagenes, videos, orden) {
+  setTarea(nombre, textos, imagenes, videos, formularios, orden) {
     this.nombre = nombre;
     this.textos = textos;
     this.imagenes = imagenes;
     this.videos = videos;
+    this.formularios = formularios;
     this.orden = orden;
   }
 }

@@ -116,7 +116,9 @@ class VerTareasState extends State<VerTareas> {
             icon: Icon(iconoAtras, color: Colors.white),
             onPressed: () => Navigator.of(context).pop(),
           ),
-          title: Text('Tareas'),
+          title: Center(child:Text('Tareas de ' + (Sesion.rol == Rol.alumno.toString()
+              ? Sesion.nombre
+              : Sesion.seleccion.nombre ))),
         ),
         body: GestureDetector(
           onPanStart: (DragStartDetails details) {
@@ -272,7 +274,7 @@ class VerTareasState extends State<VerTareas> {
           children: [
             Container(
               child: Text(
-                "${"\nTareas de: " + Sesion.nombre + "\n" + "\n" + mensajeTemporizador + "\n"}",
+                "\n" + mensajeTemporizador + "\n",
                 //DateFormat('d/M/y HH:mm').format(DateTime.fromMillisecondsSinceEpoch(Sesion.tareas[tareaActual].fechafinal)).toString(),
                 //mensajeTemporizador,
                 textAlign: TextAlign.center,
@@ -315,7 +317,9 @@ class VerTareasState extends State<VerTareas> {
                     decoration: BoxDecoration(
                         border: Border.all(width: 2),
                         color: Color.fromRGBO(143, 125, 178, 1)),
-                    child: Column(children: [
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
                       if (Sesion.tareas.length > 0) ...[
                         Center(
                             child: Text(
@@ -329,11 +333,42 @@ class VerTareasState extends State<VerTareas> {
                             j < Sesion.tareas[tareaActual].orden.length;
                             j++)
                           LecturaTarea(
-                              Sesion.tareas[tareaActual].orden[j], tareaActual)
-                      ] else ...[
-                        Text("BIEN. No tienes tareas que hacer")
-                      ]
-                    ]),
+                              Sesion.tareas[tareaActual].orden[j], tareaActual),
+
+
+                        if(Sesion.tareas[tareaActual].formularios!= null)...[
+
+                        for(int i = 0; i < Sesion.tareas[tareaActual].formularios.length; i = i + 2 + (Sesion.tareas[tareaActual].formularios[i+1] as int) * 3)
+                          Container(child:Column(children: [
+                            Text(Sesion.tareas[tareaActual].formularios[i]),
+
+
+                          for(int j = i + 2; j < i+2+(Sesion.tareas[tareaActual].formularios[i+1] as int)*3; j= j+3)
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                    Flexible(child:
+                                    Text(Sesion.tareas[tareaActual].formularios[j]),
+                                    ),
+                                    Flexible(child:
+                                    Image.network(Sesion.tareas[tareaActual].formularios[j+1],
+                                      width: 100,
+                                      height: 100,
+                                      fit: BoxFit.fill,
+                                    ),
+                                    ),
+                                    Flexible(child:
+                                    TextField()
+                                    ),
+                                  ],)
+
+
+                          ],)
+                          )
+
+                    ]
+                     ]]),
+
                   )),
 
               ///FLECHA DERECHA
@@ -357,7 +392,7 @@ class VerTareasState extends State<VerTareas> {
             ]),
         if (Sesion.rol == Rol.alumno.toString()) ...[
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Visibility(
                   visible:
@@ -387,16 +422,16 @@ class VerTareasState extends State<VerTareas> {
                       height: 150,
                       child: FloatingActionButton(
                           heroTag: "aceptarTarea",
-                          child: Flexible(
-                              flex: 1,
                               child: Image.asset(
                                 "assets/correcto.png",
                                 height: 100,
                                 width: 100,
-                              )),
+                              ),
                           onPressed: () {
                             dialogCompletarTarea(true);
-                          }))),
+                          }),
+              ),
+              ),
             ],
           ),
         ],

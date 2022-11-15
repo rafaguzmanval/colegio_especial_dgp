@@ -45,7 +45,7 @@ void main () {
   group('Tarea',(){
     test ('Se debería crear con los valores establecidos', () async {
       var tarea = new Tarea();
-      tarea.setTarea("EjemploTarea", "Tarea de ejemplo", null, null, []);
+      tarea.setTarea("EjemploTarea", "Tarea de ejemplo", null, null,null, []);
 
       expect ( tarea.nombre , "EjemploTarea");
       expect ( tarea.textos , "Tarea de ejemplo");

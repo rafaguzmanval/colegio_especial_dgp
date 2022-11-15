@@ -192,7 +192,7 @@ class CrearTareaState extends State<CrearTarea> {
             width: 500,
             child: TextField(
               obscureText: false,
-              maxLength: 60,
+              maxLength: 500,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Introduce una descripción *',
@@ -344,10 +344,12 @@ class CrearTareaState extends State<CrearTarea> {
           orden.add("V");
         }
 
+      var formularios = ["lapices"
+        ,"https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpin%2Fconejo.png?alt=media&token=b93aefd5-f2f8-4056-949d-863b6bbec317",0];
 
 
       Tarea tarea = Tarea();
-      tarea.setTarea(nombre, textos, imagenes, videos, orden);
+      tarea.setTarea(nombre, textos, imagenes, videos, formularios,orden);
 
       await base.crearTarea(tarea).then((value) {
         creando = false;
