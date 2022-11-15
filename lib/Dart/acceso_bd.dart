@@ -223,9 +223,14 @@ class AccesoBD {
               nuevaTarea.fechafinal = e.docs[i].get("fechafinal");
               nuevaTarea.respuesta = e.docs[i].get("respuesta");
               nuevaTarea.retroalimentacion = e.docs[i].get("retroalimentacion");
+
               if(nuevaTarea.estado != "sinFinalizar")
                 {
                   nuevaTarea.fechaentrega =  (DateTime.now().millisecondsSinceEpoch - e.docs[i].get("fechaentrega"))/(1000*60);
+
+                  if(nuevaTarea.formularios != [])
+                  nuevaTarea.formularios = e.docs[i].get("formularios");
+
                   //print("nuevos minutos " + nuevaTarea.fechaentrega.toString());
                 }
               nuevasTareas.add(nuevaTarea);
@@ -276,6 +281,7 @@ class AccesoBD {
         "fechaentrega" : 0,
         "respuesta":"",
         "retroalimentacion":"",
+        "formularios":[]
 
       };
 
@@ -449,6 +455,19 @@ class AccesoBD {
       return lista;
     } catch (e) {
       print(e);
+    }
+  }
+
+  updateComanda(idTareaAsignada,formulario) async
+  {
+    try
+    {
+      final ref = db.collection("usuarioTieneTareas");
+      return await ref.doc(idTareaAsignada).update({"formularios" : formulario});
+
+    }catch(e){
+      log(e.toString());
+      return false;
     }
   }
 

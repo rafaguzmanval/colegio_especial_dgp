@@ -46,6 +46,8 @@ class VerTareasState extends State<VerTareas> {
   var indiceVideos = 0;
   int tareaActual = 0;
 
+  var controladoresComandas = [];
+
   var iconoAtras = Icons.home;
 
   double offSetActual = 0;
@@ -344,25 +346,7 @@ class VerTareasState extends State<VerTareas> {
 
 
                           for(int j = i + 2; j < i+2+(Sesion.tareas[tareaActual].formularios[i+1] as int)*3; j= j+3)
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                    Flexible(child:
-                                    Text(Sesion.tareas[tareaActual].formularios[j]),
-                                    ),
-                                    Flexible(child:
-                                    Image.network(Sesion.tareas[tareaActual].formularios[j+1],
-                                      width: 100,
-                                      height: 100,
-                                      fit: BoxFit.fill,
-                                    ),
-                                    ),
-                                    Flexible(child:
-                                    TextField()
-                                    ),
-                                  ],)
-
-
+                                  comanda(j)
                           ],)
                           )
 
@@ -391,6 +375,8 @@ class VerTareasState extends State<VerTareas> {
                   ))
             ]),
         if (Sesion.rol == Rol.alumno.toString()) ...[
+
+          ///BOTONES DE COMPLETAR O RECHAZAR TAREA QUE VE SOLO EL ALUMNO
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -435,6 +421,8 @@ class VerTareasState extends State<VerTareas> {
             ],
           ),
         ],
+
+        ///TEXTO DE RETROALIMENTACIÓN DE LA APP CUANDO SE TERMINA UNA TAREA
         Visibility(
           visible: Sesion.tareas[tareaActual].estado == "completada",
           child: Text("\nTarea terminada " +
@@ -445,6 +433,8 @@ class VerTareasState extends State<VerTareas> {
           visible: Sesion.tareas[tareaActual].estado == "cancelada",
           child: Text("\nTarea sin poder completar :("),
         ),
+
+        ///COMENTARIO DEL ALUMNO AL TERMINAR LA TAREA
         Visibility(
           visible: Sesion.tareas[tareaActual].respuesta != "",
           child: Column(children: [
@@ -459,19 +449,8 @@ class VerTareasState extends State<VerTareas> {
             Text(Sesion.tareas[tareaActual].respuesta),
           ]),
         ),
-        if (Sesion.rol != Rol.alumno.toString() &&
-            Sesion.tareas[tareaActual].retroalimentacion == "") ...[
-          Visibility(
-              visible: Sesion.tareas[tareaActual].estado != "sinFinalizar",
-              child: Container(
-                  margin: EdgeInsets.all(10),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      dialogRetroalimentacion();
-                    },
-                    child: Text("Enviar retroalimentación"),
-                  ))),
-        ],
+
+        /// RETROALIMENTACIÓN DEL PROFESOR
         Visibility(
           visible: Sesion.tareas[tareaActual].retroalimentacion != "",
           child: Column(children: [
@@ -481,17 +460,19 @@ class VerTareasState extends State<VerTareas> {
             Text(Sesion.tareas[tareaActual].retroalimentacion + "\n")
           ]),
         ),
-        if (Sesion.rol != Rol.alumno.toString() &&
-            Sesion.tareas[tareaActual].retroalimentacion != "") ...[
+        if (Sesion.rol != Rol.alumno.toString()) ...[
           Visibility(
               visible: Sesion.tareas[tareaActual].estado != "sinFinalizar",
               child: ElevatedButton(
                 onPressed: () {
                   dialogRetroalimentacion();
                 },
-                child: Text("Editar retroalimentación"),
+                child: Text(
+                    (Sesion.tareas[tareaActual].retroalimentacion != ""? "Editar retroalimentación": "Enviar retroalimentación")),
               )),
         ],
+
+
       ] else ...[
         Container(
             alignment: Alignment.center,
@@ -693,6 +674,7 @@ class VerTareasState extends State<VerTareas> {
                   child: ElevatedButton(
                       onPressed: () {
                         if (estado) {
+                          base.updateComanda(Sesion.tareas[tareaActual].idRelacion, Sesion.tareas[tareaActual].formularios);
                           base.completarTarea(
                               Sesion.tareas[tareaActual].idRelacion);
                         } else {
@@ -784,4 +766,47 @@ class VerTareasState extends State<VerTareas> {
           );
         });
   }
+
+  Widget comanda(j)
+  {
+    return
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Flexible(child:
+          Text(Sesion.tareas[tareaActual].formularios[j]),
+          ),
+          Flexible(child:
+          Image.network(Sesion.tareas[tareaActual].formularios[j+1],
+            width: 100,
+            height: 100,
+            fit: BoxFit.fill,
+          ),
+          ),
+          if(Sesion.tareas[tareaActual].estado == "sinFinalizar")...[
+          Flexible(child:
+          TextFormField(keyboardType: TextInputType.number,onChanged: (nuevoNumero){
+            if(nuevoNumero == null)
+              {
+                Sesion.tareas[tareaActual].formularios[j+2] = 0;
+              }
+            else
+              {
+                Sesion.tareas[tareaActual].formularios[j+2] = nuevoNumero;
+              }
+
+            print(Sesion.tareas[tareaActual].formularios[j+2].toString());
+          },)
+          ),
+          ]
+          else...[
+            Flexible(child:
+            Text(Sesion.tareas[tareaActual].formularios[j+2].toString())
+            ),
+          ]
+        ],);
+  }
+
+
+
 }
