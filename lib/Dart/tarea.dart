@@ -20,6 +20,7 @@ class Tarea {
   var videos;
   var formularios;
   var controladoresVideo = [];
+  var controladoresComandas = [];
   var orden;
   var estado;
   var fechafinal;

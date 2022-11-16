@@ -26,6 +26,7 @@ import 'package:colegio_especial_dgp/Dart/tarea.dart';
 import 'package:colegio_especial_dgp/Dart/usuario.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:crypto/crypto.dart';
+import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 String encriptacionSha256(String password) {
@@ -208,16 +209,18 @@ class AccesoBD {
   // sesion
   consultarTareasAsignadasAlumno(id, cargarVideos) async {
     try {
+
+      //Se accede a la relación de las tareas de un usuario
       final ref = db.collection("usuarioTieneTareas");
 
 
       await ref.where("idUsuario", isEqualTo: id).orderBy("fechainicio") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
-        ..snapshots().listen((e) async {      //Escucha de los cambios en el servidor
+        ..snapshots().listen((e) async {      //Escucha los cambios en el servidor
           var nuevasTareas = [];
-          for (int i = 0; i < e.docs.length; i++) {
-            var idTarea = e.docs[i].get("idTarea");
+          for (int i = 0; i < e.docs.length; i++) { // itera sobre los elementos de la colección
+            var idTarea = e.docs[i].get("idTarea"); // cada tarea tiene una id
 
-            await consultarIDTarea(idTarea).then((nuevaTarea) {
+            await consultarIDTarea(idTarea).then((nuevaTarea) {  // sobre esa id accedemos a la colección tarea donde se encuentra la información de la tarea
               nuevaTarea.idRelacion = e.docs[i].id;
               nuevaTarea.estado = e.docs[i].get("estado");
               nuevaTarea.fechafinal = e.docs[i].get("fechafinal");
@@ -228,10 +231,10 @@ class AccesoBD {
                 {
                   nuevaTarea.fechaentrega =  (DateTime.now().millisecondsSinceEpoch - e.docs[i].get("fechaentrega"))/(1000*60);
 
-                  if(nuevaTarea.formularios != [])
+                  if(nuevaTarea.formularios != []) // si en la tarea no se han actualizado los datos del formulario entonces debemos sobreescribir
+                    //el que viene por defecto
                   nuevaTarea.formularios = e.docs[i].get("formularios");
 
-                  //print("nuevos minutos " + nuevaTarea.fechaentrega.toString());
                 }
               nuevasTareas.add(nuevaTarea);
 
@@ -239,16 +242,33 @@ class AccesoBD {
                 Sesion.tareas = nuevasTareas;
                 if (cargarVideos) {
                   try {
-                    for (int i = 0; i < Sesion.tareas.length; i++) {
+                    for (int k = 0; k < Sesion.tareas.length; k++) {
                       for (int j = 0; j < Sesion.tareas[i].videos.length; j++) {
-                        var nuevoControlador = VideoPlayerController.network(
-                            Sesion.tareas[i].videos[j]);
-                        Sesion.tareas[i].controladoresVideo
-                            .add(nuevoControlador);
-                        Sesion.tareas[i].controladoresVideo.last.initialize();
+                            var nuevoControlador = VideoPlayerController.network(
+                                Sesion.tareas[k].videos[j]);
+                            Sesion.tareas[k].controladoresVideo
+                                .add(nuevoControlador);
+                            Sesion.tareas[k].controladoresVideo.last.initialize();
                       }
+
+                      //Se cargan los formularios (Mas feo esto que pegarle a un pae la verdad)
+                      if(Sesion.tareas[k].formularios != [])
+                      {
+                        for (int l = 0; l < Sesion.tareas[k].formularios.length;
+                        l = l + 2 + (Sesion.tareas[k].formularios[l + 1] as int) * 3) {
+
+                          for(int j = 0 ; j < (Sesion.tareas[k].formularios[l + 1] as int)  ; j++)
+                          {
+                            Sesion.tareas[k].controladoresComandas.add(TextEditingController());
+                          }
+
+                        }
+                      }
+
                     }
+
                     Sesion.paginaActual.actualizar();
+
                   } catch (e) {
                     print(e);
                   }

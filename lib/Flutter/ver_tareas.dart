@@ -45,9 +45,6 @@ class VerTareasState extends State<VerTareas> {
   var indiceImagenes = 0;
   var indiceVideos = 0;
   int tareaActual = 0;
-  var vez= [];
-
-  var controladoresComandas = [];
 
   var iconoAtras = Icons.home;
 
@@ -65,6 +62,9 @@ class VerTareasState extends State<VerTareas> {
   bool verFlechaDerecha = false;
   var temporizador = null;
   var mensajeTemporizador = "";
+  var controladorTemporizador = StreamController();
+
+  var indiceComanda = 0;
 
   ///Cuándo se pasa de página es necesario que todos los controladores de los formularios y de los reproductores de vídeo se destruyan.
   @override
@@ -165,6 +165,7 @@ class VerTareasState extends State<VerTareas> {
   formatTiempoRestante() {
     if (Sesion.tareas[tareaActual].estado != "sinFinalizar") {
       mensajeTemporizador = "";
+      temporizador.cancel();
       actualizar();
       return;
     }
@@ -210,7 +211,7 @@ class VerTareasState extends State<VerTareas> {
           (segundosRestantes > 1 ? " segundos" : " segundo");
 
     //temporizador = Timer(Duration(milliseconds: 1000),formatTiempoRestante);
-    actualizar();
+    controladorTemporizador.add("");
   }
 
   String formatoFechafinalizado(minutos) {
@@ -278,16 +279,24 @@ class VerTareasState extends State<VerTareas> {
           //spacing: 800,
           children: [
             Container(
-              child: Text(
-                "\n" + mensajeTemporizador + "\n",
-                //DateFormat('d/M/y HH:mm').format(DateTime.fromMillisecondsSinceEpoch(Sesion.tareas[tareaActual].fechafinal)).toString(),
-                //mensajeTemporizador,
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 20.0,
-                ),
-              ),
+              child:
+                  StreamBuilder(
+                    stream:controladorTemporizador.stream,
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      return
+                        Text(
+                          "\n" + mensajeTemporizador + "\n",
+                          //DateFormat('d/M/y HH:mm').format(DateTime.fromMillisecondsSinceEpoch(Sesion.tareas[tareaActual].fechafinal)).toString(),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                          ),
+                        );
+                    },
+
+                  )
+
             ),
           ],
         ),
@@ -340,29 +349,13 @@ class VerTareasState extends State<VerTareas> {
                                   tareaActual),
                             if (Sesion.tareas[tareaActual].formularios !=
                                 null) ...[
-                              for (int i = 0;
-                                  i <
-                                      Sesion.tareas[tareaActual].formularios
-                                          .length;
-                                  i = i +
-                                      2 +
-                                      (Sesion.tareas[tareaActual]
-                                              .formularios[i + 1] as int) *
-                                          3)
+                              for (int i = 0; i < Sesion.tareas[tareaActual].formularios.length; i = i + 2 + (Sesion.tareas[tareaActual].formularios[i + 1] as int) * 3)
                                 Container(
                                     child: Column(
                                   children: [
                                     Text(Sesion
                                         .tareas[tareaActual].formularios[i]),
-                                    for (int j = i + 2;
-                                        j <
-                                            i +
-                                                2 +
-                                                (Sesion.tareas[tareaActual]
-                                                            .formularios[i + 1]
-                                                        as int) *
-                                                    3;
-                                        j = j + 3)
+                                    for (int j = i + 2; j < i + 2 + (Sesion.tareas[tareaActual].formularios[i + 1] as int) * 3; j = j + 3)
                                       comanda(j)
                                   ],
                                 ))
@@ -590,6 +583,7 @@ class VerTareasState extends State<VerTareas> {
   // Accede a las tareas de la base de datos
   cargarTareas(id) async {
     await base.consultarTareasAsignadasAlumno(id, true);
+
   }
 
   // Muestra la vista en horizontal
@@ -632,6 +626,8 @@ class VerTareasState extends State<VerTareas> {
 
   // Actualizar la pagina
   void actualizar() async {
+    print("nueva actualización");
+    indiceComanda = 0;
     if (Sesion.tareas.length > 1 && tareaActual == 0) {
       verFlechaDerecha = true;
     } else if (Sesion.tareas.length > 2 &&
@@ -648,6 +644,8 @@ class VerTareasState extends State<VerTareas> {
       tareaActual = Sesion.tareas.length - 1;
       formatTiempoRestante();
     }
+
+
     if (!mounted) return;
     setState(() {});
   }
@@ -782,12 +780,12 @@ class VerTareasState extends State<VerTareas> {
   }
 
   Widget comanda(j) {
-    controladoresComandas.add(TextEditingController());
-    vez.add(0);
-    if(vez[j] == 0)
+    var indice = indiceComanda;
+    indiceComanda++;
+
+    if(indice >= Sesion.tareas[tareaActual].controladoresComandas.length)
       {
-        controladoresComandas[j].text = "0";
-        vez[j]++;
+        return Text("Error : se ha pasao el indice " + indice.toString() + " cuando el máximo es" + Sesion.tareas[tareaActual].controladoresComandas.length.toString());
       }
 
     return Container(
@@ -815,7 +813,7 @@ class VerTareasState extends State<VerTareas> {
                       margin: EdgeInsets.only(left: 20),
                       child: TextFormField(
                         textAlign: TextAlign.center,
-                        controller: controladoresComandas[j],
+                        controller: Sesion.tareas[tareaActual].controladoresComandas[indice],
                         keyboardType: TextInputType.number,
                         onChanged: (nuevoNumero) {
                           if (nuevoNumero == null) {
@@ -829,30 +827,56 @@ class VerTareasState extends State<VerTareas> {
                               .toString());
                         },
                       ))),
+
               Flexible(
                   child: Container(
                       decoration: BoxDecoration(border: Border.all(width: 2)),
                       margin: EdgeInsets.only(left: 25),
                       child: ElevatedButton(
-                        child: Icon(Icons.plus_one),
+                        child: Icon(Icons.remove),
                         onPressed: () {
-                          var num = int.parse(controladoresComandas[j].text);
-                          num++;
-                          controladoresComandas[j].text = num.toString();
+                          var valor = Sesion.tareas[tareaActual].controladoresComandas[indice].text;
+
+                          if(valor != "")
+                              {
+                                var num = int.parse(valor);
+                                if(num > 0)
+                                  {
+                                    num--;
+                                    Sesion.tareas[tareaActual].controladoresComandas[indice].text = num.toString();
+                                    Sesion.tareas[tareaActual].formularios[j + 2] = num;
+
+                                  }
+                              }
+
                         },
                       ))),
+
               Flexible(
                   child: Container(
                       decoration: BoxDecoration(border: Border.all(width: 2)),
                       margin: EdgeInsets.only(left: 25),
                       child: ElevatedButton(
-                        child: Icon(Icons.exposure_minus_1),
+                        child: Icon(Icons.add),
                         onPressed: () {
-                          var num = int.parse(controladoresComandas[j].text);
-                          num--;
-                          controladoresComandas[j].text = num.toString();
+                          var valor = Sesion.tareas[tareaActual].controladoresComandas[indice].text;
+                          if(valor == "")
+                            {
+                              Sesion.tareas[tareaActual].controladoresComandas[indice].text = "1";
+                              Sesion.tareas[tareaActual].formularios[j + 2] = 1;
+                            }
+                          else
+                            {
+                              var num = int.parse(valor);
+                              num++;
+                              Sesion.tareas[tareaActual].controladoresComandas[indice].text = num.toString();
+                              Sesion.tareas[tareaActual].formularios[j + 2] = num;
+                            }
+
+
                         },
-                      )))
+                      ))),
+
             ] else ...[
               Flexible(
                   child: Text(Sesion.tareas[tareaActual].formularios[j + 2]
