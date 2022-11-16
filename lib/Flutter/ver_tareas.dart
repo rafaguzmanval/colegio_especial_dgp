@@ -45,6 +45,7 @@ class VerTareasState extends State<VerTareas> {
   var indiceImagenes = 0;
   var indiceVideos = 0;
   int tareaActual = 0;
+  var vez= [];
 
   var controladoresComandas = [];
 
@@ -313,7 +314,6 @@ class VerTareasState extends State<VerTareas> {
                   )),
 
               ///CONTENEDOR DE LA TAREA
-
               Flexible(
                   flex: 40,
                   child: Container(
@@ -372,7 +372,6 @@ class VerTareasState extends State<VerTareas> {
                   )),
 
               ///FLECHA DERECHA
-
               Container(
                   height: 60,
                   width: 60,
@@ -783,6 +782,14 @@ class VerTareasState extends State<VerTareas> {
   }
 
   Widget comanda(j) {
+    controladoresComandas.add(TextEditingController());
+    vez.add(0);
+    if(vez[j] == 0)
+      {
+        controladoresComandas[j].text = "0";
+        vez[j]++;
+      }
+
     return Container(
         decoration: BoxDecoration(border: Border.all(width: 2)),
         margin: EdgeInsets.all(10),
@@ -808,7 +815,7 @@ class VerTareasState extends State<VerTareas> {
                       margin: EdgeInsets.only(left: 20),
                       child: TextFormField(
                         textAlign: TextAlign.center,
-                        initialValue: "0",
+                        controller: controladoresComandas[j],
                         keyboardType: TextInputType.number,
                         onChanged: (nuevoNumero) {
                           if (nuevoNumero == null) {
@@ -828,7 +835,11 @@ class VerTareasState extends State<VerTareas> {
                       margin: EdgeInsets.only(left: 25),
                       child: ElevatedButton(
                         child: Icon(Icons.plus_one),
-                        onPressed: () {},
+                        onPressed: () {
+                          var num = int.parse(controladoresComandas[j].text);
+                          num++;
+                          controladoresComandas[j].text = num.toString();
+                        },
                       ))),
               Flexible(
                   child: Container(
@@ -836,7 +847,11 @@ class VerTareasState extends State<VerTareas> {
                       margin: EdgeInsets.only(left: 25),
                       child: ElevatedButton(
                         child: Icon(Icons.exposure_minus_1),
-                        onPressed: () {},
+                        onPressed: () {
+                          var num = int.parse(controladoresComandas[j].text);
+                          num--;
+                          controladoresComandas[j].text = num.toString();
+                        },
                       )))
             ] else ...[
               Flexible(
