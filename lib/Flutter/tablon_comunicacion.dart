@@ -34,6 +34,8 @@ class TablonComunicacionState extends State<TablonComunicacion> {
   ScrollController homeController = new ScrollController();
   double offSetActual2 = 0;
   ScrollController homeController2 = new ScrollController();
+  double offSetActual3 = 0;
+  ScrollController homeController3 = new ScrollController();
 
   var nombres = ["hola", "carne", "caca", "ayuda"];
   var imagenes = [
@@ -85,21 +87,22 @@ class TablonComunicacionState extends State<TablonComunicacion> {
       appBar: AppBar(
         title: Text('Tareas'),
       ),
-      body: Container(
-          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-          child: Column(
-            children: [
-              if (Sesion.rol == Rol.alumno.toString()) ...[
-                VistaAlumno(),
-              ] else if (Sesion.rol == Rol.profesor.toString()) ...[
-                VistaProfesor()
-              ] else if (Sesion.rol == Rol.administrador.toString()) ...[
-                VistaAdministrador()
-              ] else if (Sesion.rol == Rol.programador.toString()) ...[
-                VistaProgramador()
-              ]
-            ],
-          )),
+      body: SingleChildScrollView(
+          child: Container(
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+              child: Column(
+                children: [
+                  if (Sesion.rol == Rol.alumno.toString()) ...[
+                    VistaAlumno(),
+                  ] else if (Sesion.rol == Rol.profesor.toString()) ...[
+                    VistaProfesor()
+                  ] else if (Sesion.rol == Rol.administrador.toString()) ...[
+                    VistaAdministrador()
+                  ] else if (Sesion.rol == Rol.programador.toString()) ...[
+                    VistaProgramador()
+                  ]
+                ],
+              ))),
     );
   }
 
@@ -111,48 +114,55 @@ class TablonComunicacionState extends State<TablonComunicacion> {
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
   Widget VistaAlumno() {
     return Column(children: [
+      SizedBox(
+        height: 10,
+      ),
       Stack(alignment: Alignment.center, children: [
         SingleChildScrollView(
           controller: homeController,
           scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              for (int i = 0; i < 4; i++)
-                //TAREA
-                Container(
-                  margin: EdgeInsets.all(10),
-                  child: ElevatedButton(
-                      style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+          child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.amberAccent,
+                  borderRadius: BorderRadius.circular(20)),
+              child: Row(
+                children: [
+                  for (int i = 0; i < 4; i++)
+                    //TAREA
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.circular(18.0)))),
-                      child: Container(
-                        constraints:
-                            BoxConstraints(maxWidth: 100, minWidth: 60),
-                        width: 10,
-                        margin: EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                            color: Colors.lightGreenAccent,
-                            borderRadius: BorderRadius.circular(20)),
-                        alignment: Alignment.center,
-                        child: Column(children: [
-                          Image(image: NetworkImage(imagenes[i])),
-                          Text(
-                            nombres[i],
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
+                          child: Container(
+                            constraints:
+                                BoxConstraints(maxWidth: 100, minWidth: 60),
+                            width: 10,
+                            margin: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                                color: Colors.lightGreenAccent,
+                                borderRadius: BorderRadius.circular(20)),
+                            alignment: Alignment.center,
+                            child: Column(children: [
+                              Image(image: NetworkImage(imagenes[i])),
+                              Text(
+                                nombres[i],
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ]),
                           ),
-                        ]),
-                      ),
-                      onPressed: () {
-                        _speak(nombres[i]);
-                      }),
-                ),
-            ],
-          ),
+                          onPressed: () {
+                            _speak(nombres[i]);
+                          }),
+                    ),
+                ],
+              )),
         ),
         Container(
             margin: EdgeInsets.only(left: 10),
@@ -204,48 +214,55 @@ class TablonComunicacionState extends State<TablonComunicacion> {
               ),
             )),
       ]),
-      Stack(alignment: Alignment.center,
-          children: [
+      SizedBox(
+        height: 10,
+      ),
+      Stack(alignment: Alignment.center, children: [
         SingleChildScrollView(
           controller: homeController2,
           scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              for (int i = 0; i < 4; i++)
-              //TAREA
-                Container(
-                  margin: EdgeInsets.all(10),
-                  child: ElevatedButton(
-                      style: ButtonStyle(
-                          shape:
-                          MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(18.0)))),
-                      child: Container(
-                        constraints: BoxConstraints(maxWidth: 100, minWidth: 60),
-                        width: 10,
-                        margin: EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                            color: Colors.lightGreenAccent,
-                            borderRadius: BorderRadius.circular(20)),
-                        alignment: Alignment.center,
-                        child: Column(children: [
-                          Image(image: NetworkImage(imagenes[i])),
-                          Text(
-                            nombres[i],
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
+          child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.lightBlueAccent,
+                  borderRadius: BorderRadius.circular(20)),
+              child: Row(
+                children: [
+                  for (int i = 0; i < 4; i++)
+                    //TAREA
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(18.0)))),
+                          child: Container(
+                            constraints:
+                                BoxConstraints(maxWidth: 100, minWidth: 60),
+                            width: 10,
+                            margin: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                                color: Colors.lightGreenAccent,
+                                borderRadius: BorderRadius.circular(20)),
+                            alignment: Alignment.center,
+                            child: Column(children: [
+                              Image(image: NetworkImage(imagenes[i])),
+                              Text(
+                                nombres[i],
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ]),
                           ),
-                        ]),
-                      ),
-                      onPressed: () {
-                        _speak(nombres[i]);
-                      }),
-                ),
-            ],
-          ),
+                          onPressed: () {
+                            _speak(nombres[i]);
+                          }),
+                    ),
+                ],
+              )),
         ),
         Container(
             margin: EdgeInsets.only(left: 10),
@@ -258,8 +275,10 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                     onPressed: () {
                       offSetActual2 += 100;
 
-                      if (offSetActual2 > homeController2.position.maxScrollExtent)
-                        offSetActual2 = homeController2.position.maxScrollExtent;
+                      if (offSetActual2 >
+                          homeController2.position.maxScrollExtent)
+                        offSetActual2 =
+                            homeController2.position.maxScrollExtent;
 
                       homeController2.animateTo(
                         offSetActual2, // change 0.0 {double offset} to corresponding widget position
@@ -281,8 +300,10 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                     heroTag: "flechaDerecha",
                     onPressed: () {
                       offSetActual2 -= 100.0;
-                      if (offSetActual2 < homeController2.position.minScrollExtent)
-                        offSetActual2 = homeController2.position.minScrollExtent;
+                      if (offSetActual2 <
+                          homeController2.position.minScrollExtent)
+                        offSetActual2 =
+                            homeController2.position.minScrollExtent;
 
                       homeController2.animateTo(
                         offSetActual, // change 0.0 {double offset} to corresponding widget position
@@ -294,7 +315,109 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                 visible: verFlechaDerecha,
               ),
             )),
-    ]),
+      ]),
+      SizedBox(
+        height: 10,
+      ),
+      Stack(alignment: Alignment.center, children: [
+        SingleChildScrollView(
+          controller: homeController3,
+          scrollDirection: Axis.horizontal,
+          child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.deepOrangeAccent,
+                  borderRadius: BorderRadius.circular(20)),
+              child: Row(
+                children: [
+                  for (int i = 0; i < 4; i++)
+                    //TAREA
+                    Container(
+                      margin: EdgeInsets.all(10),
+                      child: ElevatedButton(
+                          style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(18.0)))),
+                          child: Container(
+                            constraints:
+                                BoxConstraints(maxWidth: 100, minWidth: 60),
+                            width: 10,
+                            margin: EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                                color: Colors.lightGreenAccent,
+                                borderRadius: BorderRadius.circular(20)),
+                            alignment: Alignment.center,
+                            child: Column(children: [
+                              Image(image: NetworkImage(imagenes[i])),
+                              Text(
+                                nombres[i],
+                                style: TextStyle(
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ]),
+                          ),
+                          onPressed: () {
+                            _speak(nombres[i]);
+                          }),
+                    ),
+                ],
+              )),
+        ),
+        Container(
+            margin: EdgeInsets.only(left: 10),
+            alignment: Alignment.topLeft,
+            child: FittedBox(
+              child: Visibility(
+                child: FloatingActionButton(
+                    elevation: 1.0,
+                    heroTag: "flechaDerecha",
+                    onPressed: () {
+                      offSetActual3 += 100;
+
+                      if (offSetActual3 >
+                          homeController3.position.maxScrollExtent)
+                        offSetActual3 =
+                            homeController3.position.maxScrollExtent;
+
+                      homeController3.animateTo(
+                        offSetActual3, // change 0.0 {double offset} to corresponding widget position
+                        duration: Duration(seconds: 1),
+                        curve: Curves.easeOut,
+                      );
+                    },
+                    child: const Icon(Icons.arrow_left)),
+                visible: verFlechaDerecha,
+              ),
+            )),
+        Container(
+            margin: EdgeInsets.only(right: 10),
+            alignment: Alignment.topRight,
+            child: FittedBox(
+              child: Visibility(
+                child: FloatingActionButton(
+                    elevation: 1.0,
+                    heroTag: "flechaDerecha",
+                    onPressed: () {
+                      offSetActual3 -= 100.0;
+                      if (offSetActual3 <
+                          homeController3.position.minScrollExtent)
+                        offSetActual3 =
+                            homeController3.position.minScrollExtent;
+
+                      homeController3.animateTo(
+                        offSetActual, // change 0.0 {double offset} to corresponding widget position
+                        duration: Duration(seconds: 1),
+                        curve: Curves.easeOut,
+                      );
+                    },
+                    child: const Icon(Icons.arrow_right)),
+                visible: verFlechaDerecha,
+              ),
+            )),
+      ]),
     ]);
   }
 
