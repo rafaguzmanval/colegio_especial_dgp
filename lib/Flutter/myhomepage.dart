@@ -24,6 +24,7 @@ import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Flutter/crear_tarea.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
+import 'package:colegio_especial_dgp/Flutter/gestion_tablon.dart';
 import 'package:colegio_especial_dgp/Flutter/registro_usuarios.dart';
 import 'package:colegio_especial_dgp/Flutter/tablon_comunicacion.dart';
 import 'package:colegio_especial_dgp/Flutter/ver_tareas.dart';
@@ -348,6 +349,79 @@ class MyHomePageState extends State<MyHomePage> {
                               flex: 1,
                               child: Image.asset(
                                 "assets/correcto.png",
+                              )),
+                        ],
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CrearTarea()));
+                      },
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          //GESTION DEL TABLON
+          Flexible(
+            flex: 1,
+            fit: FlexFit.tight,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    child: ElevatedButton(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "GESTION DEL TABLON",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          Flexible(
+                              flex: 1,
+                              child: Image.asset(
+                                "assets/tableroDeComunicacion.png",
+                              )),
+                        ],
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => GestionTablon()));
+                      },
+                    ),
+                  ),
+                ),
+                ///EDICION DE TAREAS
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    child: ElevatedButton(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "LISTA DE TAREAS",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                          Flexible(
+                              flex: 1,
+                              child: Image.asset(
+                                "assets/lista.png",
                               )),
                         ],
                       ),

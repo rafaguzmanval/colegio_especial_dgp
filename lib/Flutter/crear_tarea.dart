@@ -14,6 +14,7 @@
 *   tarea.dart: Se utiliza para construir el objeto tarea y enviarlo a la base de datos
 * */
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -43,6 +44,9 @@ class CrearTareaState extends State<CrearTarea> {
   var controladorVideo;
   var fotoTomada;
   var videoTomado;
+  var formularios = [];
+  var indiceAgrupacion = 1;
+  var numCampos = 0;
   ImagePicker capturador = new ImagePicker();
 
   var creando = false;
@@ -238,7 +242,7 @@ class CrearTareaState extends State<CrearTarea> {
 
 
           const Text(
-            "Elige un videotutorial para la tarea: *",
+            "Elige un videotutorial para la tarea: ",
             style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
           ),
           SizedBox(
@@ -249,6 +253,19 @@ class CrearTareaState extends State<CrearTarea> {
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.video);
               }),
+
+          const Text(
+            "Crea un formulario: ",
+            style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
+          ),
+          ElevatedButton(
+              child: Text('Crea un formulario'),
+              onPressed: () async {
+                  dialogFormulario();
+
+              }
+
+          ),
           SizedBox(
             height: 10,
           ),
@@ -344,9 +361,6 @@ class CrearTareaState extends State<CrearTarea> {
           orden.add("V");
         }
 
-      var formularios = ["lapices"
-        ,"https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpin%2Fconejo.png?alt=media&token=b93aefd5-f2f8-4056-949d-863b6bbec317",0];
-
 
       Tarea tarea = Tarea();
       tarea.setTarea(nombre, textos, imagenes, videos, formularios,orden);
@@ -423,6 +437,180 @@ class CrearTareaState extends State<CrearTarea> {
       ),
 
     ]));
+  }
+
+
+  dialogFormulario() {
+    var controlador = TextEditingController();
+    var controladorStream = StreamController();
+    var imagenEscogida = "";
+    showDialog(
+        context: context,
+        builder: (context) {
+          return StreamBuilder(
+              stream: controladorStream.stream,
+              initialData: "",
+              builder: (BuildContext context, AsyncSnapshot snapshot)
+          {
+            return Dialog(
+                child:SingleChildScrollView(
+                child: Column(children: [
+                  Text("\nCrea un nuevo formulario"),
+
+                  for (int i = 0; i < formularios.length;
+                  i = i + 2 + (formularios[i + 1] as int) * 3)
+                    Container(
+                        child: Column(
+                            children: [
+                              Text(formularios[i]),
+                              for (int j = i + 2; j <
+                                  i + 2 + (formularios[i + 1] as int) * 3;
+                              j = j + 3)
+                                Container(
+                                    decoration: BoxDecoration(border: Border
+                                        .all(width: 2)),
+                                    margin: EdgeInsets.all(10),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .center,
+                                      children: [
+                                        Flexible(
+                                          child: Text(formularios[j]),
+                                        ),
+                                        Flexible(
+                                          child: Container(
+                                              margin: EdgeInsets.only(
+                                                  right: 20, left: 10),
+                                              child: Image.network(
+                                                formularios[j + 1],
+                                                width: 100,
+                                                height: 100,
+                                                fit: BoxFit.fill,
+                                              )),
+                                        ),
+                                      ],
+                                    )),
+                            ])),
+
+
+                  Text("\n Crea una agrupación"),
+
+                  TextField(
+                    controller: controlador,
+                  ),
+
+                  IconButton(onPressed:
+                      () {
+                          formularios.add(controlador.text);
+                          formularios.add(0);
+                          indiceAgrupacion = formularios.length - 1;
+                          numCampos = 0;
+                          controlador.text = "";
+
+                          controladorStream.add("");
+
+                      },
+                      icon: Icon(Icons.add)),
+
+                  Text("\n Crea un elemento"),
+
+                  Row(children:[
+                    Flexible(child:
+                    TextField(
+                      controller: controlador,
+                    ),
+                    ),
+
+                    Flexible(child:
+                    ElevatedButton(
+                        child: Text('Elige un pictograma desde la web de ARASAAC'),
+                        onPressed: () async {
+                          imagenEscogida =  await buscadorArasaac(context: context);
+                          actualizar();
+                        }
+
+                    )
+                    ),
+                    if(imagenEscogida != "")...[
+                      Flexible(child:
+                        Image.network(imagenEscogida)
+
+                      ),
+                    ]
+                    else...
+                      [
+                        Flexible(child:
+                        Container())
+                      ],
+                  ]
+
+                    ),
+
+                  IconButton(onPressed:
+                      () {
+
+                    numCampos ++;
+                    formularios[indiceAgrupacion] = numCampos;
+                    formularios.add(controlador.text);
+                    formularios.add(imagenEscogida);
+                    formularios.add(0);
+
+                    controlador.text = "";
+                    controladorStream.add("");
+
+
+                  },
+                      icon: Icon(Icons.add)),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          margin: EdgeInsets.all(10),
+                          child: ElevatedButton(
+                              onPressed: () {
+                                formularios = [];
+                                Navigator.pop(context);
+                              },
+                              child: Column(children: [
+                                Text('\nCancelar'),
+                                Image.asset(
+                                  "assets/cerrar.png",
+                                  height: 100,
+                                  width: 100,
+                                )
+                              ]))),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        child: ElevatedButton(
+                            onPressed: () {
+                              if (controlador.text != null) {
+
+                              }
+
+                              actualizar();
+
+                              Navigator.pop(context);
+                            },
+                            child: Column(children: [
+                              Text('\n Crear'),
+                              Image.asset(
+                                "assets/enviarunemail.png",
+                                height: 100,
+                                width: 100,
+                              )
+                            ])),
+                      )
+                    ],
+                  )
+                ]
+                )
+            ),
+            );
+          }
+          );
+          }
+        );
   }
 
   // Actualizar las páginas
