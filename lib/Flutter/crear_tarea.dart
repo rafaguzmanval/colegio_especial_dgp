@@ -522,6 +522,7 @@ class CrearTareaState extends State<CrearTarea> {
                     ),
 
                     Flexible(child:
+                        Container(margin:EdgeInsets.only(left: 60) ,child:
                     ElevatedButton(
                         child: Text('Elige un pictograma desde la web de ARASAAC'),
                         onPressed: () async {
@@ -529,7 +530,7 @@ class CrearTareaState extends State<CrearTarea> {
                           actualizar();
                         }
 
-                    )
+                    ))
                     ),
                     if(imagenEscogida != "")...[
                       Flexible(child:
