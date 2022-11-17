@@ -23,6 +23,7 @@ import "package:flutter_tts/flutter_tts.dart";
 class TablonComunicacion extends StatefulWidget {
   @override
   TablonComunicacionState createState() => TablonComunicacionState();
+
 }
 
 class TablonComunicacionState extends State<TablonComunicacion> {
@@ -62,6 +63,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
 
   @override
   void initState() {
+
     super.initState();
 
     Sesion.paginaActual = this;
@@ -93,15 +95,8 @@ class TablonComunicacionState extends State<TablonComunicacion> {
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
               child: Column(
                 children: [
-                  if (Sesion.rol == Rol.alumno.toString()) ...[
-                    VistaAlumno(),
-                  ] else if (Sesion.rol == Rol.profesor.toString()) ...[
-                    VistaProfesor()
-                  ] else if (Sesion.rol == Rol.administrador.toString()) ...[
-                    VistaAdministrador()
-                  ] else if (Sesion.rol == Rol.programador.toString()) ...[
-                    VistaProgramador()
-                  ]
+
+                  cargando(),
                 ],
               ))),
     );
@@ -130,6 +125,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                 children: [
                   for (int i = 0; i < tablon.length; i++)
                     //TAREA
+                    if(tablon[i].tipos == "sustantivo")
                     Container(
                       margin: EdgeInsets.all(10),
                       child: ElevatedButton(
@@ -141,7 +137,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                                           BorderRadius.circular(18.0)))),
                           child: Container(
                             constraints:
-                                BoxConstraints(maxWidth: 100, minWidth: 60),
+                                BoxConstraints(maxWidth: 120, minWidth: 80),
                             width: 10,
                             margin: EdgeInsets.all(20),
                             decoration: BoxDecoration(
@@ -152,6 +148,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                               Image(image: NetworkImage(tablon[i].imagenes)),
                               Text(
                                 tablon[i].nombres,
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.black,
                                 ),
@@ -228,8 +225,9 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                   borderRadius: BorderRadius.circular(20)),
               child: Row(
                 children: [
-                  for (int i = 0; i < 4; i++)
+                  for (int i = 0; i < tablon.length; i++)
                     //TAREA
+                    if(tablon[i].tipos =="verbo")
                     Container(
                       margin: EdgeInsets.all(10),
                       child: ElevatedButton(
@@ -241,7 +239,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                                           BorderRadius.circular(18.0)))),
                           child: Container(
                             constraints:
-                                BoxConstraints(maxWidth: 100, minWidth: 60),
+                                BoxConstraints(maxWidth: 120, minWidth: 80),
                             width: 10,
                             margin: EdgeInsets.all(20),
                             decoration: BoxDecoration(
@@ -249,9 +247,10 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                                 borderRadius: BorderRadius.circular(20)),
                             alignment: Alignment.center,
                             child: Column(children: [
-                              Image(image: NetworkImage(imagenes[i])),
+                              Image(image: NetworkImage(tablon[i].imagenes)),
                               Text(
-                                nombres[i],
+                                tablon[i].nombres,
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.black,
                                 ),
@@ -259,7 +258,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                             ]),
                           ),
                           onPressed: () {
-                            _speak(nombres[i]);
+                            _speak(tablon[i].nombres);
                           }),
                     ),
                 ],
@@ -330,8 +329,9 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                   borderRadius: BorderRadius.circular(20)),
               child: Row(
                 children: [
-                  for (int i = 0; i < 4; i++)
+                  for (int i = 0; i < tablon.length; i++)
                     //TAREA
+                    if(tablon[i].tipos == "adjetivo")
                     Container(
                       margin: EdgeInsets.all(10),
                       child: ElevatedButton(
@@ -351,17 +351,19 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                                 borderRadius: BorderRadius.circular(20)),
                             alignment: Alignment.center,
                             child: Column(children: [
-                              Image(image: NetworkImage(imagenes[i])),
+                              Image(image: NetworkImage(tablon[i].imagenes)),
                               Text(
-                                nombres[i],
+                                tablon[i].nombres,
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
+
                                   color: Colors.black,
                                 ),
                               ),
                             ]),
                           ),
                           onPressed: () {
-                            _speak(nombres[i]);
+                            _speak(tablon[i].nombres);
                           }),
                     ),
                 ],
@@ -421,7 +423,28 @@ class TablonComunicacionState extends State<TablonComunicacion> {
       ]),
     ]);
   }
+  Widget cargando() {
+    if (tablon == null)
+      return Center(child:
+        Text('\nCARGANDO EL TABLON',textAlign: TextAlign.center,),
+      );
+    else {
+      return Vista();
+    }
+  }
 
+  Vista()
+  {
+    if (Sesion.rol == Rol.alumno.toString()) {
+      return VistaAlumno();
+    } else if (Sesion.rol == Rol.profesor.toString()) {
+      return VistaProfesor();
+    } else if (Sesion.rol == Rol.administrador.toString()) {
+      return VistaAdministrador();
+    } else if (Sesion.rol == Rol.programador.toString()) {
+      return VistaProgramador();
+    }
+  }
   ///Este método devuelve toda la vista que va a ver el administrador en un Widget.
   Widget VistaAdministrador() {
     return Container();
@@ -438,8 +461,11 @@ class TablonComunicacionState extends State<TablonComunicacion> {
 
   inicializar() async
   {
+
     tablon = await base.consultarTodosTablon();
+
     actualizar();
+
   }
   // Este metodo actualiza la pagina
   void actualizar() async {
