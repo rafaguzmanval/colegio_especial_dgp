@@ -93,8 +93,9 @@ class App extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       supportedLocales: [Locale('es', 'ES'), Locale('en', 'US')],
       title: 'Proyecto Colegio Especial',
+
       theme:
-          ThemeData(primarySwatch: cambioColor?colorCustom:Colors.orange),
+          ThemeData(primarySwatch: cambioColor?colorCustom:Colors.orange,fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30))),
       home: LoginPage(),
     );
   }

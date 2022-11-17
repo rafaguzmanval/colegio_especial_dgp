@@ -158,6 +158,7 @@ class MyHomePageState extends State<MyHomePage> {
                             Text(
                               "Tablon de Comunicacion",
                               style: TextStyle(
+                                fontSize: 30,
                                 color: Colors.white,
                               ),
                             ),
