@@ -96,39 +96,39 @@ class MyHomePageState extends State<MyHomePage> {
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                        Flexible(
-                        flex: 1,
-                        fit: FlexFit.tight,
-                        //margin: EdgeInsets.all(10),
-                        child: Container(
-                          margin: EdgeInsets.all(50),
-                          child: ElevatedButton(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Lista de alumnos",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      //margin: EdgeInsets.all(10),
+                      child: Container(
+                        margin: EdgeInsets.all(50),
+                        child: ElevatedButton(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Lista de alumnos",
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  color: Colors.white,
                                 ),
-                                Flexible(
-                                    flex: 1,
-                                    child: Image.asset(
-                                      "assets/companeros.png",
-                                    )),
-                              ],
-                            ),
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ListaAlumnos()));
-                            },
+                              ),
+                              Flexible(
+                                  flex: 1,
+                                  child: Image.asset(
+                                    "assets/companeros.png",
+                                  )),
+                            ],
                           ),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ListaAlumnos()));
+                          },
                         ),
                       ),
-
+                    ),
                   ]))
         ]);
   }
@@ -145,39 +145,38 @@ class MyHomePageState extends State<MyHomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    //margin: EdgeInsets.all(10),
-                    child: Container(
-                      margin: EdgeInsets.all(10),
-                      child: ElevatedButton(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Tablon de Comunicación",
-                              style: TextStyle(
-                                fontSize: 30,
-                                color: Colors.white,
-                              ),
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  //margin: EdgeInsets.all(10),
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    child: ElevatedButton(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Tablon de Comunicación",
+                            style: TextStyle(
+                              fontSize: 30,
+                              color: Colors.white,
                             ),
-                            Flexible(
-                                flex: 1,
-                                child: Image.asset(
-                                  "assets/tableroDeComunicacion.png",
-                                )),
-                          ],
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => TablonComunicacion()));
-                        },
+                          ),
+                          Flexible(
+                              flex: 1,
+                              child: Image.asset(
+                                "assets/tableroDeComunicacion.png",
+                              )),
+                        ],
                       ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => TablonComunicacion()));
+                      },
                     ),
-
+                  ),
                 ),
                 Flexible(
                   flex: 1,
@@ -191,6 +190,7 @@ class MyHomePageState extends State<MyHomePage> {
                           Text(
                             "Lista de Tareas",
                             style: TextStyle(
+                              fontSize: 30,
                               color: Colors.white,
                             ),
                           ),
@@ -228,37 +228,38 @@ class MyHomePageState extends State<MyHomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    //margin: EdgeInsets.all(10),
-                    child: Container(
-                      margin: EdgeInsets.all(10),
-                      child: ElevatedButton(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Lista de alumnos",
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  //margin: EdgeInsets.all(10),
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    child: ElevatedButton(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Lista de alumnos",
+                            style: TextStyle(
+                              fontSize: 30,
+                              color: Colors.white,
                             ),
-                            Flexible(
-                                flex: 1,
-                                child: Image.asset(
-                                  "assets/companeros.png",
-                                )),
-                          ],
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ListaAlumnos()));
-                        },
+                          ),
+                          Flexible(
+                              flex: 1,
+                              child: Image.asset(
+                                "assets/companeros.png",
+                              )),
+                        ],
                       ),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ListaAlumnos()));
+                      },
                     ),
+                  ),
                 ),
                 Flexible(
                   flex: 1,
@@ -272,6 +273,7 @@ class MyHomePageState extends State<MyHomePage> {
                           Text(
                             "Lista de Profesores",
                             style: TextStyle(
+                              fontSize: 30,
                               color: Colors.white,
                             ),
                           ),
@@ -312,6 +314,7 @@ class MyHomePageState extends State<MyHomePage> {
                           Text(
                             "Registrar Usuarios",
                             style: TextStyle(
+                              fontSize: 30,
                               color: Colors.white,
                             ),
                           ),
@@ -343,6 +346,7 @@ class MyHomePageState extends State<MyHomePage> {
                           Text(
                             "Crear Tareas",
                             style: TextStyle(
+                              fontSize: 30,
                               color: Colors.white,
                             ),
                           ),
@@ -384,6 +388,7 @@ class MyHomePageState extends State<MyHomePage> {
                           Text(
                             "GESTION DEL TABLON",
                             style: TextStyle(
+                              fontSize: 30,
                               color: Colors.white,
                             ),
                           ),
@@ -403,6 +408,7 @@ class MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                 ),
+
                 ///EDICION DE TAREAS
                 Flexible(
                   flex: 1,
@@ -416,6 +422,7 @@ class MyHomePageState extends State<MyHomePage> {
                           Text(
                             "LISTA DE TAREAS",
                             style: TextStyle(
+                              fontSize: 30,
                               color: Colors.white,
                             ),
                           ),

@@ -16,6 +16,7 @@ class Sesion {
   static var nombre;
   static var rol;
   static var tareas;
+  static var tablon;
   static var seleccion;
   static var paginaActual;
   static var metodoLogin = "";

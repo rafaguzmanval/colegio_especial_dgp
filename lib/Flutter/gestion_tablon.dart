@@ -127,6 +127,7 @@ class GestionTablonState extends State<GestionTablon> {
           SizedBox(
             width: 500,
             child: TextField(
+              style: TextStyle(fontSize: 30.0),
               obscureText: false,
               maxLength: 40,
               decoration: InputDecoration(
@@ -137,11 +138,14 @@ class GestionTablonState extends State<GestionTablon> {
             ),
           ),
           SizedBox(
-            height: 5,
+            height: 10,
           ),
           const Text(
             "Elige el tipo para el boton: *",
-            style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
+            style: TextStyle(fontSize: 30.0, height: 2.0, color: Colors.black),
+          ),
+          SizedBox(
+            height: 10,
           ),
           DropdownButton(
             value: tipoElegido,
@@ -153,7 +157,7 @@ class GestionTablonState extends State<GestionTablon> {
             ].map((String value) {
               return DropdownMenuItem(
                 value: value,
-                child: Text(value),
+                child: Text(value,style: TextStyle(fontSize: 30.0)),
               );
             }).toList(),
             onChanged: (String? value) {
@@ -163,11 +167,11 @@ class GestionTablonState extends State<GestionTablon> {
             },
           ),
           SizedBox(
-            height: 5,
+            height: 10,
           ),
           const Text(
             "Elige un pictograma para el boton: *",
-            style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
+            style: TextStyle(fontSize: 30.0, height: 2.0, color: Colors.black),
           ),
           SizedBox(
             height: 5,
@@ -176,7 +180,7 @@ class GestionTablonState extends State<GestionTablon> {
             height: 15,
           ),
           ElevatedButton(
-              child: Text('Elige un pictograma desde la web de ARASAAC'),
+              child: Text('Elige un pictograma desde la web de ARASAAC',style: TextStyle(fontSize: 30.0)),
               onPressed: () async {
                 fotoTomada = await buscadorArasaac(context: context);
                 actualizar();
@@ -189,10 +193,10 @@ class GestionTablonState extends State<GestionTablon> {
           ),
           Container(
             decoration: BoxDecoration(border: Border.all(width: 2)),
-            height: 130,
-            width: 210,
+            height: 150,
+            width: 230,
             child: fotoTomada == null
-                ? Center(child: Text('Ningun pictograma elegido ****'))
+                ? Center(child: Text('Ningun pictograma elegido ****',textAlign: TextAlign.center,))
                 : Center(
                     child: fotoTomada.startsWith("http")
                         ? Image.network(fotoTomada)
@@ -209,6 +213,7 @@ class GestionTablonState extends State<GestionTablon> {
                     child: Text(
                       "Crear nueva boton tablon",
                       style: TextStyle(
+                        fontSize: 30.0,
                         color: Colors.white,
                       ),
                     ),
