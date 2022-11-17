@@ -45,6 +45,8 @@ class CrearTareaState extends State<CrearTarea> {
   var fotoTomada;
   var videoTomado;
   var formularios = [];
+  var indiceAgrupacion = 1;
+  var numCampos = 0;
   ImagePicker capturador = new ImagePicker();
 
   var creando = false;
@@ -444,6 +446,7 @@ class CrearTareaState extends State<CrearTarea> {
   dialogFormulario() {
     var controlador = TextEditingController();
     var controladorStream = StreamController();
+    var imagenEscogida = "";
     showDialog(
         context: context,
         builder: (context) {
@@ -453,6 +456,7 @@ class CrearTareaState extends State<CrearTarea> {
               builder: (BuildContext context, AsyncSnapshot snapshot)
           {
             return Dialog(
+                child:SingleChildScrollView(
                 child: Column(children: [
                   Text("\nCrea un nuevo formulario"),
 
@@ -500,20 +504,58 @@ class CrearTareaState extends State<CrearTarea> {
 
                   IconButton(onPressed:
                       () {
+                          formularios.add(controlador.text);
+                          formularios.add(0);
+                          indiceAgrupacion = formularios.length - 1;
                           controlador.text = "";
+
+                          controladorStream.add("");
 
                       },
                       icon: Icon(Icons.add)),
 
                   Text("\n Crea un elemento"),
 
-                  TextField(
-                    controller: controlador,
-                  ),
+                  Row(children:[
+                    Flexible(child:
+                    TextField(
+                      controller: controlador,
+                    ),
+                    ),
+
+                    Flexible(child:
+                    ElevatedButton(
+                        child: Text('Elige un pictograma desde la web de ARASAAC'),
+                        onPressed: () async {
+                          imagenEscogida =  await buscadorArasaac(context: context);
+                          actualizar();
+                        }
+
+                    )
+                    ),
+                    if(imagenEscogida != "")...[
+                      Flexible(child:
+                        Image.network(imagenEscogida)
+
+                      ),
+                    ]
+                    else...
+                      [
+                        Flexible(child:
+                        Container())
+                      ],
+                  ]
+
+                    ),
 
                   IconButton(onPressed:
                       () {
+
+                    numCampos ++;
+                    formularios[indiceAgrupacion] = numCampos;
+                    formularios.add(controlador.text);
                     controlador.text = "";
+                    controladorStream.add("");
 
                   },
                       icon: Icon(Icons.add)),
@@ -561,6 +603,7 @@ class CrearTareaState extends State<CrearTarea> {
                   )
                 ]
                 )
+            ),
             );
           }
           );
