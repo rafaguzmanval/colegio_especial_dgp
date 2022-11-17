@@ -173,11 +173,10 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                     elevation: 1.0,
                     heroTag: "flechaDerecha",
                     onPressed: () {
-                      offSetActual += 100;
-
-                      if (offSetActual >
-                          homeController.position.maxScrollExtent)
-                        offSetActual = homeController.position.maxScrollExtent;
+                      offSetActual -= 100.0;
+                      if (offSetActual <
+                          homeController.position.minScrollExtent)
+                        offSetActual = homeController.position.minScrollExtent;
 
                       homeController.animateTo(
                         offSetActual, // change 0.0 {double offset} to corresponding widget position
@@ -198,10 +197,11 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                     elevation: 1.0,
                     heroTag: "flechaDerecha",
                     onPressed: () {
-                      offSetActual -= 100.0;
-                      if (offSetActual <
-                          homeController.position.minScrollExtent)
-                        offSetActual = homeController.position.minScrollExtent;
+                      offSetActual += 100;
+
+                      if (offSetActual >
+                          homeController.position.maxScrollExtent)
+                        offSetActual = homeController.position.maxScrollExtent;
 
                       homeController.animateTo(
                         offSetActual, // change 0.0 {double offset} to corresponding widget position
@@ -273,15 +273,14 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                     elevation: 1.0,
                     heroTag: "flechaDerecha",
                     onPressed: () {
-                      offSetActual2 += 100;
-
-                      if (offSetActual2 >
-                          homeController2.position.maxScrollExtent)
+                      offSetActual2 -= 100.0;
+                      if (offSetActual2 <
+                          homeController2.position.minScrollExtent)
                         offSetActual2 =
-                            homeController2.position.maxScrollExtent;
+                            homeController2.position.minScrollExtent;
 
                       homeController2.animateTo(
-                        offSetActual2, // change 0.0 {double offset} to corresponding widget position
+                        offSetActual, // change 0.0 {double offset} to corresponding widget position
                         duration: Duration(seconds: 1),
                         curve: Curves.easeOut,
                       );
@@ -299,14 +298,15 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                     elevation: 1.0,
                     heroTag: "flechaDerecha",
                     onPressed: () {
-                      offSetActual2 -= 100.0;
-                      if (offSetActual2 <
-                          homeController2.position.minScrollExtent)
+                      offSetActual2 += 100;
+
+                      if (offSetActual2 >
+                          homeController2.position.maxScrollExtent)
                         offSetActual2 =
-                            homeController2.position.minScrollExtent;
+                            homeController2.position.maxScrollExtent;
 
                       homeController2.animateTo(
-                        offSetActual, // change 0.0 {double offset} to corresponding widget position
+                        offSetActual2, // change 0.0 {double offset} to corresponding widget position
                         duration: Duration(seconds: 1),
                         curve: Curves.easeOut,
                       );
@@ -375,15 +375,14 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                     elevation: 1.0,
                     heroTag: "flechaDerecha",
                     onPressed: () {
-                      offSetActual3 += 100;
-
-                      if (offSetActual3 >
-                          homeController3.position.maxScrollExtent)
+                      offSetActual3 -= 100.0;
+                      if (offSetActual3 <
+                          homeController3.position.minScrollExtent)
                         offSetActual3 =
-                            homeController3.position.maxScrollExtent;
+                            homeController3.position.minScrollExtent;
 
                       homeController3.animateTo(
-                        offSetActual3, // change 0.0 {double offset} to corresponding widget position
+                        offSetActual, // change 0.0 {double offset} to corresponding widget position
                         duration: Duration(seconds: 1),
                         curve: Curves.easeOut,
                       );
@@ -401,14 +400,15 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                     elevation: 1.0,
                     heroTag: "flechaDerecha",
                     onPressed: () {
-                      offSetActual3 -= 100.0;
-                      if (offSetActual3 <
-                          homeController3.position.minScrollExtent)
+                      offSetActual3 += 100;
+
+                      if (offSetActual3 >
+                          homeController3.position.maxScrollExtent)
                         offSetActual3 =
-                            homeController3.position.minScrollExtent;
+                            homeController3.position.maxScrollExtent;
 
                       homeController3.animateTo(
-                        offSetActual, // change 0.0 {double offset} to corresponding widget position
+                        offSetActual3, // change 0.0 {double offset} to corresponding widget position
                         duration: Duration(seconds: 1),
                         curve: Curves.easeOut,
                       );
