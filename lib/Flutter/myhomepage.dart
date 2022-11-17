@@ -156,7 +156,7 @@ class MyHomePageState extends State<MyHomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Tablon de Comunicacion",
+                              "Tablon de Comunicación",
                               style: TextStyle(
                                 fontSize: 30,
                                 color: Colors.white,
