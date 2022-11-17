@@ -361,9 +361,6 @@ class CrearTareaState extends State<CrearTarea> {
           orden.add("V");
         }
 
-      var formularios = ["lapices"
-        ,"https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpin%2Fconejo.png?alt=media&token=b93aefd5-f2f8-4056-949d-863b6bbec317",0];
-
 
       Tarea tarea = Tarea();
       tarea.setTarea(nombre, textos, imagenes, videos, formularios,orden);
@@ -507,6 +504,7 @@ class CrearTareaState extends State<CrearTarea> {
                           formularios.add(controlador.text);
                           formularios.add(0);
                           indiceAgrupacion = formularios.length - 1;
+                          numCampos = 0;
                           controlador.text = "";
 
                           controladorStream.add("");
@@ -554,8 +552,12 @@ class CrearTareaState extends State<CrearTarea> {
                     numCampos ++;
                     formularios[indiceAgrupacion] = numCampos;
                     formularios.add(controlador.text);
+                    formularios.add(imagenEscogida);
+                    formularios.add(0);
+
                     controlador.text = "";
                     controladorStream.add("");
+
 
                   },
                       icon: Icon(Icons.add)),
