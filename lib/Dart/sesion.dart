@@ -29,6 +29,7 @@ class Sesion {
     rol = null;
     tareas = [];
     seleccion = null;
+    tablon = [];
   }
 
   // Constructor por defecto
@@ -37,6 +38,7 @@ class Sesion {
     nombre = null;
     rol = null;
     tareas = [];
+    tablon = [];
     seleccion = null;
   }
 }

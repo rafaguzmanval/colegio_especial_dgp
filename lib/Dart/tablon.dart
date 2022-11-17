@@ -31,19 +31,18 @@ class Tablon {
       ) {
     final data = snapshot.data();
     return Tablon(
-      nombres: data?['nombres'] is Iterable ? List.from(data?['nombres']) : null,
-      imagenes:
-      data?['imagenes'] is Iterable ? List.from(data?['imagenes']) : null,
-      tipos: data?['tipos'] is Iterable ? List.from(data?['tipos']) : null,
+      nombres: data?['nombre'],
+      imagenes: data?['imagene'],
+      tipos: data?['tipo'],
     );
   }
 
   // Obtiene los datos del objeto y los inserta en la base de datos
   Map<String, dynamic> toFirestore() {
     return {
-      if (nombres != null) "nombres": nombres,
-      if (imagenes != null) "imagenes": imagenes,
-      if (tipos != null) "tipos": tipos,
+      if (nombres != null) "nombre": nombres,
+      if (imagenes != null) "imagene": imagenes,
+      if (tipos != null) "tipo": tipos,
     };
   }
 

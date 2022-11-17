@@ -45,6 +45,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
     "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fayuda.png?alt=media&token=8c7910ed-7885-475b-92c0-7d3fb8d24584"
   ];
 
+  var tablon;
   var db = FirebaseFirestore.instance;
 
   AccesoBD base = new AccesoBD();
@@ -66,7 +67,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
     Sesion.paginaActual = this;
 
     Sesion.seleccion = "";
-    Sesion.tareas = [];
+    inicializar();
 
     initTTS();
   }
@@ -127,7 +128,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                   borderRadius: BorderRadius.circular(20)),
               child: Row(
                 children: [
-                  for (int i = 0; i < 4; i++)
+                  for (int i = 0; i < tablon.length; i++)
                     //TAREA
                     Container(
                       margin: EdgeInsets.all(10),
@@ -148,9 +149,9 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                                 borderRadius: BorderRadius.circular(20)),
                             alignment: Alignment.center,
                             child: Column(children: [
-                              Image(image: NetworkImage(imagenes[i])),
+                              Image(image: NetworkImage(tablon[i].imagenes)),
                               Text(
-                                nombres[i],
+                                tablon[i].nombres,
                                 style: TextStyle(
                                   color: Colors.black,
                                 ),
@@ -158,7 +159,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                             ]),
                           ),
                           onPressed: () {
-                            _speak(nombres[i]);
+                            _speak(tablon[i].nombres);
                           }),
                     ),
                 ],
@@ -435,6 +436,11 @@ class TablonComunicacionState extends State<TablonComunicacion> {
     );
   }
 
+  inicializar() async
+  {
+    tablon = await base.consultarTodosTablon();
+    actualizar();
+  }
   // Este metodo actualiza la pagina
   void actualizar() async {
     setState(() {});

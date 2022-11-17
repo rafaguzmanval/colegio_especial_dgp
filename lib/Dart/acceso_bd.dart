@@ -21,6 +21,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
+import 'package:colegio_especial_dgp/Dart/tablon.dart';
 import 'package:colegio_especial_dgp/Dart/tarea.dart';
 
 import 'package:colegio_especial_dgp/Dart/usuario.dart';
@@ -582,9 +583,29 @@ class AccesoBD {
       print(e);
       return false;
     }
+  }
 
+  // Metodo que te devuelve todos los usuarios de la base de datos
+  consultarTodosTablon() async {
+    try {
+      var tablon = [];
 
+      final ref = db.collection("tablero").withConverter(
+          fromFirestore: Tablon.fromFirestore,
+          toFirestore: (Tablon tab, _) => tab.toFirestore());
 
+      final consulta = await ref.get();
+
+      consulta.docs.forEach((element) {
+        final tableroNuevo = element.data();
+        tableroNuevo.id = element.id;
+        tablon.add(tableroNuevo);
+      });
+      return tablon;
+
+    } catch (e) {
+      print(e);
+    }
   }
 
 }
