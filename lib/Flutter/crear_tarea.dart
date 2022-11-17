@@ -14,6 +14,7 @@
 *   tarea.dart: Se utiliza para construir el objeto tarea y enviarlo a la base de datos
 * */
 
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -43,6 +44,7 @@ class CrearTareaState extends State<CrearTarea> {
   var controladorVideo;
   var fotoTomada;
   var videoTomado;
+  var formularios = [];
   ImagePicker capturador = new ImagePicker();
 
   var creando = false;
@@ -238,7 +240,7 @@ class CrearTareaState extends State<CrearTarea> {
 
 
           const Text(
-            "Elige un videotutorial para la tarea: *",
+            "Elige un videotutorial para la tarea: ",
             style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
           ),
           SizedBox(
@@ -249,6 +251,19 @@ class CrearTareaState extends State<CrearTarea> {
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.video);
               }),
+
+          const Text(
+            "Crea un formulario: ",
+            style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
+          ),
+          ElevatedButton(
+              child: Text('Crea un formulario'),
+              onPressed: () async {
+                  dialogFormulario();
+
+              }
+
+          ),
           SizedBox(
             height: 10,
           ),
@@ -423,6 +438,134 @@ class CrearTareaState extends State<CrearTarea> {
       ),
 
     ]));
+  }
+
+
+  dialogFormulario() {
+    var controlador = TextEditingController();
+    var controladorStream = StreamController();
+    showDialog(
+        context: context,
+        builder: (context) {
+          return StreamBuilder(
+              stream: controladorStream.stream,
+              initialData: "",
+              builder: (BuildContext context, AsyncSnapshot snapshot)
+          {
+            return Dialog(
+                child: Column(children: [
+                  Text("\nCrea un nuevo formulario"),
+
+                  for (int i = 0; i < formularios.length;
+                  i = i + 2 + (formularios[i + 1] as int) * 3)
+                    Container(
+                        child: Column(
+                            children: [
+                              Text(formularios[i]),
+                              for (int j = i + 2; j <
+                                  i + 2 + (formularios[i + 1] as int) * 3;
+                              j = j + 3)
+                                Container(
+                                    decoration: BoxDecoration(border: Border
+                                        .all(width: 2)),
+                                    margin: EdgeInsets.all(10),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .center,
+                                      children: [
+                                        Flexible(
+                                          child: Text(formularios[j]),
+                                        ),
+                                        Flexible(
+                                          child: Container(
+                                              margin: EdgeInsets.only(
+                                                  right: 20, left: 10),
+                                              child: Image.network(
+                                                formularios[j + 1],
+                                                width: 100,
+                                                height: 100,
+                                                fit: BoxFit.fill,
+                                              )),
+                                        ),
+                                      ],
+                                    )),
+                            ])),
+
+
+                  Text("\n Crea una agrupación"),
+
+                  TextField(
+                    controller: controlador,
+                  ),
+
+                  IconButton(onPressed:
+                      () {
+                          controlador.text = "";
+
+                      },
+                      icon: Icon(Icons.add)),
+
+                  Text("\n Crea un elemento"),
+
+                  TextField(
+                    controller: controlador,
+                  ),
+
+                  IconButton(onPressed:
+                      () {
+                    controlador.text = "";
+
+                  },
+                      icon: Icon(Icons.add)),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          margin: EdgeInsets.all(10),
+                          child: ElevatedButton(
+                              onPressed: () {
+                                formularios = [];
+                                Navigator.pop(context);
+                              },
+                              child: Column(children: [
+                                Text('\nCancelar'),
+                                Image.asset(
+                                  "assets/cerrar.png",
+                                  height: 100,
+                                  width: 100,
+                                )
+                              ]))),
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        child: ElevatedButton(
+                            onPressed: () {
+                              if (controlador.text != null) {
+
+                              }
+
+                              actualizar();
+
+                              Navigator.pop(context);
+                            },
+                            child: Column(children: [
+                              Text('\n Crear'),
+                              Image.asset(
+                                "assets/enviarunemail.png",
+                                height: 100,
+                                width: 100,
+                              )
+                            ])),
+                      )
+                    ],
+                  )
+                ]
+                )
+            );
+          }
+          );
+          }
+        );
   }
 
   // Actualizar las páginas

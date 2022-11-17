@@ -565,4 +565,24 @@ class AccesoBD {
       // Handle any errors.
     }
   }
+
+  crearTablon(nombres,imagenes,tipos)
+  {
+    try {
+      final ref = db.collection("tablero");
+      var nuevoTablero = <String, dynamic>{
+          "nombres" : nombres,
+          "imagenes" : imagenes,
+          "tipos" : tipos,
+      };
+
+    }
+    catch(e){
+      print(e);
+    }
+
+
+
+  }
+
 }

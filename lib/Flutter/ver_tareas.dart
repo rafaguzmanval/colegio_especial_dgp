@@ -659,6 +659,8 @@ class VerTareasState extends State<VerTareas> {
             child: Column(children: [
               Text("\nIntroduce un comentario opcional:"),
               TextField(
+                minLines: 3,
+                maxLines: 6,
                 controller: controladorRespuesta,
               ),
               Text("\nSeguro que quieres " +
