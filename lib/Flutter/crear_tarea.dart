@@ -45,8 +45,8 @@ class CrearTareaState extends State<CrearTarea> {
   var fotoTomada;
   var videoTomado;
   var formularios = [];
-  var indiceAgrupacion = 1;
-  var numCampos = 0;
+  //var indiceAgrupacion = 1;
+  //var numCampos = 0;
   ImagePicker capturador = new ImagePicker();
 
   var creando = false;
@@ -259,10 +259,9 @@ class CrearTareaState extends State<CrearTarea> {
             style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
           ),
           ElevatedButton(
-              child: Text('Crea un formulario'),
+              child: Text(formularios == []?'Crea un formulario':"Edita el formulario"),
               onPressed: () async {
                   dialogFormulario();
-
               }
 
           ),
@@ -455,7 +454,7 @@ class CrearTareaState extends State<CrearTarea> {
             return Dialog(
                 child:SingleChildScrollView(
                 child: Column(children: [
-                  Text("\nCrea un nuevo formulario"),
+                  Text("\nCrea un nuevo formulario",style: TextStyle(fontSize: 40),),
 
                   for (int i = 0; i < formularios.length;
                   i = i + 2 + (formularios[i + 1] as int) * 3)
@@ -489,82 +488,53 @@ class CrearTareaState extends State<CrearTarea> {
                                               )),
                                         ),
                                       ],
-                                    )),
-                            ])),
+                                    )
+                                  ),
 
+                              /// ELEMENTO NUEVO
+                              ///
+                              ElevatedButton(onPressed: () async {
+                                await dialogElemento(i);
+                                controladorStream.add("");
+
+                              },
+                                  child: Text("Crea un elemento"))
+                              ,
+
+                            ]
+                        ),
+                    ),
+
+
+
+
+                  ///
 
                   Text("\n Crea una agrupación"),
 
-                  TextField(
-                    controller: controlador,
-                  ),
-
                   IconButton(onPressed:
-                      () {
-                          formularios.add(controlador.text);
-                          formularios.add(0);
-                          indiceAgrupacion = formularios.length - 1;
-                          numCampos = 0;
-                          controlador.text = "";
+                      () async {
 
-                          controladorStream.add("");
+                            await dialogNombre().then((e){
+
+
+                              formularios.add(e);
+                              formularios.add(0);
+                              print(formularios.toString());
+                              controladorStream.add("");
+
+
+
+                            }
+                            );
+
 
                       },
                       icon: Icon(Icons.add)),
 
-                  Text("\n Crea un elemento"),
-
-                  Row(children:[
-                    Flexible(child:
-                    TextField(
-                      controller: controlador,
-                    ),
-                    ),
-
-                    Flexible(child:
-                        Container(margin:EdgeInsets.only(left: 60) ,child:
-                    ElevatedButton(
-                        child: Text('Elige un pictograma desde la web de ARASAAC'),
-                        onPressed: () async {
-                          imagenEscogida =  await buscadorArasaac(context: context);
-                          actualizar();
-                        }
-
-                    ))
-                    ),
-                    if(imagenEscogida != "")...[
-                      Flexible(child:
-                        Image.network(imagenEscogida)
-
-                      ),
-                    ]
-                    else...
-                      [
-                        Flexible(child:
-                        Container())
-                      ],
-                  ]
-
-                    ),
-
-                  IconButton(onPressed:
-                      () {
-
-                    numCampos ++;
-                    formularios[indiceAgrupacion] = numCampos;
-                    formularios.add(controlador.text);
-                    formularios.add(imagenEscogida);
-                    formularios.add(0);
-
-                    controlador.text = "";
-                    controladorStream.add("");
-
-
-                  },
-                      icon: Icon(Icons.add)),
 
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
                           margin: EdgeInsets.all(10),
@@ -585,10 +555,6 @@ class CrearTareaState extends State<CrearTarea> {
                         margin: EdgeInsets.all(10),
                         child: ElevatedButton(
                             onPressed: () {
-                              if (controlador.text != null) {
-
-                              }
-
                               actualizar();
 
                               Navigator.pop(context);
@@ -612,6 +578,124 @@ class CrearTareaState extends State<CrearTarea> {
           );
           }
         );
+  }
+
+
+  dialogNombre()
+  {
+    var controlador = TextEditingController();
+    return showDialog(
+        context: context,
+        builder: (context) {
+
+          return Dialog(
+            child:Column(children: [
+              TextField(
+                controller: controlador,
+              ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Container(
+                      margin: EdgeInsets.all(10),
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Column(children: [
+                            Text('No'),
+
+                          ]))),
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          if (controlador.text != "") {
+                            Navigator.pop(context,controlador.text);
+                          }
+                        },
+                        child:
+                          Text('Ok'),
+
+                  )
+                  )
+                ],
+              )
+
+            ],)
+            );
+        }
+    );
+  }
+
+  dialogElemento(i)
+  {
+    var imagenEscogida = "";
+    var controlador = TextEditingController();
+    var controladorStream = StreamController();
+
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return StreamBuilder(
+              stream: controladorStream.stream,
+              initialData: "",
+              builder: (BuildContext context, AsyncSnapshot snapshot)
+          {
+            return Dialog(child:
+
+            Column(children: [Row(children: [
+              Flexible(child:
+              TextField(
+                controller: controlador,
+              ),
+              ),
+              Flexible(child:
+              Container(margin: EdgeInsets.only(left: 60), child:
+              ElevatedButton(
+                  child: Text('Elige un pictograma desde la web de ARASAAC'),
+                  onPressed: () async {
+                    imagenEscogida = await buscadorArasaac(context: context);
+                    controladorStream.add("");
+                  }
+
+              ))
+              ),
+              if(imagenEscogida != "")...[
+                Flexible(child:
+                Image.network(imagenEscogida, width: 100, height: 100)
+                ),
+              ]
+              else
+                ...
+                [
+                  Flexible(child:
+                  Container())
+                ],
+            ]
+
+            )
+              ,
+              IconButton(onPressed:
+                  () {
+                formularios[i + 1]++;
+                formularios.add(controlador.text);
+                formularios.add(imagenEscogida);
+                formularios.add(0);
+
+                controlador.text = "";
+                Navigator.pop(context);
+              },
+                  icon: Icon(Icons.add)),
+            ]
+
+            )
+            );
+          }
+          );
+    }
+    );
   }
 
   // Actualizar las páginas

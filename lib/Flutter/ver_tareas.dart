@@ -22,6 +22,33 @@ import 'package:video_player/video_player.dart';
 import "package:image_picker/image_picker.dart";
 import 'dart:async';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+//Función para mandar un email.
+Future sendEmail(String name, String email,String subject, String message) async {
+  final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
+  const serviceId = 'servicioCorreo';
+  const templateId = 'template_xxh3jhv';
+  const userId = '2wgqbl0rcKfvIgaCQ';
+  final response = await http.post(url,
+      headers: {
+        'Content-Type': 'application/json'
+      }, //This line makes sure it works for all platforms.
+      body: json.encode({
+        'service_id': serviceId,
+        'template_id': templateId,
+        'user_id': userId,
+        'template_params': {
+          'to_email': email,
+          'message': message,
+          'subject' : subject
+        }
+      }));
+  return response.statusCode;
+}
+
+
 class VerTareas extends StatefulWidget {
   @override
   VerTareasState createState() => VerTareasState();
@@ -298,6 +325,20 @@ class VerTareasState extends State<VerTareas> {
                   )
 
             ),
+
+            if(Sesion.rol != Rol.alumno.toString() && Sesion.tareas[tareaActual].formularios != [] )...[
+                ElevatedButton(onPressed: (){
+                    dialogCorreo();
+                   }, child: Column(children: [
+                      Text('\nEnviar'),
+                      Image.asset(
+                      "assets/enviarunemail.png",
+                      height: 100,
+                      width: 100,
+                      )
+                      ]))
+            ]
+
           ],
         ),
         Row(
@@ -348,7 +389,7 @@ class VerTareasState extends State<VerTareas> {
                               LecturaTarea(Sesion.tareas[tareaActual].orden[j],
                                   tareaActual),
                             if (Sesion.tareas[tareaActual].formularios !=
-                                null) ...[
+                                null && Sesion.tareas[tareaActual].formularios != []) ...[
                               for (int i = 0; i < Sesion.tareas[tareaActual].formularios.length; i = i + 2 + (Sesion.tareas[tareaActual].formularios[i + 1] as int) * 3)
                                 Container(
                                     child: Column(
@@ -886,5 +927,51 @@ class VerTareasState extends State<VerTareas> {
             ]
           ],
         ));
+  }
+
+
+
+  dialogCorreo()
+  {
+    var controladorAsunto = TextEditingController();
+    var controladorEnviar = TextEditingController();
+    var controladorMensaje = TextEditingController();
+    return showDialog(context: context, builder: (context){
+        return Dialog(
+          child:
+              SingleChildScrollView(child:
+          Column(
+            children: [
+              //Flexible(child: Row(children: [Text("Asunto:"),TextField(controller: controladorAsunto,)],) ),
+
+              Text("Asunto:"),
+              TextField(controller: controladorAsunto,),
+
+
+              //Flexible(child:Row(children: [Text("Enviar a:"),TextField(controller: controladorEnviar,)],)),
+
+              Text("Enviar a:"),
+              TextField(controller: controladorEnviar,),
+
+              Text("Mensaje:"),
+              TextField(controller: controladorMensaje,minLines: 10,maxLines: 20,),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                ElevatedButton(onPressed: (){Navigator.pop(context);}, child: Text("cancelar")),
+                  ElevatedButton(onPressed: () async{
+                    await sendEmail("mochileros", "rafagval@gmail.com", "diselo", "colega").then((e){
+                      print(e);
+                    });
+                    Navigator.pop(context);},
+                      child: Text("enviar")),
+
+                ],),
+            ],
+          ),
+        )
+        );
+    });
   }
 }
