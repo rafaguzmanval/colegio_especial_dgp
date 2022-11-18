@@ -175,9 +175,16 @@ class LoginPageState extends State<LoginPage> {
   // Metodo para inicializar y cargar los datos necesarios
   inicializar() async {
     if(Sesion.argumentos.first == "profesores")
-      usuarios = await base.consultarTodosProfesores();
+      {
+        usuarios = await base.consultarTodosProfesores();
+      }
     else
+      {
       usuarios = await base.consultarTodosAlumnos();
+      }
+
+
+    Sesion.argumentos.clear();
 
     imagenUgr = await lecturaImagen("AppStorage/ugr.png");
     if (usuarios.length > 10) verBotonAbajo = true;

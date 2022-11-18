@@ -487,6 +487,20 @@ class CrearTareaState extends State<CrearTarea> {
                                                 fit: BoxFit.fill,
                                               )),
                                         ),
+                                        Flexible(
+                                          child: Container(
+                                              child:
+                                              FloatingActionButton(
+                                                heroTag: "boton" + i.toString() + j.toString(),
+                                                onPressed: (){
+                                                  formularios.removeAt(j);
+                                                  formularios.removeAt(j+1);
+                                                  formularios.removeAt(j+2);
+                                                },
+                                                child:Icon(Icons.remove)
+                                              )
+                                          ),
+                                        ),
                                       ],
                                     )
                                   ),
@@ -518,11 +532,13 @@ class CrearTareaState extends State<CrearTarea> {
                             await dialogNombre().then((e){
 
 
-                              formularios.add(e);
-                              formularios.add(0);
-                              print(formularios.toString());
-                              controladorStream.add("");
-
+                              if(e!= null)
+                                {
+                                  formularios.add(e);
+                                  formularios.add(0);
+                                  //print(formularios.toString());
+                                  controladorStream.add("");
+                                }
 
 
                             }
