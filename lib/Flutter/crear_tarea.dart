@@ -461,7 +461,27 @@ class CrearTareaState extends State<CrearTarea> {
                     Container(
                         child: Column(
                             children: [
-                              Text(formularios[i]),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                  children:[
+                                Flexible(child:Text(formularios[i])),
+                                Flexible(
+                                  child: Container(
+                                      child:
+                                      FloatingActionButton(
+                                          heroTag: "boton" + i.toString(),
+                                          onPressed: (){
+                                            formularios.removeRange(i, i + 2 + (formularios[i + 1] as int) * 3);
+                                            controladorStream.add("");
+
+                                          },
+                                          child:Icon(Icons.remove)
+                                      )
+                                  ),
+                                ),
+                              ],
+                              ),
+
                               for (int j = i + 2; j <
                                   i + 2 + (formularios[i + 1] as int) * 3;
                               j = j + 3)
@@ -476,26 +496,32 @@ class CrearTareaState extends State<CrearTarea> {
                                         Flexible(
                                           child: Text(formularios[j]),
                                         ),
-                                        Flexible(
-                                          child: Container(
-                                              margin: EdgeInsets.only(
-                                                  right: 20, left: 10),
-                                              child: Image.network(
-                                                formularios[j + 1],
-                                                width: 100,
-                                                height: 100,
-                                                fit: BoxFit.fill,
-                                              )),
-                                        ),
+                                        if(formularios[j + 1] != "")...[
+                                          Flexible(
+                                            child: Container(
+                                                margin: EdgeInsets.only(
+                                                    right: 20, left: 10),
+                                                child: Image.network(
+                                                  formularios[j + 1],
+                                                  width: 100,
+                                                  height: 100,
+                                                  fit: BoxFit.fill,
+                                                )),
+                                          ),
+                                        ],
+
                                         Flexible(
                                           child: Container(
                                               child:
                                               FloatingActionButton(
                                                 heroTag: "boton" + i.toString() + j.toString(),
                                                 onPressed: (){
-                                                  formularios.removeAt(j);
-                                                  formularios.removeAt(j+1);
-                                                  formularios.removeAt(j+2);
+                                                  print(formularios[j].toString() +" " + formularios[j+1].toString() + "  " +formularios[j+2].toString());
+                                                  formularios.removeRange(j, j+3);
+                                                  formularios[i+1]--;
+
+                                                  controladorStream.add("");
+
                                                 },
                                                 child:Icon(Icons.remove)
                                               )
@@ -695,14 +721,15 @@ class CrearTareaState extends State<CrearTarea> {
               ,
               IconButton(onPressed:
                   () {
-                formularios[i + 1]++;
-                formularios.add(controlador.text);
-                formularios.add(imagenEscogida);
-                formularios.add(0);
+                    if(imagenEscogida == null){imagenEscogida = "";}
+                    formularios.insert(i + 2 + formularios[i + 1] * 3 ,controlador.text);
+                    formularios.insert(i + 2 + formularios[i + 1] * 3 + 1,imagenEscogida);
+                    formularios.insert(i + 2 + formularios[i + 1] * 3 + 2,0);
+                    formularios[i + 1]++;
 
-                controlador.text = "";
-                Navigator.pop(context);
-              },
+                    controlador.text = "";
+                    Navigator.pop(context);
+                  },
                   icon: Icon(Icons.add)),
             ]
 
