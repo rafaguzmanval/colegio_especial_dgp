@@ -94,14 +94,14 @@ class LoginPageState extends State<LoginPage> {
   obtenerAutenticacion() async {
     try {
       Sesion.credenciales = await FirebaseAuth.instance.signInAnonymously();
-      print("Signed in with temporary account.");
+      print("Signed in with temporary account.".toUpperCase());
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "operation-not-allowed":
-          print("Anonymous auth hasn't been enabled for this project.");
+          print("Anonymous auth hasn't been enabled for this project.".toUpperCase());
           break;
         default:
-          print("Unknown error.");
+          print("Unknown error.".toUpperCase());
       }
     }
   }
@@ -111,7 +111,7 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(title: Text('TuCole')),
+        appBar: AppBar(title: Text('TuCole'.toUpperCase())),
         body: Stack(children: [
           ListaUsuarios(),
           Visibility(
@@ -220,7 +220,7 @@ class LoginPageState extends State<LoginPage> {
         ImagenUGR(),
         Text('Créditos: Los mochileros'),
         Text(
-            'Rafael Guzmán , Blanca Abril , Javier Mesa , José Paneque , Hicham Bouchemma , Emilio Vargas'),
+            'Rafael Guzmán , Blanca Abril , Javier Mesa , José Paneque , Hicham Bouchemma , Emilio Vargas'.toUpperCase()),
       ]);
     else {
       return OrientationBuilder(
@@ -261,7 +261,7 @@ class LoginPageState extends State<LoginPage> {
                       child: Column(
                         children: [
                           Text(
-                            usuarios[j].nombre,
+                            usuarios[j].nombre.toString().toUpperCase(),
                             style: TextStyle(
                               color: Colors.white,
                             ),
