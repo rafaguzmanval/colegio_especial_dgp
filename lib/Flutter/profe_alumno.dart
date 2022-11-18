@@ -17,6 +17,7 @@
 
 import 'package:colegio_especial_dgp/Dart/main.dart';
 import 'package:colegio_especial_dgp/Dart/passport_method.dart';
+import 'package:colegio_especial_dgp/Flutter/loginpage.dart';
 import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
 import 'package:colegio_especial_dgp/Flutter/password_login.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -26,11 +27,69 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
+class ProfeAlumno extends StatefulWidget {
   @override
-  LoginPageState createState() => LoginPageState();
+  ProfeAlumnoState createState() => ProfeAlumnoState();
 }
 
+class ProfeAlumnoState extends State<ProfeAlumno> {
+
+
+  FlutterLocalNotificationsPlugin notificaciones =
+  new FlutterLocalNotificationsPlugin();
+
+  var homeController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    Notificacion.initialize(flutterLocalNotificationsPlugin);
+    //Notificacion.showBigTextNotification(title: "Bienvenio", body: "LA gran notificacion", fln: flutterLocalNotificationsPlugin);
+
+  }
+
+
+// Contructor de la estructura de la pagina
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(title: Text('TuCole')),
+    body: Column(
+    mainAxisAlignment: MainAxisAlignment.center,
+
+    children: [
+      ElevatedButton(
+      child: Text('Profesores'),
+      onPressed: () {
+        Sesion.argumentos.add("profesores");
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage()),
+        );
+      },
+    ),
+      ElevatedButton(
+      child: Text('Alumnos'),
+      onPressed: () {
+      Sesion.argumentos.add("alumnos");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginPage()),
+      );
+      },
+      ),
+  ],
+  ),
+  );
+}
+
+}
+
+        
+
+/*
 class LoginPageState extends State<LoginPage> {
   AccesoBD base = new AccesoBD();
   var usuarios;
@@ -94,14 +153,14 @@ class LoginPageState extends State<LoginPage> {
   obtenerAutenticacion() async {
     try {
       Sesion.credenciales = await FirebaseAuth.instance.signInAnonymously();
-      print("Signed in with temporary account.".toUpperCase());
+      print("Signed in with temporary account.");
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "operation-not-allowed":
-          print("Anonymous auth hasn't been enabled for this project.".toUpperCase());
+          print("Anonymous auth hasn't been enabled for this project.");
           break;
         default:
-          print("Unknown error.".toUpperCase());
+          print("Unknown error.");
       }
     }
   }
@@ -111,7 +170,7 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(title: Text('TuCole'.toUpperCase())),
+        appBar: AppBar(title: Text('TuCole')),
         body: Stack(children: [
           ListaUsuarios(),
           Visibility(
@@ -174,11 +233,7 @@ class LoginPageState extends State<LoginPage> {
 
   // Metodo para inicializar y cargar los datos necesarios
   inicializar() async {
-    if(Sesion.argumentos.first == "profesores")
-      usuarios = await base.consultarTodosProfesores();
-    else
-      usuarios = await base.consultarTodosAlumnos();
-
+    usuarios = await base.consultarTodosUsuarios();
     imagenUgr = await lecturaImagen("AppStorage/ugr.png");
     if (usuarios.length > 10) verBotonAbajo = true;
     _actualizar();
@@ -224,7 +279,7 @@ class LoginPageState extends State<LoginPage> {
         ImagenUGR(),
         Text('Créditos: Los mochileros'),
         Text(
-            'Rafael Guzmán , Blanca Abril , Javier Mesa , José Paneque , Hicham Bouchemma , Emilio Vargas'.toUpperCase()),
+            'Rafael Guzmán , Blanca Abril , Javier Mesa , José Paneque , Hicham Bouchemma , Emilio Vargas'),
       ]);
     else {
       return OrientationBuilder(
@@ -265,7 +320,7 @@ class LoginPageState extends State<LoginPage> {
                       child: Column(
                         children: [
                           Text(
-                            usuarios[j].nombre.toString().toUpperCase(),
+                            usuarios[j].nombre,
                             style: TextStyle(
                               color: Colors.white,
                             ),
@@ -311,3 +366,4 @@ class LoginPageState extends State<LoginPage> {
     setState(() {});
   }
 }
+*/

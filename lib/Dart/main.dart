@@ -18,6 +18,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import '../Flutter/profe_alumno.dart';
 import 'firebase_options.dart';
 import '../Flutter/loginpage.dart';
 import 'notificacion.dart';
@@ -96,7 +97,7 @@ class App extends StatelessWidget {
 
       theme:
           ThemeData(primarySwatch: cambioColor?colorCustom:Colors.orange,fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30))),
-      home: LoginPage(),
+      home: ProfeAlumno(),
     );
   }
 }
