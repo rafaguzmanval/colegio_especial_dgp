@@ -65,13 +65,13 @@ class PasswordLoginState extends State<PasswordLogin> {
 
   // Crear el mensaje de advertencia
   void advertencia() {
-    errorLog = "El pin no es correcto, pulsa el botón si te has equivocado";
+    errorLog = "El pin no es correcto, pulsa el botón si te has equivocado".toUpperCase();
     _actualizar();
   }
 
   // Borrar el pin introducido si ha sido fallido
   void resetPin() {
-    errorLog = "Vuelve a introducir";
+    errorLog = "Vuelve a introducir".toUpperCase();
     concatenacionPin = "";
     pulsaciones = 0;
     _actualizar();
@@ -81,7 +81,7 @@ class PasswordLoginState extends State<PasswordLogin> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Hola ${Sesion.nombre}'),
+          title: Text('Hola ${Sesion.nombre}'.toUpperCase()),
         ),
         body: Container(margin: EdgeInsets.all(5), child: vista()));
   }
@@ -112,7 +112,7 @@ class PasswordLoginState extends State<PasswordLogin> {
                 obscureText: true,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
-                  hintText: 'Introduce la clave',
+                  hintText: 'Introduce la clave'.toUpperCase(),
                 ),
                 controller: myController,
               ),
@@ -123,7 +123,7 @@ class PasswordLoginState extends State<PasswordLogin> {
             SizedBox(
               child: ElevatedButton(
                 child: Text(
-                  "Enviar",
+                  "Enviar".toUpperCase(),
                   style: TextStyle(
                     fontSize: 30,
                     color: Colors.white,
@@ -144,7 +144,7 @@ class PasswordLoginState extends State<PasswordLogin> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(29)),
                             ),
-                            child: Text("La contraseña no puede estar vacia"),
+                            child: Text("La contraseña no puede estar vacia".toUpperCase()),
                           )),
                     );
                   } else {
@@ -234,7 +234,7 @@ class PasswordLoginState extends State<PasswordLogin> {
               onPressed: () {
                 resetPin();
               },
-              child: Text("Volver a introducir")),
+              child: Text("Volver a introducir".toUpperCase(),style: TextStyle(fontSize: 20),)),
         ]);
   }
 

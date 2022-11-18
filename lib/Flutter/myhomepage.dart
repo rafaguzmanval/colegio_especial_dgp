@@ -109,6 +109,7 @@ class MyHomePageState extends State<MyHomePage> {
                                 Text(
                                   "Lista de alumnos".toUpperCase(),
                                   style: TextStyle(
+                                    fontSize: 30,
                                     color: Colors.white,
                                   ),
                                 ),
@@ -190,6 +191,7 @@ class MyHomePageState extends State<MyHomePage> {
                           Text(
                             "Lista de Tareas".toUpperCase(),
                             style: TextStyle(
+                              fontSize: 30,
                               color: Colors.white,
                             ),
                           ),
@@ -240,6 +242,7 @@ class MyHomePageState extends State<MyHomePage> {
                             Text(
                               "Lista de alumnos".toUpperCase(),
                               style: TextStyle(
+                                fontSize: 30,
                                 color: Colors.white,
                               ),
                             ),
@@ -271,6 +274,7 @@ class MyHomePageState extends State<MyHomePage> {
                           Text(
                             "Lista de Profesores".toUpperCase(),
                             style: TextStyle(
+                              fontSize: 30,
                               color: Colors.white,
                             ),
                           ),
@@ -311,6 +315,7 @@ class MyHomePageState extends State<MyHomePage> {
                           Text(
                             "Registrar Usuarios".toUpperCase(),
                             style: TextStyle(
+                              fontSize: 30,
                               color: Colors.white,
                             ),
                           ),
@@ -342,6 +347,7 @@ class MyHomePageState extends State<MyHomePage> {
                           Text(
                             "Crear Tareas".toUpperCase(),
                             style: TextStyle(
+                              fontSize: 30,
                               color: Colors.white,
                             ),
                           ),
@@ -383,6 +389,7 @@ class MyHomePageState extends State<MyHomePage> {
                           Text(
                             "GESTION DEL TABLON",
                             style: TextStyle(
+                              fontSize: 30,
                               color: Colors.white,
                             ),
                           ),
@@ -415,6 +422,7 @@ class MyHomePageState extends State<MyHomePage> {
                           Text(
                             "LISTA DE TAREAS",
                             style: TextStyle(
+                              fontSize: 30,
                               color: Colors.white,
                             ),
                           ),
@@ -460,7 +468,7 @@ class MyHomePageState extends State<MyHomePage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('¿SEFURO?'),
+            title: const Text('¿SEGURO?'),
             content: Text('¿QUIERES CERRAR SESIÓN?'),
             actions: [
               ElevatedButton(

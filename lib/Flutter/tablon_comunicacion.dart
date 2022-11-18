@@ -38,14 +38,6 @@ class TablonComunicacionState extends State<TablonComunicacion> {
   double offSetActual3 = 0;
   ScrollController homeController3 = new ScrollController();
 
-  var nombres = ["hola", "carne", "caca", "ayuda"];
-  var imagenes = [
-    "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fhola.png?alt=media&token=8985d5de-d0a5-4c53-a427-32f9241917d3",
-    "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fcarne.png?alt=media&token=842b044f-a900-4a19-a697-df8799eba89c",
-    "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fcaca.png?alt=media&token=f838fb98-bb18-43de-b27f-09dd5fa038a2",
-    "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpictogramas%2Fayuda.png?alt=media&token=8c7910ed-7885-475b-92c0-7d3fb8d24584"
-  ];
-
   var tablon;
   var db = FirebaseFirestore.instance;
 
@@ -88,7 +80,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: Text('Tareas'),
+        title: Text('TABLON DE COMUNICACIÓN'),
       ),
       body: SingleChildScrollView(
           child: Container(
@@ -137,7 +129,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                                           BorderRadius.circular(18.0)))),
                           child: Container(
                             constraints:
-                                BoxConstraints(maxWidth: 130, minWidth: 90),
+                                BoxConstraints(maxWidth: 150, minWidth: 100),
                             width: 10,
                             margin: EdgeInsets.all(20),
                             decoration: BoxDecoration(
@@ -150,6 +142,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                                 tablon[i].nombres,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
+                                  fontSize: 20,
                                   color: Colors.black,
                                 ),
                               ),
@@ -239,7 +232,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                                           BorderRadius.circular(18.0)))),
                           child: Container(
                             constraints:
-                                BoxConstraints(maxWidth: 130, minWidth: 90),
+                                BoxConstraints(maxWidth: 150, minWidth: 100),
                             width: 10,
                             margin: EdgeInsets.all(20),
                             decoration: BoxDecoration(
@@ -252,6 +245,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                                 tablon[i].nombres,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
+                                  fontSize: 20,
                                   color: Colors.black,
                                 ),
                               ),
@@ -343,7 +337,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                                           BorderRadius.circular(18.0)))),
                           child: Container(
                             constraints:
-                                BoxConstraints(maxWidth: 130, minWidth: 90),
+                                BoxConstraints(maxWidth: 150, minWidth: 100),
                             width: 10,
                             margin: EdgeInsets.all(20),
                             decoration: BoxDecoration(
@@ -356,7 +350,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                                 tablon[i].nombres,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-
+                                  fontSize: 20,
                                   color: Colors.black,
                                 ),
                               ),

@@ -33,8 +33,8 @@ class PerfilProfesorState extends State<PerfilProfesor> {
 
   //Todas las tareas que el profesor selecciona para asignar al alumno
   var tareas = [];
-  var nombresTareas = ["Nada seleccionado"];
-  var tareaElegida = "Nada seleccionado";
+  var nombresTareas = ["NADA SELECCIONADO"];
+  var tareaElegida = "NADA SELECCIONADO";
   var idTareaElegida = null;
 
   bool esNuevaTareaCargando = false;
@@ -62,7 +62,7 @@ class PerfilProfesorState extends State<PerfilProfesor> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Perfil de ${Sesion.seleccion.nombre}'
+        title: Text('PERFIL DE ${Sesion.seleccion.nombre}'
             ''),
       ),
       body: Container(
@@ -119,11 +119,11 @@ class PerfilProfesorState extends State<PerfilProfesor> {
       child: Column(
         children: [
           if (usuarioPerfil != null) ...[
-            Text("Nombre: " + usuarioPerfil.nombre + "\n"),
-            Text("Apellidos: " + usuarioPerfil.apellidos + "\n"),
+            Text("NOMBRE: " + usuarioPerfil.nombre + "\n"),
+            Text("APELLIDOS: " + usuarioPerfil.apellidos + "\n"),
             Text(
-                "Fecha de nacimiento: " + usuarioPerfil.fechanacimiento + "\n"),
-            Text("Imagen de perfil:\n"),
+                "FECHA DE NACIMIENTO: " + usuarioPerfil.fechanacimiento + "\n"),
+            Text("IMAGEN DE PERFIL:\n"),
             Image(
               width: 100,
               height: 100,

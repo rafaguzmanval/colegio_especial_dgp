@@ -39,7 +39,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
 
   //Todas las tareas que el profesor selecciona para asignar al alumno
   var tareas = [];
-  var nombresTareas = ["Nada seleccionado"];
+  var nombresTareas = ["NADA SELECCIONADO"];
 
   bool esTareaEliminandose = false;
 
@@ -67,7 +67,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Perfil de ${Sesion.seleccion.nombre}'
+        title: Text('PERFIL DE: ${Sesion.seleccion.nombre}'
             ''),
       ),
       body: Container(
@@ -127,11 +127,11 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
       child: Column(
         children: [
           if (usuarioPerfil != null) ...[
-            Text("Nombre: " + usuarioPerfil.nombre + "\n"),
-            Text("Apellidos: " + usuarioPerfil.apellidos + "\n"),
+            Text("NOMBRE: " + usuarioPerfil.nombre.toString().toUpperCase() + "\n"),
+            Text("APELLIDOS: " + usuarioPerfil.apellidos.toString().toUpperCase() + "\n"),
             Text(
-                "Fecha de nacimiento: " + usuarioPerfil.fechanacimiento + "\n"),
-            Text("Imagen de perfil:\n"),
+                "FECHA DE NACIMIENTO: " + usuarioPerfil.fechanacimiento.toString().toUpperCase() + "\n"),
+            Text("IMAGEN DE PERFIL:\n"),
             Image(
               width: 100,
               height: 100,
@@ -156,7 +156,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                       builder: (context) => VerTareas()));
                               Sesion.paginaActual = this;
                             },
-                            child: Text(Sesion.tareas[i].nombre),
+                            child: Text(Sesion.tareas[i].nombre.toString().toUpperCase(),style: TextStyle(fontSize: 30),),
                           ),
                           IconButton(
                               onPressed: () async {
@@ -219,7 +219,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
   }
 
   addTarea({required BuildContext context}) {
-    var tareaElegida = "Nada seleccionado";
+    var tareaElegida = "NADA SELECCIONADO";
     var idTareaElegida = null;
     var fechafinal = null;
     var horafinal = null;
@@ -291,7 +291,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                     });
                                   },
                                   child: Text((fechafinal == null)
-                                      ? "Elige fecha de entrega límite"
+                                      ? "ELIGE FECHA DE ENTREGA LIMITE"
                                       : DateFormat('d/M/y')
                                           .format(fechafinal))),
                             ),
@@ -308,7 +308,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                   });
                                 },
                                 child: Text((horafinal == null)
-                                    ? "Elige hora de entrega límite"
+                                    ? "ELIGE HORA DE ENTREGA LIMITE"
                                     : horafinal.hour.toString() +
                                         ":" +
                                         ((horafinal.minute > 9)
@@ -318,14 +318,14 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                               ),
                             ),
                             Visibility(
-                              visible: tareaElegida != "Nada seleccionado",
+                              visible: tareaElegida != "NADA SELECCIONADO",
                               child: Container(
                                 margin: EdgeInsets.only(bottom: 10),
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.orange),
                                   child: Text(
-                                    "Añadir Tarea",
+                                    "AÑADIR TAREA",
                                     style: TextStyle(
                                       color: Colors.white,
                                     ),

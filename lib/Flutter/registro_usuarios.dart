@@ -43,7 +43,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
 
   var registrando = false;
   var mensajeDeRegistro = "";
-  var rolElegido = "ningun rol elegido";
+  var rolElegido = "NINGUN ROL ELEGIDO";
   var fechaElegida = null;
 
   final controladorNombre = TextEditingController();
@@ -102,7 +102,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: Text('Registra un nuevo usuario'),
+        title: Text('REGISTRA UN NUEVO USUARIO'),
       ),
       body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -151,7 +151,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               maxLength: 20,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: 'Introduce nombre *',
+                hintText: 'INTRODUCE EL NOMBRE *',
               ),
               controller: controladorNombre,
             ),
@@ -163,7 +163,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               maxLength: 40,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: 'Introduce apellidos *',
+                hintText: 'INTRODUCE LOS APELLIDOS *',
               ),
               controller: controladorApellidos,
             ),
@@ -191,7 +191,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                   maxLength: 20,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'Introduce contraseña *',
+                    hintText: 'INTRODUCE LA CONTRASEÑA *',
                   ),
                   controller: controladorPassword,
                 ),
@@ -204,7 +204,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 child: vistaPin(),
               )),
           const Text(
-            "Introduce fecha de nacimiento: *",
+            "INTRODUCE LA FECHA DE NACIMIENTO: *",
             style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
           ),
           ElevatedButton(
@@ -221,7 +221,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 });
               },
               child: Text((fechaElegida == null)
-                  ? "Elige la fecha de nacimiento"
+                  ? "ELIGE LA FECHA DE NACIMIENTO"
                   : DateFormat('d/M/y').format(fechaElegida))),
 
           /*
@@ -235,7 +235,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
             ),*/
 
           const Text(
-            "Elige rol para el usuario: *",
+            "ELIGE ROL PARA EL USUARIO: *",
             style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
           ),
           DropdownButton(
@@ -244,7 +244,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               Rol.profesor.toString(),
               Rol.administrador.toString(),
               Rol.alumno.toString(),
-              "ningun rol elegido"
+              "NINGUN ROL ELEGIDO"
             ].map((String value) {
               return DropdownMenuItem(
                 value: value,
@@ -259,7 +259,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
             },
           ),
           const Text(
-            "Elige foto de perfil (opcional):",
+            "ELIGE FOTO DE PERFIL (OPCINAL):",
             style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
           ),
           Column(
@@ -270,7 +270,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 height: 10,
               ),
               ElevatedButton(
-                  child: Text('Haz una foto desde la cámara'),
+                  child: Text('HAZ UNA FOTO DESDE LA CAMARA'),
                   onPressed: () {
                     seleccionarImagen(SeleccionImagen.camara);
                   }),
@@ -278,21 +278,24 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 height: 10,
               ),
               ElevatedButton(
-                  child: Text('Elige una foto de la galería'),
+                  child: Text('ELIGE FOTO DE LA GALERIA'),
                   onPressed: () {
                     seleccionarImagen(SeleccionImagen.galeria);
                   }),
             ],
           ),
           SizedBox(
-            height: 100,
-            width: 100,
+            height: 20,
+          ),
+          SizedBox(
+            height: 120,
+            width: 120,
             child: fotoTomada == null
                 ? Center(
                     child: Container(
                     decoration:
                         BoxDecoration(border: Border.all(color: Colors.black)),
-                    child: Text('Ninguna foto tomada'),
+                    child: Text('NINGUNA FOTO TOMADA ***', textAlign: TextAlign.center,),
                   ))
                 : Center(child: Image.file(File(fotoTomada.path))),
           ),
@@ -305,7 +308,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                       const Color.fromRGBO(143, 125, 178, 1)),
                 ),
                 child: Text(
-                  "Registrar",
+                  "REGISTRAR",
                   style: TextStyle(
                       backgroundColor: Colors.transparent, color: Colors.white),
                 ),
@@ -403,7 +406,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               onPressed: () {
                 resetPin();
               },
-              child: Text("Volver a introducir")),
+              child: Text("VOLVER A INTRODUCIR")),
         ]);
   }
 
@@ -472,10 +475,10 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           resetPin();
           metodoElegido = "clave";
           fechaElegida = null;
-          rolElegido = "ningun rol elegido";
+          rolElegido = "NINGUN ROL ELEGIDO";
 
           mensajeDeRegistro =
-              "Registro completado correctamente\nPuedes volver a registrar otro usuario";
+              "REGISTRO COMPLETADO PERFECTAMENETE\nPUEDES VOLVER A REGISTRAR OTRO USUARIO";
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 behavior: SnackBarBehavior.floating,
@@ -494,14 +497,14 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           );
         } else {
           mensajeDeRegistro =
-              "Fallo en el proceso de registro, inténtelo de nuevo";
+              "FALLO EN EL PROCESO DE REGISTRO, INTENTELO DE NUEVO";
           mostrarError(mensajeDeRegistro,true);
         }
 
         actualizar();
       });
     } else {
-      mensajeDeRegistro = "Debe rellenar todos los campos con *";
+      mensajeDeRegistro = "DEBE RELLENAR TODOS LOS CAMPOS CON *";
       mostrarError(mensajeDeRegistro,true);
       actualizar();
     }
