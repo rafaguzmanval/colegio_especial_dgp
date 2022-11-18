@@ -72,7 +72,7 @@ class MyHomePageState extends State<MyHomePage> {
                 icon: Icon(Icons.settings_power, color: Colors.white),
                 onPressed: () => _onBackPressed(context)),
             title: Column(children: [
-              Text('Menú principal'),
+              Text('Menú principal'.toUpperCase()),
             ]),
             automaticallyImplyLeading: false,
           ),
@@ -107,7 +107,7 @@ class MyHomePageState extends State<MyHomePage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "Lista de alumnos",
+                                  "Lista de alumnos".toUpperCase(),
                                   style: TextStyle(
                                     color: Colors.white,
                                   ),
@@ -156,7 +156,7 @@ class MyHomePageState extends State<MyHomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Tablon de Comunicación",
+                            "Tablon de Comunicación".toUpperCase(),
                             style: TextStyle(
                               fontSize: 30,
                               color: Colors.white,
@@ -188,7 +188,7 @@ class MyHomePageState extends State<MyHomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Lista de Tareas",
+                            "Lista de Tareas".toUpperCase(),
                             style: TextStyle(
                               color: Colors.white,
                             ),
@@ -238,7 +238,7 @@ class MyHomePageState extends State<MyHomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Lista de alumnos",
+                              "Lista de alumnos".toUpperCase(),
                               style: TextStyle(
                                 color: Colors.white,
                               ),
@@ -269,7 +269,7 @@ class MyHomePageState extends State<MyHomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Lista de Profesores",
+                            "Lista de Profesores".toUpperCase(),
                             style: TextStyle(
                               color: Colors.white,
                             ),
@@ -309,7 +309,7 @@ class MyHomePageState extends State<MyHomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Registrar Usuarios",
+                            "Registrar Usuarios".toUpperCase(),
                             style: TextStyle(
                               color: Colors.white,
                             ),
@@ -340,7 +340,7 @@ class MyHomePageState extends State<MyHomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Crear Tareas",
+                            "Crear Tareas".toUpperCase(),
                             style: TextStyle(
                               color: Colors.white,
                             ),
@@ -460,19 +460,19 @@ class MyHomePageState extends State<MyHomePage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('¿Seguro?'),
-            content: Text('¿Quieres cerrar sesión?'),
+            title: const Text('¿SEFURO?'),
+            content: Text('¿QUIERES CERRAR SESIÓN?'),
             actions: [
               ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context, false);
                   },
-                  child: Text('No')),
+                  child: Text('NO')),
               ElevatedButton(
                   onPressed: () {
                     Navigator.popUntil(context, (route) => route.isFirst);
                   },
-                  child: Text('Sí')),
+                  child: Text('SÍ')),
             ],
           );
         });
