@@ -135,7 +135,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
                   child: Column(
                     children: [
                       Text(
-                        profesores[i].nombre,
+                        profesores[i].nombre.toString().toUpperCase(),
                         style: TextStyle(
                           color: Colors.white,
                         ),

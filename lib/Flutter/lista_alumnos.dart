@@ -53,7 +53,7 @@ class ListaAlumnosState extends State<ListaAlumnos> {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: AppBar(
-          title: Text('Lista de alumnos'),
+          title: Text('LISTA DE ALUMNOS'),
         ),
         body: Stack(children: [
           OrientationBuilder(
@@ -135,7 +135,7 @@ class ListaAlumnosState extends State<ListaAlumnos> {
                   child: Column(
                     children: [
                       Text(
-                        alumnos[i].nombre,
+                        alumnos[i].nombre.toString().toUpperCase(),
                         style: TextStyle(
                           color: Colors.white,
                         ),
