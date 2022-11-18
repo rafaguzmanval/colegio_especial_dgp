@@ -58,6 +58,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
     super.initState();
 
     Sesion.tareas = [];
+    Sesion.argumentos.clear();
     Sesion.paginaActual = this;
     cargarUsuario();
     cargarTareas();

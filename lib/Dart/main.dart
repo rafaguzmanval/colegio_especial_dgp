@@ -15,10 +15,14 @@
 *   covert: Se usa para codificar los JSON
 * */
 
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../Flutter/profe_alumno.dart';
+import 'background.dart';
 import 'firebase_options.dart';
 import '../Flutter/loginpage.dart';
 import 'notificacion.dart';
@@ -26,11 +30,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+
 var user = "";
 
 bool cambioColor = true;
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+final FlutterLocalNotificationsPlugin notificaciones =
     FlutterLocalNotificationsPlugin();
 
 // Establecer los colores de la pagina siguiendo la paleta de color
@@ -83,11 +88,14 @@ Future sendEmail(String name, String email, String message) async {
   return response.statusCode;
 }
 
+
 // Inicializa la aplicacion indicando el idioma soportado
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Notificacion.initialize(flutterLocalNotificationsPlugin);
+    Notificacion.initialize(notificaciones);
+
+    Background.inicializarBackground();
 
     return MaterialApp(
       localizationsDelegates: GlobalMaterialLocalizations.delegates,

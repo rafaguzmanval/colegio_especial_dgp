@@ -40,8 +40,7 @@ class LoginPageState extends State<LoginPage> {
 
   bool verBotonAbajo = false, verBotonArriba = false;
 
-  FlutterLocalNotificationsPlugin notificaciones =
-      new FlutterLocalNotificationsPlugin();
+
 
   var homeController;
 
@@ -50,12 +49,12 @@ class LoginPageState extends State<LoginPage> {
     super.initState();
     obtenerAutenticacion();
     inicializar();
-    Notificacion.initialize(flutterLocalNotificationsPlugin);
     //Notificacion.showBigTextNotification(title: "Bienvenio", body: "LA gran notificacion", fln: flutterLocalNotificationsPlugin);
     Sesion.reload();
     Sesion.paginaActual = this;
     homeController = new ScrollController();
     homeController.addListener(_scrollListener);
+
   }
 
   _scrollListener() {

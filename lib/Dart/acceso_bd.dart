@@ -29,6 +29,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+import 'main.dart';
+import 'notificacion.dart';
 
 String encriptacionSha256(String password) {
   var data = utf8.encode(password);
@@ -283,6 +285,7 @@ class AccesoBD {
           }
 
           if (e.docs.length == 0) Sesion.tareas = [];
+
         });
     } catch (e) {
       print(e);

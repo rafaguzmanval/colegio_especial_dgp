@@ -8,6 +8,9 @@
 *   flutter_local_notifications.dart : Se utiliza para inicializar notificaciones.
 * */
 
+import 'package:colegio_especial_dgp/Dart/sesion.dart';
+import 'package:colegio_especial_dgp/Flutter/ver_tareas.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class Notificacion {
@@ -19,7 +22,23 @@ class Notificacion {
     var iOSInitialize = new DarwinInitializationSettings();
     var initializationsSettings = new InitializationSettings(
         android: androidInitialize, iOS: iOSInitialize);
-    await flutterLocalNotificationsPlugin.initialize(initializationsSettings);
+    await flutterLocalNotificationsPlugin.initialize(initializationsSettings,
+        onDidReceiveNotificationResponse: (notificationResponse){
+        print("recibido");
+        if(Sesion.paginaActual.toString().startsWith("MyHomePageState"))
+          {
+            Navigator.push(Sesion.paginaActual.context, MaterialPageRoute(
+                builder: (context) => VerTareas()));
+          }
+    },onDidReceiveBackgroundNotificationResponse: (response){
+          print("recibido");
+          if(Sesion.paginaActual.toString().startsWith("MyHomePageState"))
+          {
+            Navigator.push(Sesion.paginaActual.context, MaterialPageRoute(
+                builder: (context) => VerTareas()));
+          }
+    }
+    );
   }
 
   // Metodo para mostrar la notificación de textp
@@ -37,11 +56,16 @@ class Notificacion {
       sound: RawResourceAndroidNotificationSound('cancion'),
       importance: Importance.max,
       priority: Priority.high,
+
     );
+
 
     var not = NotificationDetails(
         android: androidPlatformChannelSpecifics,
         iOS: DarwinNotificationDetails());
     await fln.show(0, title, body, not);
+
+
+
   }
 }

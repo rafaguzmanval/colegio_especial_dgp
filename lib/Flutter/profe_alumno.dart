@@ -43,8 +43,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
   @override
   void initState() {
     super.initState();
-
-    Notificacion.initialize(flutterLocalNotificationsPlugin);
+    Sesion.argumentos.clear();
     //Notificacion.showBigTextNotification(title: "Bienvenio", body: "LA gran notificacion", fln: flutterLocalNotificationsPlugin);
 
   }

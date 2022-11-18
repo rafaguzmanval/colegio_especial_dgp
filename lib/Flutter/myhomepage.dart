@@ -20,6 +20,8 @@
 * */
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:colegio_especial_dgp/Dart/background.dart';
+import 'package:colegio_especial_dgp/Dart/notificacion.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Flutter/crear_tarea.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
@@ -29,6 +31,7 @@ import 'package:colegio_especial_dgp/Flutter/registro_usuarios.dart';
 import 'package:colegio_especial_dgp/Flutter/tablon_comunicacion.dart';
 import 'package:colegio_especial_dgp/Flutter/ver_tareas.dart';
 import 'package:flutter/material.dart';
+import '../Dart/main.dart';
 import 'lista_alumnos.dart';
 import 'lista_profesores.dart';
 
@@ -60,6 +63,7 @@ class MyHomePageState extends State<MyHomePage> {
 
     Sesion.seleccion = "";
     Sesion.tareas = [];
+    Background.activarNotificacionesNuevasTareas();
   }
 
   /// Este es el build de la clase MyHomePage que devuelve toda la vista génerica más la vista especial de cada usuario.
