@@ -40,7 +40,7 @@ class GestionTablonState extends State<GestionTablon> {
   var db = FirebaseFirestore.instance;
 
   AccesoBD base = new AccesoBD();
-  var tipoElegido = "ningun tipo elegido";
+  var tipoElegido = "NINGÚN TIPO ELEGIDO";
   var tipo;
   var controladorVideo;
   var fotoTomada;
@@ -82,7 +82,7 @@ class GestionTablonState extends State<GestionTablon> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: Text('Crea una nuevo boton para el tablon'),
+        title: Text('CREA UN NUEVO BOTÓN PARA EL TABLÓN'),
       ),
       body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -132,7 +132,7 @@ class GestionTablonState extends State<GestionTablon> {
               maxLength: 40,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: 'Introduce el nombre del pictograma *',
+                hintText: 'INTRODUCE EL NOMBRE DEL PICTOGRAMA *',
               ),
               controller: controladorNombre,
             ),
@@ -141,7 +141,7 @@ class GestionTablonState extends State<GestionTablon> {
             height: 10,
           ),
           const Text(
-            "Elige el tipo para el boton: *",
+            "ELIGE EL TIPO PARA EL BOTÓN: *",
             style: TextStyle(fontSize: 30.0, height: 2.0, color: Colors.black),
           ),
           SizedBox(
@@ -153,7 +153,7 @@ class GestionTablonState extends State<GestionTablon> {
               Tipo.sustantivo.toString(),
               Tipo.adjetivo.toString(),
               Tipo.verbo.toString(),
-              "ningun tipo elegido"
+              "NINGÚN TIPO ELEGIDO"
             ].map((String value) {
               return DropdownMenuItem(
                 value: value,
@@ -170,7 +170,7 @@ class GestionTablonState extends State<GestionTablon> {
             height: 10,
           ),
           const Text(
-            "Elige un pictograma para el boton: *",
+            "ELIGE UN PICTOGRAMA PARA EL BOTÓN: *",
             style: TextStyle(fontSize: 30.0, height: 2.0, color: Colors.black),
           ),
           SizedBox(
@@ -180,7 +180,7 @@ class GestionTablonState extends State<GestionTablon> {
             height: 15,
           ),
           ElevatedButton(
-              child: Text('Elige un pictograma desde la web de ARASAAC',style: TextStyle(fontSize: 30.0)),
+              child: Text('ELIGE UN PICTOGRAMA DESDE LA WEB DE ARASAAC',style: TextStyle(fontSize: 30.0)),
               onPressed: () async {
                 fotoTomada = await buscadorArasaac(context: context);
                 actualizar();
@@ -196,7 +196,7 @@ class GestionTablonState extends State<GestionTablon> {
             height: 150,
             width: 230,
             child: fotoTomada == null
-                ? Center(child: Text('Ningun pictograma elegido ****',textAlign: TextAlign.center,))
+                ? Center(child: Text('NINGÚN PICTOGRAMA ELEGIDO ****',textAlign: TextAlign.center,))
                 : Center(
                     child: fotoTomada.startsWith("http")
                         ? Image.network(fotoTomada)
@@ -211,7 +211,7 @@ class GestionTablonState extends State<GestionTablon> {
                   margin: EdgeInsets.only(top: 0),
                   child: ElevatedButton(
                     child: Text(
-                      "Crear nueva boton tablon",
+                      "CREAR NUEVO BOTÓN TABLÓN",
                       style: TextStyle(
                         fontSize: 30.0,
                         color: Colors.white,
@@ -261,17 +261,17 @@ class GestionTablonState extends State<GestionTablon> {
           controladorNombre.text = "";
           fotoTomada = null;
           displayMensajeValidacion(
-              "Tarea creada correctamente\nPuedes volver a crear otra tarea:",
+              "TAREA CREADA CORRECTAMENTE\nPUEDES VOLVER A CREAR OTRA TAREA:",
               false);
         } else {
           displayMensajeValidacion(
-              "Fallo al crear tarea, inténtelo de nuevo", true);
+              "FALLO AL CREAR TAREA, INTÉNTELO DE NUEVO", true);
         }
 
         actualizar();
       });
     } else {
-      displayMensajeValidacion("Es necesario rellenar todos los campos", true);
+      displayMensajeValidacion("ES NECESARIO RELLENAR TODOS LOS CAMPOS", true);
       actualizar();
     }
   }
