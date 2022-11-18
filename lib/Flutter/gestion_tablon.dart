@@ -261,11 +261,11 @@ class GestionTablonState extends State<GestionTablon> {
           controladorNombre.text = "";
           fotoTomada = null;
           displayMensajeValidacion(
-              "TAREA CREADA CORRECTAMENTE\nPUEDES VOLVER A CREAR OTRA TAREA:",
+              "TABLON CREADO CORRECTAMENTE\nPUEDES VOLVER A CREAR OTRO BOTON:",
               false);
         } else {
           displayMensajeValidacion(
-              "FALLO AL CREAR TAREA, INTÉNTELO DE NUEVO", true);
+              "FALLO AL CREAR TABLON, INTÉNTELO DE NUEVO", true);
         }
 
         actualizar();
