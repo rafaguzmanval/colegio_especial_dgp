@@ -137,7 +137,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                                           BorderRadius.circular(18.0)))),
                           child: Container(
                             constraints:
-                                BoxConstraints(maxWidth: 120, minWidth: 80),
+                                BoxConstraints(maxWidth: 130, minWidth: 90),
                             width: 10,
                             margin: EdgeInsets.all(20),
                             decoration: BoxDecoration(
@@ -239,7 +239,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                                           BorderRadius.circular(18.0)))),
                           child: Container(
                             constraints:
-                                BoxConstraints(maxWidth: 120, minWidth: 80),
+                                BoxConstraints(maxWidth: 130, minWidth: 90),
                             width: 10,
                             margin: EdgeInsets.all(20),
                             decoration: BoxDecoration(
@@ -343,7 +343,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                                           BorderRadius.circular(18.0)))),
                           child: Container(
                             constraints:
-                                BoxConstraints(maxWidth: 100, minWidth: 60),
+                                BoxConstraints(maxWidth: 130, minWidth: 90),
                             width: 10,
                             margin: EdgeInsets.all(20),
                             decoration: BoxDecoration(
