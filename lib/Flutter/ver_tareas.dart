@@ -17,6 +17,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
+import 'package:colegio_especial_dgp/Flutter/reproductor_video.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import "package:image_picker/image_picker.dart";
@@ -327,7 +328,7 @@ class VerTareasState extends State<VerTareas> {
 
             ),
 
-            if(Sesion.rol != Rol.alumno.toString() && Sesion.tareas[tareaActual].formularios != [] )...[
+            if(Sesion.rol != Rol.alumno.toString() && Sesion.tareas[tareaActual].formularios != [] && Sesion.tareas[tareaActual].formularios.length > 4)...[
                 ElevatedButton(onPressed: (){
                   var mensaje = "";
                   Map contador = new Map();
@@ -602,10 +603,15 @@ class VerTareasState extends State<VerTareas> {
       return Container(
           decoration: BoxDecoration(border: Border.all(width: 2)),
           margin: EdgeInsets.only(bottom: 15),
-          width: 200,
-          height: 200,
-          child: Container()); //ReproductorVideo(
-      //Sesion.tareas[i].controladoresVideo[indiceVideos++]));
+          child: ElevatedButton(
+            onPressed: (){
+              ventanaVideo(
+                  Sesion.tareas[i].controladoresVideo[indiceVideos++],context);
+            },
+              child:Text("ver video")
+            ),
+
+          );
     } else
       return Container();
   }
@@ -618,43 +624,6 @@ class VerTareasState extends State<VerTareas> {
         children: [],
       ),
     );
-  }
-
-  // Widget que se encarga de construir un reproductor de video
-  Widget ReproductorVideo(controlador) {
-    /*
-    if(controlador.value.position == controlador.value.duration)
-      {
-        print("fin del video");
-        controlador.seekTo(Duration(minutes:0,seconds:0,milliseconds: 0));
-        controlador.pause();
-      }*/
-    return ElevatedButton(
-        onPressed: () {
-          if (controlador.value.isPlaying) {
-            controlador.pause();
-          } else {
-            controlador.play();
-          }
-          setState(() {});
-        },
-        child: Container(
-            margin: EdgeInsets.only(top: 10),
-            child: Column(children: [
-              AspectRatio(
-                  aspectRatio: 12.0 / 9.0, child: VideoPlayer(controlador)),
-              Icon(
-                controlador.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                size: 20,
-                semanticLabel:
-                    controlador.value.isPlaying ? "Pausa" : "Reanudar",
-              ),
-              Container(
-                //duration of video
-                child: Text(
-                    "Total Duration: " + controlador.value.duration.toString()),
-              ),
-            ])));
   }
 
   // Accede a las tareas de la base de datos

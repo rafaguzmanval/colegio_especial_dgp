@@ -22,6 +22,7 @@ import 'package:colegio_especial_dgp/Dart/arasaac.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
+import 'package:colegio_especial_dgp/Flutter/reproductor_video.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import "package:image_picker/image_picker.dart";
@@ -289,7 +290,13 @@ class CrearTareaState extends State<CrearTarea> {
                         top: 100, bottom: 100, right: 10, left: 10),
                   )
                 : Container(
-                    child: ReproductorVideo(controladorVideo),
+                    child: ElevatedButton(
+                      onPressed: (){
+                        ventanaVideo(controladorVideo,context);
+                      },
+                      child:Text("ver video")
+
+                    ),
                     padding: EdgeInsets.only(
                         top: 10, bottom: 10, right: 10, left: 10),
                   ),
@@ -408,7 +415,8 @@ class CrearTareaState extends State<CrearTarea> {
   }
 
   // Widget para insertar el reproductor de video
-  Widget ReproductorVideo(controlador) {
+  /*
+  Widget ReproductorVideo(controlador,controladorStream) {
     return Container(
         //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
         child: Column(children: [
@@ -419,26 +427,28 @@ class CrearTareaState extends State<CrearTarea> {
           } else {
             controlador.play();
           }
-          setState(() {});
+          controladorStream.add("");
         },
         child: AspectRatio(
             aspectRatio: controlador.value.aspectRatio,
-            child: VideoPlayer(controlador)),
+            child: Column(children:[VideoPlayer(controlador),
+              Icon(
+                controlador.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                size: 20,
+                semanticLabel: controlador.value.isPlaying ? "Pausa" : "Reanudar",
+              ),
+              Container(
+                //duration of video
+                child: Text("Total Duration: " + controlador.value.duration.toString()),
+              ),
+            ]),
       ),
-      Icon(
-        controlador.value.isPlaying ? Icons.pause : Icons.play_arrow,
-        size: 20,
-        semanticLabel: controlador.value.isPlaying ? "Pausa" : "Reanudar",
-      ),
-      Container(
-        //duration of video
-        child: Text("Total Duration: " + controlador.value.duration.toString()),
-      ),
+
 
     ]));
   }
 
-
+*/
   dialogFormulario() {
     var controlador = TextEditingController();
     var controladorStream = StreamController();

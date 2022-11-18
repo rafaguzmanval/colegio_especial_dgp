@@ -174,7 +174,12 @@ class LoginPageState extends State<LoginPage> {
 
   // Metodo para inicializar y cargar los datos necesarios
   inicializar() async {
-    if(Sesion.argumentos.first == "profesores")
+
+    if(Sesion.argumentos.length == 0)
+      {
+        usuarios = await base.consultarTodosUsuarios();
+      }
+    else if(Sesion.argumentos.first == "profesores")
       {
         usuarios = await base.consultarTodosProfesores();
       }

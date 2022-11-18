@@ -245,7 +245,7 @@ class AccesoBD {
                 if (cargarVideos) {
                   try {
                     for (int k = 0; k < Sesion.tareas.length; k++) {
-                      for (int j = 0; j < Sesion.tareas[i].videos.length; j++) {
+                      for (int j = 0; j < Sesion.tareas[k].videos.length; j++) {
                             var nuevoControlador = VideoPlayerController.network(
                                 Sesion.tareas[k].videos[j]);
                             Sesion.tareas[k].controladoresVideo
