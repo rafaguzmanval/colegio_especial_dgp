@@ -33,6 +33,7 @@ Future sendEmail(String name, String email,String subject, String message) async
   const userId = '2wgqbl0rcKfvIgaCQ';
   final response = await http.post(url,
       headers: {
+        'origin': 'http://localhost',
         'Content-Type': 'application/json'
       }, //This line makes sure it works for all platforms.
       body: json.encode({
@@ -45,7 +46,7 @@ Future sendEmail(String name, String email,String subject, String message) async
           'subject' : subject
         }
       }));
-  return response.statusCode;
+  return response.body;
 }
 
 
@@ -328,7 +329,42 @@ class VerTareasState extends State<VerTareas> {
 
             if(Sesion.rol != Rol.alumno.toString() && Sesion.tareas[tareaActual].formularios != [] )...[
                 ElevatedButton(onPressed: (){
-                    dialogCorreo();
+                  var mensaje = "";
+                  Map contador = new Map();
+
+                          for (int i = 0; i < Sesion.tareas[tareaActual].formularios.length; i = i + 2 + (Sesion.tareas[tareaActual].formularios[i + 1] as int) * 3)
+                            {
+                              mensaje += Sesion.tareas[tareaActual].formularios[i] + "\n";
+                              for (int j = i + 2; j < i + 2 + (Sesion.tareas[tareaActual].formularios[i + 1] as int) * 3; j = j + 3)
+                                {
+
+                                  mensaje += "   "+ Sesion.tareas[tareaActual].formularios[j].toString() + " : " + Sesion.tareas[tareaActual].formularios[j+2].toString() + "\n";
+
+                                  var index = contador.containsKey(Sesion.tareas[tareaActual].formularios[j].toString());
+                                  if(index)
+                                    {
+                                      contador[Sesion.tareas[tareaActual].formularios[j].toString()] += Sesion.tareas[tareaActual].formularios[j+2];
+                                    }
+                                  else
+                                    {
+                                      contador[Sesion.tareas[tareaActual].formularios[j].toString()] = Sesion.tareas[tareaActual].formularios[j+2];
+
+                                    }
+                                }
+
+                            }
+
+                          mensaje+="\nTotal:\n";
+
+
+                          contador.forEach((key, value) {
+                            mensaje += "   "+key.toString() + " : " + value.toString()+ "\n";
+                          });
+
+
+
+
+                    dialogCorreo(mensaje);
                    }, child: Column(children: [
                       Text('\nEnviar'),
                       Image.asset(
@@ -931,11 +967,14 @@ class VerTareasState extends State<VerTareas> {
 
 
 
-  dialogCorreo()
+  dialogCorreo(mensaje)
   {
     var controladorAsunto = TextEditingController();
     var controladorEnviar = TextEditingController();
     var controladorMensaje = TextEditingController();
+
+        controladorMensaje.text = mensaje;
+
     return showDialog(context: context, builder: (context){
         return Dialog(
           child:
@@ -948,8 +987,6 @@ class VerTareasState extends State<VerTareas> {
               TextField(controller: controladorAsunto,),
 
 
-              //Flexible(child:Row(children: [Text("Enviar a:"),TextField(controller: controladorEnviar,)],)),
-
               Text("Enviar a:"),
               TextField(controller: controladorEnviar,),
 
@@ -961,10 +998,18 @@ class VerTareasState extends State<VerTareas> {
                 children: [
                 ElevatedButton(onPressed: (){Navigator.pop(context);}, child: Text("cancelar")),
                   ElevatedButton(onPressed: () async{
-                    await sendEmail("mochileros", "rafagval@gmail.com", "diselo", "colega").then((e){
-                      print(e);
-                    });
-                    Navigator.pop(context);},
+
+
+                      if(controladorEnviar.text != "" && controladorAsunto.text != "" && controladorMensaje.text != "")
+                        {
+                          await sendEmail("mochileros", controladorEnviar.text, controladorAsunto.text, controladorMensaje.text).then((e){
+                            print(e);
+                          });
+
+                          Navigator.pop(context);
+                        }
+                      },
+
                       child: Text("enviar")),
 
                 ],),

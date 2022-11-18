@@ -208,6 +208,7 @@ class AccesoBD {
 
   // Metodo para consultar las tareas asignadas a un usuario según el id pasado por parametro y te devuelve las tareas que tiene insertandolas en la
   // sesion
+  @deprecated
   consultarTareasAsignadasAlumno(id, cargarVideos) async {
     try {
 
