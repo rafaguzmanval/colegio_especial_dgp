@@ -56,8 +56,13 @@ Widget build(BuildContext context) {
   return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text('TuCole')),
-    body: Column(
-    mainAxisAlignment: MainAxisAlignment.center,
+    body: Center(
+  child:
+    Row(
+
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+    //crossAxisAlignment: CrossAxisAlignment.center,
 
     children: [
       ElevatedButton(
@@ -82,6 +87,7 @@ Widget build(BuildContext context) {
       ),
   ],
   ),
+    ),
   );
 }
 
