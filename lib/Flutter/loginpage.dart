@@ -284,6 +284,11 @@ class LoginPageState extends State<LoginPage> {
                             width: 70,
                             height: 70,
                             fit: BoxFit.fill,
+                            errorBuilder: (context,exception,stacktrace){
+                              print(exception.toString());
+                              return Image.asset('assets/desconocido.jpg',width: 70,
+                                height: 70);
+                            },
                           ),
                         ],
                       )),

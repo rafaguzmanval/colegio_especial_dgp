@@ -588,8 +588,7 @@ class VerTareasState extends State<VerTareas> {
 
   // Este metodo itera sobre las tareas que tiene el usuario y las muestra
   Widget LecturaTarea(String valor, i) {
-    var indice = indiceVideos;
-    indiceVideos++;
+
     if (valor == "T" && Sesion.tareas[i].textos.length > indiceTextos) {
       String pathTexto = Sesion.tareas[i].textos[indiceTextos];
       indiceTextos++;
@@ -609,6 +608,8 @@ class VerTareasState extends State<VerTareas> {
           margin: EdgeInsets.only(bottom: 15),
           child: Image.network(pathImagen, width: 200, height: 200));
     } else if (valor == "V" && Sesion.tareas[i].controladoresVideo.length > 0) {
+      var indice = indiceVideos;
+      indiceVideos++;
       return Container(
           decoration: BoxDecoration(border: Border.all(width: 2)),
           margin: EdgeInsets.only(bottom: 15),
