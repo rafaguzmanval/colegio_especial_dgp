@@ -614,6 +614,11 @@ class VerTareasState extends State<VerTareas> {
           margin: EdgeInsets.only(bottom: 15),
           child: ElevatedButton(
             onPressed: (){
+              var nuevoControlador = VideoPlayerController.network(
+                                Sesion.tareas[i].videos[indice]);
+              Sesion.tareas[i].controladoresVideo[indice] = nuevoControlador;
+              Sesion.tareas[i].controladoresVideo[indice].initialize();
+
               ventanaVideo(
                   Sesion.tareas[i].controladoresVideo[indice],context);
             },

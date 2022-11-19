@@ -255,12 +255,16 @@ class AccesoBD {
                 if (cargarVideos) {
                   try {
                     for (int k = 0; k < Sesion.tareas.length; k++) {
+                      var array = [];
+
+
                       for (int j = 0; j < Sesion.tareas[k].videos.length; j++) {
-                            var nuevoControlador = VideoPlayerController.network(
-                                Sesion.tareas[k].videos[j]);
+                        /*var nuevoControlador = VideoPlayerController.network(
+                                Sesion.tareas[k].videos[j]);*/
                             Sesion.tareas[k].controladoresVideo
-                                .add(nuevoControlador);
-                            Sesion.tareas[k].controladoresVideo.last.initialize();
+                                .add(0);
+                            /*Sesion.tareas[k].controladoresVideo.last.initialize();*/
+
                       }
 
                       //Se cargan los formularios (Mas feo esto que pegarle a un pae la verdad)
