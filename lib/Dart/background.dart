@@ -1,17 +1,13 @@
 
-import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
-
 import 'notificacion.dart';
 import 'main.dart';
 import 'package:flutter_background/flutter_background.dart';
-import 'acceso_bd.dart';
 
 class Background
 {
-  static var _ultimaTarea = "";
-  static var _lengthTareas = 0;
   static var _subscripcion ;
 
 static inicializarBackground() async
@@ -46,21 +42,19 @@ static inicializarBackground() async
         var ref = Sesion.db.db.collection("usuarioTieneTareas");
 
         _subscripcion = await ref.where("idUsuario", isEqualTo: Sesion.id).orderBy("fechainicio") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
-          .snapshots().listen((e) async {
+          .snapshots().listen((e) {
               var idTarea = e.docs.last.get("idTarea"); // cada tarea tiene una id
 
-              if(_lengthTareas < e.docs.length && _lengthTareas != 0)
-                {
-                  await Sesion.db.consultarIDTarea(idTarea).then((nuevaTarea) {
+              e.docChanges.forEach((element) async {
+                if(element.type == DocumentChangeType.added)
+                  {
+                    await Sesion.db.consultarIDTarea(idTarea).then((nuevaTarea) {
 
                       Sesion.argumentos.add(e.docs.length-1);
                       Notificacion.showBigTextNotification(title: "Nueva tarea", body: nuevaTarea.nombre, fln: notificaciones );
-
-                    _ultimaTarea = nuevaTarea.nombre;
-
-                  });
-                }
-              _lengthTareas = e.docs.length;
+                    });
+                  }
+              });
 
           });
       }

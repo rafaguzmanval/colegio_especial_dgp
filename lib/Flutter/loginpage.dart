@@ -47,7 +47,7 @@ class LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    obtenerAutenticacion();
+    //obtenerAutenticacion();
     inicializar();
     //Notificacion.showBigTextNotification(title: "Bienvenio", body: "LA gran notificacion", fln: flutterLocalNotificationsPlugin);
     Sesion.reload();
@@ -89,21 +89,7 @@ class LoginPageState extends State<LoginPage> {
     }
   }
 
-  // Metodo para acceder a la autenticacion
-  obtenerAutenticacion() async {
-    try {
-      Sesion.credenciales = await FirebaseAuth.instance.signInAnonymously();
-      print("Signed in with temporary account.".toUpperCase());
-    } on FirebaseAuthException catch (e) {
-      switch (e.code) {
-        case "operation-not-allowed":
-          print("Anonymous auth hasn't been enabled for this project.".toUpperCase());
-          break;
-        default:
-          print("Unknown error.".toUpperCase());
-      }
-    }
-  }
+
 
   // Contructor de la estructura de la pagina
   @override
@@ -176,23 +162,35 @@ class LoginPageState extends State<LoginPage> {
 
     if(Sesion.argumentos.length == 0)
       {
-        usuarios = await Sesion.db.consultarTodosUsuarios();
+        await Sesion.db.consultarTodosUsuarios().then((e){
+          usuarios = e;
+          if (usuarios.length > 10) verBotonAbajo = true;
+          _actualizar();
+        });
+
+
       }
     else if(Sesion.argumentos.first == "profesores")
       {
-        usuarios = await Sesion.db.consultarTodosProfesores();
+        await Sesion.db.consultarTodosProfesores().then((e){
+          usuarios = e;
+          if (usuarios.length > 10) verBotonAbajo = true;
+          _actualizar();
+        });
+
       }
     else
       {
-      usuarios = await Sesion.db.consultarTodosAlumnos();
+        await Sesion.db.consultarTodosAlumnos().then((e){
+          usuarios = e;
+          if (usuarios.length > 10) verBotonAbajo = true;
+          _actualizar();
+        });
       }
 
 
     Sesion.argumentos.clear();
 
-    imagenUgr = await lecturaImagen("AppStorage/ugr.png");
-    //if (usuarios.length > 10) verBotonAbajo = true;
-    //_actualizar();
   }
 
   SeleccionUsuario() async {

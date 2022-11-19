@@ -15,6 +15,7 @@
 *   video_player.dart : Necesario para cargar los videos del storage y cargarlos en el controlador de los reproductores de video. 
 * */
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
@@ -44,10 +45,15 @@ String encriptacionSha256(String password) {
 class AccesoBD {
   var db = FirebaseFirestore.instance;
   var storageRef = FirebaseStorage.instance.ref();
-  var subscripcion;
+  var _subscripcion;
 
   var fotoDesconocido =
       "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fperfiles%2Fdesconocido.png?alt=media&token=98ba72ac-776e-4f83-9aaa-57761589c974";
+
+  desactivarSubscripcion(){
+    if(_subscripcion != null)
+    _subscripcion.cancel();
+  }
 
   // Metodo para registrar usuario
   registrarUsuario(usuario, foto) async {
@@ -219,7 +225,7 @@ class AccesoBD {
       final ref = db.collection("usuarioTieneTareas");
 
 
-      subscripcion = await ref.where("idUsuario", isEqualTo: id).orderBy("fechainicio") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
+      await ref.where("idUsuario", isEqualTo: id).orderBy("fechainicio") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
         ..snapshots().listen((e) async {      //Escucha los cambios en el servidor
           var nuevasTareas = [];
           for (int i = 0; i < e.docs.length; i++) { // itera sobre los elementos de la colección

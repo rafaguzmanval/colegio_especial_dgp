@@ -105,7 +105,7 @@ class VerTareasState extends State<VerTareas> {
       //Sesion.tareas[i].controladoresVideo.clear();
     }
 
-    Sesion.db.subscripcion.cancel();
+    Sesion.db.desactivarSubscripcion();
     if (temporizador != null) {
       temporizador.cancel();
       temporizador = false;

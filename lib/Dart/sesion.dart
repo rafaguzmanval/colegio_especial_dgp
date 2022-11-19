@@ -22,7 +22,7 @@ class Sesion {
   static var paginaActual;
   static var metodoLogin = "";
   static var argumentos = [];
-  static var db = new AccesoBD();
+  static var db;
 
   // Sesion por defecto
   static reload() {

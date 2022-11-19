@@ -18,10 +18,13 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:colegio_especial_dgp/Dart/sesion.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../Flutter/profe_alumno.dart';
+import 'acceso_bd.dart';
 import 'background.dart';
 import 'firebase_options.dart';
 import '../Flutter/loginpage.dart';
@@ -88,14 +91,32 @@ Future sendEmail(String name, String email, String message) async {
   return response.statusCode;
 }
 
+// Metodo para acceder a la autenticacion
+obtenerAutenticacion() async {
+  try {
+    Sesion.credenciales = await FirebaseAuth.instance.signInAnonymously();
+    print("Signed in with temporary account.".toUpperCase());
+  } on FirebaseAuthException catch (e) {
+    switch (e.code) {
+      case "operation-not-allowed":
+        print("Anonymous auth hasn't been enabled for this project.".toUpperCase());
+        break;
+      default:
+        print("Unknown error.".toUpperCase());
+    }
+  }
+}
+
 
 // Inicializa la aplicacion indicando el idioma soportado
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Notificacion.initialize(notificaciones);
+    obtenerAutenticacion();
+    Sesion.db = new AccesoBD();
+    //Notificacion.initialize(notificaciones);
 
-    Background.inicializarBackground();
+    //Background.inicializarBackground();
 
     return MaterialApp(
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
