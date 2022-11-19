@@ -9,6 +9,7 @@ import 'package:flutter_background/flutter_background.dart';
 class Background
 {
   static var _subscripcion ;
+  static  bool primera= false;
 
 static inicializarBackground() async
   {
@@ -43,18 +44,27 @@ static inicializarBackground() async
 
         _subscripcion = await ref.where("idUsuario", isEqualTo: Sesion.id).orderBy("fechainicio") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
           .snapshots().listen((e) {
-              var idTarea = e.docs.last.get("idTarea"); // cada tarea tiene una id
 
-              e.docChanges.forEach((element) async {
-                if(element.type == DocumentChangeType.added)
-                  {
-                    await Sesion.db.consultarIDTarea(idTarea).then((nuevaTarea) {
+            if(e.docs.length > 0)
+              {
+                var idTarea = e.docs.last.get("idTarea"); // cada tarea tiene una id
 
-                      Sesion.argumentos.add(e.docs.length-1);
-                      Notificacion.showBigTextNotification(title: "Nueva tarea", body: nuevaTarea.nombre, fln: notificaciones );
-                    });
-                  }
-              });
+                if(primera)
+                {
+                  e.docChanges.forEach((element) async {
+                    if(element.type == DocumentChangeType.added)
+                    {
+                      await Sesion.db.consultarIDTarea(idTarea).then((nuevaTarea) {
+
+                        Sesion.argumentos.add(e.docs.length-1);
+                        Notificacion.showBigTextNotification(title: "Nueva tarea", body: nuevaTarea.nombre, fln: notificaciones );
+                      });
+                    }
+                  });
+                }
+
+                primera = true;
+              }
 
           });
       }

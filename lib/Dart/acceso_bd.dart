@@ -225,8 +225,9 @@ class AccesoBD {
       final ref = db.collection("usuarioTieneTareas");
 
 
-      await ref.where("idUsuario", isEqualTo: id).orderBy("fechainicio") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
-        ..snapshots().listen((e) async {      //Escucha los cambios en el servidor
+      _subscripcion = await ref.where("idUsuario", isEqualTo: id).orderBy("fechainicio") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
+        .snapshots().listen((e) async {
+          print("nueva actualización en ver_tareas");//Escucha los cambios en el servidor
           var nuevasTareas = [];
           for (int i = 0; i < e.docs.length; i++) { // itera sobre los elementos de la colección
             var idTarea = e.docs[i].get("idTarea"); // cada tarea tiene una id
@@ -278,6 +279,7 @@ class AccesoBD {
 
                     }
 
+
                     Sesion.paginaActual.actualizar();
 
                   } catch (e) {
@@ -286,7 +288,6 @@ class AccesoBD {
                   ;
                 }
                 Sesion.paginaActual.actualizar();
-                return;
               }
             });
           }
@@ -294,9 +295,10 @@ class AccesoBD {
           if (e.docs.length == 0) Sesion.tareas = [];
 
         });
+
+
     } catch (e) {
       print(e);
-      return false;
     }
   }
 

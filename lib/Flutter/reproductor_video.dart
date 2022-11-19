@@ -9,7 +9,7 @@ ventanaVideo(controlador,context){
 
   showDialog(context: context, builder: (context){
 
-    return Dialog(
+    return WillPopScope(child: Dialog(
         child: StreamBuilder(stream: controladorStream.stream,
             builder: (BuildContext context,AsyncSnapshot snapshot)
             {
@@ -48,8 +48,12 @@ ventanaVideo(controlador,context){
 
               );
             }
-        )
-    );
+          )
+        ),
+        onWillPop: (){
+          controlador.pause();
+          return Future.value(true);
+        });
 
   }
 

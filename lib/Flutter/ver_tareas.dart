@@ -588,6 +588,8 @@ class VerTareasState extends State<VerTareas> {
 
   // Este metodo itera sobre las tareas que tiene el usuario y las muestra
   Widget LecturaTarea(String valor, i) {
+    var indice = indiceVideos;
+    indiceVideos++;
     if (valor == "T" && Sesion.tareas[i].textos.length > indiceTextos) {
       String pathTexto = Sesion.tareas[i].textos[indiceTextos];
       indiceTextos++;
@@ -613,7 +615,7 @@ class VerTareasState extends State<VerTareas> {
           child: ElevatedButton(
             onPressed: (){
               ventanaVideo(
-                  Sesion.tareas[i].controladoresVideo[indiceVideos++],context);
+                  Sesion.tareas[i].controladoresVideo[indice],context);
             },
               child:Text("ver video")
             ),
@@ -679,7 +681,7 @@ class VerTareasState extends State<VerTareas> {
 
   // Actualizar la pagina
   void actualizar() async {
-    print("nueva actualización");
+    //print("nueva actualización");
     indiceComanda = 0;
     if (Sesion.tareas.length > 1 && tareaActual == 0) {
       verFlechaDerecha = true;
