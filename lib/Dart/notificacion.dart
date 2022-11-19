@@ -18,17 +18,24 @@ class Notificacion {
   static Future initialize(
       FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin) async {
     var androidInitialize =
-        new AndroidInitializationSettings('mipmap/ic_launcher');
+        new AndroidInitializationSettings('app_icon');
     var iOSInitialize = new DarwinInitializationSettings();
     var initializationsSettings = new InitializationSettings(
         android: androidInitialize, iOS: iOSInitialize);
     await flutterLocalNotificationsPlugin.initialize(initializationsSettings,
-        onDidReceiveNotificationResponse: (notificationResponse){
+        onDidReceiveNotificationResponse: (notificationResponse) async{
         print("recibido");
         if(Sesion.paginaActual.toString().startsWith("MyHomePageState"))
           {
-            Navigator.push(Sesion.paginaActual.context, MaterialPageRoute(
+            var paginaAnterior = Sesion.paginaActual;
+            await Navigator.push(Sesion.paginaActual.context, MaterialPageRoute(
                 builder: (context) => VerTareas()));
+            Sesion.paginaActual = paginaAnterior;
+          }
+        else if(Sesion.paginaActual.toString().startsWith("VerTareasState"))
+          {
+            Sesion.paginaActual.enfocarTarea();
+            Sesion.paginaActual.actualizar();
           }
     },onDidReceiveBackgroundNotificationResponse: (response){
           print("recibido");

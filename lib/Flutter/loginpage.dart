@@ -32,7 +32,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  AccesoBD base = new AccesoBD();
+
   var usuarios;
   var imagenUgr;
   var maxUsuariosPorFila = 2;
@@ -176,23 +176,23 @@ class LoginPageState extends State<LoginPage> {
 
     if(Sesion.argumentos.length == 0)
       {
-        usuarios = await base.consultarTodosUsuarios();
+        usuarios = await Sesion.db.consultarTodosUsuarios();
       }
     else if(Sesion.argumentos.first == "profesores")
       {
-        usuarios = await base.consultarTodosProfesores();
+        usuarios = await Sesion.db.consultarTodosProfesores();
       }
     else
       {
-      usuarios = await base.consultarTodosAlumnos();
+      usuarios = await Sesion.db.consultarTodosAlumnos();
       }
 
 
     Sesion.argumentos.clear();
 
     imagenUgr = await lecturaImagen("AppStorage/ugr.png");
-    if (usuarios.length > 10) verBotonAbajo = true;
-    _actualizar();
+    //if (usuarios.length > 10) verBotonAbajo = true;
+    //_actualizar();
   }
 
   SeleccionUsuario() async {
@@ -313,7 +313,7 @@ class LoginPageState extends State<LoginPage> {
 
   // Metodo para leer la imagen
   lecturaImagen(path) async {
-    return await base.leerImagen(path);
+    return await Sesion.db.leerImagen(path);
   }
 
   // Metodo para actualizar la pagina

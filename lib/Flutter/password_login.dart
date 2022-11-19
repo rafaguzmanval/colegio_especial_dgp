@@ -26,7 +26,7 @@ class PasswordLogin extends StatefulWidget {
 }
 
 class PasswordLoginState extends State<PasswordLogin> {
-  AccesoBD base = new AccesoBD();
+
   var error_inicio = false;
   var usuarios;
   var concatenacionPin = "";
@@ -251,7 +251,7 @@ class PasswordLoginState extends State<PasswordLogin> {
 
   // Metodo para comprobar el pin introducido
   ComprobarPin(id, password) async {
-    var resul = await base.checkearPassword(id, password);
+    var resul = await Sesion.db.checkearPassword(id, password);
 
     print(resul);
 
@@ -263,7 +263,7 @@ class PasswordLoginState extends State<PasswordLogin> {
 
   // Metodo para comprobar si la contraseña es correcta
   ComprobarLogeo(id, password) async {
-    var resul = await base.checkearPassword(id, password);
+    var resul = await Sesion.db.checkearPassword(id, password);
 
     print(resul);
 

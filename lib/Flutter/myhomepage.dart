@@ -43,8 +43,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage> {
-  var db = FirebaseFirestore.instance;
-  AccesoBD base = new AccesoBD();
+
   var maxUsuariosPorFila = 2;
   double offSetActual = 0;
   ScrollController homeController = new ScrollController();
@@ -60,7 +59,6 @@ class MyHomePageState extends State<MyHomePage> {
     super.initState();
 
     Sesion.paginaActual = this;
-
     Sesion.seleccion = "";
     Sesion.tareas = [];
     Background.activarNotificacionesNuevasTareas();
@@ -124,11 +122,12 @@ class MyHomePageState extends State<MyHomePage> {
                                     )),
                               ],
                             ),
-                            onPressed: () {
-                              Navigator.push(
+                            onPressed: () async {
+                              await Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => ListaAlumnos()));
+                              Sesion.paginaActual = this;
                             },
                           ),
                         ),
@@ -174,11 +173,12 @@ class MyHomePageState extends State<MyHomePage> {
                               )),
                         ],
                       ),
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async{
+                        await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => TablonComunicacion()));
+                        Sesion.paginaActual = this;
                       },
                     ),
                   ),
@@ -206,11 +206,12 @@ class MyHomePageState extends State<MyHomePage> {
                               )),
                         ],
                       ),
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async {
+                        await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => VerTareas()));
+                        Sesion.paginaActual = this;
                       },
                     ),
                   ),
@@ -257,11 +258,12 @@ class MyHomePageState extends State<MyHomePage> {
                                 )),
                           ],
                         ),
-                        onPressed: () {
-                          Navigator.push(
+                        onPressed: () async{
+                          await Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => ListaAlumnos()));
+                          Sesion.paginaActual = this;
                         },
                       ),
                     ),
@@ -289,11 +291,12 @@ class MyHomePageState extends State<MyHomePage> {
                               )),
                         ],
                       ),
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async{
+                        await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => ListaProfesores()));
+                        Sesion.paginaActual = this;
                       },
                     ),
                   ),
@@ -330,11 +333,12 @@ class MyHomePageState extends State<MyHomePage> {
                               )),
                         ],
                       ),
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async{
+                        await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => RegistroUsuarios()));
+                        Sesion.paginaActual = this;
                       },
                     ),
                   ),
@@ -362,11 +366,12 @@ class MyHomePageState extends State<MyHomePage> {
                               )),
                         ],
                       ),
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async{
+                        await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => CrearTarea()));
+                        Sesion.paginaActual = this;
                       },
                     ),
                   ),
@@ -404,11 +409,12 @@ class MyHomePageState extends State<MyHomePage> {
                               )),
                         ],
                       ),
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async{
+                        await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => GestionTablon()));
+                        Sesion.paginaActual = this;
                       },
                     ),
                   ),
@@ -437,11 +443,12 @@ class MyHomePageState extends State<MyHomePage> {
                               )),
                         ],
                       ),
-                      onPressed: () {
-                        Navigator.push(
+                      onPressed: () async{
+                        await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => CrearTarea()));
+                        Sesion.paginaActual = this;
                       },
                     ),
                   ),
@@ -482,7 +489,9 @@ class MyHomePageState extends State<MyHomePage> {
                   child: Text('NO')),
               ElevatedButton(
                   onPressed: () {
+                    Background.desactivarNotificaciones();
                     Navigator.popUntil(context, (route) => route.isFirst);
+
                   },
                   child: Text('SÍ')),
             ],

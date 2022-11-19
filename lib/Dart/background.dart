@@ -10,8 +10,10 @@ import 'acceso_bd.dart';
 
 class Background
 {
-  static var ultimaTarea = "";
-  static var lengthTareas = 0;
+  static var _ultimaTarea = "";
+  static var _lengthTareas = 0;
+  static var _subscripcion ;
+
 static inicializarBackground() async
   {
   print("intentando hacer background");
@@ -40,28 +42,34 @@ static inicializarBackground() async
   {
     if(Sesion.id != "")
       {
-        var db = FirebaseFirestore.instance;
-        var ref = db.collection("usuarioTieneTareas");
-        var base = new AccesoBD();
-        await ref.where("idUsuario", isEqualTo: Sesion.id).orderBy("fechainicio") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
-          ..snapshots().listen((e) async {
+
+        var ref = Sesion.db.db.collection("usuarioTieneTareas");
+
+        _subscripcion = await ref.where("idUsuario", isEqualTo: Sesion.id).orderBy("fechainicio") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
+          .snapshots().listen((e) async {
               var idTarea = e.docs.last.get("idTarea"); // cada tarea tiene una id
 
-              if(lengthTareas < e.docs.length && lengthTareas != 0)
+              if(_lengthTareas < e.docs.length && _lengthTareas != 0)
                 {
-                  await base.consultarIDTarea(idTarea).then((nuevaTarea) {
+                  await Sesion.db.consultarIDTarea(idTarea).then((nuevaTarea) {
 
-                    Sesion.argumentos.add(e.docs.length-1);
+                      Sesion.argumentos.add(e.docs.length-1);
                       Notificacion.showBigTextNotification(title: "Nueva tarea", body: nuevaTarea.nombre, fln: notificaciones );
 
-                    ultimaTarea = nuevaTarea.nombre;
+                    _ultimaTarea = nuevaTarea.nombre;
 
                   });
                 }
-              lengthTareas = e.docs.length;
+              _lengthTareas = e.docs.length;
 
           });
       }
+  }
+
+  static desactivarNotificaciones()
+  {
+    if(_subscripcion != null)
+    _subscripcion.cancel();
   }
 
 }

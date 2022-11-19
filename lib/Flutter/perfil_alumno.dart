@@ -28,7 +28,6 @@ class PerfilAlumno extends StatefulWidget {
 }
 
 class PerfilAlumnoState extends State<PerfilAlumno> {
-  AccesoBD base = new AccesoBD();
 
   var usuarioPerfil;
 
@@ -161,7 +160,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                           ),
                           IconButton(
                               onPressed: () async {
-                                await base.eliminarTareaAlumno(
+                                await Sesion.db.eliminarTareaAlumno(
                                     Sesion.tareas[i].idRelacion);
 
                                 esTareaEliminandose = true;
@@ -197,14 +196,14 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
 
   cargarUsuario() async // EN sesion seleccion estara el id del usuario que se ha elegido
   {
-    usuarioPerfil = await base.consultarIDusuario(Sesion.seleccion.id);
-    await base.consultarTareasAsignadasAlumno(Sesion.seleccion.id, false);
+    usuarioPerfil = await Sesion.db.consultarIDusuario(Sesion.seleccion.id);
+    await Sesion.db.consultarTareasAsignadasAlumno(Sesion.seleccion.id, false);
     actualizar();
   }
 
   // Metodo que carga las tareas del alumno
   cargarTareas() async {
-    tareas = await base.consultarTodasLasTareas();
+    tareas = await Sesion.db.consultarTodasLasTareas();
 
     for (int i = 0; i < tareas.length; i++) {
       nombresTareas.add(tareas[i].nombre);
@@ -346,7 +345,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                               horafinal.hour,
                                               horafinal.minute)
                                           .millisecondsSinceEpoch;
-                                      await base
+                                      await Sesion.db
                                           .addTareaAlumno(Sesion.seleccion.id,
                                               idTareaElegida, tiempoFinal)
                                           .then((valor) {

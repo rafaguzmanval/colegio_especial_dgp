@@ -34,9 +34,8 @@ class RegistroUsuarios extends StatefulWidget {
 }
 
 class RegistroUsuariosState extends State<RegistroUsuarios> {
-  var db = FirebaseFirestore.instance;
 
-  AccesoBD base = new AccesoBD();
+
 
   var fotoTomada;
   ImagePicker capturador = new ImagePicker();
@@ -461,7 +460,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
         foto = File(fotoTomada.path);
       }
 
-      var future = base.registrarUsuario(usuario, foto);
+      var future = Sesion.db.registrarUsuario(usuario, foto);
 
       future.then((value) {
         registrando = false;

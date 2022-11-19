@@ -8,6 +8,7 @@
 *   passport_method.dart : Contiene el enum que indica el tipo de contraseña que va a usarse (clave, pin,...)
 * */
 
+import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:colegio_especial_dgp/Dart/passport_method.dart';
 
 class Sesion {
@@ -21,6 +22,7 @@ class Sesion {
   static var paginaActual;
   static var metodoLogin = "";
   static var argumentos = [];
+  static var db = new AccesoBD();
 
   // Sesion por defecto
   static reload() {

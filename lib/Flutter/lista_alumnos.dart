@@ -28,11 +28,8 @@ class ListaAlumnos extends StatefulWidget {
 class ListaAlumnosState extends State<ListaAlumnos> {
   var alumnos = [];
 
-  var db = FirebaseFirestore.instance;
   double offSetActual = 0;
   ScrollController homeController = new ScrollController();
-
-  AccesoBD base = new AccesoBD();
 
   @override
   void initState() {
@@ -175,7 +172,7 @@ class ListaAlumnosState extends State<ListaAlumnos> {
 
   // Obtiene la lista de alumnos y actualiza la pagina
   cargarAlumnos() async {
-    alumnos = await base.consultarTodosAlumnos();
+    alumnos = await Sesion.db.consultarTodosAlumnos();
     actualizar();
   }
 

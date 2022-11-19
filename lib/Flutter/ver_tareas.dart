@@ -105,6 +105,7 @@ class VerTareasState extends State<VerTareas> {
       //Sesion.tareas[i].controladoresVideo.clear();
     }
 
+    Sesion.db.subscripcion.cancel();
     if (temporizador != null) {
       temporizador.cancel();
       temporizador = false;
@@ -123,16 +124,22 @@ class VerTareasState extends State<VerTareas> {
 
     Sesion.tareas = [];
 
-    if (Sesion.argumentos.length == 1) {
-      tareaActual = Sesion.argumentos[0];
-      iconoAtras = Icons.arrow_back;
-      Sesion.argumentos = [];
-    }
+
+    enfocarTarea();
     if (Sesion.rol == Rol.alumno.toString()) {
       print("Cargando tareas");
       cargarTareas(Sesion.id);
     } else {
       cargarTareas(Sesion.seleccion.id);
+    }
+  }
+
+  void enfocarTarea()
+  {
+    if (Sesion.argumentos.length == 1) {
+      tareaActual = Sesion.argumentos[0];
+      iconoAtras = Icons.arrow_back;
+      Sesion.argumentos = [];
     }
   }
 
@@ -628,7 +635,7 @@ class VerTareasState extends State<VerTareas> {
 
   // Accede a las tareas de la base de datos
   cargarTareas(id) async {
-    await base.consultarTareasAsignadasAlumno(id, true);
+    await Sesion.db.consultarTareasAsignadasAlumno(id, true);
 
   }
 
@@ -717,6 +724,7 @@ class VerTareasState extends State<VerTareas> {
                     margin: EdgeInsets.all(10),
                     child: ElevatedButton(
                         onPressed: () {
+
                           Navigator.pop(context);
                         },
                         child: Column(children: [
@@ -732,18 +740,18 @@ class VerTareasState extends State<VerTareas> {
                   child: ElevatedButton(
                       onPressed: () {
                         if (estado) {
-                          base.updateComanda(
+                          Sesion.db.updateComanda(
                               Sesion.tareas[tareaActual].idRelacion,
                               Sesion.tareas[tareaActual].formularios);
-                          base.completarTarea(
+                          Sesion.db.completarTarea(
                               Sesion.tareas[tareaActual].idRelacion);
                         } else {
-                          base.fallarTarea(
+                          Sesion.db.fallarTarea(
                               Sesion.tareas[tareaActual].idRelacion);
                         }
 
                         if (controladorRespuesta.text != null) {
-                          base.addRespuestaTarea(
+                          Sesion.db.addRespuestaTarea(
                               Sesion.tareas[tareaActual].idRelacion,
                               controladorRespuesta.text);
                         }
@@ -802,7 +810,7 @@ class VerTareasState extends State<VerTareas> {
                     child: ElevatedButton(
                         onPressed: () {
                           if (controlador.text != null) {
-                            base.addFeedbackTarea(
+                            Sesion.db.addFeedbackTarea(
                                 Sesion.tareas[tareaActual].idRelacion,
                                 controlador.text);
                           }

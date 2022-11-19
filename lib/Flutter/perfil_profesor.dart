@@ -22,7 +22,7 @@ class PerfilProfesor extends StatefulWidget {
 }
 
 class PerfilProfesorState extends State<PerfilProfesor> {
-  AccesoBD base = new AccesoBD();
+
 
   var usuarioPerfil;
 
@@ -146,7 +146,7 @@ class PerfilProfesorState extends State<PerfilProfesor> {
   /// Carga el usuario del profesor
   cargarUsuario() async // EN sesion seleccion estara el id del usuario que se ha elegido
   {
-    usuarioPerfil = await base.consultarIDusuario(Sesion.seleccion.id);
+    usuarioPerfil = await Sesion.db.consultarIDusuario(Sesion.seleccion.id);
     actualizar();
   }
   /// Actualiza la pagina

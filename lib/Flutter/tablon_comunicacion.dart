@@ -39,9 +39,6 @@ class TablonComunicacionState extends State<TablonComunicacion> {
   ScrollController homeController3 = new ScrollController();
 
   var tablon;
-  var db = FirebaseFirestore.instance;
-
-  AccesoBD base = new AccesoBD();
 
   var lenguajes;
 
@@ -456,7 +453,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
   inicializar() async
   {
 
-    tablon = await base.consultarTodosTablon();
+    tablon = await Sesion.db.consultarTodosTablon();
 
     actualizar();
 

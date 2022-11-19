@@ -28,11 +28,9 @@ class ListaProfesores extends StatefulWidget {
 class ListaProfesoresState extends State<ListaProfesores> {
   var profesores = [];
 
-  var db = FirebaseFirestore.instance;
   double offSetActual = 0;
   ScrollController homeController = new ScrollController();
 
-  AccesoBD base = new AccesoBD();
 
   @override
   void initState() {
@@ -203,7 +201,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
 
   // metodo para cargar la lista de profesores
   cargarProfesores() async {
-    profesores = await base.consultarTodosProfesores();
+    profesores = await Sesion.db.consultarTodosProfesores();
     actualizar();
   }
 

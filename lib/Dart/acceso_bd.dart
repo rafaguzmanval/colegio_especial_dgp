@@ -44,6 +44,7 @@ String encriptacionSha256(String password) {
 class AccesoBD {
   var db = FirebaseFirestore.instance;
   var storageRef = FirebaseStorage.instance.ref();
+  var subscripcion;
 
   var fotoDesconocido =
       "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fperfiles%2Fdesconocido.png?alt=media&token=98ba72ac-776e-4f83-9aaa-57761589c974";
@@ -218,7 +219,7 @@ class AccesoBD {
       final ref = db.collection("usuarioTieneTareas");
 
 
-      await ref.where("idUsuario", isEqualTo: id).orderBy("fechainicio") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
+      subscripcion = await ref.where("idUsuario", isEqualTo: id).orderBy("fechainicio") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
         ..snapshots().listen((e) async {      //Escucha los cambios en el servidor
           var nuevasTareas = [];
           for (int i = 0; i < e.docs.length; i++) { // itera sobre los elementos de la colección
