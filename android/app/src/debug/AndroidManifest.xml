@@ -14,6 +14,10 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
     <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <uses-permission android:name="android.permission" />
+
+    <meta-data android:name="com.google.android.maps.v2.API_KEY"
+        android:value="AIzaSyBPJlgGrtEgnTJ3sl4b7Pv_u6bIMMpn0-g"/>
 
 
 </manifest>

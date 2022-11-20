@@ -296,6 +296,7 @@ class LoginPageState extends State<LoginPage> {
                     Sesion.id = usuarios[j].id;
                     Sesion.nombre = usuarios[j].nombre;
                     Sesion.rol = usuarios[j].rol;
+                    Sesion.foto = usuarios[j].foto;
                     if(usuarios[j].metodoLogeo == Passportmethod.free.toString())
                       {
                         Sesion.metodoLogin = "free";

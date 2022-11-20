@@ -16,6 +16,7 @@ class Sesion {
   static var credenciales;
   static var nombre;
   static var rol;
+  static var foto;
   static var tareas;
   static var tablon;
   static var seleccion;

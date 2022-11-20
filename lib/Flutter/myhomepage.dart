@@ -32,6 +32,7 @@ import 'package:colegio_especial_dgp/Flutter/tablon_comunicacion.dart';
 import 'package:colegio_especial_dgp/Flutter/ver_tareas.dart';
 import 'package:flutter/material.dart';
 import '../Dart/main.dart';
+import 'configuracion.dart';
 import 'lista_alumnos.dart';
 import 'lista_profesores.dart';
 
@@ -73,9 +74,13 @@ class MyHomePageState extends State<MyHomePage> {
             leading: IconButton(
                 icon: Icon(Icons.settings_power, color: Colors.white),
                 onPressed: () => _onBackPressed(context)),
+
             title: Column(children: [
               Text('Menú principal'.toUpperCase()),
             ]),
+            actions: [IconButton(onPressed: () => Navigator.push(context,
+                MaterialPageRoute(
+                    builder: (context) => Configuracion())), icon: Icon(Icons.settings, color: Colors.white))],
             automaticallyImplyLeading: false,
           ),
           body: Container(margin: EdgeInsets.all(5), child: vistaMenu())),
