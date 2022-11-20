@@ -37,6 +37,11 @@ class Notificacion {
             Sesion.paginaActual.enfocarTarea();
             Sesion.paginaActual.actualizar();
           }
+        else
+          {
+            //Navigator.popUntil(Sesion.paginaActual.context, ModalRoute.withName("/home"));
+            Navigator.pop(Sesion.paginaActual.context);
+          }
     },onDidReceiveBackgroundNotificationResponse: (response){
           print("recibido");
           if(Sesion.paginaActual.toString().startsWith("MyHomePageState"))

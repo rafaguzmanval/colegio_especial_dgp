@@ -107,12 +107,13 @@ class CrearTareaState extends State<CrearTarea> {
       } else if (seleccion == SeleccionImagen.galeria) {
         print("Se va a coger una foto de la galería");
         fotoTomada = await capturador.pickImage(
-            source: ImageSource.gallery, imageQuality: 15);
+            source: ImageSource.gallery, imageQuality: 5);
       } else {
         print("Hacer un video");
         await capturador
             .pickVideo(
           source: ImageSource.camera,
+          maxDuration: Duration(seconds: 10)
         )
             .then((value) async {
           videoTomado = value;

@@ -177,8 +177,18 @@ class MyHomePageState extends State<MyHomePage> {
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => TablonComunicacion()));
-                        Sesion.paginaActual = this;
+                                builder: (context) => TablonComunicacion())).then((value) async{
+                          Sesion.paginaActual = this;
+                          if(Sesion.argumentos.length == 1)
+                          {
+                            await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => VerTareas()));
+                            Sesion.paginaActual = this;
+                          }
+                        });
+
                       },
                     ),
                   ),

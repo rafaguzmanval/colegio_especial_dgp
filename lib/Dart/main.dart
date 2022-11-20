@@ -19,6 +19,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
+import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
+import 'package:colegio_especial_dgp/Flutter/password_login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -114,9 +116,9 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     obtenerAutenticacion();
     Sesion.db = new AccesoBD();
-    //Notificacion.initialize(notificaciones);
+    Notificacion.initialize(notificaciones);
 
-    //Background.inicializarBackground();
+    Background.inicializarBackground();
 
     return MaterialApp(
       localizationsDelegates: GlobalMaterialLocalizations.delegates,
@@ -124,9 +126,19 @@ class App extends StatelessWidget {
       supportedLocales: [Locale('es', 'ES'), Locale('en', 'US')],
       title: 'Proyecto Colegio Especial',
 
+      initialRoute: '/',
+      routes: {
+        '/' : (context) =>  ProfeAlumno(),
+        '/login' : (context) =>  LoginPage(),
+        '/login/password' : (context) =>  PasswordLogin(),
+        '/home' : (context) =>  MyHomePage(),
+
+
+      },
+
       theme:
           ThemeData(primarySwatch: cambioColor?colorCustom:Colors.orange,fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30))),
-      home: ProfeAlumno(),
+      //home: ProfeAlumno(),
     );
   }
 }

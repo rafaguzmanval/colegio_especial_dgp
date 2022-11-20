@@ -100,7 +100,9 @@ class VerTareasState extends State<VerTareas> {
   void dispose() {
     for (int i = 0; i < Sesion.tareas.length; i++) {
       for (int j = 0; j < Sesion.tareas[i].controladoresVideo.length; j++) {
+        if( Sesion.tareas[i].controladoresVideo[j] != 0)
         Sesion.tareas[i].controladoresVideo[j].dispose();
+
       }
       //Sesion.tareas[i].controladoresVideo.clear();
     }
@@ -139,6 +141,8 @@ class VerTareasState extends State<VerTareas> {
     if (Sesion.argumentos.length == 1) {
       tareaActual = Sesion.argumentos[0];
       iconoAtras = Icons.arrow_back;
+      if(tareaActual == Sesion.tareas.length -1)
+        verFlechaDerecha = false;
       Sesion.argumentos = [];
     }
   }
@@ -607,6 +611,7 @@ class VerTareasState extends State<VerTareas> {
           decoration: BoxDecoration(border: Border.all(width: 2)),
           margin: EdgeInsets.only(bottom: 15),
           child: Image.network(pathImagen, width: 200, height: 200));
+
     } else if (valor == "V" && Sesion.tareas[i].controladoresVideo.length > 0) {
       var indice = indiceVideos;
       indiceVideos++;
@@ -615,10 +620,13 @@ class VerTareasState extends State<VerTareas> {
           margin: EdgeInsets.only(bottom: 15),
           child: ElevatedButton(
             onPressed: (){
-              var nuevoControlador = VideoPlayerController.network(
-                                Sesion.tareas[i].videos[indice]);
-              Sesion.tareas[i].controladoresVideo[indice] = nuevoControlador;
-              Sesion.tareas[i].controladoresVideo[indice].initialize();
+              if(Sesion.tareas[i].controladoresVideo[indice] == 0 )
+                {
+                  var nuevoControlador = VideoPlayerController.network(
+                      Sesion.tareas[i].videos[indice]);
+                  Sesion.tareas[i].controladoresVideo[indice] = nuevoControlador;
+                  Sesion.tareas[i].controladoresVideo[indice].initialize();
+                }
 
               ventanaVideo(
                   Sesion.tareas[i].controladoresVideo[indice],context);
@@ -644,7 +652,6 @@ class VerTareasState extends State<VerTareas> {
   // Accede a las tareas de la base de datos
   cargarTareas(id) async {
     await Sesion.db.consultarTareasAsignadasAlumno(id, true);
-
   }
 
   // Muestra la vista en horizontal
