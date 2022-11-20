@@ -96,7 +96,7 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(title: Text('TuCole'.toUpperCase())),
+        appBar: AppBar(title: Text('TuCole')),
         body: Stack(children: [
           ListaUsuarios(),
           Visibility(
