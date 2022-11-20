@@ -4,6 +4,19 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
+String _duracionVideo(Duration duracion){
+  String dosDigitos(int n) => n.toString().padLeft(2,'0');
+  final horas = dosDigitos(duracion.inHours);
+  final minutos = dosDigitos(duracion.inMinutes.remainder(60));
+  final segundos = dosDigitos(duracion.inSeconds.remainder(60));
+
+  return [
+    if(duracion.inHours>0) horas,
+    minutos,
+    segundos
+  ].join(':');
+}
+
 ventanaVideo(controlador,context){
   var controladorStream = StreamController();
 
@@ -14,38 +27,60 @@ ventanaVideo(controlador,context){
             builder: (BuildContext context,AsyncSnapshot snapshot)
             {
               return Container(
+                color: Theme.of(context).primaryColor,
                 //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
                 child:
-                ElevatedButton(
-                  onPressed: () {
-                    if (controlador.value.isPlaying) {
-                      controlador.pause();
-                    } else {
-                      controlador.play();
-                    }
-                    controladorStream.add("");
-                  },
-                  child: AspectRatio(
-                    aspectRatio: controlador.value.aspectRatio,
-                    child: /*Column(children: [*/
-                    VideoPlayer(controlador),
-                    /*Icon(
-                            controlador.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                            size: 20,
-                            semanticLabel: controlador.value.isPlaying ? "Pausa" : "Reanudar",
-                          ),
-                          Container(
-                            //duration of video
-                            child: Text("Duración del video: " +
-                                (controlador.value.duration.inSeconds / 3600).toString() + " : "
-                                + ((controlador.value.duration.inSeconds / 60) % 60 ).toString()  + " : "
-                                + (controlador.value.duration.inSeconds % 60).toString()),
-                          ),
-
-                        ],)*/),
-                ),
-
-
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children:[
+                        Expanded(
+                          flex: 12,
+                            child:
+                        ElevatedButton(
+                            onPressed: () {
+                              if (controlador.value.isPlaying) {
+                                controlador.pause();
+                              } else {
+                                controlador.play();
+                              }
+                              controladorStream.add("");
+                            },
+                            child:
+                            AspectRatio(
+                              aspectRatio: controlador.value.aspectRatio,
+                              child: VideoPlayer(controlador),))
+                        ),
+                        Expanded(child:
+                        Row(
+                          children:[
+                            ValueListenableBuilder(valueListenable: controlador, builder: (context, VideoPlayerValue value, child){
+                              return Text(
+                                _duracionVideo(value.position),
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                              );
+                            }),
+                            Expanded(
+                                child:
+                                    SizedBox(
+                                      height: 40,
+                                      child:
+                                        VideoProgressIndicator(controlador, allowScrubbing: true,
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 0,
+                                              horizontal: 12),))
+                            ),
+                            Text(
+                              _duracionVideo(controlador.value.duration),
+                              style: const TextStyle(
+                                color: Colors.white,
+                              ),)
+                          ]
+                        )
+                        )
+                      ]
+                    )
               );
             }
           )
@@ -58,5 +93,7 @@ ventanaVideo(controlador,context){
   }
 
   );
+
+
 
 }

@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.colegio_especial_dgp">
    <application
-        android:label="colegio_especial_dgp"
+        android:label="TuCole"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
