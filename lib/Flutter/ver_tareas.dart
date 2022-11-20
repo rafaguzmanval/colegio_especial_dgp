@@ -344,7 +344,7 @@ class VerTareasState extends State<VerTareas> {
 
             ),
 
-            if(Sesion.rol != Rol.alumno.toString() && Sesion.tareas[tareaActual].formularios != [] && Sesion.tareas[tareaActual].formularios.length > 4)...[
+            if(Sesion.rol != Rol.alumno.toString() && Sesion.tareas[tareaActual].estado != "sinFinalizar" && Sesion.tareas[tareaActual].formularios.length > 4)...[
                 ElevatedButton(onPressed: (){
                   var mensaje = "";
                   Map contador = new Map();
@@ -358,13 +358,20 @@ class VerTareasState extends State<VerTareas> {
                                   mensaje += "   "+ Sesion.tareas[tareaActual].formularios[j].toString() + " : " + Sesion.tareas[tareaActual].formularios[j+2].toString() + "\n";
 
                                   var index = contador.containsKey(Sesion.tareas[tareaActual].formularios[j].toString());
+
+                                  var valor = Sesion.tareas[tareaActual].formularios[j+2];
+                                  if(valor is String )
+                                    {
+                                      valor = int.parse(valor);
+                                    }
+
                                   if(index)
                                     {
-                                      contador[Sesion.tareas[tareaActual].formularios[j].toString()] += Sesion.tareas[tareaActual].formularios[j+2];
+                                      contador[Sesion.tareas[tareaActual].formularios[j].toString()] += valor;
                                     }
                                   else
                                     {
-                                      contador[Sesion.tareas[tareaActual].formularios[j].toString()] = Sesion.tareas[tareaActual].formularios[j+2];
+                                      contador[Sesion.tareas[tareaActual].formularios[j].toString()] = valor;
 
                                     }
                                 }
