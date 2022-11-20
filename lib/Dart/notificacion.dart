@@ -24,7 +24,6 @@ class Notificacion {
         android: androidInitialize, iOS: iOSInitialize);
     await flutterLocalNotificationsPlugin.initialize(initializationsSettings,
         onDidReceiveNotificationResponse: (notificationResponse) async{
-        print("recibido");
         if(Sesion.paginaActual.toString().startsWith("MyHomePageState"))
           {
             var paginaAnterior = Sesion.paginaActual;
@@ -42,14 +41,14 @@ class Notificacion {
             //Navigator.popUntil(Sesion.paginaActual.context, ModalRoute.withName("/home"));
             Navigator.pop(Sesion.paginaActual.context);
           }
-    },onDidReceiveBackgroundNotificationResponse: (response){
+    }/*,onDidReceiveBackgroundNotificationResponse: (response){
           print("recibido");
           if(Sesion.paginaActual.toString().startsWith("MyHomePageState"))
           {
             Navigator.push(Sesion.paginaActual.context, MaterialPageRoute(
                 builder: (context) => VerTareas()));
           }
-    }
+    }*/
     );
   }
 

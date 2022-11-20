@@ -54,6 +54,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_background: ^1.1.0
+  url_launcher: ^6.1.6
+  google_maps_flutter: ^2.2.1
+  flutter_native_splash: ^2.2.15
 
 dev_dependencies:
 

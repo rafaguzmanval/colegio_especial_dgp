@@ -276,7 +276,7 @@ class CrearTareaState extends State<CrearTarea> {
             width: 190,
             child: fotoTomada == null
                 ? Center(child: Text('Ninguna foto tomada ****'))
-                : Center(child: fotoTomada.startsWith("http") ? Image.network(fotoTomada): Image.file(File(fotoTomada.path)) ),
+                : Center(child: fotoTomada is String? Image.network(fotoTomada): Image.file(File(fotoTomada.path)) ),
           ),
           SizedBox(
             height: 10,

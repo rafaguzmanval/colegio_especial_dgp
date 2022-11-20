@@ -13,7 +13,6 @@ class Background
 
 static inicializarBackground() async
   {
-  print("intentando hacer background");
     final androidConfig = FlutterBackgroundAndroidConfig(
     notificationTitle: "flutter_background example app",
     notificationText: "Background notification for keeping the example app running in the background",
@@ -25,12 +24,7 @@ static inicializarBackground() async
     if(success)
     {
       print("Servicio de background activado");
-      final backgroundExecution =
       await FlutterBackground.enableBackgroundExecution();
-      if(backgroundExecution)
-      {
-          print("diselo");
-      };
 
     }
   }
