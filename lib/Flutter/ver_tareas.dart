@@ -22,7 +22,7 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import "package:image_picker/image_picker.dart";
 import 'dart:async';
-
+import 'package:share_plus/share_plus.dart';
 
 
 import 'package:http/http.dart' as http;
@@ -300,6 +300,9 @@ class VerTareasState extends State<VerTareas> {
     return VistaAlumno();
   }
 
+
+
+
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
   Widget VistaAlumno() {
     if (Sesion.tareas.length > 0) {
@@ -377,8 +380,9 @@ class VerTareasState extends State<VerTareas> {
 
 
 
+                      Share.share(mensaje);
 
-                    dialogCorreo(mensaje);
+                    //dialogCorreo(mensaje);
                    }, child: Column(children: [
                       Text('\nEnviar'),
                       Image.asset(

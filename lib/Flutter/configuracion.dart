@@ -87,7 +87,8 @@ class ConfiguracionState extends State<Configuracion>{
   
   @override
   Widget build(BuildContext context){
-    return Scaffold(appBar: AppBar(title: Text("Configuración"),),
+    return Scaffold(
+          appBar: AppBar(title: Text("Configuración"),),
           body: Column(children: [
             
             ElevatedButton(onPressed: (){}, child: Text("Elegir color")),
