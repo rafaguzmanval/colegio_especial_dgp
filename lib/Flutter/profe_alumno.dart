@@ -33,10 +33,8 @@ class ProfeAlumno extends StatefulWidget {
 }
 
 class ProfeAlumnoState extends State<ProfeAlumno> {
-
-
   FlutterLocalNotificationsPlugin notificaciones =
-  new FlutterLocalNotificationsPlugin();
+      new FlutterLocalNotificationsPlugin();
 
   var homeController;
 
@@ -45,112 +43,123 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
     super.initState();
     Sesion.argumentos.clear();
     //Notificacion.showBigTextNotification(title: "Bienvenio", body: "LA gran notificacion", fln: flutterLocalNotificationsPlugin);
-
   }
 
-
 // Contructor de la estructura de la pagina
-@override
-Widget build(BuildContext context) {
-  double media = MediaQuery.of(context).size.width;
-  return Scaffold(
+  @override
+  Widget build(BuildContext context) {
+    double media = MediaQuery.of(context).size.width;
+    return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text('TuCole')),
+      body: Center(
+        child: media > 600
+            ?
+        Flexible(
+          flex: 1,
+          fit: FlexFit.tight,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Flexible(
+                flex: 1,
+                fit: FlexFit.tight,
+                //margin: EdgeInsets.all(10),
+                child: Container(
+                  margin: EdgeInsets.all(50),
+                  child: ElevatedButton(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Alumnos".toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 30,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Flexible(
+                            flex: 1,
+                            child: Image.asset(
+                              "assets/companeros.png",
+                            )),
+                      ],
+                    ),
+                    onPressed: () {
+                      Sesion.argumentos.add("alumnos");
 
-    body: Center(
-  child:
-  media > 600 ?
-      Row(
-
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-        //crossAxisAlignment: CrossAxisAlignment.center,
-
-        children: [
-          ElevatedButton(
-          child: Text('Profesores',
-            style: TextStyle(
-                fontSize: 30, fontWeight: FontWeight.normal
-            ),
-          ),
-          onPressed: () {
-            Sesion.argumentos.add("profesores");
-
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => LoginPage()),
-            );
-          },
-
-        ),
-          ElevatedButton(
-          child: Text('Alumnos',
-            style: TextStyle(
-                fontSize: 30, fontWeight: FontWeight.normal
-            ),
-          ),
-          onPressed: () {
-          Sesion.argumentos.add("alumnos");
-
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => LoginPage()),
-          );
-          },
-
-          ),
-      ],
-      ):
-      Column(
-
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-        //crossAxisAlignment: CrossAxisAlignment.center,
-
-        children: [
-          ElevatedButton(
-            child: Text('Profesores',
-              style: TextStyle(
-                  fontSize: 30, fontWeight: FontWeight.normal
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    },
+                  ),
+                ),
               ),
-            ),
-            onPressed: () {
-              Sesion.argumentos.add("profesores");
+              Flexible(
+                flex: 1,
+                fit: FlexFit.tight,
+                child: Container(
+                  margin: EdgeInsets.all(50),
+                  child: ElevatedButton(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Profesores".toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 30,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Flexible(
+                            flex: 1,
+                            child: Image.asset(
+                              "assets/profesor.png",
+                            )),
+                      ],
+                    ),
+                    onPressed: () {
+                      Sesion.argumentos.add("profesores");
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
-              );
-            },
-
-          ),
-          ElevatedButton(
-
-            child: Text('Alumnos',
-
-              style: TextStyle(
-                  fontSize: 30, fontWeight: FontWeight.normal
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    },
+                  ),
+                ),
               ),
-            ),
-            onPressed: () {
-              Sesion.argumentos.add("alumnos");
-
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => LoginPage()),
-              );
-            },
-
+            ],
           ),
-        ],
+        )
+            : Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+
+                //crossAxisAlignment: CrossAxisAlignment.center,
+
+                children: [
+                  ElevatedButton(
+                    child: Text(
+                      'Profesores',
+                      style: TextStyle(
+                          fontSize: 30, fontWeight: FontWeight.normal),
+                    ),
+                    onPressed: () {
+                      Sesion.argumentos.add("profesores");
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LoginPage()),
+                      );
+                    },
+                  ),
+                ],
+              ),
       ),
-    ),
-  );
+    );
+  }
 }
-
-}
-
-        
 
 /*
 class LoginPageState extends State<LoginPage> {
