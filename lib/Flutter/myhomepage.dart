@@ -69,21 +69,24 @@ class MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
-      child: new Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-                icon: Icon(Icons.settings_power, color: Colors.white),
-                onPressed: () => _onBackPressed(context)),
+      child:Theme(
+        data: ThemeData(primarySwatch: Sesion.colores[0], canvasColor: Sesion.colores[1],fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30))),
+        child:  new Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                    icon: Icon(Icons.settings_power, color: Sesion.colores[2]),
+                    onPressed: () => _onBackPressed(context)),
 
-            title: Column(children: [
-              Text('Menú principal'.toUpperCase()),
-            ]),
-            actions: [IconButton(onPressed: () => Navigator.push(context,
-                MaterialPageRoute(
-                    builder: (context) => Configuracion())), icon: Icon(Icons.settings, color: Colors.white))],
-            automaticallyImplyLeading: false,
-          ),
-          body: Container(margin: EdgeInsets.all(5), child: vistaMenu())),
+                title: Column(children: [
+                  Text('Menú principal'.toUpperCase(),style: TextStyle(color: Sesion.colores[2]),),
+                ]),
+                actions: [IconButton(onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(
+                        builder: (context) => Configuracion())), icon: Icon(Icons.settings, color: Sesion.colores[2]))],
+                automaticallyImplyLeading: false,
+              ),
+              body: Container(margin: EdgeInsets.all(5), child: vistaMenu())),
+      ),
       onWillPop: () async {
         final pop = await _onBackPressed(context);
         return pop ?? false;
@@ -117,7 +120,7 @@ class MyHomePageState extends State<MyHomePage> {
                                   "Lista de alumnos".toUpperCase(),
                                   style: TextStyle(
                                     fontSize: 30,
-                                    color: Colors.white,
+                                    color: Sesion.colores[2],
                                   ),
                                 ),
                                 Flexible(
@@ -168,7 +171,7 @@ class MyHomePageState extends State<MyHomePage> {
                             "Tablon de Comunicación".toUpperCase(),
                             style: TextStyle(
                               fontSize: 30,
-                              color: Colors.white,
+                              color: Sesion.colores[2],
                             ),
                           ),
                           Flexible(
@@ -211,7 +214,7 @@ class MyHomePageState extends State<MyHomePage> {
                             "Lista de Tareas".toUpperCase(),
                             style: TextStyle(
                               fontSize: 30,
-                              color: Colors.white,
+                              color: Sesion.colores[2],
                             ),
                           ),
                           Flexible(
@@ -263,7 +266,7 @@ class MyHomePageState extends State<MyHomePage> {
                               "Lista de alumnos".toUpperCase(),
                               style: TextStyle(
                                 fontSize: 30,
-                                color: Colors.white,
+                                color: Sesion.colores[2],
                               ),
                             ),
                             Flexible(
@@ -296,7 +299,7 @@ class MyHomePageState extends State<MyHomePage> {
                             "Lista de Profesores".toUpperCase(),
                             style: TextStyle(
                               fontSize: 30,
-                              color: Colors.white,
+                              color: Sesion.colores[2],
                             ),
                           ),
                           Flexible(
@@ -338,7 +341,7 @@ class MyHomePageState extends State<MyHomePage> {
                             "Registrar Usuarios".toUpperCase(),
                             style: TextStyle(
                               fontSize: 30,
-                              color: Colors.white,
+                              color: Sesion.colores[2],
                             ),
                           ),
                           Flexible(
@@ -371,7 +374,7 @@ class MyHomePageState extends State<MyHomePage> {
                             "Crear Tareas".toUpperCase(),
                             style: TextStyle(
                               fontSize: 30,
-                              color: Colors.white,
+                              color: Sesion.colores[2],
                             ),
                           ),
                           Flexible(
@@ -414,7 +417,7 @@ class MyHomePageState extends State<MyHomePage> {
                             "GESTION DEL TABLON",
                             style: TextStyle(
                               fontSize: 30,
-                              color: Colors.white,
+                              color: Sesion.colores[2],
                             ),
                           ),
                           Flexible(
@@ -448,7 +451,7 @@ class MyHomePageState extends State<MyHomePage> {
                             "LISTA DE TAREAS",
                             style: TextStyle(
                               fontSize: 30,
-                              color: Colors.white,
+                              color: Sesion.colores[2],
                             ),
                           ),
                           Flexible(
@@ -493,23 +496,27 @@ class MyHomePageState extends State<MyHomePage> {
     return showDialog(
         context: context,
         builder: (context) {
-          return AlertDialog(
-            title: const Text('¿SEGURO?'),
-            content: Text('¿QUIERES CERRAR SESIÓN?'),
-            actions: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context, false);
-                  },
-                  child: Text('NO')),
-              ElevatedButton(
-                  onPressed: () {
-                    Background.desactivarNotificaciones();
-                    Navigator.popUntil(context, (route) => route.isFirst);
+          return Theme(
+            data:ThemeData(primarySwatch: Sesion.colores[0],fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30))),
+            child: AlertDialog(
+              backgroundColor: Sesion.colores[1],
+              title:  Text('¿SEGURO?',style: TextStyle(color: Sesion.colores[0]),),
+              content: Text('¿QUIERES CERRAR SESIÓN?',style: TextStyle(color: Sesion.colores[0]),),
+              actions: [
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context, false);
+                    },
+                    child: Text('NO',style: TextStyle(color: Sesion.colores[2]),)),
+                ElevatedButton(
+                    onPressed: () {
+                      Background.desactivarNotificaciones();
+                      Navigator.popUntil(context, (route) => route.isFirst);
 
-                  },
-                  child: Text('SÍ')),
-            ],
+                    },
+                    child: Text('SÍ',style: TextStyle(color: Sesion.colores[2]),)),
+              ],
+            ),
           );
         });
   }
