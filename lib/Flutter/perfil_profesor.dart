@@ -60,28 +60,33 @@ class PerfilProfesorState extends State<PerfilProfesor> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('PERFIL DE ${Sesion.seleccion.nombre}'
-            ''),
-      ),
-      body: Container(
-          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-          alignment: Alignment.center,
-          child: Column(
-            children: [
-              if (Sesion.rol == Rol.alumno.toString()) ...[
-                VistaAlumno()
-              ] else if (Sesion.rol == Rol.profesor.toString()) ...[
-                VistaProfesor()
-              ] else if (Sesion.rol == Rol.administrador.toString()) ...[
-                VistaAdministrador()
-              ] else if (Sesion.rol == Rol.programador.toString()) ...[
-                VistaProgramador()
-              ]
-            ],
-          )),
-    );
+    return Theme(
+        data: ThemeData(primarySwatch: Sesion.colores[0],canvasColor: Sesion.colores[1],fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30))),
+        child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios_new, color: Sesion.colores[2]),
+                onPressed: (){Navigator.pop(context);}),
+            title: Text('PERFIL DE ${Sesion.seleccion.nombre}'
+                '',style: TextStyle(color: Sesion.colores[2]),),
+          ),
+          body: Container(
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              alignment: Alignment.center,
+              child: Column(
+                children: [
+                  if (Sesion.rol == Rol.alumno.toString()) ...[
+                    VistaAlumno()
+                  ] else if (Sesion.rol == Rol.profesor.toString()) ...[
+                    VistaProfesor()
+                  ] else if (Sesion.rol == Rol.administrador.toString()) ...[
+                    VistaAdministrador()
+                  ] else if (Sesion.rol == Rol.programador.toString()) ...[
+                    VistaProgramador()
+                  ]
+                ],
+              )),
+    ));
   }
   // Carga el perfil del profesor
   Widget VistaProfesor() {
@@ -119,11 +124,11 @@ class PerfilProfesorState extends State<PerfilProfesor> {
       child: Column(
         children: [
           if (usuarioPerfil != null) ...[
-            Text("NOMBRE: " + usuarioPerfil.nombre + "\n"),
-            Text("APELLIDOS: " + usuarioPerfil.apellidos + "\n"),
+            Text("NOMBRE: " + usuarioPerfil.nombre + "\n",style: TextStyle(color: Sesion.colores[0]),),
+            Text("APELLIDOS: " + usuarioPerfil.apellidos + "\n",style: TextStyle(color: Sesion.colores[0]),),
             Text(
-                "FECHA DE NACIMIENTO: " + usuarioPerfil.fechanacimiento + "\n"),
-            Text("IMAGEN DE PERFIL:\n"),
+                "FECHA DE NACIMIENTO: " + usuarioPerfil.fechanacimiento + "\n",style: TextStyle(color: Sesion.colores[0]),),
+            Text("IMAGEN DE PERFIL:\n",style: TextStyle(color: Sesion.colores[0]),),
             Image(
               width: 100,
               height: 100,

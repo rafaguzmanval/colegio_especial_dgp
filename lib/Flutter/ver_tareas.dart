@@ -155,53 +155,55 @@ class VerTareasState extends State<VerTareas> {
     var dragInicial = 0.0;
     var distancia = 0.0;
 
-    return new Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: Icon(iconoAtras, color: Colors.white),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          title: Center(
-              child: Text('Tareas de ' +
-                  (Sesion.rol == Rol.alumno.toString()
-                      ? Sesion.nombre
-                      : Sesion.seleccion.nombre))),
-        ),
-        body: GestureDetector(
-          onPanStart: (DragStartDetails details) {
-            dragInicial = details.globalPosition.dx;
-          },
-          onPanUpdate: (details) {
-            distancia = details.globalPosition.dx - dragInicial;
-          },
-          onPanEnd: (details) {
-            dragInicial = 0;
-            if (Sesion.tareas.length > 0) {
-              if (distancia > 100) {
-                desplazarIzquierda();
-                actualizar();
-              } else if (distancia < -100) {
-                desplazarDerecha();
-                actualizar();
-              }
-            }
-          },
-          child: SingleChildScrollView(
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-              child: Stack(
-                children: [
-                  if (Sesion.rol == Rol.alumno.toString()) ...[
-                    VistaAlumno(),
-                  ] else if (Sesion.rol == Rol.profesor.toString()) ...[
-                    VistaProfesor()
-                  ] else if (Sesion.rol == Rol.administrador.toString()) ...[
-                    VistaAdministrador()
-                  ] else if (Sesion.rol == Rol.programador.toString()) ...[
-                    VistaProgramador()
-                  ]
-                ],
-              )),
-        ));
+    return new Theme(
+        data: ThemeData(primarySwatch: Sesion.colores[0], canvasColor: Sesion.colores[1],fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30))),
+        child: Scaffold(
+            appBar: AppBar(
+              leading: IconButton(
+                icon: Icon(iconoAtras, color: Sesion.colores[2]),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              title: Center(
+                  child: Text('Tareas de ' +
+                      (Sesion.rol == Rol.alumno.toString()
+                          ? Sesion.nombre
+                          : Sesion.seleccion.nombre),style: TextStyle(color: Sesion.colores[2]),)),
+            ),
+            body: GestureDetector(
+              onPanStart: (DragStartDetails details) {
+                dragInicial = details.globalPosition.dx;
+              },
+              onPanUpdate: (details) {
+                distancia = details.globalPosition.dx - dragInicial;
+              },
+              onPanEnd: (details) {
+                dragInicial = 0;
+                if (Sesion.tareas.length > 0) {
+                  if (distancia > 100) {
+                    desplazarIzquierda();
+                    actualizar();
+                  } else if (distancia < -100) {
+                    desplazarDerecha();
+                    actualizar();
+                  }
+                }
+              },
+              child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                  child: Stack(
+                    children: [
+                      if (Sesion.rol == Rol.alumno.toString()) ...[
+                        VistaAlumno(),
+                      ] else if (Sesion.rol == Rol.profesor.toString()) ...[
+                        VistaProfesor()
+                      ] else if (Sesion.rol == Rol.administrador.toString()) ...[
+                        VistaAdministrador()
+                      ] else if (Sesion.rol == Rol.programador.toString()) ...[
+                        VistaProgramador()
+                      ]
+                    ],
+                  )),
+            )));
   }
 
   formatTiempoRestante() {
@@ -333,8 +335,8 @@ class VerTareasState extends State<VerTareas> {
                           "\n" + mensajeTemporizador + "\n",
                           //DateFormat('d/M/y HH:mm').format(DateTime.fromMillisecondsSinceEpoch(Sesion.tareas[tareaActual].fechafinal)).toString(),
                           textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.black,
+                          style: TextStyle(
+                            color: Sesion.colores[0],
                             fontSize: 20.0,
                           ),
                         );
@@ -419,7 +421,7 @@ class VerTareasState extends State<VerTareas> {
                             desplazarIzquierda();
                             actualizar();
                           },
-                          child: const Icon(Icons.arrow_left)),
+                          child: Icon(Icons.arrow_left,color: Sesion.colores[2],)),
                       visible: verFlechaIzquierda,
                     ),
                   )),
@@ -431,7 +433,7 @@ class VerTareasState extends State<VerTareas> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                         border: Border.all(width: 2),
-                        color: Color.fromRGBO(143, 125, 178, 1)),
+                        color: Sesion.colores[0]),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -439,8 +441,8 @@ class VerTareasState extends State<VerTareas> {
                             Center(
                                 child: Text(
                               "\n" + Sesion.tareas[tareaActual].nombre + "\n",
-                              style: const TextStyle(
-                                color: Colors.white,
+                              style:  TextStyle(
+                                color: Sesion.colores[2],
                               ),
                             )),
                             resetIndicesTarea(),
@@ -479,7 +481,7 @@ class VerTareasState extends State<VerTareas> {
                             desplazarDerecha();
                             actualizar();
                           },
-                          child: const Icon(Icons.arrow_right)),
+                          child:  Icon(Icons.arrow_right,color: Sesion.colores[2],)),
                       visible: verFlechaDerecha,
                     ),
                   ))
@@ -613,7 +615,7 @@ class VerTareasState extends State<VerTareas> {
           child: Text(pathTexto + "\n",
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Colors.white,
+                color: Sesion.colores[2],
               )));
     } else if (valor == "I" &&
         Sesion.tareas[i].imagenes.length > indiceImagenes) {
@@ -644,7 +646,7 @@ class VerTareasState extends State<VerTareas> {
               ventanaVideo(
                   Sesion.tareas[i].controladoresVideo[indice],context);
             },
-              child:Text("ver video")
+              child:Text("ver video",style: TextStyle(color: Sesion.colores[2]),)
             ),
 
           );
@@ -917,7 +919,7 @@ class VerTareasState extends State<VerTareas> {
                       decoration: BoxDecoration(border: Border.all(width: 2)),
                       margin: EdgeInsets.only(left: 25),
                       child: ElevatedButton(
-                        child: Icon(Icons.remove),
+                        child: Icon(Icons.remove,color: Sesion.colores[2],),
                         onPressed: () {
                           var valor = Sesion.tareas[tareaActual].controladoresComandas[indice].text;
 
@@ -941,7 +943,7 @@ class VerTareasState extends State<VerTareas> {
                       decoration: BoxDecoration(border: Border.all(width: 2)),
                       margin: EdgeInsets.only(left: 25),
                       child: ElevatedButton(
-                        child: Icon(Icons.add),
+                        child: Icon(Icons.add,color: Sesion.colores[2],),
                         onPressed: () {
                           var valor = Sesion.tareas[tareaActual].controladoresComandas[indice].text;
                           if(valor == "")

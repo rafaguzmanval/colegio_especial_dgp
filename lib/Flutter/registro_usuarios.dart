@@ -99,23 +99,26 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
   /// Este es el build de la clase MyHomePage que devuelve toda la vista génerica más la vista especial de cada usuario.
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: AppBar(
-        title: Text('REGISTRA UN NUEVO USUARIO'),
+    return new Theme(
+      data: ThemeData(primarySwatch: Sesion.colores[0], canvasColor: Sesion.colores[1],fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30,color: Sesion.colores[0]))),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('REGISTRA UN NUEVO USUARIO',style: TextStyle(color: Sesion.colores[2]),),
+        ),
+        body: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+            child: Column(
+              children: [
+                if (Sesion.rol == Rol.alumno.toString()) ...[
+                  VistaAlumno(),
+                ] else if (Sesion.rol == Rol.profesor.toString()) ...[
+                  VistaProfesor()
+                ] else if (Sesion.rol == Rol.administrador.toString()) ...[
+                  VistaAdministrador()
+                ]
+              ],
+            )),
       ),
-      body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-          child: Column(
-            children: [
-              if (Sesion.rol == Rol.alumno.toString()) ...[
-                VistaAlumno(),
-              ] else if (Sesion.rol == Rol.profesor.toString()) ...[
-                VistaProfesor()
-              ] else if (Sesion.rol == Rol.administrador.toString()) ...[
-                VistaAdministrador()
-              ]
-            ],
-          )),
     );
   }
 
@@ -149,8 +152,13 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               obscureText: false,
               maxLength: 20,
               decoration: InputDecoration(
+                fillColor: Sesion.colores[0],
+                enabledBorder:  OutlineInputBorder(
+                  borderSide:  BorderSide(color: Sesion.colores[0], width: 0.0),
+                ),
                 border: OutlineInputBorder(),
                 hintText: 'INTRODUCE EL NOMBRE *',
+                hintStyle: TextStyle(color: Sesion.colores[0])
               ),
               controller: controladorNombre,
             ),
@@ -161,13 +169,18 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               obscureText: false,
               maxLength: 40,
               decoration: InputDecoration(
+                enabledBorder:  OutlineInputBorder(
+                  borderSide:  BorderSide(color: Sesion.colores[0], width: 0.0),
+                ),
                 border: OutlineInputBorder(),
                 hintText: 'INTRODUCE LOS APELLIDOS *',
+                hintStyle: TextStyle(color: Sesion.colores[0])
               ),
               controller: controladorApellidos,
             ),
           ),
           DropdownButton(
+            style: TextStyle(color: Sesion.colores[0]),
             value: metodoElegido,
             items: metodos.map((String value) {
               return DropdownMenuItem(
@@ -186,11 +199,17 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               child: SizedBox(
                 width: 500,
                 child: TextField(
+                  style: TextStyle(color: Sesion.colores[0]),
                   obscureText: true,
                   maxLength: 20,
                   decoration: InputDecoration(
+                    focusColor: Sesion.colores[0],
+                    enabledBorder:  OutlineInputBorder(
+                      borderSide:  BorderSide(color: Sesion.colores[0], width: 0.0),
+                    ),
                     border: OutlineInputBorder(),
                     hintText: 'INTRODUCE LA CONTRASEÑA *',
+                    hintStyle: TextStyle(color: Sesion.colores[0])
                   ),
                   controller: controladorPassword,
                 ),
@@ -202,18 +221,34 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 height: 400,
                 child: vistaPin(),
               )),
-          const Text(
+          Text(
             "INTRODUCE LA FECHA DE NACIMIENTO: *",
-            style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
+            style: TextStyle(fontSize: 20.0, height: 2.0, color: Sesion.colores[0]),
           ),
           ElevatedButton(
               onPressed: () async {
                 await showDatePicker(
-                        context: context,
-                        locale: const Locale("es", "ES"),
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1940),
-                        lastDate: DateTime.now())
+                    builder: (context, child) {
+                      return Theme(
+                        data: Theme.of(context).copyWith(
+                          canvasColor: Sesion.colores[1],
+                          colorScheme: ColorScheme.light(
+                              primary: Sesion.colores[0]// <-- SEE HERE
+                          ),
+                          textButtonTheme: TextButtonThemeData(
+                            style: TextButton.styleFrom(
+                              primary: Sesion.colores[0], // button text color
+                            ),
+                          ),
+                        ),
+                        child: child!,
+                      );
+                    },
+                    context: context,
+                    locale: const Locale("es", "ES"),
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1940),
+                    lastDate: DateTime.now())
                     .then((e) {
                   fechaElegida = e;
                   actualizar();
@@ -221,7 +256,8 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               },
               child: Text((fechaElegida == null)
                   ? "ELIGE LA FECHA DE NACIMIENTO"
-                  : DateFormat('d/M/y').format(fechaElegida))),
+                  : DateFormat('d/M/y').format(fechaElegida),style: TextStyle(color: Sesion.colores[2]),)
+                  ,style: ElevatedButton.styleFrom(backgroundColor: Sesion.colores[0])),
 
           /*
             TextField(
@@ -233,11 +269,12 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               controller: controladorFechanacimiento,
             ),*/
 
-          const Text(
+          Text(
             "ELIGE ROL PARA EL USUARIO: *",
-            style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
+            style: TextStyle(fontSize: 20.0, height: 2.0, color:Sesion.colores[0]),
           ),
           DropdownButton(
+            style: TextStyle(color:Sesion.colores[0]),
             value: rolElegido,
             items: [
               Rol.profesor.toString(),
@@ -257,9 +294,9 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               });
             },
           ),
-          const Text(
+          Text(
             "ELIGE FOTO DE PERFIL (OPCINAL):",
-            style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
+            style: TextStyle(fontSize: 20.0, height: 2.0, color: Sesion.colores[0]),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -269,7 +306,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 height: 10,
               ),
               ElevatedButton(
-                  child: Text('HAZ UNA FOTO DESDE LA CAMARA'),
+                  child: Text('HAZ UNA FOTO DESDE LA CAMARA',style: TextStyle(color: Sesion.colores[2]),),
                   onPressed: () {
                     seleccionarImagen(SeleccionImagen.camara);
                   }),
@@ -277,7 +314,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 height: 10,
               ),
               ElevatedButton(
-                  child: Text('ELIGE FOTO DE LA GALERIA'),
+                  child: Text('ELIGE FOTO DE LA GALERIA',style: TextStyle(color: Sesion.colores[2])),
                   onPressed: () {
                     seleccionarImagen(SeleccionImagen.galeria);
                   }),
@@ -291,11 +328,11 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
             width: 120,
             child: fotoTomada == null
                 ? Center(
-                    child: Container(
-                    decoration:
-                        BoxDecoration(border: Border.all(color: Colors.black)),
-                    child: Text('NINGUNA FOTO TOMADA ***', textAlign: TextAlign.center,),
-                  ))
+                child: Container(
+                  decoration:
+                  BoxDecoration(border: Border.all(color: Sesion.colores[0])),
+                  child: Text('NINGUNA FOTO TOMADA ***', textAlign: TextAlign.center,),
+                ))
                 : Center(child: Image.file(File(fotoTomada.path))),
           ),
           Text(mensajeDeRegistro),
@@ -303,13 +340,12 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               visible: !registrando,
               child: TextButton(
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                      const Color.fromRGBO(143, 125, 178, 1)),
+                  backgroundColor: MaterialStateProperty.all(Sesion.colores[0]),
                 ),
                 child: Text(
                   "REGISTRAR",
                   style: TextStyle(
-                      backgroundColor: Colors.transparent, color: Colors.white),
+                      backgroundColor: Colors.transparent, color: Sesion.colores[2]),
                 ),
                 onPressed: () {
                   registrarUsuario();
@@ -343,7 +379,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                             concatenarPin("conejo", 0);
                           },
                           child: Column(children: [
-                            Text(ordenPin[0]),
+                            Text(ordenPin[0],style: TextStyle(color: Sesion.colores[2]),),
                             Image.network(pictogramasPin[0])
                           ]))),
                 ),
@@ -477,7 +513,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           rolElegido = "NINGUN ROL ELEGIDO";
 
           mensajeDeRegistro =
-              "REGISTRO COMPLETADO PERFECTAMENETE\nPUEDES VOLVER A REGISTRAR OTRO USUARIO";
+          "REGISTRO COMPLETADO PERFECTAMENETE\nPUEDES VOLVER A REGISTRAR OTRO USUARIO";
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 behavior: SnackBarBehavior.floating,
@@ -496,7 +532,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           );
         } else {
           mensajeDeRegistro =
-              "FALLO EN EL PROCESO DE REGISTRO, INTENTELO DE NUEVO";
+          "FALLO EN EL PROCESO DE REGISTRO, INTENTELO DE NUEVO";
           mostrarError(mensajeDeRegistro,true);
         }
 
@@ -543,7 +579,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
         controladorFechanacimiento.text = DateFormat.yMd().format(fechaElegida);
       });
   }*/
-  
+
   // Metodo para actualizar la pagina
   void actualizar() async {
     setState(() {});

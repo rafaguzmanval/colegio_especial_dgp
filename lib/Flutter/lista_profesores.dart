@@ -49,9 +49,14 @@ class ListaProfesoresState extends State<ListaProfesores> {
   /// Este es el build de la clase MyHomePage que devuelve toda la vista génerica más la vista especial de cada usuario.
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return new Theme(
+        data:ThemeData(primarySwatch: Sesion.colores[0],canvasColor: Sesion.colores[1],fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30))),
+        child: Scaffold(
         appBar: AppBar(
-          title: Text('Lista de Profesores'),
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios_new, color: Sesion.colores[2]),
+              onPressed: (){Navigator.pop(context);}),
+          title: Text('Lista de Profesores',style: TextStyle(color: Sesion.colores[2]),),
         ),
         body: Stack(children: [
           OrientationBuilder(
@@ -64,7 +69,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
             alignment: FractionalOffset(0.98, 0.01),
             child: FloatingActionButton(
                 heroTag: "botonUp",
-                child: Icon(Icons.arrow_upward),
+                child: Icon(Icons.arrow_upward,color: Sesion.colores[2],),
                 elevation: 1.0,
                 onPressed: () {
                   offSetActual -= 100.0;
@@ -82,7 +87,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
             alignment: FractionalOffset(0.98, 0.99),
             child: FloatingActionButton(
                 heroTag: "botonDown",
-                child: Icon(Icons.arrow_downward),
+                child: Icon(Icons.arrow_downward, color: Sesion.colores[2]),
                 elevation: 1.0,
                 onPressed: () {
                   offSetActual += 100;
@@ -97,7 +102,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
                   );
                 }),
           ),
-        ]));
+        ])));
   }
 
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
@@ -135,7 +140,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
                       Text(
                         profesores[i].nombre.toString().toUpperCase(),
                         style: TextStyle(
-                          color: Colors.white,
+                          color: Sesion.colores[2],
                         ),
                       ),
                       Image.network(
