@@ -261,7 +261,7 @@ class CrearTareaState extends State<CrearTarea> {
             style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
           ),
           ElevatedButton(
-              child: Text(formularios == []?'Crea un formulario':"Edita el formulario".toUpperCase()),
+              child: Text((formularios == [])?'Crea un formulario'.toUpperCase():"Edita el formulario".toUpperCase()),
               onPressed: () async {
                   dialogFormulario();
               }
@@ -473,10 +473,19 @@ class CrearTareaState extends State<CrearTarea> {
                         child: Column(
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children:[
-                                Flexible(child:Text(formularios[i])),
                                 Flexible(
+                                      flex: 90,
+                                      child: TextButton(
+                                      child:Text(formularios[i],style: TextStyle(fontSize: 40,color: Colors.black),),
+                                      onPressed:()async{ await dialogNombre(formularios[i]).then((e){
+                                        formularios[i] = e;
+                                        controladorStream.add("");
+                                      });}
+                                      ),),
+                                Flexible(
+                                  flex : 10,
                                   child: Container(
                                       child:
                                       FloatingActionButton(
@@ -490,6 +499,25 @@ class CrearTareaState extends State<CrearTarea> {
                                       )
                                   ),
                                 ),
+
+                                    Flexible(
+                                      flex : 10,
+                                      child: Container(
+                                          child:
+                                          FloatingActionButton(
+                                              heroTag: "boton" + i.toString(),
+                                              onPressed: (){
+                                                for(int m = i; m < i + 2 + formularios[i+1] * 3;m++)
+                                                  formularios.add(formularios[m]);
+
+
+                                                controladorStream.add("");
+
+                                              },
+                                              child:Icon(Icons.queue_outlined)
+                                          )
+                                      ),
+                                    ),
                               ],
                               ),
 
@@ -505,7 +533,14 @@ class CrearTareaState extends State<CrearTarea> {
                                           .center,
                                       children: [
                                         Flexible(
-                                          child: Text(formularios[j]),
+                                          child: TextButton(
+                                                            child:Text(formularios[j],style: TextStyle(fontSize: 30)),
+                                                            onPressed:()async {await dialogNombre(formularios[j]).then((e){
+                                                              formularios[j] = e;
+                                                              controladorStream.add("");
+                                                            });
+                                                            }
+                                                 ),
                                         ),
                                         if(formularios[j + 1] != "")...[
                                           Flexible(
@@ -566,14 +601,13 @@ class CrearTareaState extends State<CrearTarea> {
                   IconButton(onPressed:
                       () async {
 
-                            await dialogNombre().then((e){
+                            await dialogNombre("").then((e){
 
 
                               if(e!= null)
                                 {
                                   formularios.add(e);
                                   formularios.add(0);
-                                  //print(formularios.toString());
                                   controladorStream.add("");
                                 }
 
@@ -634,9 +668,10 @@ class CrearTareaState extends State<CrearTarea> {
   }
 
 
-  dialogNombre()
+  dialogNombre(texto)
   {
     var controlador = TextEditingController();
+    controlador.text = texto;
     return showDialog(
         context: context,
         builder: (context) {
