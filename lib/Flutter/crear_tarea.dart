@@ -136,7 +136,7 @@ class CrearTareaState extends State<CrearTarea> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: Text('Crea una nueva tarea'),
+        title: Text('Crea una nueva tarea'.toUpperCase()),
       ),
       body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -186,7 +186,7 @@ class CrearTareaState extends State<CrearTarea> {
               maxLength: 40,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: 'Introduce el título *',
+                hintText: 'Introduce el título *'.toUpperCase(),
               ),
               controller: controladorNombre,
             ),
@@ -201,32 +201,32 @@ class CrearTareaState extends State<CrearTarea> {
               maxLength: 500,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: 'Introduce una descripción *',
+                hintText: 'Introduce una descripción *'.toUpperCase(),
               ),
               controller: controladorTexto,
             ),
           ),
           const Text(
-            "Elige una foto para la tarea: *",
+            "ELIGE UNA FOTO PARA LA TAREA: *",
             style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
           ),
           SizedBox(
             height: 5,
           ),
           ElevatedButton(
-              child: Text('Haz una foto'),
+              child: Text('Haz una foto'.toUpperCase()),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.camara);
               }),
           const Text(
-            "Elige un pictograma para la tarea: *",
+            "ELIGE UN PICTOGRAMA PARA LA TAREA: *",
             style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
           ),
           SizedBox(
             height: 5,
           ),
           ElevatedButton(
-              child: Text('Elige un pictograma de tu galería'),
+              child: Text('Elige un pictograma de tu galería'.toUpperCase()),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.galeria);
               }),
@@ -234,7 +234,7 @@ class CrearTareaState extends State<CrearTarea> {
             height: 15,
           ),
           ElevatedButton(
-              child: Text('Elige un pictograma desde la web de ARASAAC'),
+              child: Text('Elige un pictograma desde la web de ARASAAC'.toUpperCase()),
               onPressed: () async {
                     fotoTomada =  await buscadorArasaac(context: context);
                     actualizar();
@@ -244,38 +244,38 @@ class CrearTareaState extends State<CrearTarea> {
 
 
           const Text(
-            "Elige un videotutorial para la tarea: ",
+            "ELIGE UN VIDEOTUTORIAL PARA LA TAREA: ",
             style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
           ),
           SizedBox(
             height: 5,
           ),
           ElevatedButton(
-              child: Text('Haz un videotutorial'),
+              child: Text('Haz un videotutorial'.toUpperCase()),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.video);
               }),
 
           const Text(
-            "Crea un formulario: ",
+            "CREA UN FORMULARIO: ",
             style: TextStyle(fontSize: 20.0, height: 2.0, color: Colors.black),
           ),
           ElevatedButton(
-              child: Text(formularios == []?'Crea un formulario':"Edita el formulario"),
+              child: Text(formularios == []?'Crea un formulario':"Edita el formulario".toUpperCase()),
               onPressed: () async {
                   dialogFormulario();
               }
 
           ),
           SizedBox(
-            height: 10,
+            height: 20,
           ),
           Container(
             decoration: BoxDecoration(border: Border.all(width: 2)),
-            height: 120,
-            width: 190,
+            height: 150,
+            width: 210,
             child: fotoTomada == null
-                ? Center(child: Text('Ninguna foto tomada ****'))
+                ? Center(child: Text('Ninguna foto tomada ****'.toUpperCase(),textAlign: TextAlign.center,))
                 : Center(child: fotoTomada is String? Image.network(fotoTomada): Image.file(File(fotoTomada.path)) ),
           ),
           SizedBox(
@@ -286,7 +286,7 @@ class CrearTareaState extends State<CrearTarea> {
             margin: EdgeInsets.only(right: 70, left: 70, top: 20, bottom: 20),
             child: videoTomado == null
                 ? Container(
-                    child: Text('Ningun video tomado ****'),
+                    child: Text('Ningun video tomado ****'.toUpperCase()),
                     padding: EdgeInsets.only(
                         top: 100, bottom: 100, right: 10, left: 10),
                   )
@@ -295,7 +295,7 @@ class CrearTareaState extends State<CrearTarea> {
                       onPressed: (){
                         ventanaVideo(controladorVideo,context);
                       },
-                      child:Text("ver video")
+                      child:Text("ver video".toUpperCase())
 
                     ),
                     padding: EdgeInsets.only(
@@ -308,7 +308,7 @@ class CrearTareaState extends State<CrearTarea> {
                   margin: EdgeInsets.only(top: 0),
                   child: ElevatedButton(
                     child: Text(
-                      "Crear nueva tarea",
+                      "Crear nueva tarea".toUpperCase(),
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -381,15 +381,15 @@ class CrearTareaState extends State<CrearTarea> {
           fotoTomada = null;
           videoTomado = null;
 
-          displayMensajeValidacion("Tarea creada correctamente\nPuedes volver a crear otra tarea:",false);
+          displayMensajeValidacion("Tarea creada correctamente\nPuedes volver a crear otra tarea:".toUpperCase(),false);
         } else {
-          displayMensajeValidacion("Fallo al crear tarea, inténtelo de nuevo",true);
+          displayMensajeValidacion("Fallo al crear tarea, inténtelo de nuevo".toUpperCase(),true);
         }
 
         actualizar();
       });
     } else {
-      displayMensajeValidacion("Es necesario rellenar todos los campos",true);
+      displayMensajeValidacion("Es necesario rellenar todos los campos".toUpperCase(),true);
       actualizar();
     }
   }
@@ -465,7 +465,7 @@ class CrearTareaState extends State<CrearTarea> {
             return Dialog(
                 child:SingleChildScrollView(
                 child: Column(children: [
-                  Text("\nCrea un nuevo formulario",style: TextStyle(fontSize: 40),),
+                  Text("\nCrea un nuevo formulario".toUpperCase(),style: TextStyle(fontSize: 40),),
 
                   for (int i = 0; i < formularios.length;
                   i = i + 2 + (formularios[i + 1] as int) * 3)
@@ -549,7 +549,7 @@ class CrearTareaState extends State<CrearTarea> {
                                 controladorStream.add("");
 
                               },
-                                  child: Text("Crea un elemento"))
+                                  child: Text("Crea un elemento".toUpperCase()))
                               ,
 
                             ]
