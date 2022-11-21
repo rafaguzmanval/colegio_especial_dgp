@@ -1,6 +1,3 @@
-
-
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -10,33 +7,23 @@ import "package:latlong2/latlong.dart";
 
 import '../Dart/sesion.dart';
 
-
-class Configuracion extends StatefulWidget{
-  
+class Configuracion extends StatefulWidget {
   @override
   ConfiguracionState createState() => ConfiguracionState();
 }
 
-
-class ConfiguracionState extends State<Configuracion>{
-
+class ConfiguracionState extends State<Configuracion> {
   var posicion = null;
   @override
-  initState()
-  {
+  initState() {
     super.initState();
     Sesion.paginaActual = this;
 
     obtenerPosicion();
-
-
   }
 
-  Widget marcadorPersonal()
-  {
-
-
-    return  CircleAvatar(
+  Widget marcadorPersonal() {
+    return CircleAvatar(
       radius: 56,
       backgroundColor: Colors.red,
       child: Padding(
@@ -46,8 +33,7 @@ class ConfiguracionState extends State<Configuracion>{
     );
   }
 
-  obtenerPosicion() async
-  {
+  obtenerPosicion() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -78,59 +64,74 @@ class ConfiguracionState extends State<Configuracion>{
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
-    await Geolocator.getCurrentPosition().then((value) {posicion = value;
-        print(posicion.latitude.toString() + "  " +posicion.longitude.toString());
-      setState(() {
-
-    });} );
+    await Geolocator.getCurrentPosition().then((value) {
+      posicion = value;
+      print(
+          posicion.latitude.toString() + "  " + posicion.longitude.toString());
+      setState(() {});
+    });
   }
-  
+
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
-          appBar: AppBar(title: Text("Configuración"),),
-          body: Column(children: [
-            
-            ElevatedButton(onPressed: (){}, child: Text("Elegir color")),
-            Container(width: 500,height: 500
-            ,child:posicion == null?
-                    Text("Calculando posición")
-                    :
-                    Flexible(child:
-                      FlutterMap(
-                      options: MapOptions(
-                      center: LatLng(posicion.latitude,posicion.longitude),
-                      zoom: 18,
-                        maxZoom: 18,
-
-                      ),
-                      nonRotatedChildren: [
-                        AttributionWidget.defaultWidget(
-                          source: 'OpenStreetMap contributors',
-                          onSourceTapped: null,
-                        ),
-                      ],
-                      children: [
-                      TileLayer(
-                        urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                        userAgentPackageName: 'com.example.app',
-                      ),
-
-                        MarkerLayer(
-                          markers: [
-                            Marker(point: LatLng(posicion.latitude,posicion.longitude),
-                                width: 30,
-                                height: 30,
-                                builder: (context) => marcadorPersonal())
-                          ],
-                        )
-                      ],
-                  )
-                    )
-                ),
-
-            
-      ],)
-      ,);
+      appBar: AppBar(
+        title: Text("Configuración".toUpperCase()),
+      ),
+      body: SingleChildScrollView(
+          child: Container(
+              alignment: Alignment.center,
+              child: Column(
+                //mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                      margin: EdgeInsets.all(20),
+                      child: ElevatedButton(
+                          onPressed: () {},
+                          child: Text("Elegir color".toUpperCase(),
+                              style: TextStyle(fontSize: 30)))),
+                  Container(
+                      alignment: Alignment.center,
+                      width: 650,
+                      height: 600,
+                      margin: EdgeInsets.only(bottom: 20),
+                      child: posicion == null
+                          ? Text("Calculando posición".toUpperCase())
+                          : Flexible(
+                              child: FlutterMap(
+                              options: MapOptions(
+                                center: LatLng(
+                                    posicion.latitude, posicion.longitude),
+                                zoom: 18,
+                                maxZoom: 18,
+                              ),
+                              nonRotatedChildren: [
+                                AttributionWidget.defaultWidget(
+                                  source: 'OpenStreetMap contributors',
+                                  onSourceTapped: null,
+                                ),
+                              ],
+                              children: [
+                                TileLayer(
+                                  urlTemplate:
+                                      'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                  userAgentPackageName: 'com.example.app',
+                                ),
+                                MarkerLayer(
+                                  markers: [
+                                    Marker(
+                                        point: LatLng(posicion.latitude,
+                                            posicion.longitude),
+                                        width: 30,
+                                        height: 30,
+                                        builder: (context) =>
+                                            marcadorPersonal())
+                                  ],
+                                )
+                              ],
+                            ))),
+                ],
+              ))),
+    );
   }
 }
