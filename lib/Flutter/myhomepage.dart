@@ -162,7 +162,7 @@ class MyHomePageState extends State<MyHomePage> {
                   fit: FlexFit.tight,
                   //margin: EdgeInsets.all(10),
                   child: Container(
-                    margin: EdgeInsets.all(10),
+                    margin: EdgeInsets.all(50),
                     child: ElevatedButton(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -205,7 +205,7 @@ class MyHomePageState extends State<MyHomePage> {
                   flex: 1,
                   fit: FlexFit.tight,
                   child: Container(
-                    margin: EdgeInsets.all(10),
+                    margin: EdgeInsets.all(50),
                     child: ElevatedButton(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,

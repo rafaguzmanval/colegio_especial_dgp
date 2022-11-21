@@ -646,7 +646,7 @@ class VerTareasState extends State<VerTareas> {
               ventanaVideo(
                   Sesion.tareas[i].controladoresVideo[indice],context);
             },
-              child:Text("ver video",style: TextStyle(color: Sesion.colores[2]),)
+              child:Text("ver video".toUpperCase(),style: TextStyle(fontSize:25, color: Sesion.colores[2]),)
             ),
 
           );
