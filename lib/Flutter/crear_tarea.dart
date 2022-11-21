@@ -276,7 +276,12 @@ class CrearTareaState extends State<CrearTarea> {
             width: 210,
             child: fotoTomada == null
                 ? Center(child: Text('Ninguna foto tomada ****'.toUpperCase(),textAlign: TextAlign.center,))
-                : Center(child: fotoTomada is String? Image.network(fotoTomada): Image.file(File(fotoTomada.path)) ),
+                : Stack(children: [
+              Center(child: fotoTomada is String? Image.network(fotoTomada): Image.file(File(fotoTomada.path)) ),
+              Container(child:ElevatedButton(onPressed: (){fotoTomada = null; actualizar();}, child: Icon(Icons.remove)),
+                alignment: Alignment.topLeft,)
+
+            ],),
           ),
           SizedBox(
             height: 10,
@@ -290,16 +295,23 @@ class CrearTareaState extends State<CrearTarea> {
                     padding: EdgeInsets.only(
                         top: 100, bottom: 100, right: 10, left: 10),
                   )
-                : Container(
-                    child: ElevatedButton(
+                : Stack(
+                    children: [
+                      Container(child:ElevatedButton(
                       onPressed: (){
                         ventanaVideo(controladorVideo,context);
                       },
                       child:Text("ver video".toUpperCase())
 
                     ),
-                    padding: EdgeInsets.only(
-                        top: 10, bottom: 10, right: 10, left: 10),
+                        alignment: Alignment.center,
+                      ),
+                      Container(child:ElevatedButton(onPressed: (){videoTomado = null; actualizar();}, child: Icon(Icons.remove)),
+                      alignment: Alignment.centerLeft,)
+
+                    ]
+                    /*padding: EdgeInsets.only(
+                        top: 10, bottom: 10, right: 10, left: 10),*/
                   ),
           ),
           Visibility(
@@ -480,8 +492,12 @@ class CrearTareaState extends State<CrearTarea> {
                                       child: TextButton(
                                       child:Text(formularios[i],style: TextStyle(fontSize: 40,color: Colors.black),),
                                       onPressed:()async{ await dialogNombre(formularios[i]).then((e){
-                                        formularios[i] = e;
-                                        controladorStream.add("");
+                                        if(e != null)
+                                          {
+                                            formularios[i] = e;
+                                            controladorStream.add("");
+                                          }
+
                                       });}
                                       ),),
                                 Flexible(
@@ -536,8 +552,12 @@ class CrearTareaState extends State<CrearTarea> {
                                           child: TextButton(
                                                             child:Text(formularios[j],style: TextStyle(fontSize: 30)),
                                                             onPressed:()async {await dialogNombre(formularios[j]).then((e){
-                                                              formularios[j] = e;
-                                                              controladorStream.add("");
+                                                              if(e != null)
+                                                                {
+                                                                  formularios[j] = e;
+                                                                  controladorStream.add("");
+                                                                }
+
                                                             });
                                                             }
                                                  ),
