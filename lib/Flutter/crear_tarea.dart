@@ -251,7 +251,7 @@ class CrearTareaState extends State<CrearTarea> {
             height: 5,
           ),
           ElevatedButton(
-              child: Text('Haz un videotutorial'.toUpperCase()),
+              child: Text('Haz un videOtutorial'.toUpperCase()),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.video);
               }),
