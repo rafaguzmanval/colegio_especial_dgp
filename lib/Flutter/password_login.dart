@@ -19,6 +19,8 @@ import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
 import '../Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:flutter/material.dart';
+import 'package:colegio_especial_dgp/Dart/background.dart';
+
 
 class PasswordLogin extends StatefulWidget {
   @override
@@ -26,7 +28,7 @@ class PasswordLogin extends StatefulWidget {
 }
 
 class PasswordLoginState extends State<PasswordLogin> {
-
+  var iconoAtras = Icons.home;
   var error_inicio = false;
   var usuarios;
   var concatenacionPin = "";
@@ -81,7 +83,11 @@ class PasswordLoginState extends State<PasswordLogin> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back, color: Colors.white),
+                onPressed: () => _onBackPressed(context)),
           title: Text('Hola ${Sesion.nombre}'.toUpperCase()),
+
         ),
         body: Container(margin: EdgeInsets.all(5), child: vista()));
   }
@@ -288,6 +294,31 @@ class PasswordLoginState extends State<PasswordLogin> {
             )),
       );
     }
+  }
+
+  Future<bool?> _onBackPressed(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('¿SEGURO?'),
+            content: Text('¿Que quieres volver atras?'.toUpperCase()),
+            actions: [
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: Text('NO')),
+              ElevatedButton(
+                  onPressed: () {
+                    Background.desactivarNotificaciones();
+                    Navigator.popUntil(context, (route) => route.isFirst);
+
+                  },
+                  child: Text('SÍ')),
+            ],
+          );
+        });
   }
 
   // Actualizar pagina
