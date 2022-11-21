@@ -276,18 +276,19 @@ class LoginPageState extends State<LoginPage> {
                           Text(
                             usuarios[j].nombre.toString().toUpperCase(),
                             style: TextStyle(
+                              fontSize: 25,
                               color: Colors.white,
                             ),
                           ),
                           Image.network(
                             usuarios[j].foto,
-                            width: 70,
-                            height: 70,
+                            width: 90,
+                            height: 90,
                             fit: BoxFit.fill,
                             errorBuilder: (context,exception,stacktrace){
                               print(exception.toString());
-                              return Image.asset('assets/desconocido.jpg',width: 70,
-                                height: 70);
+                              return Image.asset('assets/desconocido.jpg',width: 90,
+                                height: 90);
                             },
                           ),
                         ],
