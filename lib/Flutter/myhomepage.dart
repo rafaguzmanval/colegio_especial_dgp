@@ -64,7 +64,13 @@ class MyHomePageState extends State<MyHomePage> {
     Sesion.paginaActual = this;
     Sesion.seleccion = "";
     Sesion.tareas = [];
+    Notificacion.initialize(notificaciones,Sesion.rol);
+    Background.inicializarBackground();
+
+    if(Sesion.rol == Rol.alumno.toString())
     Background.activarNotificacionesNuevasTareas();
+    else
+      Background.activarNotificacionesTareasTerminadas();
   }
 
   /// Este es el build de la clase MyHomePage que devuelve toda la vista génerica más la vista especial de cada usuario.

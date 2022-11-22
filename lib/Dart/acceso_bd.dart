@@ -362,7 +362,7 @@ class AccesoBD {
     try
     {
       final ref = db.collection("usuarioTieneTareas");
-      return await ref.doc(idTareaAsignada).update({"estado" : "sinFinalizar", "fechaentrega" : "","respuesta":"","retroalimentacion":"","fotoURL":"","fotopath":""});
+      return await ref.doc(idTareaAsignada).update({"estado" : "sinFinalizar", "fechaentrega" : 0,"respuesta":"","retroalimentacion":"","fotoURL":"","fotopath":""});
 
     }catch(e){
       log(e.toString());

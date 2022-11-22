@@ -64,6 +64,40 @@ static inicializarBackground() async
       }
   }
 
+  static activarNotificacionesTareasTerminadas() async
+  {
+    if(Sesion.id != "")
+    {
+
+      var ref = Sesion.db.db.collection("usuarioTieneTareas");
+
+      _subscripcion = await ref.orderBy("fechaentrega") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
+          .snapshots().listen((e) {
+
+            print("nueva completada");
+            print(e.docs.last.get("estado"));
+        if(e.docs.length > 0 && e.docs.last.get("estado") != "sinFinalizar")
+        {
+          var idUsuario = e.docs.last.get("idUsuario"); // cada tarea tiene una id
+
+
+            e.docChanges.forEach((element) async {
+              if(element.type == DocumentChangeType.added)
+              {
+                await Sesion.db.consultarIDusuario(idUsuario).then((usuario) {
+
+                  Sesion.argumentos.add(e.docs.length-1);
+                  Notificacion.showBigTextNotification(title: "Tarea completada", body: usuario.nombre + " ha completado una tarea", fln: notificaciones );
+                });
+              }
+            });
+
+        }
+
+      });
+    }
+  }
+
   static desactivarNotificaciones()
   {
     if(_subscripcion != null)

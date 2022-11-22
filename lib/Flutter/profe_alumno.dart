@@ -45,9 +45,6 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
     super.initState();
     obtenerAutenticacion();
     Sesion.db = new AccesoBD();
-    Notificacion.initialize(notificaciones);
-
-    Background.inicializarBackground();
 
     Sesion.argumentos.clear();
     //Notificacion.showBigTextNotification(title: "Bienvenio", body: "LA gran notificacion", fln: flutterLocalNotificationsPlugin);
