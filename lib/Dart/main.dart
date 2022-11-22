@@ -17,7 +17,9 @@
 
 import 'dart:async';
 import 'dart:io';
+import 'dart:math';
 
+import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
 import 'package:colegio_especial_dgp/Flutter/password_login.dart';
@@ -34,6 +36,7 @@ import 'notificacion.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 var user = "";
@@ -114,11 +117,6 @@ obtenerAutenticacion() async {
 class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    obtenerAutenticacion();
-    Sesion.db = new AccesoBD();
-    Notificacion.initialize(notificaciones);
-
-    Background.inicializarBackground();
 
     return MaterialApp(
       localizationsDelegates: GlobalMaterialLocalizations.delegates,

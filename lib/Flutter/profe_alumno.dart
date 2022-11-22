@@ -21,6 +21,8 @@ import 'package:colegio_especial_dgp/Flutter/loginpage.dart';
 import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
 import 'package:colegio_especial_dgp/Flutter/password_login.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import '../Dart/background.dart';
+import '../Dart/guardado_local.dart';
 import '../Dart/notificacion.dart';
 import '../Dart/sesion.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -41,6 +43,15 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
   @override
   void initState() {
     super.initState();
+    obtenerAutenticacion();
+    Sesion.db = new AccesoBD();
+    Notificacion.initialize(notificaciones);
+
+    Background.inicializarBackground();
+
+    // se inicializa la clase de guardado local
+    GuardadoLocal.inicializar();
+
     Sesion.argumentos.clear();
     //Notificacion.showBigTextNotification(title: "Bienvenio", body: "LA gran notificacion", fln: flutterLocalNotificationsPlugin);
   }
