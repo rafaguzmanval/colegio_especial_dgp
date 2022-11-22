@@ -14,6 +14,7 @@
 
 
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
+import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_tts/flutter_tts.dart";
@@ -76,9 +77,9 @@ class TablonComunicacionState extends State<TablonComunicacion> {
     return new Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Sesion.colores[2]),
+            icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
             onPressed: (){Navigator.pop(context);}),
-        title: Text('TABLON DE COMUNICACIÓN',style: TextStyle(color: Sesion.colores[2]),),
+        title: Text('TABLON DE COMUNICACIÓN',style: TextStyle(color: GuardadoLocal.colores[2]),),
       ),
       body: SingleChildScrollView(
           child: Container(

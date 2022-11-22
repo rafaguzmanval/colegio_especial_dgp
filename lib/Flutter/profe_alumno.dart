@@ -59,7 +59,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
     double media = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: Text('TuCole',style: TextStyle(color: Sesion.colores[2]),)),
+      appBar: AppBar(title: Text('TuCole',style: TextStyle(color: GuardadoLocal.colores[2]),)),
       body: Center(
         child:
         Flexible(
@@ -83,7 +83,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 30,
-                            color: Sesion.colores[2],
+                            color: GuardadoLocal.colores[2],
                           ),
                         ),
                         Flexible(
@@ -118,7 +118,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 30,
-                            color: Sesion.colores[2],
+                            color: GuardadoLocal.colores[2],
                           ),
                         ),
                         Flexible(

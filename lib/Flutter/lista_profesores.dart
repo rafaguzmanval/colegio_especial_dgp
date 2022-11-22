@@ -15,6 +15,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
+import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Flutter/perfil_profesor.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
@@ -52,9 +53,9 @@ class ListaProfesoresState extends State<ListaProfesores> {
     return new Scaffold(
         appBar: AppBar(
           leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: Sesion.colores[2]),
+              icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
               onPressed: (){Navigator.pop(context);}),
-          title: Text('Lista de Profesores',style: TextStyle(color: Sesion.colores[2]),),
+          title: Text('Lista de Profesores',style: TextStyle(color: GuardadoLocal.colores[2]),),
         ),
         body: Stack(children: [
           OrientationBuilder(
@@ -67,7 +68,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
             alignment: FractionalOffset(0.98, 0.01),
             child: FloatingActionButton(
                 heroTag: "botonUp",
-                child: Icon(Icons.arrow_upward,color: Sesion.colores[2],),
+                child: Icon(Icons.arrow_upward,color: GuardadoLocal.colores[2],),
                 elevation: 1.0,
                 onPressed: () {
                   offSetActual -= 100.0;
@@ -85,7 +86,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
             alignment: FractionalOffset(0.98, 0.99),
             child: FloatingActionButton(
                 heroTag: "botonDown",
-                child: Icon(Icons.arrow_downward, color: Sesion.colores[2]),
+                child: Icon(Icons.arrow_downward, color: GuardadoLocal.colores[2]),
                 elevation: 1.0,
                 onPressed: () {
                   offSetActual += 100;
@@ -138,7 +139,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
                       Text(
                         profesores[i].nombre.toString().toUpperCase(),
                         style: TextStyle(
-                          color: Sesion.colores[2],
+                          color: GuardadoLocal.colores[2],
                         ),
                       ),
                       Image.network(

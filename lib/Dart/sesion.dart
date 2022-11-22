@@ -25,7 +25,6 @@ class Sesion {
   static var metodoLogin = "";
   static var argumentos = [];
   static var db;
-  static var colores = [];
 
   // Sesion por defecto
   static reload() {

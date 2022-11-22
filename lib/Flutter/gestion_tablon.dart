@@ -18,6 +18,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/arasaac.dart';
+import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/tipo_tablon.dart';
@@ -83,9 +84,9 @@ class GestionTablonState extends State<GestionTablon> {
     return new Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Sesion.colores[2]),
+            icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
             onPressed: (){Navigator.pop(context);}),
-        title: Text('CREA UN NUEVO BOTÓN PARA EL TABLÓN',style: TextStyle(color: Sesion.colores[2]),),
+        title: Text('CREA UN NUEVO BOTÓN PARA EL TABLÓN',style: TextStyle(color: GuardadoLocal.colores[2]),),
       ),
       body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -130,16 +131,16 @@ class GestionTablonState extends State<GestionTablon> {
           SizedBox(
             width: 500,
             child: TextField(
-              style: TextStyle(fontSize: 30.0,color: Sesion.colores[0]),
+              style: TextStyle(fontSize: 30.0,color: GuardadoLocal.colores[0]),
               obscureText: false,
               maxLength: 40,
               decoration: InputDecoration(
                 enabledBorder:  OutlineInputBorder(
-                  borderSide:  BorderSide(color: Sesion.colores[0], width: 0.0),
+                  borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
                 ),
                 border: OutlineInputBorder(),
                 hintText: 'INTRODUCE EL NOMBRE DEL PICTOGRAMA *',
-                hintStyle: TextStyle(color: Sesion.colores[0])
+                hintStyle: TextStyle(color: GuardadoLocal.colores[0])
               ),
               controller: controladorNombre,
             ),
@@ -149,13 +150,13 @@ class GestionTablonState extends State<GestionTablon> {
           ),
           Text(
             "ELIGE EL TIPO PARA EL BOTÓN: *",
-            style: TextStyle(fontSize: 30.0, height: 2.0, color: Sesion.colores[0]),
+            style: TextStyle(fontSize: 30.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           SizedBox(
             height: 10,
           ),
           DropdownButton(
-            style: TextStyle(color: Sesion.colores[0]),
+            style: TextStyle(color: GuardadoLocal.colores[0]),
             value: tipoElegido,
             items: [
               Tipo.sustantivo.toString(),
@@ -179,7 +180,7 @@ class GestionTablonState extends State<GestionTablon> {
           ),
           Text(
             "ELIGE UN PICTOGRAMA PARA EL BOTÓN: *",
-            style: TextStyle(fontSize: 30.0, height: 2.0, color: Sesion.colores[0]),
+            style: TextStyle(fontSize: 30.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           SizedBox(
             height: 5,
@@ -188,7 +189,7 @@ class GestionTablonState extends State<GestionTablon> {
             height: 15,
           ),
           ElevatedButton(
-              child: Text('ELIGE UN PICTOGRAMA DESDE LA WEB DE ARASAAC',style: TextStyle(fontSize: 30.0,color: Sesion.colores[2])),
+              child: Text('ELIGE UN PICTOGRAMA DESDE LA WEB DE ARASAAC',style: TextStyle(fontSize: 30.0,color: GuardadoLocal.colores[2])),
               onPressed: () async {
                 fotoTomada = await buscadorArasaac(context: context);
                 actualizar();
@@ -200,7 +201,7 @@ class GestionTablonState extends State<GestionTablon> {
             height: 10,
           ),
           Container(
-            decoration: BoxDecoration(border: Border.all(width: 2,color: Sesion.colores[0])),
+            decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[0])),
             height: 150,
             width: 230,
             child: fotoTomada == null
@@ -222,7 +223,7 @@ class GestionTablonState extends State<GestionTablon> {
                       "CREAR NUEVO BOTÓN TABLÓN",
                       style: TextStyle(
                         fontSize: 30.0,
-                        color: Sesion.colores[2],
+                        color: GuardadoLocal.colores[2],
                       ),
                     ),
                     onPressed: () {
@@ -299,7 +300,7 @@ class GestionTablonState extends State<GestionTablon> {
               borderRadius: BorderRadius.all(Radius.circular(29)),
             ),
             child: Center(
-                child: Text(mensajeDeValidacion, style: TextStyle(color: Sesion.colores[2]))),
+                child: Text(mensajeDeValidacion, style: TextStyle(color: GuardadoLocal.colores[2]))),
           )),
     );
   }

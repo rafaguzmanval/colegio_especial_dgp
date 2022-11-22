@@ -23,6 +23,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/background.dart';
 import 'package:colegio_especial_dgp/Dart/notificacion.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
+import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Flutter/crear_tarea.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
@@ -73,15 +74,15 @@ class MyHomePageState extends State<MyHomePage> {
       child:Scaffold(
               appBar: AppBar(
                 leading: IconButton(
-                    icon: Icon(Icons.settings_power, color: Sesion.colores[2]),
+                    icon: Icon(Icons.settings_power, color: GuardadoLocal.colores[2]),
                     onPressed: () => _onBackPressed(context)),
 
                 title: Column(children: [
-                  Text('Menú principal'.toUpperCase(),style: TextStyle(color: Sesion.colores[2]),),
+                  Text('Menú principal'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),),
                 ]),
                 actions: [IconButton(onPressed: () => Navigator.push(context,
                     MaterialPageRoute(
-                        builder: (context) => Configuracion())), icon: Icon(Icons.settings, color: Sesion.colores[2]))],
+                        builder: (context) => Configuracion())), icon: Icon(Icons.settings, color: GuardadoLocal.colores[2]))],
                 automaticallyImplyLeading: false,
               ),
               body: Container(margin: EdgeInsets.all(5), child: vistaMenu())),
@@ -118,7 +119,7 @@ class MyHomePageState extends State<MyHomePage> {
                                   "Lista de alumnos".toUpperCase(),
                                   style: TextStyle(
                                     fontSize: 30,
-                                    color: Sesion.colores[2],
+                                    color: GuardadoLocal.colores[2],
                                   ),
                                 ),
                                 Flexible(
@@ -169,7 +170,7 @@ class MyHomePageState extends State<MyHomePage> {
                             "Tablon de Comunicación".toUpperCase(),
                             style: TextStyle(
                               fontSize: 30,
-                              color: Sesion.colores[2],
+                              color: GuardadoLocal.colores[2],
                             ),
                           ),
                           Flexible(
@@ -212,7 +213,7 @@ class MyHomePageState extends State<MyHomePage> {
                             "Lista de Tareas".toUpperCase(),
                             style: TextStyle(
                               fontSize: 30,
-                              color: Sesion.colores[2],
+                              color: GuardadoLocal.colores[2],
                             ),
                           ),
                           Flexible(
@@ -264,7 +265,7 @@ class MyHomePageState extends State<MyHomePage> {
                               "Lista de alumnos".toUpperCase(),
                               style: TextStyle(
                                 fontSize: 30,
-                                color: Sesion.colores[2],
+                                color: GuardadoLocal.colores[2],
                               ),
                             ),
                             Flexible(
@@ -297,7 +298,7 @@ class MyHomePageState extends State<MyHomePage> {
                             "Lista de Profesores".toUpperCase(),
                             style: TextStyle(
                               fontSize: 30,
-                              color: Sesion.colores[2],
+                              color: GuardadoLocal.colores[2],
                             ),
                           ),
                           Flexible(
@@ -339,7 +340,7 @@ class MyHomePageState extends State<MyHomePage> {
                             "Registrar Usuarios".toUpperCase(),
                             style: TextStyle(
                               fontSize: 30,
-                              color: Sesion.colores[2],
+                              color: GuardadoLocal.colores[2],
                             ),
                           ),
                           Flexible(
@@ -372,7 +373,7 @@ class MyHomePageState extends State<MyHomePage> {
                             "Crear Tareas".toUpperCase(),
                             style: TextStyle(
                               fontSize: 30,
-                              color: Sesion.colores[2],
+                              color: GuardadoLocal.colores[2],
                             ),
                           ),
                           Flexible(
@@ -415,7 +416,7 @@ class MyHomePageState extends State<MyHomePage> {
                             "GESTION DEL TABLON",
                             style: TextStyle(
                               fontSize: 30,
-                              color: Sesion.colores[2],
+                              color: GuardadoLocal.colores[2],
                             ),
                           ),
                           Flexible(
@@ -449,7 +450,7 @@ class MyHomePageState extends State<MyHomePage> {
                             "LISTA DE TAREAS",
                             style: TextStyle(
                               fontSize: 30,
-                              color: Sesion.colores[2],
+                              color: GuardadoLocal.colores[2],
                             ),
                           ),
                           Flexible(
@@ -495,22 +496,22 @@ class MyHomePageState extends State<MyHomePage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-              backgroundColor: Sesion.colores[1],
-              title:  Text('¿SEGURO?',style: TextStyle(color: Sesion.colores[0]),),
-              content: Text('¿QUIERES CERRAR SESIÓN?',style: TextStyle(color: Sesion.colores[0]),),
+              backgroundColor: GuardadoLocal.colores[1],
+              title:  Text('¿SEGURO?',style: TextStyle(color: GuardadoLocal.colores[0]),),
+              content: Text('¿QUIERES CERRAR SESIÓN?',style: TextStyle(color: GuardadoLocal.colores[0]),),
               actions: [
                 ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context, false);
                     },
-                    child: Text('NO',style: TextStyle(color: Sesion.colores[2]),)),
+                    child: Text('NO',style: TextStyle(color: GuardadoLocal.colores[2]),)),
                 ElevatedButton(
                     onPressed: () {
                       Background.desactivarNotificaciones();
                       Navigator.popUntil(context, (route) => route.isFirst);
 
                     },
-                    child: Text('SÍ',style: TextStyle(color: Sesion.colores[2]),)),
+                    child: Text('SÍ',style: TextStyle(color: GuardadoLocal.colores[2]),)),
               ],
           );
         });

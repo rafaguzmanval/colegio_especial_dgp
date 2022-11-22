@@ -19,6 +19,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/arasaac.dart';
+import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
@@ -137,9 +138,9 @@ class CrearTareaState extends State<CrearTarea> {
     return new Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Sesion.colores[2]),
+            icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
             onPressed: (){Navigator.pop(context);}),
-        title: Text('Crea una nueva tarea'.toUpperCase(),style: TextStyle(color: Sesion.colores[2])),
+        title: Text('Crea una nueva tarea'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2])),
       ),
       body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -185,16 +186,16 @@ class CrearTareaState extends State<CrearTarea> {
           SizedBox(
             width: 500,
             child: TextField(
-              style: TextStyle(color: Sesion.colores[0]),
+              style: TextStyle(color: GuardadoLocal.colores[0]),
               obscureText: false,
               maxLength: 40,
               decoration: InputDecoration(
                 enabledBorder:  OutlineInputBorder(
-                  borderSide:  BorderSide(color: Sesion.colores[0], width: 0.0),
+                  borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
                 ),
                 border: OutlineInputBorder(),
                 hintText: 'Introduce el título *'.toUpperCase(),
-                hintStyle: TextStyle(color: Sesion.colores[0])
+                hintStyle: TextStyle(color: GuardadoLocal.colores[0])
               ),
               controller: controladorNombre,
             ),
@@ -205,41 +206,41 @@ class CrearTareaState extends State<CrearTarea> {
           SizedBox(
             width: 500,
             child: TextField(
-              style: TextStyle(color: Sesion.colores[0]),
+              style: TextStyle(color: GuardadoLocal.colores[0]),
               obscureText: false,
               maxLength: 500,
               decoration: InputDecoration(
                 enabledBorder:  OutlineInputBorder(
-                  borderSide:  BorderSide(color: Sesion.colores[0], width: 0.0),
+                  borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
                 ),
                 border: OutlineInputBorder(),
                 hintText: 'Introduce una descripción *'.toUpperCase(),
-                hintStyle: TextStyle(color: Sesion.colores[0])
+                hintStyle: TextStyle(color: GuardadoLocal.colores[0])
               ),
               controller: controladorTexto,
             ),
           ),
           Text(
             "ELIGE UNA FOTO PARA LA TAREA: *",
-            style: TextStyle(fontSize: 20.0, height: 2.0, color: Sesion.colores[0]),
+            style: TextStyle(fontSize: 20.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           SizedBox(
             height: 5,
           ),
           ElevatedButton(
-              child: Text('Haz una foto'.toUpperCase(),style: TextStyle(color: Sesion.colores[2])),
+              child: Text('Haz una foto'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2])),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.camara);
               }),
           Text(
             "ELIGE UN PICTOGRAMA PARA LA TAREA: *",
-            style: TextStyle(fontSize: 20.0, height: 2.0, color:Sesion.colores[0]),
+            style: TextStyle(fontSize: 20.0, height: 2.0, color:GuardadoLocal.colores[0]),
           ),
           SizedBox(
             height: 5,
           ),
           ElevatedButton(
-              child: Text('Elige un pictograma de tu galería'.toUpperCase(),style: TextStyle(color: Sesion.colores[2])),
+              child: Text('Elige un pictograma de tu galería'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2])),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.galeria);
               }),
@@ -247,7 +248,7 @@ class CrearTareaState extends State<CrearTarea> {
             height: 15,
           ),
           ElevatedButton(
-              child: Text('Elige un pictograma desde la web de ARASAAC'.toUpperCase(),style: TextStyle(color: Sesion.colores[2])),
+              child: Text('Elige un pictograma desde la web de ARASAAC'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2])),
               onPressed: () async {
                     fotoTomada =  await buscadorArasaac(context: context);
                     actualizar();
@@ -258,23 +259,23 @@ class CrearTareaState extends State<CrearTarea> {
 
           Text(
             "ELIGE UN VIDEOTUTORIAL PARA LA TAREA: ",
-            style: TextStyle(fontSize: 20.0, height: 2.0, color: Sesion.colores[0]),
+            style: TextStyle(fontSize: 20.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           SizedBox(
             height: 5,
           ),
           ElevatedButton(
-              child: Text('Haz un videOtutorial'.toUpperCase(),style: TextStyle(color: Sesion.colores[2])),
+              child: Text('Haz un videOtutorial'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2])),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.video);
               }),
 
           Text(
             "CREA UN FORMULARIO: ",
-            style: TextStyle(fontSize: 20.0, height: 2.0, color: Sesion.colores[0]),
+            style: TextStyle(fontSize: 20.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           ElevatedButton(
-              child: Text((formularios == [])?'Crea un formulario'.toUpperCase():"Edita el formulario".toUpperCase(),style: TextStyle(color: Sesion.colores[2])),
+              child: Text((formularios == [])?'Crea un formulario'.toUpperCase():"Edita el formulario".toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2])),
               onPressed: () async {
                   dialogFormulario();
               }
@@ -284,14 +285,14 @@ class CrearTareaState extends State<CrearTarea> {
             height: 20,
           ),
           Container(
-            decoration: BoxDecoration(border: Border.all(width: 2,color: Sesion.colores[0])),
+            decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[0])),
             height: 150,
             width: 210,
             child: fotoTomada == null
                 ? Center(child: Text('Ninguna foto tomada ****'.toUpperCase(),textAlign: TextAlign.center,))
                 : Stack(children: [
               Center(child: fotoTomada is String? Image.network(fotoTomada): Image.file(File(fotoTomada.path)) ),
-              Container(child:ElevatedButton(onPressed: (){fotoTomada = null; actualizar();}, child: Icon(Icons.remove,color: Sesion.colores[0],)),
+              Container(child:ElevatedButton(onPressed: (){fotoTomada = null; actualizar();}, child: Icon(Icons.remove,color: GuardadoLocal.colores[0],)),
                 alignment: Alignment.topLeft,)
 
             ],),
@@ -300,7 +301,7 @@ class CrearTareaState extends State<CrearTarea> {
             height: 10,
           ),
           Container(
-            decoration: BoxDecoration(border: Border.all(width: 2,color: Sesion.colores[0])),
+            decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[0])),
             margin: EdgeInsets.only(right: 70, left: 70, top: 20, bottom: 20),
             child: videoTomado == null
                 ? Container(
@@ -314,12 +315,12 @@ class CrearTareaState extends State<CrearTarea> {
                       onPressed: (){
                         ventanaVideo(controladorVideo,context);
                       },
-                      child:Text("ver video".toUpperCase(),style: TextStyle(color: Sesion.colores[2]),)
+                      child:Text("ver video".toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),)
 
                     ),
                         alignment: Alignment.center,
                       ),
-                      Container(child:ElevatedButton(onPressed: (){videoTomado = null; actualizar();}, child: Icon(Icons.remove,color: Sesion.colores[0],)),
+                      Container(child:ElevatedButton(onPressed: (){videoTomado = null; actualizar();}, child: Icon(Icons.remove,color: GuardadoLocal.colores[0],)),
                       alignment: Alignment.centerLeft,)
 
                     ]
@@ -335,7 +336,7 @@ class CrearTareaState extends State<CrearTarea> {
                     child: Text(
                       "Crear nueva tarea".toUpperCase(),
                       style: TextStyle(
-                        color: Sesion.colores[2],
+                        color: GuardadoLocal.colores[2],
                       ),
                     ),
                     onPressed: () {
@@ -435,7 +436,7 @@ class CrearTareaState extends State<CrearTarea> {
               color: Color(error?0xFFC72C41:0xFF6BFF67),
               borderRadius: BorderRadius.all(Radius.circular(29)),
             ),
-            child: Center(child:Text(mensajeDeValidacion, style: TextStyle(color: Sesion.colores[2]))),
+            child: Center(child:Text(mensajeDeValidacion, style: TextStyle(color: GuardadoLocal.colores[2]))),
           )),
     );
   }
@@ -488,7 +489,7 @@ class CrearTareaState extends State<CrearTarea> {
               builder: (BuildContext context, AsyncSnapshot snapshot)
           {
             return Dialog(
-              backgroundColor: Sesion.colores[1],
+              backgroundColor: GuardadoLocal.colores[1],
                 child:SingleChildScrollView(
                 child: Column(children: [
                   Text("\nCrea un nuevo formulario".toUpperCase(),style: TextStyle(fontSize: 40),),
@@ -504,7 +505,7 @@ class CrearTareaState extends State<CrearTarea> {
                                 Flexible(
                                       flex: 90,
                                       child: TextButton(
-                                      child:Text(formularios[i],style: TextStyle(fontSize: 40,color: Sesion.colores[0]),),
+                                      child:Text(formularios[i],style: TextStyle(fontSize: 40,color: GuardadoLocal.colores[0]),),
                                       onPressed:()async{ await dialogNombre(formularios[i]).then((e){
                                         if(e != null)
                                           {
@@ -525,7 +526,7 @@ class CrearTareaState extends State<CrearTarea> {
                                             controladorStream.add("");
 
                                           },
-                                          child:Icon(Icons.remove,color: Sesion.colores[2],)
+                                          child:Icon(Icons.remove,color: GuardadoLocal.colores[2],)
                                       )
                                   ),
                                 ),
@@ -544,7 +545,7 @@ class CrearTareaState extends State<CrearTarea> {
                                                 controladorStream.add("");
 
                                               },
-                                              child:Icon(Icons.queue_outlined,color: Sesion.colores[2],)
+                                              child:Icon(Icons.queue_outlined,color: GuardadoLocal.colores[2],)
                                           )
                                       ),
                                     ),
@@ -564,7 +565,7 @@ class CrearTareaState extends State<CrearTarea> {
                                       children: [
                                         Flexible(
                                           child: TextButton(
-                                                            child:Text(formularios[j],style: TextStyle(fontSize: 30,color: Sesion.colores[0])),
+                                                            child:Text(formularios[j],style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[0])),
                                                             onPressed:()async {await dialogNombre(formularios[j]).then((e){
                                                               if(e != null)
                                                                 {
@@ -603,7 +604,7 @@ class CrearTareaState extends State<CrearTarea> {
                                                   controladorStream.add("");
 
                                                 },
-                                                child:Icon(Icons.remove,color: Sesion.colores[2],)
+                                                child:Icon(Icons.remove,color: GuardadoLocal.colores[2],)
                                               )
                                           ),
                                         ),
@@ -618,7 +619,7 @@ class CrearTareaState extends State<CrearTarea> {
                                 controladorStream.add("");
 
                               },
-                                  child: Text("Crea un elemento".toUpperCase(),style: TextStyle(color: Sesion.colores[2]),))
+                                  child: Text("Crea un elemento".toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),))
                               ,
 
                             ]
@@ -633,7 +634,7 @@ class CrearTareaState extends State<CrearTarea> {
                   Text("\n Crea una agrupación",),
 
                   IconButton(
-                      color:Sesion.colores[0],
+                      color:GuardadoLocal.colores[0],
                       onPressed:
                       () async {
 
@@ -653,7 +654,7 @@ class CrearTareaState extends State<CrearTarea> {
 
 
                       },
-                      icon: Icon(Icons.add,color: Sesion.colores[0],)),
+                      icon: Icon(Icons.add,color: GuardadoLocal.colores[0],)),
 
 
                   Row(
@@ -667,7 +668,7 @@ class CrearTareaState extends State<CrearTarea> {
                                 Navigator.pop(context);
                               },
                               child: Column(children: [
-                                Text('\nCancelar'.toUpperCase(), style: TextStyle(color: Sesion.colores[2])),
+                                Text('\nCancelar'.toUpperCase(), style: TextStyle(color: GuardadoLocal.colores[2])),
                                 Image.asset(
                                   "assets/cerrar.png",
                                   height: 100,
@@ -683,7 +684,7 @@ class CrearTareaState extends State<CrearTarea> {
                               Navigator.pop(context);
                             },
                             child: Column(children: [
-                              Text('\n Crear'.toUpperCase(), style: TextStyle(color: Sesion.colores[2])),
+                              Text('\n Crear'.toUpperCase(), style: TextStyle(color: GuardadoLocal.colores[2])),
                               Image.asset(
                                 "assets/enviarunemail.png",
                                 height: 100,
@@ -713,18 +714,18 @@ class CrearTareaState extends State<CrearTarea> {
         builder: (context) {
 
           return Dialog(
-            backgroundColor: Sesion.colores[1],
+            backgroundColor: GuardadoLocal.colores[1],
             child:Column(children: [
               TextField(
-                style: TextStyle(color: Sesion.colores[0]),
+                style: TextStyle(color: GuardadoLocal.colores[0]),
                 controller: controlador,
                 decoration: InputDecoration(
                   enabledBorder:  OutlineInputBorder(
-                    borderSide:  BorderSide(color: Sesion.colores[0], width: 0.0),
+                    borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
                   ),
                   border: OutlineInputBorder(),
                   hintText: 'Introduce nombre'.toUpperCase(),
-                  hintStyle: TextStyle(color: Sesion.colores[0])
+                  hintStyle: TextStyle(color: GuardadoLocal.colores[0])
                 )
               ),
 
@@ -738,7 +739,7 @@ class CrearTareaState extends State<CrearTarea> {
                             Navigator.pop(context);
                           },
                           child: Column(children: [
-                            Text('No'.toUpperCase(),style: TextStyle(color: Sesion.colores[2]),),
+                            Text('No'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),),
 
                           ]))),
                   Container(
@@ -750,7 +751,7 @@ class CrearTareaState extends State<CrearTarea> {
                           }
                         },
                         child:
-                          Text('Ok'.toUpperCase(),style: TextStyle(color: Sesion.colores[2])),
+                          Text('Ok'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2])),
 
                   )
                   )
@@ -778,28 +779,28 @@ class CrearTareaState extends State<CrearTarea> {
               builder: (BuildContext context, AsyncSnapshot snapshot)
           {
             return Dialog(
-                backgroundColor: Sesion.colores[1],
+                backgroundColor: GuardadoLocal.colores[1],
                 child:
 
             Column(children: [Row(children: [
               Flexible(child:
               TextField(
-                style: TextStyle(color: Sesion.colores[0]),
+                style: TextStyle(color: GuardadoLocal.colores[0]),
                 controller: controlador,
                 decoration: InputDecoration(
                     enabledBorder:  OutlineInputBorder(
-                      borderSide:  BorderSide(color: Sesion.colores[0], width: 0.0),
+                      borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
                     ),
                     border: OutlineInputBorder(),
                     hintText: 'Introduce nombre'.toUpperCase(),
-                    hintStyle: TextStyle(color: Sesion.colores[0])
+                    hintStyle: TextStyle(color: GuardadoLocal.colores[0])
                 )
               ),
               ),
               Flexible(child:
-              Container(margin: EdgeInsets.only(left: 60), color:Sesion.colores[1],child:
+              Container(margin: EdgeInsets.only(left: 60), color:GuardadoLocal.colores[1],child:
               ElevatedButton(
-                  child: Text('Elige un pictograma desde la web de ARASAAC',style: TextStyle(color: Sesion.colores[2])),
+                  child: Text('Elige un pictograma desde la web de ARASAAC',style: TextStyle(color: GuardadoLocal.colores[2])),
                   onPressed: () async {
                     imagenEscogida = await buscadorArasaac(context: context);
                     controladorStream.add("");
@@ -833,7 +834,7 @@ class CrearTareaState extends State<CrearTarea> {
                     controlador.text = "";
                     Navigator.pop(context);
                   },
-                  icon: Icon(Icons.add,color: Sesion.colores[0],)),
+                  icon: Icon(Icons.add,color: GuardadoLocal.colores[0],)),
             ]
 
             )

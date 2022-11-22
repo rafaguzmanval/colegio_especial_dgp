@@ -3,7 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import 'package:colegio_especial_dgp/Dart/sesion.dart';
+import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 
 String _duracionVideo(Duration duracion){
   String dosDigitos(int n) => n.toString().padLeft(2,'0');
@@ -28,7 +28,7 @@ ventanaVideo(controlador,context){
             builder: (BuildContext context,AsyncSnapshot snapshot)
             {
               return Container(
-                  color: Sesion.colores[0],
+                  color: GuardadoLocal.colores[0],
                   //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
                   child:
                   Column(
@@ -58,7 +58,7 @@ ventanaVideo(controlador,context){
                                 return Text(
                                   _duracionVideo(value.position),
                                   style: TextStyle(
-                                    color: Sesion.colores[2],
+                                    color: GuardadoLocal.colores[2],
                                   ),
                                 );
                               }),
@@ -75,7 +75,7 @@ ventanaVideo(controlador,context){
                               Text(
                                 _duracionVideo(controlador.value.duration),
                                 style: TextStyle(
-                                  color: Sesion.colores[2],
+                                  color: GuardadoLocal.colores[2],
                                 ),)
                             ]
                         )

@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 class GuardadoLocal{
   static var prefs;
 
+  static var colores = [];
+
   static inicializar() async
   {
     await SharedPreferences.getInstance().then((e){

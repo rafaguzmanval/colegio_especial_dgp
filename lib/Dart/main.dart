@@ -117,9 +117,9 @@ cargarPreajustes() async{
     colorLetra = new Color(value);
   }
 
-    Sesion.colores.add(colorPrimario);
-    Sesion.colores.add(colorFondo);
-    Sesion.colores.add(colorLetra);
+    GuardadoLocal.colores.add(colorPrimario);
+    GuardadoLocal.colores.add(colorFondo);
+    GuardadoLocal.colores.add(colorLetra);
 }
 
 //Función para mandar un email.

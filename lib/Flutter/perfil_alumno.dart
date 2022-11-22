@@ -15,6 +15,7 @@
 import 'dart:async';
 
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
+import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Flutter/ver_tareas.dart';
 import '../Dart/tarea.dart';
@@ -68,10 +69,10 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
     return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: Sesion.colores[2]),
+              icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
               onPressed: (){Navigator.pop(context);}),
           title: Text('PERFIL DE: ${Sesion.seleccion.nombre}'
-              '',style: TextStyle(color: Sesion.colores[2]),),
+              '',style: TextStyle(color: GuardadoLocal.colores[2]),),
         ),
         body: Container(
             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
@@ -131,17 +132,17 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
       child: Column(
         children: [
           if (usuarioPerfil != null) ...[
-            Text("NOMBRE: " + usuarioPerfil.nombre.toString().toUpperCase() + "\n",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: Sesion.colores[0])),
-            Text("APELLIDOS: " + usuarioPerfil.apellidos.toString().toUpperCase() + "\n",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: Sesion.colores[0])),
+            Text("NOMBRE: " + usuarioPerfil.nombre.toString().toUpperCase() + "\n",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
+            Text("APELLIDOS: " + usuarioPerfil.apellidos.toString().toUpperCase() + "\n",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
             Text(
-                "FECHA DE NACIMIENTO: " + usuarioPerfil.fechanacimiento.toString().toUpperCase() + "\n",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: Sesion.colores[0])),
-            Text("IMAGEN DE PERFIL:\n",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: Sesion.colores[0])),
+                "FECHA DE NACIMIENTO: " + usuarioPerfil.fechanacimiento.toString().toUpperCase() + "\n",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
+            Text("IMAGEN DE PERFIL:\n",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
             Image(
               width: 100,
               height: 100,
               image: NetworkImage(usuarioPerfil.foto),
             ),
-            Text("\nTAREAS ASIGNADAS:",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: Sesion.colores[0])),
+            Text("\nTAREAS ASIGNADAS:",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
             if (Sesion.tareas != null) ...[
               for (int i = 0; i < Sesion.tareas.length; i++)
                 if (Sesion.tareas[i] is Tarea) ...[
@@ -160,7 +161,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                       builder: (context) => VerTareas()));
                               Sesion.paginaActual = this;
                             },
-                            child: Text(Sesion.tareas[i].nombre.toString().toUpperCase(),style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: Sesion.colores[2]),),
+                            child: Text(Sesion.tareas[i].nombre.toString().toUpperCase(),style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[2]),),
                           ),
                           IconButton(
                               onPressed: () async {
@@ -171,7 +172,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                 tareaEliminandose = i;
                                 actualizar();
                               },
-                              icon: Icon(Icons.delete,color: Sesion.colores[0],)),
+                              icon: Icon(Icons.delete,color: GuardadoLocal.colores[0],)),
                           if (esTareaEliminandose &&
                               i == tareaEliminandose) ...[
                             new CircularProgressIndicator(),
@@ -188,7 +189,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                   child: FloatingActionButton(
                       heroTag: "addtarea",
                       onPressed: () => addTarea(context: context),
-                      child: Icon(Icons.add,color: Sesion.colores[2],)))
+                      child: Icon(Icons.add,color: GuardadoLocal.colores[2],)))
             ],
           ] else ...[
             new CircularProgressIndicator()
@@ -239,19 +240,19 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                   initialData: "",
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     return Container(
-                      color: Sesion.colores[1],
+                      color: GuardadoLocal.colores[1],
                         height: MediaQuery.of(context).size.height - 100,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              color: Sesion.colores[1],
+                              color: GuardadoLocal.colores[1],
                               margin:
                                   EdgeInsets.only(top: 10, left: 10),
                               child: DropdownButton(
-                                style: TextStyle(fontFamily:"Escolar",color: Sesion.colores[0]),
-                                dropdownColor: Sesion.colores[1],
+                                style: TextStyle(fontFamily:"Escolar",color: GuardadoLocal.colores[0]),
+                                dropdownColor: GuardadoLocal.colores[1],
                                 key: Key("Multiselección"),
                                 value: tareaElegida,
                                 items: nombresTareas.map((String value) {
@@ -284,11 +285,11 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                               ),
                             ),
                             Container(
-                              color: Sesion.colores[1],
+                              color: GuardadoLocal.colores[1],
                               margin: EdgeInsets.only(top: 5),
                               child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: Sesion.colores[0]),
+                                      backgroundColor: GuardadoLocal.colores[0]),
                                   onPressed: () async {
                                     await showDatePicker(
                                             context: context,
@@ -304,14 +305,14 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                   child: Text((fechafinal == null)
                                       ? "ELIGE FECHA DE ENTREGA LIMITE"
                                       : DateFormat('d/M/y')
-                                          .format(fechafinal),style: TextStyle(color: Sesion.colores[2]),)),
+                                          .format(fechafinal),style: TextStyle(color: GuardadoLocal.colores[2]),)),
                             ),
                             Container(
-                              color: Sesion.colores[1],
+                              color: GuardadoLocal.colores[1],
                               margin: EdgeInsets.only(top: 5),
                               child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    backgroundColor: Sesion.colores[0]),
+                                    backgroundColor: GuardadoLocal.colores[0]),
                                 onPressed: () async {
                                   await showTimePicker(
                                     context: context,
@@ -328,21 +329,21 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                         ((horafinal.minute > 9)
                                             ? horafinal.minute.toString()
                                             : "0" +
-                                                horafinal.minute.toString()),style: TextStyle(color: Sesion.colores[2]),),
+                                                horafinal.minute.toString()),style: TextStyle(color: GuardadoLocal.colores[2]),),
                               ),
                             ),
                             Visibility(
                               visible: tareaElegida != "NADA SELECCIONADO",
                               child: Container(
-                                color: Sesion.colores[1],
+                                color: GuardadoLocal.colores[1],
                                 margin: EdgeInsets.only(bottom: 10),
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: Sesion.colores[0]),
+                                      backgroundColor: GuardadoLocal.colores[0]),
                                   child: Text(
                                     "AÑADIR TAREA",
                                     style: TextStyle(
-                                      color: Sesion.colores[2],
+                                      color: GuardadoLocal.colores[2],
                                     ),
                                   ),
                                   onPressed: () async {

@@ -15,6 +15,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
+import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:colegio_especial_dgp/Flutter/reproductor_video.dart';
@@ -158,14 +159,14 @@ class VerTareasState extends State<VerTareas> {
     return new Scaffold(
             appBar: AppBar(
               leading: IconButton(
-                icon: Icon(iconoAtras, color: Sesion.colores[2]),
+                icon: Icon(iconoAtras, color: GuardadoLocal.colores[2]),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               title: Center(
                   child: Text('Tareas de ' +
                       (Sesion.rol == Rol.alumno.toString()
                           ? Sesion.nombre
-                          : Sesion.seleccion.nombre),style: TextStyle(color: Sesion.colores[2]),)),
+                          : Sesion.seleccion.nombre),style: TextStyle(color: GuardadoLocal.colores[2]),)),
             ),
             body: GestureDetector(
               onPanStart: (DragStartDetails details) {
@@ -334,7 +335,7 @@ class VerTareasState extends State<VerTareas> {
                           //DateFormat('d/M/y HH:mm').format(DateTime.fromMillisecondsSinceEpoch(Sesion.tareas[tareaActual].fechafinal)).toString(),
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Sesion.colores[0],
+                            color: GuardadoLocal.colores[0],
                             fontSize: 20.0,
                           ),
                         );
@@ -419,7 +420,7 @@ class VerTareasState extends State<VerTareas> {
                             desplazarIzquierda();
                             actualizar();
                           },
-                          child: Icon(Icons.arrow_left,color: Sesion.colores[2],)),
+                          child: Icon(Icons.arrow_left,color: GuardadoLocal.colores[2],)),
                       visible: verFlechaIzquierda,
                     ),
                   )),
@@ -431,7 +432,7 @@ class VerTareasState extends State<VerTareas> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                         border: Border.all(width: 2),
-                        color: Sesion.colores[0]),
+                        color: GuardadoLocal.colores[0]),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -440,7 +441,7 @@ class VerTareasState extends State<VerTareas> {
                                 child: Text(
                               "\n" + Sesion.tareas[tareaActual].nombre + "\n",
                               style:  TextStyle(
-                                color: Sesion.colores[2],
+                                color: GuardadoLocal.colores[2],
                               ),
                             )),
                             resetIndicesTarea(),
@@ -479,7 +480,7 @@ class VerTareasState extends State<VerTareas> {
                             desplazarDerecha();
                             actualizar();
                           },
-                          child:  Icon(Icons.arrow_right,color: Sesion.colores[2],)),
+                          child:  Icon(Icons.arrow_right,color: GuardadoLocal.colores[2],)),
                       visible: verFlechaDerecha,
                     ),
                   ))
@@ -613,7 +614,7 @@ class VerTareasState extends State<VerTareas> {
           child: Text(pathTexto + "\n",
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Sesion.colores[2],
+                color: GuardadoLocal.colores[2],
               )));
     } else if (valor == "I" &&
         Sesion.tareas[i].imagenes.length > indiceImagenes) {
@@ -644,7 +645,7 @@ class VerTareasState extends State<VerTareas> {
               ventanaVideo(
                   Sesion.tareas[i].controladoresVideo[indice],context);
             },
-              child:Text("ver video".toUpperCase(),style: TextStyle(fontSize:25, color: Sesion.colores[2]),)
+              child:Text("ver video".toUpperCase(),style: TextStyle(fontSize:25, color: GuardadoLocal.colores[2]),)
             ),
 
           );
@@ -917,7 +918,7 @@ class VerTareasState extends State<VerTareas> {
                       decoration: BoxDecoration(border: Border.all(width: 2)),
                       margin: EdgeInsets.only(left: 25),
                       child: ElevatedButton(
-                        child: Icon(Icons.remove,color: Sesion.colores[2],),
+                        child: Icon(Icons.remove,color: GuardadoLocal.colores[2],),
                         onPressed: () {
                           var valor = Sesion.tareas[tareaActual].controladoresComandas[indice].text;
 
@@ -941,7 +942,7 @@ class VerTareasState extends State<VerTareas> {
                       decoration: BoxDecoration(border: Border.all(width: 2)),
                       margin: EdgeInsets.only(left: 25),
                       child: ElevatedButton(
-                        child: Icon(Icons.add,color: Sesion.colores[2],),
+                        child: Icon(Icons.add,color: GuardadoLocal.colores[2],),
                         onPressed: () {
                           var valor = Sesion.tareas[tareaActual].controladoresComandas[indice].text;
                           if(valor == "")

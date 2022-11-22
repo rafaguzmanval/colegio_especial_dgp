@@ -17,6 +17,7 @@ import 'dart:async';
 import 'package:colegio_especial_dgp/Dart/passport_method.dart';
 import 'package:colegio_especial_dgp/Flutter/myhomepage.dart';
 import '../Dart/sesion.dart';
+import '../Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:flutter/material.dart';
 import 'package:colegio_especial_dgp/Dart/background.dart';
@@ -84,9 +85,9 @@ class PasswordLoginState extends State<PasswordLogin> {
     return Scaffold(
         appBar: AppBar(
             leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: Sesion.colores[2]),
+                icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
                 onPressed: () => _onBackPressed(context)),
-          title: Text('Hola ${Sesion.nombre}'.toUpperCase(),style: TextStyle(color: Sesion.colores[2]),),
+          title: Text('Hola ${Sesion.nombre}'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),),
 
         ),
         body: Container(margin: EdgeInsets.all(5), child: vista()));
@@ -114,16 +115,16 @@ class PasswordLoginState extends State<PasswordLogin> {
             SizedBox(
               width: 500,
               child: TextField(
-                style: TextStyle(color: Sesion.colores[0]),
+                style: TextStyle(color: GuardadoLocal.colores[0]),
                 key: Key("campoContraseña"),
                 obscureText: true,
                 decoration: InputDecoration(
                   enabledBorder:  OutlineInputBorder(
-                    borderSide:  BorderSide(color: Sesion.colores[0], width: 0.0),
+                    borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
                   ),
                   border: OutlineInputBorder(),
                   hintText: 'Introduce la clave'.toUpperCase(),
-                  hintStyle: TextStyle(color: Sesion.colores[0]),
+                  hintStyle: TextStyle(color: GuardadoLocal.colores[0]),
                 ),
                 controller: myController,
               ),
@@ -137,7 +138,7 @@ class PasswordLoginState extends State<PasswordLogin> {
                   "Enviar".toUpperCase(),
                   style: TextStyle(
                     fontSize: 30,
-                    color: Sesion.colores[2],
+                    color: GuardadoLocal.colores[2],
                   ),
                 ),
                 onPressed: () {
@@ -245,7 +246,7 @@ class PasswordLoginState extends State<PasswordLogin> {
               onPressed: () {
                 resetPin();
               },
-              child: Text("Volver a introducir".toUpperCase(),style: TextStyle(fontSize: 20,color: Sesion.colores[2]),)),
+              child: Text("Volver a introducir".toUpperCase(),style: TextStyle(fontSize: 20,color: GuardadoLocal.colores[2]),)),
         ]);
   }
 
@@ -306,22 +307,22 @@ class PasswordLoginState extends State<PasswordLogin> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            backgroundColor: Sesion.colores[1],
-            title: Text('¿SEGURO?',style: TextStyle(color: Sesion.colores[0])),
-            content: Text('¿Que quieres volver atras?'.toUpperCase(),style: TextStyle(color: Sesion.colores[0])),
+            backgroundColor: GuardadoLocal.colores[1],
+            title: Text('¿SEGURO?',style: TextStyle(color: GuardadoLocal.colores[0])),
+            content: Text('¿Que quieres volver atras?'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[0])),
             actions: [
               ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context, false);
                   },
-                  child: Text('NO',style: TextStyle(color: Sesion.colores[2]))),
+                  child: Text('NO',style: TextStyle(color: GuardadoLocal.colores[2]))),
               ElevatedButton(
                   onPressed: () {
                     Background.desactivarNotificaciones();
                     Navigator.popUntil(context, (route) => route.isFirst);
 
                   },
-                  child: Text('SÍ',style: TextStyle(color: Sesion.colores[2]))),
+                  child: Text('SÍ',style: TextStyle(color: GuardadoLocal.colores[2]))),
             ],
           );
         });

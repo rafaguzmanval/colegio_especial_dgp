@@ -5,7 +5,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:flutter_map/flutter_map.dart';
 import "package:latlong2/latlong.dart";
 
-import '../Dart/sesion.dart';
+import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
+import 'package:colegio_especial_dgp/Dart/sesion.dart';
 
 class Configuracion extends StatefulWidget {
   @override
@@ -77,9 +78,9 @@ class ConfiguracionState extends State<Configuracion> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: Sesion.colores[2]),
+            icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
             onPressed: (){Navigator.pop(context);}),
-        title: Text("Configuración".toUpperCase(),style: TextStyle(color: Sesion.colores[2]),),
+        title: Text("Configuración".toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),),
       ),
       body: SingleChildScrollView(
           child: Container(
@@ -92,7 +93,7 @@ class ConfiguracionState extends State<Configuracion> {
                       child: ElevatedButton(
                           onPressed: () {},
                           child: Text("Elegir color".toUpperCase(),
-                              style: TextStyle(fontSize: 30,color: Sesion.colores[2])))),
+                              style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2])))),
                   Container(
                       alignment: Alignment.center,
                       width: 650,
