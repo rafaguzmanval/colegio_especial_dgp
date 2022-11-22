@@ -53,8 +53,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(title: Text('TuCole')),
       body: Center(
-        child: media > 600
-            ?
+        child:
         Flexible(
           flex: 1,
           fit: FlexFit.tight,
@@ -73,6 +72,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
                       children: [
                         Text(
                           "Alumnos".toUpperCase(),
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 30,
                             color: Colors.white,
@@ -107,6 +107,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
                       children: [
                         Text(
                           "Profesores".toUpperCase(),
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 30,
                             color: Colors.white,
@@ -133,29 +134,6 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
             ],
           ),
         )
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-
-                //crossAxisAlignment: CrossAxisAlignment.center,
-
-                children: [
-                  ElevatedButton(
-                    child: Text(
-                      'Profesores',
-                      style: TextStyle(
-                          fontSize: 30, fontWeight: FontWeight.normal),
-                    ),
-                    onPressed: () {
-                      Sesion.argumentos.add("profesores");
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    },
-                  ),
-                ],
-              ),
       ),
     );
   }
