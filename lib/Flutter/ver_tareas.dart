@@ -220,6 +220,7 @@ class VerTareasState extends State<VerTareas> {
     if (Sesion.tareas[tareaActual].estado != "sinFinalizar") {
       mensajeTemporizador = "";
       temporizador.cancel();
+
       actualizar();
       return;
     }
@@ -264,7 +265,6 @@ class VerTareasState extends State<VerTareas> {
           segundosRestantes.toString() +
           (segundosRestantes > 1 ? " segundos" : " segundo");
 
-    //temporizador = Timer(Duration(milliseconds: 1000),formatTiempoRestante);
     controladorTemporizador.add("");
   }
 
@@ -292,6 +292,8 @@ class VerTareasState extends State<VerTareas> {
       mostrarBotones = Sesion.tareas[tareaActual].estado == "sinFinalizar";
       formatTiempoRestante();
       verFlechaIzquierda = true;
+      temporizador.cancel();
+      temporizador = null;
     }
 
     verFlechaDerecha = (tareaActual != Sesion.tareas.length - 1);
@@ -303,6 +305,8 @@ class VerTareasState extends State<VerTareas> {
       mostrarBotones = Sesion.tareas[tareaActual].estado == "sinFinalizar";
       formatTiempoRestante();
       verFlechaDerecha = true;
+      temporizador.cancel();
+      temporizador = null;
     }
     verFlechaIzquierda = tareaActual != 0;
   }
@@ -335,24 +339,43 @@ class VerTareasState extends State<VerTareas> {
           alignment: WrapAlignment.end,
           //spacing: 800,
           children: [
-            Container(
-              child:
-                  StreamBuilder(
-                    stream:controladorTemporizador.stream,
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      return
-                        Text(
-                          "\n" + mensajeTemporizador + "\n",
-                          //DateFormat('d/M/y HH:mm').format(DateTime.fromMillisecondsSinceEpoch(Sesion.tareas[tareaActual].fechafinal)).toString(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: GuardadoLocal.colores[0],
-                            fontSize: 20.0,
-                          ),
-                        );
-                    },
 
-                  )
+
+
+              Container(
+              child:
+              StreamBuilder(
+                stream:controladorTemporizador.stream,
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    return
+                    Text(
+                    "\n" + mensajeTemporizador + "\n",
+                    //DateFormat('d/M/y HH:mm').format(DateTime.fromMillisecondsSinceEpoch(Sesion.tareas[tareaActual].fechafinal)).toString(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                    color: GuardadoLocal.colores[0],
+                    fontSize: 20.0,
+                  ),
+                );
+              },
+
+              )
+
+              ),
+              ///TEXTO DE RETROALIMENTACIÓN DE LA APP CUANDO SE TERMINA UNA TAREA
+              Visibility(
+              visible: Sesion.tareas[tareaActual].estado == "completada",
+              child: Text("\nTarea terminada " +
+              formatoFechafinalizado(Sesion.tareas[tareaActual].fechaentrega) +
+              " :)"),
+              ),
+              Visibility(
+              visible: Sesion.tareas[tareaActual].estado == "cancelada",
+              child: Text("\nTarea sin poder completar :("),
+              ),
+
+          ]
+
 
             ),
 
@@ -410,10 +433,8 @@ class VerTareasState extends State<VerTareas> {
                       width: 100,
                       )
                       ]))
-            ]
+            ],
 
-          ],
-        ),
         Row(
             //ROW 2
             mainAxisAlignment: MainAxisAlignment.center,
@@ -436,6 +457,8 @@ class VerTareasState extends State<VerTareas> {
                     ),
                   )),
 
+
+
               ///CONTENEDOR DE LA TAREA
               Flexible(
                   flex: 40,
@@ -448,6 +471,7 @@ class VerTareasState extends State<VerTareas> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           if (Sesion.tareas.length > 0) ...[
+
                             Center(
                                 child: Text(
                               "\n" + Sesion.tareas[tareaActual].nombre + "\n",
@@ -542,18 +566,6 @@ class VerTareasState extends State<VerTareas> {
           ),
         ],
 
-        ///TEXTO DE RETROALIMENTACIÓN DE LA APP CUANDO SE TERMINA UNA TAREA
-        Visibility(
-          visible: Sesion.tareas[tareaActual].estado == "completada",
-          child: Text("\nTarea terminada " +
-              formatoFechafinalizado(Sesion.tareas[tareaActual].fechaentrega) +
-              " :)"),
-        ),
-        Visibility(
-          visible: Sesion.tareas[tareaActual].estado == "cancelada",
-          child: Text("\nTarea sin poder completar :("),
-        ),
-
         ///COMENTARIO DEL ALUMNO AL TERMINAR LA TAREA
         Visibility(
           visible: Sesion.tareas[tareaActual].respuesta != "",
@@ -566,7 +578,7 @@ class VerTareasState extends State<VerTareas> {
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            Text(Sesion.tareas[tareaActual].respuesta),
+            Text(Sesion.tareas[tareaActual].respuesta ),
             if(Sesion.tareas[tareaActual].fotoRespuesta != "")...
               [
                 Image.network(Sesion.tareas[tareaActual].fotoRespuesta,width: 200,height: 200,)
@@ -597,7 +609,17 @@ class VerTareasState extends State<VerTareas> {
                     ? "Editar retroalimentación"
                     : "Enviar retroalimentación")),
               )),
+
         ],
+
+        Visibility(
+          visible: Sesion.tareas[tareaActual].estado != "sinFinalizar",
+          child: ElevatedButton(
+              onPressed: () {
+                Sesion.db.resetTarea(Sesion.tareas[tareaActual].idRelacion);
+              },
+              child: Text("Reinicia la tarea")),
+        ),
       ] else ...[
         Container(
             alignment: Alignment.center,

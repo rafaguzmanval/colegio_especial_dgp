@@ -357,6 +357,20 @@ class AccesoBD {
 
   }
 
+  resetTarea(idTareaAsignada) async
+  {
+    try
+    {
+      final ref = db.collection("usuarioTieneTareas");
+      return await ref.doc(idTareaAsignada).update({"estado" : "sinFinalizar", "fechaentrega" : "","respuesta":"","retroalimentacion":"","fotoURL":"","fotopath":""});
+
+    }catch(e){
+      log(e.toString());
+      return false;
+    }
+
+  }
+
 
   fallarTarea(idTareaAsignada) async
   {
