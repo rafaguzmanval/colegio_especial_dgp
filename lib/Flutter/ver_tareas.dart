@@ -609,16 +609,17 @@ class VerTareasState extends State<VerTareas> {
                     ? "Editar retroalimentación"
                     : "Enviar retroalimentación")),
               )),
-          Visibility(
-              visible: Sesion.tareas[tareaActual].estado != "sinFinalizar",
-              child: ElevatedButton(
-                onPressed: () {
-                  Sesion.db.resetTarea(Sesion.tareas[tareaActual].idRelacion);
-                  actualizar();
-                },
-                child: Text("Reinicia la tarea")),
-              ),
+
         ],
+
+        Visibility(
+          visible: Sesion.tareas[tareaActual].estado != "sinFinalizar",
+          child: ElevatedButton(
+              onPressed: () {
+                Sesion.db.resetTarea(Sesion.tareas[tareaActual].idRelacion);
+              },
+              child: Text("Reinicia la tarea")),
+        ),
       ] else ...[
         Container(
             alignment: Alignment.center,
