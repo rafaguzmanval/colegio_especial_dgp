@@ -35,6 +35,7 @@ import '../Dart/main.dart';
 import 'configuracion.dart';
 import 'lista_alumnos.dart';
 import 'lista_profesores.dart';
+import 'lista_tareas.dart';
 
 enum SeleccionImagen { camara, galeria }
 
@@ -465,7 +466,7 @@ class MyHomePageState extends State<MyHomePage> {
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => CrearTarea()));
+                                builder: (context) => ListaTareas()));
                         Sesion.paginaActual = this;
                       },
                     ),
