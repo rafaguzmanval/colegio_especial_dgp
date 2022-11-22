@@ -783,7 +783,7 @@ class PerfilTareaState extends State<PerfilTarea> {
           videoTomado = null;
 
           displayMensajeValidacion(
-              "Tarea creada correctamente\nPuedes volver a crear otra tarea:"
+              "Tarea editada correctamente\nPuedes volver a crear otra tarea:"
                   .toUpperCase(),
               false);
         } else {

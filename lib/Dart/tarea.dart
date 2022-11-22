@@ -26,6 +26,7 @@ class Tarea {
   var fechafinal;
   var fechaentrega;
   var respuesta;
+  var fotoRespuesta;
   var retroalimentacion;
 
 

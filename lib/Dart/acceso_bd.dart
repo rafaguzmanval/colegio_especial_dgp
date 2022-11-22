@@ -232,68 +232,80 @@ class AccesoBD {
           for (int i = 0; i < e.docs.length; i++) { // itera sobre los elementos de la colección
             var idTarea = e.docs[i].get("idTarea"); // cada tarea tiene una id
 
-            await consultarIDTarea(idTarea).then((nuevaTarea) {  // sobre esa id accedemos a la colección tarea donde se encuentra la información de la tarea
-              nuevaTarea.idRelacion = e.docs[i].id;
-              nuevaTarea.estado = e.docs[i].get("estado");
-              nuevaTarea.fechafinal = e.docs[i].get("fechafinal");
-              nuevaTarea.respuesta = e.docs[i].get("respuesta");
-              nuevaTarea.retroalimentacion = e.docs[i].get("retroalimentacion");
-
-              if(nuevaTarea.estado != "sinFinalizar")
-                {
-                  nuevaTarea.fechaentrega =  (DateTime.now().millisecondsSinceEpoch - e.docs[i].get("fechaentrega"))/(1000*60);
-
-                  if(nuevaTarea.formularios != []) // si en la tarea no se han actualizado los datos del formulario entonces debemos sobreescribir
-                    //el que viene por defecto
-                  nuevaTarea.formularios = e.docs[i].get("formularios");
-
+            try {
+              await consultarIDTarea(idTarea).then((
+                  nuevaTarea) { // sobre esa id accedemos a la colección tarea donde se encuentra la información de la tarea
+                nuevaTarea.idRelacion = e.docs[i].id;
+                nuevaTarea.estado = e.docs[i].get("estado");
+                nuevaTarea.fechafinal = e.docs[i].get("fechafinal");
+                nuevaTarea.respuesta = e.docs[i].get("respuesta");
+                try {
+                  nuevaTarea.fotoRespuesta = e.docs[i].get("fotoURL");
+                } catch (e) {
+                  nuevaTarea.fotoRespuesta = "";
                 }
-              nuevasTareas.add(nuevaTarea);
+                nuevaTarea.retroalimentacion =
+                    e.docs[i].get("retroalimentacion");
 
-              if (nuevasTareas.length == e.docs.length) {
-                Sesion.tareas = nuevasTareas;
-                if (cargarVideos) {
-                  try {
-                    for (int k = 0; k < Sesion.tareas.length; k++) {
-                      var array = [];
+                if (nuevaTarea.estado != "sinFinalizar") {
+                  nuevaTarea.fechaentrega = (DateTime
+                      .now()
+                      .millisecondsSinceEpoch - e.docs[i].get("fechaentrega")) /
+                      (1000 * 60);
+
+                  if (nuevaTarea.formularios != [
+                  ]) // si en la tarea no se han actualizado los datos del formulario entonces debemos sobreescribir
+                    //el que viene por defecto
+                    nuevaTarea.formularios = e.docs[i].get("formularios");
+                }
+                nuevasTareas.add(nuevaTarea);
+
+                if (nuevasTareas.length == e.docs.length) {
+                  Sesion.tareas = nuevasTareas;
+                  if (cargarVideos) {
+                    try {
+                      for (int k = 0; k < Sesion.tareas.length; k++) {
+                        var array = [];
 
 
-                      for (int j = 0; j < Sesion.tareas[k].videos.length; j++) {
-                        /*var nuevoControlador = VideoPlayerController.network(
+                        for (int j = 0; j < Sesion.tareas[k].videos
+                            .length; j++) {
+                          /*var nuevoControlador = VideoPlayerController.network(
                                 Sesion.tareas[k].videos[j]);*/
-                            Sesion.tareas[k].controladoresVideo
-                                .add(0);
-                            /*Sesion.tareas[k].controladoresVideo.last.initialize();*/
+                          Sesion.tareas[k].controladoresVideo
+                              .add(0);
+                          /*Sesion.tareas[k].controladoresVideo.last.initialize();*/
 
-                      }
+                        }
 
-                      //Se cargan los formularios (Mas feo esto que pegarle a un pae la verdad)
-                      if(Sesion.tareas[k].formularios != [])
-                      {
-                        for (int l = 0; l < Sesion.tareas[k].formularios.length;
-                        l = l + 2 + (Sesion.tareas[k].formularios[l + 1] as int) * 3) {
-
-                          for(int j = 0 ; j < (Sesion.tareas[k].formularios[l + 1] as int)  ; j++)
-                          {
-                            Sesion.tareas[k].controladoresComandas.add(TextEditingController());
+                        //Se cargan los formularios (Mas feo esto que pegarle a un pae la verdad)
+                        if (Sesion.tareas[k].formularios != []) {
+                          for (int l = 0; l <
+                              Sesion.tareas[k].formularios.length;
+                          l = l + 2 +
+                              (Sesion.tareas[k].formularios[l + 1] as int) *
+                                  3) {
+                            for (int j = 0; j <
+                                (Sesion.tareas[k].formularios[l +
+                                    1] as int); j++) {
+                              Sesion.tareas[k].controladoresComandas.add(
+                                  TextEditingController());
+                            }
                           }
-
                         }
                       }
 
+
+                      Sesion.paginaActual.actualizar();
+                    } catch (e) {
+                      print(e);
                     }
-
-
-                    Sesion.paginaActual.actualizar();
-
-                  } catch (e) {
-                    print(e);
+                    ;
                   }
-                  ;
+                  Sesion.paginaActual.actualizar();
                 }
-                Sesion.paginaActual.actualizar();
-              }
-            });
+              });
+            }catch(e){print(e);}
           }
 
           if (e.docs.length == 0) Sesion.tareas = [];
@@ -360,12 +372,33 @@ class AccesoBD {
 
   }
 
-  addRespuestaTarea(idTareaAsignada,comentario) async
+  addRespuestaTarea(idTareaAsignada,comentario,foto) async
   {
     try
     {
+
       final ref = db.collection("usuarioTieneTareas");
-      return await ref.doc(idTareaAsignada).update({"respuesta" : comentario});
+      var fotoURL = "";
+      var fotoPath = "";
+
+      if(foto != null)
+        {
+          fotoPath = "Imágenes/comentarios/"+idTareaAsignada;
+          storageRef.child(fotoPath).putFile(foto).then((p0) async{
+
+               await leerImagen(fotoPath).then((url) async{
+                 fotoURL = url;
+                 return await ref.doc(idTareaAsignada).update({"respuesta" : comentario,'fotopath':fotoPath, 'fotoURL':fotoURL});
+               });
+          });
+        }
+      else
+        {
+          return await ref.doc(idTareaAsignada).update({"respuesta" : comentario,'fotopath':"", 'fotoURL':""});
+        }
+
+
+
 
     }catch(e){
       log(e.toString());

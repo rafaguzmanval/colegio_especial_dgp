@@ -13,6 +13,8 @@
 *   image_picker.dart : Libreria para acceder a la cámara y a la galería de imagenes del dispositivo.
 * */
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
@@ -97,6 +99,15 @@ class VerTareasState extends State<VerTareas> {
   var controladorTemporizador = StreamController();
 
   var indiceComanda = 0;
+
+  tomarFoto() async
+  {
+    fotoTomada = await capturador.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 15,
+    );
+    return fotoTomada;
+  }
 
   ///Cuándo se pasa de página es necesario que todos los controladores de los formularios y de los reproductores de vídeo se destruyan.
   @override
@@ -556,6 +567,12 @@ class VerTareasState extends State<VerTareas> {
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             Text(Sesion.tareas[tareaActual].respuesta),
+            if(Sesion.tareas[tareaActual].fotoRespuesta != "")...
+              [
+                Image.network(Sesion.tareas[tareaActual].fotoRespuesta,width: 200,height: 200,)
+              ]
+
+
           ]),
         ),
 
@@ -734,6 +751,7 @@ class VerTareasState extends State<VerTareas> {
 
   dialogCompletarTarea(estado) {
     var controladorRespuesta = TextEditingController();
+    var controladorStream = StreamController();
     showDialog(
         context: context,
         builder: (context) {
@@ -745,6 +763,23 @@ class VerTareasState extends State<VerTareas> {
                 maxLines: 6,
                 controller: controladorRespuesta,
               ),
+              Text("\Envia una foto (opcional):"),
+              ElevatedButton(onPressed: () async{
+                await tomarFoto();
+                controladorStream.add("");
+
+              }, child: Column(children: [
+                Text("Tomar foto"),
+                Icon(Icons.camera_alt_outlined)
+                
+              ],)),
+
+              StreamBuilder(stream: controladorStream.stream,builder: (context,snapshot){
+                return fotoTomada==null?Container(width: 100,height: 100):Container(width: 200,height: 200,child:Image.file(File(fotoTomada.path)),);
+              }),
+
+
+
               Text("\nSeguro que quieres " +
                   (estado ? "terminar" : "cancelar") +
                   " la tarea"),
@@ -780,9 +815,14 @@ class VerTareasState extends State<VerTareas> {
                         }
 
                         if (controladorRespuesta.text != null) {
+                          var file = null;
+                          if(fotoTomada != null)
+                            {
+                              file = File(fotoTomada.path);
+                            }
                           Sesion.db.addRespuestaTarea(
                               Sesion.tareas[tareaActual].idRelacion,
-                              controladorRespuesta.text);
+                              controladorRespuesta.text,file);
                         }
 
                         mostrarBotones = false;
