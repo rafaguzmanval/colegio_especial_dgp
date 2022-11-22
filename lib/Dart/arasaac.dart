@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:colegio_especial_dgp/Dart/sesion.dart';
 
 ///función con el dialog para encontrar imágenes de arasaac
 buscadorArasaac({required BuildContext context}) {
@@ -62,15 +63,21 @@ _estructura(context) {
 
                 return
                   Container(
+                    color: Sesion.colores[1],
                     width: MediaQuery.of(context).size.width - 300,
                   child:
                   Column(children: [
                     //Textfield donde el usuario introduce la imágen que quiere buscar
                   TextField(
+                    style: TextStyle(color: Sesion.colores[0]),
                     controller: controladorBusqueda,
                     decoration: InputDecoration(
+                      enabledBorder:  OutlineInputBorder(
+                        borderSide:  BorderSide(color: Sesion.colores[0], width: 0.0),
+                      ),
                       border: OutlineInputBorder(),
                       hintText: 'Buscar ...',
+                      hintStyle: TextStyle(color: Sesion.colores[0])
                     ),
                   ),
                   if (snapshot.data.toString() != "" ) ...[

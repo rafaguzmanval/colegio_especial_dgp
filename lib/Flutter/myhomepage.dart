@@ -70,9 +70,7 @@ class MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
-      child:Theme(
-        data: ThemeData(primarySwatch: Sesion.colores[0], canvasColor: Sesion.colores[1],fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30))),
-        child:  new Scaffold(
+      child:Scaffold(
               appBar: AppBar(
                 leading: IconButton(
                     icon: Icon(Icons.settings_power, color: Sesion.colores[2]),
@@ -87,11 +85,10 @@ class MyHomePageState extends State<MyHomePage> {
                 automaticallyImplyLeading: false,
               ),
               body: Container(margin: EdgeInsets.all(5), child: vistaMenu())),
-      ),
-      onWillPop: () async {
-        final pop = await _onBackPressed(context);
-        return pop ?? false;
-      },
+              onWillPop: () async {
+                final pop = await _onBackPressed(context);
+                return pop ?? false;
+              },
     );
   }
 
@@ -497,9 +494,7 @@ class MyHomePageState extends State<MyHomePage> {
     return showDialog(
         context: context,
         builder: (context) {
-          return Theme(
-            data:ThemeData(primarySwatch: Sesion.colores[0],fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30))),
-            child: AlertDialog(
+          return AlertDialog(
               backgroundColor: Sesion.colores[1],
               title:  Text('¿SEGURO?',style: TextStyle(color: Sesion.colores[0]),),
               content: Text('¿QUIERES CERRAR SESIÓN?',style: TextStyle(color: Sesion.colores[0]),),
@@ -517,7 +512,6 @@ class MyHomePageState extends State<MyHomePage> {
                     },
                     child: Text('SÍ',style: TextStyle(color: Sesion.colores[2]),)),
               ],
-            ),
           );
         });
   }

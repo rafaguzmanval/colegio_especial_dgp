@@ -60,9 +60,7 @@ class PerfilProfesorState extends State<PerfilProfesor> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-        data: ThemeData(primarySwatch: Sesion.colores[0],canvasColor: Sesion.colores[1],fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30))),
-        child: Scaffold(
+    return Scaffold(
           appBar: AppBar(
             leading: IconButton(
                 icon: Icon(Icons.arrow_back_ios_new, color: Sesion.colores[2]),
@@ -86,7 +84,7 @@ class PerfilProfesorState extends State<PerfilProfesor> {
                   ]
                 ],
               )),
-    ));
+    );
   }
   // Carga el perfil del profesor
   Widget VistaProfesor() {

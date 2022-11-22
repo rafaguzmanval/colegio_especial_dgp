@@ -65,12 +65,10 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data:ThemeData(primarySwatch: Sesion.colores[0], canvasColor: Sesion.colores[1],fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30))),
-      child: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios_new, color: Sesion.colores[2]),
+              icon: Icon(Icons.arrow_back, color: Sesion.colores[2]),
               onPressed: (){Navigator.pop(context);}),
           title: Text('PERFIL DE: ${Sesion.seleccion.nombre}'
               '',style: TextStyle(color: Sesion.colores[2]),),
@@ -90,7 +88,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                   VistaProgramador()
                 ]
               ],
-            )),
+            ),
       ),
     );
   }
@@ -293,22 +291,6 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                       backgroundColor: Sesion.colores[0]),
                                   onPressed: () async {
                                     await showDatePicker(
-                                            builder: (context, child) {
-                                              return Theme(
-                                                data: Theme.of(context).copyWith(
-                                                  canvasColor: Sesion.colores[1],
-                                                  colorScheme: ColorScheme.light(
-                                                    primary: Sesion.colores[0]// <-- SEE HERE
-                                                  ),
-                                                  textButtonTheme: TextButtonThemeData(
-                                                    style: TextButton.styleFrom(
-                                                      primary: Sesion.colores[0], // button text color
-                                                    ),
-                                                  ),
-                                                ),
-                                                child: child!,
-                                              );
-                                            },
                                             context: context,
                                             locale: const Locale("es", "ES"),
                                             initialDate: DateTime.now(),
@@ -332,22 +314,6 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                     backgroundColor: Sesion.colores[0]),
                                 onPressed: () async {
                                   await showTimePicker(
-                                    builder: (context, child) {
-                                      return Theme(
-                                        data: Theme.of(context).copyWith(
-                                          canvasColor: Sesion.colores[1],
-                                          colorScheme: ColorScheme.light(
-                                              primary: Sesion.colores[0]// <-- SEE HERE
-                                          ),
-                                          textButtonTheme: TextButtonThemeData(
-                                            style: TextButton.styleFrom(
-                                              primary: Sesion.colores[0], // button text color
-                                            ),
-                                          ),
-                                        ),
-                                        child: child!,
-                                      );
-                                    },
                                     context: context,
                                     initialTime: TimeOfDay.now(),
                                   ).then((e) {

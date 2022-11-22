@@ -84,9 +84,9 @@ class PasswordLoginState extends State<PasswordLogin> {
     return Scaffold(
         appBar: AppBar(
             leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: Colors.white),
+                icon: Icon(Icons.arrow_back, color: Sesion.colores[2]),
                 onPressed: () => _onBackPressed(context)),
-          title: Text('Hola ${Sesion.nombre}'.toUpperCase()),
+          title: Text('Hola ${Sesion.nombre}'.toUpperCase(),style: TextStyle(color: Sesion.colores[2]),),
 
         ),
         body: Container(margin: EdgeInsets.all(5), child: vista()));
@@ -114,11 +114,16 @@ class PasswordLoginState extends State<PasswordLogin> {
             SizedBox(
               width: 500,
               child: TextField(
+                style: TextStyle(color: Sesion.colores[0]),
                 key: Key("campoContraseña"),
                 obscureText: true,
                 decoration: InputDecoration(
+                  enabledBorder:  OutlineInputBorder(
+                    borderSide:  BorderSide(color: Sesion.colores[0], width: 0.0),
+                  ),
                   border: OutlineInputBorder(),
                   hintText: 'Introduce la clave'.toUpperCase(),
+                  hintStyle: TextStyle(color: Sesion.colores[0]),
                 ),
                 controller: myController,
               ),
@@ -132,7 +137,7 @@ class PasswordLoginState extends State<PasswordLogin> {
                   "Enviar".toUpperCase(),
                   style: TextStyle(
                     fontSize: 30,
-                    color: Colors.white,
+                    color: Sesion.colores[2],
                   ),
                 ),
                 onPressed: () {
@@ -240,7 +245,7 @@ class PasswordLoginState extends State<PasswordLogin> {
               onPressed: () {
                 resetPin();
               },
-              child: Text("Volver a introducir".toUpperCase(),style: TextStyle(fontSize: 20),)),
+              child: Text("Volver a introducir".toUpperCase(),style: TextStyle(fontSize: 20,color: Sesion.colores[2]),)),
         ]);
   }
 
@@ -301,21 +306,22 @@ class PasswordLoginState extends State<PasswordLogin> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('¿SEGURO?'),
-            content: Text('¿Que quieres volver atras?'.toUpperCase()),
+            backgroundColor: Sesion.colores[1],
+            title: Text('¿SEGURO?',style: TextStyle(color: Sesion.colores[0])),
+            content: Text('¿Que quieres volver atras?'.toUpperCase(),style: TextStyle(color: Sesion.colores[0])),
             actions: [
               ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context, false);
                   },
-                  child: Text('NO')),
+                  child: Text('NO',style: TextStyle(color: Sesion.colores[2]))),
               ElevatedButton(
                   onPressed: () {
                     Background.desactivarNotificaciones();
                     Navigator.popUntil(context, (route) => route.isFirst);
 
                   },
-                  child: Text('SÍ')),
+                  child: Text('SÍ',style: TextStyle(color: Sesion.colores[2]))),
             ],
           );
         });

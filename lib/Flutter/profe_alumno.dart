@@ -49,9 +49,6 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
 
     Background.inicializarBackground();
 
-    // se inicializa la clase de guardado local
-    GuardadoLocal.inicializar();
-
     Sesion.argumentos.clear();
     //Notificacion.showBigTextNotification(title: "Bienvenio", body: "LA gran notificacion", fln: flutterLocalNotificationsPlugin);
   }
@@ -62,7 +59,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
     double media = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(title: Text('TuCole')),
+      appBar: AppBar(title: Text('TuCole',style: TextStyle(color: Sesion.colores[2]),)),
       body: Center(
         child:
         Flexible(
@@ -86,7 +83,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 30,
-                            color: Colors.white,
+                            color: Sesion.colores[2],
                           ),
                         ),
                         Flexible(
@@ -121,7 +118,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 30,
-                            color: Colors.white,
+                            color: Sesion.colores[2],
                           ),
                         ),
                         Flexible(

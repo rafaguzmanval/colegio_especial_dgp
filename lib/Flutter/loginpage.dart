@@ -96,7 +96,11 @@ class LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(title: Text('TuCole')),
+        appBar: AppBar(
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back, color: Sesion.colores[2]),
+                onPressed: (){Navigator.pop(context);}),
+            title: Text('TuCole',style: TextStyle(color: Sesion.colores[2]),)),
         body: Stack(children: [
           ListaUsuarios(),
           Visibility(
@@ -105,7 +109,7 @@ class LoginPageState extends State<LoginPage> {
               alignment: FractionalOffset(0.98, 0.01),
               child: FloatingActionButton(
                   heroTag: "botonUp",
-                  child: Icon(Icons.arrow_upward),
+                  child: Icon(Icons.arrow_upward,color: Sesion.colores[2],),
                   elevation: 1.0,
                   onPressed: () {
                     offSetActual -= 150.0;
@@ -132,7 +136,7 @@ class LoginPageState extends State<LoginPage> {
               alignment: FractionalOffset(0.98, 0.99),
               child: FloatingActionButton(
                   heroTag: "botonDown",
-                  child: Icon(Icons.arrow_downward),
+                  child: Icon(Icons.arrow_downward,color: Sesion.colores[2],),
                   elevation: 1.0,
                   onPressed: () {
                     offSetActual += 150;
@@ -277,7 +281,7 @@ class LoginPageState extends State<LoginPage> {
                             usuarios[j].nombre.toString().toUpperCase(),
                             style: TextStyle(
                               fontSize: 25,
-                              color: Colors.white,
+                              color: Sesion.colores[2],
                             ),
                           ),
                           Image.network(

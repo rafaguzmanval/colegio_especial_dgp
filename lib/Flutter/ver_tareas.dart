@@ -155,9 +155,7 @@ class VerTareasState extends State<VerTareas> {
     var dragInicial = 0.0;
     var distancia = 0.0;
 
-    return new Theme(
-        data: ThemeData(primarySwatch: Sesion.colores[0], canvasColor: Sesion.colores[1],fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30))),
-        child: Scaffold(
+    return new Scaffold(
             appBar: AppBar(
               leading: IconButton(
                 icon: Icon(iconoAtras, color: Sesion.colores[2]),
@@ -203,7 +201,7 @@ class VerTareasState extends State<VerTareas> {
                       ]
                     ],
                   )),
-            )));
+            ));
   }
 
   formatTiempoRestante() {

@@ -49,12 +49,10 @@ class ListaAlumnosState extends State<ListaAlumnos> {
   /// Este es el build de la clase MyHomePage que devuelve toda la vista génerica más la vista especial de cada usuario.
   @override
   Widget build(BuildContext context) {
-    return new Theme(
-      data:ThemeData(primarySwatch: Sesion.colores[0],canvasColor: Sesion.colores[1],fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30))),
-      child: Scaffold(
+    return new Scaffold(
           appBar: AppBar(
             leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios_new, color: Sesion.colores[2]),
+                icon: Icon(Icons.arrow_back, color: Sesion.colores[2]),
                 onPressed: (){Navigator.pop(context);}),
             title: Text('LISTA DE ALUMNOS',style: TextStyle(color: Sesion.colores[2]),),
           ),
@@ -102,7 +100,7 @@ class ListaAlumnosState extends State<ListaAlumnos> {
                     );
                   }),
             ),
-          ])),
+          ]),
     );
   }
 

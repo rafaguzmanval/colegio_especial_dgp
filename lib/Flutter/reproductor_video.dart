@@ -24,9 +24,7 @@ ventanaVideo(controlador,context){
   showDialog(context: context, builder: (context){
 
     return WillPopScope(child: Dialog(
-        child: Theme(
-          data: ThemeData(primarySwatch: Sesion.colores[0], canvasColor: Sesion.colores[1],fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30))),
-          child: StreamBuilder(stream: controladorStream.stream,
+        child: StreamBuilder(stream: controladorStream.stream,
             builder: (BuildContext context,AsyncSnapshot snapshot)
             {
               return Container(
@@ -86,7 +84,7 @@ ventanaVideo(controlador,context){
                   )
               );
             }
-        ),)
+        ),
         ),
         onWillPop: (){
           controlador.pause();

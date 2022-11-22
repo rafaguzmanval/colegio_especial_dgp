@@ -99,10 +99,11 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
   /// Este es el build de la clase MyHomePage que devuelve toda la vista génerica más la vista especial de cada usuario.
   @override
   Widget build(BuildContext context) {
-    return new Theme(
-      data: ThemeData(primarySwatch: Sesion.colores[0], canvasColor: Sesion.colores[1],fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30,color: Sesion.colores[0]))),
-      child: Scaffold(
+    return new Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: Sesion.colores[2]),
+              onPressed: (){Navigator.pop(context);}),
           title: Text('REGISTRA UN NUEVO USUARIO',style: TextStyle(color: Sesion.colores[2]),),
         ),
         body: SingleChildScrollView(
@@ -118,7 +119,6 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 ]
               ],
             )),
-      ),
     );
   }
 
@@ -149,10 +149,10 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           SizedBox(
             width: 500,
             child: TextField(
+              style: TextStyle(color: Sesion.colores[0]),
               obscureText: false,
               maxLength: 20,
               decoration: InputDecoration(
-                fillColor: Sesion.colores[0],
                 enabledBorder:  OutlineInputBorder(
                   borderSide:  BorderSide(color: Sesion.colores[0], width: 0.0),
                 ),
@@ -166,6 +166,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           SizedBox(
             width: 500,
             child: TextField(
+              style: TextStyle(color: Sesion.colores[0]),
               obscureText: false,
               maxLength: 40,
               decoration: InputDecoration(
@@ -258,16 +259,6 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                   ? "ELIGE LA FECHA DE NACIMIENTO"
                   : DateFormat('d/M/y').format(fechaElegida),style: TextStyle(color: Sesion.colores[2]),)
                   ,style: ElevatedButton.styleFrom(backgroundColor: Sesion.colores[0])),
-
-          /*
-            TextField(
-              obscureText: false,
-              decoration: InputDecoration(
-                border:OutlineInputBorder(),
-                hintText: 'Introduce fecha de nacimiento',
-              ),
-              controller: controladorFechanacimiento,
-            ),*/
 
           Text(
             "ELIGE ROL PARA EL USUARIO: *",
