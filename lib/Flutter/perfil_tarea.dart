@@ -171,6 +171,7 @@ class PerfilTareaState extends State<PerfilTarea> {
       controladorNombre.text = tareaPerfil.nombre.toUpperCase();
       controladorTexto.text = tareaPerfil.textos[0].toUpperCase();
       fotoTomada = tareaPerfil.imagenes[0];
+      formularios = tareaPerfil.formularios;
       vez++;
     }
     if (vez2 == 0) {
@@ -338,7 +339,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                           onPressed: () {
                             ventanaVideo(controladorVideo, context);
                           },
-                          child: Text("ver video".toUpperCase())),
+                          child: Text("ver video".toUpperCase(), style: TextStyle(fontSize: 25),)),
                       alignment: Alignment.center,
                     ),
                     Container(
