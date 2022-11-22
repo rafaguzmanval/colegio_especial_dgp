@@ -13,6 +13,13 @@
 *   flutter_localizations.dart : Se utiliza para traducir widgets al español.
 *   http.dart : Se usa para acceder a webs y concretamente para acceder a la API de emailjs que se encarga de enviar los emails
 *   covert: Se usa para codificar los JSON
+*
+*   Indicaciones colores:
+*     -El color primaryswatch se guarda en GuardadoLocal.colores[0]
+*     -El color del background se guarda en GuardadoLocal.colores[1]
+*     -El color de las letras:
+*         -Cuando se escribe directamente sobre el fondo se utiliza el color: GuardadoLocal.colores[0]
+*         -Cuando se escribe sobre los elementos coloreados por el primarySwatch se utiliza: GuardadoLocal.colores[2]
 * */
 
 import 'dart:async';
