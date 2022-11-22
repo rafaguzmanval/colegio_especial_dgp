@@ -483,7 +483,7 @@ class AccesoBD {
         "formularios":tarea.formularios,
         "orden": tarea.orden
       };
-log(nuevaTarea.toString());
+      log(nuevaTarea.toString());
       ref.doc(tareaPerfil.id).update(nuevaTarea);
 
       return true;

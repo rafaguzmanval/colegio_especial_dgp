@@ -23,6 +23,7 @@ import 'package:video_player/video_player.dart';
 import 'package:colegio_especial_dgp/Dart/arasaac.dart';
 import 'package:colegio_especial_dgp/Flutter/reproductor_video.dart';
 import '../Dart/tarea.dart';
+import 'dart:developer';
 
 enum SeleccionImagen { camara, galeria, video }
 
@@ -110,28 +111,28 @@ class PerfilTareaState extends State<PerfilTarea> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
-                onPressed: () {
-                  Navigator.pop(context);
-                }),
-            title: Text(
-              'Editar tarea: ${Sesion.seleccion.nombre}'
-                      ''
-                  .toUpperCase(),
-              style: TextStyle(color: GuardadoLocal.colores[2]),
-            ),
+        appBar: AppBar(
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          title: Text(
+            'Editar tarea: ${Sesion.seleccion.nombre}'
+                    ''
+                .toUpperCase(),
+            style: TextStyle(color: GuardadoLocal.colores[2]),
           ),
-          body: SingleChildScrollView(
-              child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-                  alignment: Alignment.center,
-                  child: Column(
-                    children: [
-                      cargando(),
-                    ],
-                  )),
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              alignment: Alignment.center,
+              child: Column(
+                children: [
+                  cargando(),
+                ],
+              )),
         ));
   }
 
@@ -364,39 +365,13 @@ class PerfilTareaState extends State<PerfilTarea> {
                       ),
                     ),
                     onPressed: () {
-                      crearTarea();
+                      editarTarea();
                     },
                   ))),
           SizedBox(
             height: 10,
           ),
           Visibility(visible: creando, child: new CircularProgressIndicator()),
-        ],
-      ),
-    );
-    return Container(
-      //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-      child: Column(
-        children: [
-          if (tareaPerfil != null) ...[
-            Text(
-              "NOMBRE: " + tareaPerfil.nombre.toUpperCase() + "\n",
-              style: TextStyle(color: GuardadoLocal.colores[0]),
-            ),
-            Text(
-              "DESCRIPCION: " + tareaPerfil.textos[0].toUpperCase() + "\n",
-              style: TextStyle(color: GuardadoLocal.colores[0]),
-            ),
-            Text(
-              "IMAGEN DE PERFIL:\n",
-              style: TextStyle(color: GuardadoLocal.colores[0]),
-            ),
-            Image(
-              width: 100,
-              height: 100,
-              image: NetworkImage(tareaPerfil.imagenes[0]),
-            ),
-          ]
         ],
       ),
     );
@@ -726,7 +701,7 @@ class PerfilTareaState extends State<PerfilTarea> {
         });
   }
 
-  crearTarea() async {
+  editarTarea() async {
     if (controladorNombre.text.isNotEmpty) {
       creando = true;
       actualizar();
@@ -749,6 +724,7 @@ class PerfilTareaState extends State<PerfilTarea> {
           }
         } else {
           imagenes.add(File(fotoTomada.path));
+          log(imagenes.toString());
         }
 
         orden.add("I");
@@ -756,15 +732,23 @@ class PerfilTareaState extends State<PerfilTarea> {
 
       var videos = [];
       if (videoTomado != null) {
-        videos.add(File(videoTomado.path));
+        if (videoTomado is String) {
+          if (videoTomado.startsWith("http")) {
+            videos.add(videoTomado);
+          }
+        } else {
+          log(videos.toString());
+          videos.add(File(videoTomado.path));
+          log(videos.toString());
+        }
+
         orden.add("V");
       }
 
       Tarea tarea = Tarea();
-      tarea.setTarea(nombre, textos, imagenes, videos, formularios,orden);
+      tarea.setTarea(nombre, textos, imagenes, videos, formularios, orden);
 
-
-      await base.EditarTarea(tarea,tareaPerfil).then((value) {
+      await base.EditarTarea(tarea, tareaPerfil).then((value) {
         creando = false;
 
         if (value) {
@@ -813,8 +797,11 @@ class PerfilTareaState extends State<PerfilTarea> {
 
   Widget cargando() {
     if (tareaPerfil == null)
-      return Center(child:
-      Text('\nCARGANDO LAS TAREAS',textAlign: TextAlign.center,),
+      return Center(
+        child: Text(
+          '\nCARGANDO LAS TAREAS',
+          textAlign: TextAlign.center,
+        ),
       );
     else {
       return vista();
