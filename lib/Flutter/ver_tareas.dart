@@ -607,7 +607,7 @@ class VerTareasState extends State<VerTareas> {
                 },
                 child: Text((Sesion.tareas[tareaActual].retroalimentacion != ""
                     ? "Editar retroalimentación"
-                    : "Enviar retroalimentación")),
+                    : "Enviar retroalimentación").toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2])),
               )),
 
         ],
@@ -618,7 +618,7 @@ class VerTareasState extends State<VerTareas> {
               onPressed: () {
                 Sesion.db.resetTarea(Sesion.tareas[tareaActual].idRelacion);
               },
-              child: Text("Reinicia la tarea")),
+              child: Text("Reinicia la tarea".toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),)),
         ),
       ] else ...[
         Container(
@@ -873,9 +873,17 @@ class VerTareasState extends State<VerTareas> {
         context: context,
         builder: (context) {
           return Dialog(
+            backgroundColor: GuardadoLocal.colores[1],
             child: Column(children: [
               Text("\nIntroduce una realimentacion para el alumno:"),
               TextField(
+                style: TextStyle(color: GuardadoLocal.colores[0]),
+                decoration: InputDecoration(
+                    enabledBorder:  OutlineInputBorder(
+                      borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
+                    ),
+                    border: OutlineInputBorder(),
+                ),
                 controller: controlador,
               ),
               Text("\nSeguro que quieres dar" + " esa realimentacion?"),
@@ -889,7 +897,7 @@ class VerTareasState extends State<VerTareas> {
                             Navigator.pop(context);
                           },
                           child: Column(children: [
-                            Text('\nSalir'),
+                            Text('\nSalir'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),),
                             Image.asset(
                               "assets/cerrar.png",
                               height: 100,
@@ -911,7 +919,7 @@ class VerTareasState extends State<VerTareas> {
                           Navigator.pop(context);
                         },
                         child: Column(children: [
-                          Text('\nEnviar'),
+                          Text('\nEnviar'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),),
                           Image.asset(
                             "assets/enviarunemail.png",
                             height: 100,
