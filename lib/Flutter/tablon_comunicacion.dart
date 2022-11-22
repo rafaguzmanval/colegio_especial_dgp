@@ -75,7 +75,10 @@ class TablonComunicacionState extends State<TablonComunicacion> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: Text('TABLON DE COMUNICACIÓN'),
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Sesion.colores[2]),
+            onPressed: (){Navigator.pop(context);}),
+        title: Text('TABLON DE COMUNICACIÓN',style: TextStyle(color: Sesion.colores[2]),),
       ),
       body: SingleChildScrollView(
           child: Container(

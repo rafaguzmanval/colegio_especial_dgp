@@ -76,7 +76,10 @@ class ConfiguracionState extends State<Configuracion> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Configuración".toUpperCase()),
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Sesion.colores[2]),
+            onPressed: (){Navigator.pop(context);}),
+        title: Text("Configuración".toUpperCase(),style: TextStyle(color: Sesion.colores[2]),),
       ),
       body: SingleChildScrollView(
           child: Container(
@@ -89,7 +92,7 @@ class ConfiguracionState extends State<Configuracion> {
                       child: ElevatedButton(
                           onPressed: () {},
                           child: Text("Elegir color".toUpperCase(),
-                              style: TextStyle(fontSize: 30)))),
+                              style: TextStyle(fontSize: 30,color: Sesion.colores[2])))),
                   Container(
                       alignment: Alignment.center,
                       width: 650,

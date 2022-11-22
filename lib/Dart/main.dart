@@ -64,7 +64,7 @@ MaterialColor colorCustom =
     MaterialColor(Color.fromRGBO(143, 125, 178, 1).value, color);
 
 Color colorFondo = Colors.white;
-Color colorLetra = Colors.black;
+Color colorLetra = Colors.white;
 
 // Inicializar la app
 Future<void> main() async {
@@ -103,19 +103,19 @@ cargarPreajustes() async{
       900: colorPrimario.withOpacity(1),
     };
     colorCustom = MaterialColor(colorPrimario.value, color);
-  } else await prefs.setString('PrimaryColor', Colors.green.toString());
+  }
 
   if(prefs.getKeys().contains('BackgroundColor')){
     String valueString = prefs.getString('BackgroundColor')!.split('(0x')[1].split(')')[0];
     int value = int.parse(valueString, radix: 16);
     colorFondo = new Color(value);
-  }else await prefs.setString('BackgroundColor', Colors.black.toString());
+  }
 
   if(prefs.getKeys().contains('TextColor')){
     String valueString = prefs.getString('TextColor')!.split('(0x')[1].split(')')[0];
     int value = int.parse(valueString, radix: 16);
     colorLetra = new Color(value);
-  }else await prefs.setString('TextColor', Colors.black.toString());
+  }
 
     Sesion.colores.add(colorPrimario);
     Sesion.colores.add(colorFondo);

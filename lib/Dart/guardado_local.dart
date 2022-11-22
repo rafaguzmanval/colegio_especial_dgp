@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/material.dart';
 
 class GuardadoLocal{
   static var prefs;
@@ -11,21 +12,22 @@ class GuardadoLocal{
   {
     await SharedPreferences.getInstance().then((e){
       prefs = e;
-      cambiarColor();
     })
     ;
 
   }
 
-  static cambiarColor()
+  static almacenarColores(Color primaryColor, Color backgroundColor, Color textColor) async
   {
-    // se busca si existe almacenada una variable 'color' que es un string
-    var ultimoColor = prefs.getString('color');
-    print(ultimoColor);
+    await prefs.setString('PrimaryColor', primaryColor);
+    await prefs.setString('BackgroundColor', backgroundColor);
+    await prefs.setString('TextColor', textColor);
+  }
 
-    // Se vuelve a cambiar para que la proxima vez que se cargue la aplicación haya un nuevo valor
-    ultimoColor = Random().nextInt(50).toString();
-    prefs.setString('color',ultimoColor);
-    print(ultimoColor);
+  static eliminarColores() async
+  {
+      await prefs.remove('PrimaryColor');
+      await prefs.remove('BackgroundColor');
+      await prefs.remove('TextColor');
   }
 }

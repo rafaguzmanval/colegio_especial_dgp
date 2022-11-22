@@ -435,7 +435,7 @@ class CrearTareaState extends State<CrearTarea> {
               color: Color(error?0xFFC72C41:0xFF6BFF67),
               borderRadius: BorderRadius.all(Radius.circular(29)),
             ),
-            child: Center(child:Text(mensajeDeValidacion, selectionColor: Colors.black)),
+            child: Center(child:Text(mensajeDeValidacion, style: TextStyle(color: Sesion.colores[2]))),
           )),
     );
   }
@@ -564,7 +564,7 @@ class CrearTareaState extends State<CrearTarea> {
                                       children: [
                                         Flexible(
                                           child: TextButton(
-                                                            child:Text(formularios[j],style: TextStyle(fontSize: 30,color: Sesion.colores[2])),
+                                                            child:Text(formularios[j],style: TextStyle(fontSize: 30,color: Sesion.colores[0])),
                                                             onPressed:()async {await dialogNombre(formularios[j]).then((e){
                                                               if(e != null)
                                                                 {
@@ -618,7 +618,7 @@ class CrearTareaState extends State<CrearTarea> {
                                 controladorStream.add("");
 
                               },
-                                  child: Text("Crea un elemento".toUpperCase()))
+                                  child: Text("Crea un elemento".toUpperCase(),style: TextStyle(color: Sesion.colores[2]),))
                               ,
 
                             ]
@@ -653,7 +653,7 @@ class CrearTareaState extends State<CrearTarea> {
 
 
                       },
-                      icon: Icon(Icons.add,color: Sesion.colores[2],)),
+                      icon: Icon(Icons.add,color: Sesion.colores[0],)),
 
 
                   Row(
@@ -667,7 +667,7 @@ class CrearTareaState extends State<CrearTarea> {
                                 Navigator.pop(context);
                               },
                               child: Column(children: [
-                                Text('\nCancelar', style: TextStyle(color: Sesion.colores[2])),
+                                Text('\nCancelar'.toUpperCase(), style: TextStyle(color: Sesion.colores[2])),
                                 Image.asset(
                                   "assets/cerrar.png",
                                   height: 100,
@@ -683,7 +683,7 @@ class CrearTareaState extends State<CrearTarea> {
                               Navigator.pop(context);
                             },
                             child: Column(children: [
-                              Text('\n Crear', style: TextStyle(color: Sesion.colores[2])),
+                              Text('\n Crear'.toUpperCase(), style: TextStyle(color: Sesion.colores[2])),
                               Image.asset(
                                 "assets/enviarunemail.png",
                                 height: 100,
@@ -713,10 +713,19 @@ class CrearTareaState extends State<CrearTarea> {
         builder: (context) {
 
           return Dialog(
+            backgroundColor: Sesion.colores[1],
             child:Column(children: [
               TextField(
                 style: TextStyle(color: Sesion.colores[0]),
                 controller: controlador,
+                decoration: InputDecoration(
+                  enabledBorder:  OutlineInputBorder(
+                    borderSide:  BorderSide(color: Sesion.colores[0], width: 0.0),
+                  ),
+                  border: OutlineInputBorder(),
+                  hintText: 'Introduce nombre'.toUpperCase(),
+                  hintStyle: TextStyle(color: Sesion.colores[0])
+                )
               ),
 
               Row(
@@ -729,7 +738,7 @@ class CrearTareaState extends State<CrearTarea> {
                             Navigator.pop(context);
                           },
                           child: Column(children: [
-                            Text('No'),
+                            Text('No'.toUpperCase(),style: TextStyle(color: Sesion.colores[2]),),
 
                           ]))),
                   Container(
@@ -741,7 +750,7 @@ class CrearTareaState extends State<CrearTarea> {
                           }
                         },
                         child:
-                          Text('Ok'),
+                          Text('Ok'.toUpperCase(),style: TextStyle(color: Sesion.colores[2])),
 
                   )
                   )
@@ -768,19 +777,29 @@ class CrearTareaState extends State<CrearTarea> {
               initialData: "",
               builder: (BuildContext context, AsyncSnapshot snapshot)
           {
-            return Dialog(child:
+            return Dialog(
+                backgroundColor: Sesion.colores[1],
+                child:
 
             Column(children: [Row(children: [
               Flexible(child:
               TextField(
                 style: TextStyle(color: Sesion.colores[0]),
                 controller: controlador,
+                decoration: InputDecoration(
+                    enabledBorder:  OutlineInputBorder(
+                      borderSide:  BorderSide(color: Sesion.colores[0], width: 0.0),
+                    ),
+                    border: OutlineInputBorder(),
+                    hintText: 'Introduce nombre'.toUpperCase(),
+                    hintStyle: TextStyle(color: Sesion.colores[0])
+                )
               ),
               ),
               Flexible(child:
-              Container(margin: EdgeInsets.only(left: 60), child:
+              Container(margin: EdgeInsets.only(left: 60), color:Sesion.colores[1],child:
               ElevatedButton(
-                  child: Text('Elige un pictograma desde la web de ARASAAC'),
+                  child: Text('Elige un pictograma desde la web de ARASAAC',style: TextStyle(color: Sesion.colores[2])),
                   onPressed: () async {
                     imagenEscogida = await buscadorArasaac(context: context);
                     controladorStream.add("");
@@ -814,7 +833,7 @@ class CrearTareaState extends State<CrearTarea> {
                     controlador.text = "";
                     Navigator.pop(context);
                   },
-                  icon: Icon(Icons.add)),
+                  icon: Icon(Icons.add,color: Sesion.colores[0],)),
             ]
 
             )

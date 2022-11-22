@@ -82,7 +82,10 @@ class GestionTablonState extends State<GestionTablon> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: Text('CREA UN NUEVO BOTÓN PARA EL TABLÓN'),
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: Sesion.colores[2]),
+            onPressed: (){Navigator.pop(context);}),
+        title: Text('CREA UN NUEVO BOTÓN PARA EL TABLÓN',style: TextStyle(color: Sesion.colores[2]),),
       ),
       body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -127,12 +130,16 @@ class GestionTablonState extends State<GestionTablon> {
           SizedBox(
             width: 500,
             child: TextField(
-              style: TextStyle(fontSize: 30.0),
+              style: TextStyle(fontSize: 30.0,color: Sesion.colores[0]),
               obscureText: false,
               maxLength: 40,
               decoration: InputDecoration(
+                enabledBorder:  OutlineInputBorder(
+                  borderSide:  BorderSide(color: Sesion.colores[0], width: 0.0),
+                ),
                 border: OutlineInputBorder(),
                 hintText: 'INTRODUCE EL NOMBRE DEL PICTOGRAMA *',
+                hintStyle: TextStyle(color: Sesion.colores[0])
               ),
               controller: controladorNombre,
             ),
@@ -140,14 +147,15 @@ class GestionTablonState extends State<GestionTablon> {
           SizedBox(
             height: 10,
           ),
-          const Text(
+          Text(
             "ELIGE EL TIPO PARA EL BOTÓN: *",
-            style: TextStyle(fontSize: 30.0, height: 2.0, color: Colors.black),
+            style: TextStyle(fontSize: 30.0, height: 2.0, color: Sesion.colores[0]),
           ),
           SizedBox(
             height: 10,
           ),
           DropdownButton(
+            style: TextStyle(color: Sesion.colores[0]),
             value: tipoElegido,
             items: [
               Tipo.sustantivo.toString(),
@@ -169,9 +177,9 @@ class GestionTablonState extends State<GestionTablon> {
           SizedBox(
             height: 10,
           ),
-          const Text(
+          Text(
             "ELIGE UN PICTOGRAMA PARA EL BOTÓN: *",
-            style: TextStyle(fontSize: 30.0, height: 2.0, color: Colors.black),
+            style: TextStyle(fontSize: 30.0, height: 2.0, color: Sesion.colores[0]),
           ),
           SizedBox(
             height: 5,
@@ -180,7 +188,7 @@ class GestionTablonState extends State<GestionTablon> {
             height: 15,
           ),
           ElevatedButton(
-              child: Text('ELIGE UN PICTOGRAMA DESDE LA WEB DE ARASAAC',style: TextStyle(fontSize: 30.0)),
+              child: Text('ELIGE UN PICTOGRAMA DESDE LA WEB DE ARASAAC',style: TextStyle(fontSize: 30.0,color: Sesion.colores[2])),
               onPressed: () async {
                 fotoTomada = await buscadorArasaac(context: context);
                 actualizar();
@@ -192,7 +200,7 @@ class GestionTablonState extends State<GestionTablon> {
             height: 10,
           ),
           Container(
-            decoration: BoxDecoration(border: Border.all(width: 2)),
+            decoration: BoxDecoration(border: Border.all(width: 2,color: Sesion.colores[0])),
             height: 150,
             width: 230,
             child: fotoTomada == null
@@ -214,7 +222,7 @@ class GestionTablonState extends State<GestionTablon> {
                       "CREAR NUEVO BOTÓN TABLÓN",
                       style: TextStyle(
                         fontSize: 30.0,
-                        color: Colors.white,
+                        color: Sesion.colores[2],
                       ),
                     ),
                     onPressed: () {
@@ -291,7 +299,7 @@ class GestionTablonState extends State<GestionTablon> {
               borderRadius: BorderRadius.all(Radius.circular(29)),
             ),
             child: Center(
-                child: Text(mensajeDeValidacion, selectionColor: Colors.black)),
+                child: Text(mensajeDeValidacion, style: TextStyle(color: Sesion.colores[2]))),
           )),
     );
   }

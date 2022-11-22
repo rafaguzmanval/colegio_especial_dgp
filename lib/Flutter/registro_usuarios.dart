@@ -518,7 +518,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                     color: Color(0xFF6BFF67),
                     borderRadius: BorderRadius.all(Radius.circular(29)),
                   ),
-                  child: Text(mensajeDeRegistro, selectionColor: Colors.black),
+                  child: Text(mensajeDeRegistro, style: TextStyle(color: Sesion.colores[2]),),
                 )),
           );
         } else {
@@ -550,7 +550,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               color: Color(error?0xFFC72C41:0xFF6BFF67),
               borderRadius: BorderRadius.all(Radius.circular(29)),
             ),
-            child: Text(mensaje),
+            child: Text(mensaje,style: TextStyle(color: Sesion.colores[2]),),
           )),
     );
   }
