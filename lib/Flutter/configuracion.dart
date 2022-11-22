@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_map/flutter_map.dart';
 import "package:latlong2/latlong.dart";
 
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
+import 'package:restart_app/restart_app.dart';
 
 class Configuracion extends StatefulWidget {
   @override
@@ -15,6 +17,10 @@ class Configuracion extends StatefulWidget {
 
 class ConfiguracionState extends State<Configuracion> {
   var posicion = null;
+  Color p = GuardadoLocal.colores[0];
+  Color b = GuardadoLocal.colores[1];
+  Color l = GuardadoLocal.colores[2];
+
   @override
   initState() {
     super.initState();
@@ -73,6 +79,207 @@ class ConfiguracionState extends State<Configuracion> {
     });
   }
 
+  ventanaColores() async{
+    //Ajusto el color de la ventana
+    int marcosR = (255-GuardadoLocal.colores[0].red) as int;
+    int marcosG =(255-GuardadoLocal.colores[0].green) as int;
+    int marcosB =(255-GuardadoLocal.colores[0].blue) as int;
+    Color marcos = Color.fromRGBO(marcosR, marcosG, marcosB, GuardadoLocal.colores[0].opacity);
+
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+              child: Container(
+                decoration: BoxDecoration(
+                    color: GuardadoLocal.colores[1],
+                    borderRadius: BorderRadius.all(Radius.circular(10))),
+                padding: const EdgeInsets.all(10),
+                child: Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      //Color primario
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(child: Text('COLOR PRINCIPAL Y ELEMENTOS SOBRE FONDO: ',style: TextStyle(color: GuardadoLocal.colores[0]),),),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.all(5),
+                                padding:  const EdgeInsets.all(1),
+                                decoration: BoxDecoration(
+                                    color: marcos,
+                                    shape: BoxShape.circle),
+                                child: CircleAvatar(backgroundColor: p),),
+                              ElevatedButton(onPressed: (){_elegirColor('p');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),))
+                            ],
+                          )
+                        ],
+                      ),
+                      //Color fondo
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(child:Text('COLOR DE FONDO: ',style: TextStyle(color: GuardadoLocal.colores[0]))),
+                          Row(
+
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.all(5),
+                                padding:  const EdgeInsets.all(1),
+                                decoration: BoxDecoration(
+                                    color: marcos,
+                                    shape: BoxShape.circle),
+                                child: CircleAvatar(backgroundColor: b),),
+                              ElevatedButton(onPressed: (){_elegirColor('b');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),))
+                            ],
+                          )
+                        ],
+                      ),
+                      //Color fuente
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(child:Text('COLOR LETRAS SOBRE ELEMENTOS: ',style: TextStyle(color: GuardadoLocal.colores[0]))),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                margin: const EdgeInsets.all(5),
+                                padding:  const EdgeInsets.all(1),
+                                decoration: BoxDecoration(
+                                    color: marcos,
+                                    shape: BoxShape.circle),
+                                child: CircleAvatar(backgroundColor: l),),
+                              ElevatedButton(onPressed: (){_elegirColor('l');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),))
+                            ],
+                          )
+                        ],
+                      ),
+                      //Cancelar/Aplicar
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          ElevatedButton(onPressed: (){Navigator.pop(context);}, child: Text('Cancelar'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),)),
+                          ElevatedButton(child: Text('Por defecto'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),),
+                            onPressed: () async{
+                              await GuardadoLocal.eliminarColores();
+                              _aplicarColor();
+                            },),
+                          ElevatedButton(child: Text('Aplicar'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),),
+                            onPressed: () async{
+                              await GuardadoLocal.almacenarColores(p, b, l);
+                                _aplicarColor();
+                            },)
+                        ],
+                      )
+                    ],
+                  ),
+                )
+              )
+          );
+        });
+  }
+
+  _elegirColor(String actual){
+    //Crear las variables
+    Color currentColor = Colors.white;
+    switch(actual){
+      case 'p':
+        currentColor = p;
+        break;
+      case 'b':
+        currentColor = b;
+        break;
+      case 'l':
+        currentColor = l;
+        break;
+    }
+    Color pickerColor = currentColor;
+
+// ValueChanged<Color> callback
+    void changeColor(Color color) {
+      setState(() => pickerColor = color);
+    }
+
+// raise the [showDialog] widget
+    return showDialog(
+      context: context,
+      builder: (context){
+        return AlertDialog(
+          backgroundColor: GuardadoLocal.colores[1],
+          title: Text('Elige un color'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[0]),),
+          content: SingleChildScrollView(
+            child: ColorPicker(
+              pickerColor: currentColor,
+              onColorChanged: changeColor,
+            ),
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              child: Text('Aplicar'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),),
+              onPressed: () {
+                setState(() {
+                  switch(actual){
+                    case 'p':
+                      p = pickerColor;
+                      break;
+                    case 'b':
+                      b = pickerColor;
+                      break;
+                    case 'l':
+                      l = pickerColor;
+                      break;
+                }});
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+                ventanaColores();
+              },
+            ),
+          ],
+        );
+      }
+    );
+  }
+
+  _aplicarColor() async{
+
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: GuardadoLocal.colores[1],
+            title: Text('PARA APLICAR CAMBIOS HAY QUE REINICIAR',style: TextStyle(fontSize:30,color: GuardadoLocal.colores[0])),
+            content: Text('¿Quiere reiniciar ahora?'.toUpperCase(),style: TextStyle(fontSize:25,color: GuardadoLocal.colores[0])),
+            actions: [
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: Text('NO',style: TextStyle(color: GuardadoLocal.colores[2]))),
+              ElevatedButton(
+                  onPressed: () async{
+                    Restart.restartApp();
+                  },
+                  child: Text('SÍ',style: TextStyle(color: GuardadoLocal.colores[2]))),
+            ],
+          );
+        }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,7 +298,9 @@ class ConfiguracionState extends State<Configuracion> {
                   Container(
                       margin: EdgeInsets.all(20),
                       child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            return await ventanaColores();
+                          },
                           child: Text("Elegir color".toUpperCase(),
                               style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2])))),
                   Container(

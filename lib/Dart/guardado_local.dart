@@ -21,9 +21,9 @@ class GuardadoLocal{
 
   static almacenarColores(Color primaryColor, Color backgroundColor, Color textColor) async
   {
-    await prefs.setString('PrimaryColor', primaryColor);
-    await prefs.setString('BackgroundColor', backgroundColor);
-    await prefs.setString('TextColor', textColor);
+    await prefs.setString('PrimaryColor', primaryColor.toString());
+    await prefs.setString('BackgroundColor', backgroundColor.toString());
+    await prefs.setString('TextColor', textColor.toString());
   }
 
   static eliminarColores() async
