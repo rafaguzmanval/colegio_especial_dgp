@@ -76,7 +76,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
                 fit: FlexFit.tight,
                 //margin: EdgeInsets.all(10),
                 child: Container(
-                  margin: EdgeInsets.all(50),
+                  margin: EdgeInsets.all(40),
                   child: ElevatedButton(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -111,7 +111,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
                 flex: 1,
                 fit: FlexFit.tight,
                 child: Container(
-                  margin: EdgeInsets.all(50),
+                  margin: EdgeInsets.all(40),
                   child: ElevatedButton(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
