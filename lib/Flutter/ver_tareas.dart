@@ -566,7 +566,7 @@ class VerTareasState extends State<VerTareas> {
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            Text(Sesion.tareas[tareaActual].respuesta),
+            Text(Sesion.tareas[tareaActual].respuesta ),
             if(Sesion.tareas[tareaActual].fotoRespuesta != "")...
               [
                 Image.network(Sesion.tareas[tareaActual].fotoRespuesta,width: 200,height: 200,)
