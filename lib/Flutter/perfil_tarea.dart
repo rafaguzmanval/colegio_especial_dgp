@@ -339,7 +339,10 @@ class PerfilTareaState extends State<PerfilTarea> {
                           onPressed: () {
                             ventanaVideo(controladorVideo, context);
                           },
-                          child: Text("ver video".toUpperCase(), style: TextStyle(fontSize: 25),)),
+                          child: Text(
+                            "ver video".toUpperCase(),
+                            style: TextStyle(fontSize: 25),
+                          )),
                       alignment: Alignment.center,
                     ),
                     Container(
@@ -408,31 +411,38 @@ class PerfilTareaState extends State<PerfilTarea> {
                         i < formularios.length;
                         i = i + 2 + (formularios[i + 1] as int) * 3)
                       Container(
+                        margin: EdgeInsets.only(top: 15, bottom: 10),
                         child: Column(children: [
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Flexible(
-                                flex: 90,
-                                child: TextButton(
-                                    child: Text(
-                                      formularios[i],
-                                      style: TextStyle(
-                                          fontSize: 40, color: Colors.black),
-                                    ),
-                                    onPressed: () async {
-                                      await dialogNombre(formularios[i])
-                                          .then((e) {
-                                        if (e != null) {
-                                          formularios[i] = e;
-                                          controladorStream.add("");
-                                        }
-                                      });
-                                    }),
-                              ),
+                                  flex: 90,
+                                  child: Container(
+                                    margin: EdgeInsets.only(bottom: 10),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(width: 1)),
+                                    child: TextButton(
+                                        child: Text(
+                                          formularios[i],
+                                          style: TextStyle(
+                                              fontSize: 40,
+                                              color: GuardadoLocal.colores[0]),
+                                        ),
+                                        onPressed: () async {
+                                          await dialogNombre(formularios[i])
+                                              .then((e) {
+                                            if (e != null) {
+                                              formularios[i] = e;
+                                              controladorStream.add("");
+                                            }
+                                          });
+                                        }),
+                                  )),
                               Flexible(
-                                flex: 10,
+                                flex: 30,
                                 child: Container(
+                                    margin: EdgeInsets.only(bottom: 10),
                                     child: FloatingActionButton(
                                         heroTag: "boton" + i.toString(),
                                         onPressed: () {
@@ -447,8 +457,9 @@ class PerfilTareaState extends State<PerfilTarea> {
                                         child: Icon(Icons.remove))),
                               ),
                               Flexible(
-                                flex: 10,
+                                flex: 30,
                                 child: Container(
+                                    margin: EdgeInsets.only(bottom: 10),
                                     child: FloatingActionButton(
                                         heroTag: "boton" + i.toString(),
                                         onPressed: () {
@@ -478,24 +489,34 @@ class PerfilTareaState extends State<PerfilTarea> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Flexible(
-                                      child: TextButton(
-                                          child: Text(formularios[j],
-                                              style: TextStyle(fontSize: 30)),
-                                          onPressed: () async {
-                                            await dialogNombre(formularios[j])
-                                                .then((e) {
-                                              if (e != null) {
-                                                formularios[j] = e;
-                                                controladorStream.add("");
-                                              }
-                                            });
-                                          }),
+                                      child: Container(
+                                          margin: EdgeInsets.only(right: 20),
+                                          child: TextButton(
+                                              child: Text(
+                                                  formularios[j].toUpperCase(),
+                                                  style: TextStyle(
+                                                      fontSize: 30,
+                                                      color: GuardadoLocal
+                                                          .colores[0])),
+                                              onPressed: () async {
+                                                await dialogNombre(
+                                                        formularios[j])
+                                                    .then((e) {
+                                                  if (e != null) {
+                                                    formularios[j] = e;
+                                                    controladorStream.add("");
+                                                  }
+                                                });
+                                              })),
                                     ),
                                     if (formularios[j + 1] != "") ...[
                                       Flexible(
                                         child: Container(
                                             margin: EdgeInsets.only(
-                                                right: 20, left: 10),
+                                                right: 20,
+                                                left: 20,
+                                                top: 10,
+                                                bottom: 10),
                                             child: Image.network(
                                               formularios[j + 1],
                                               width: 100,
@@ -506,6 +527,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                                     ],
                                     Flexible(
                                       child: Container(
+                                          margin: EdgeInsets.only(left: 30),
                                           child: FloatingActionButton(
                                               heroTag: "boton" +
                                                   i.toString() +
@@ -531,44 +553,61 @@ class PerfilTareaState extends State<PerfilTarea> {
                                 )),
 
                           /// ELEMENTO NUEVO
-                          ///
-                          ElevatedButton(
-                              onPressed: () async {
-                                await dialogElemento(i);
-                                controladorStream.add("");
-                              },
-                              child: Text("Crea un elemento".toUpperCase())),
+                          Container(
+                              margin: EdgeInsets.only(top: 15),
+                              child: ElevatedButton(
+                                  onPressed: () async {
+                                    await dialogElemento(i);
+                                    controladorStream.add("");
+                                  },
+                                  child: Text(
+                                    "Crea un elemento".toUpperCase(),
+                                    style: TextStyle(
+                                        fontSize: 25,
+                                        color: GuardadoLocal.colores[2]),
+                                  ))),
                         ]),
                       ),
 
                     ///
 
-                    Text("\n Crea una agrupación"),
+                    Text(
+                      "\n Crea una agrupación".toUpperCase(),
+                      style: TextStyle(
+                          fontSize: 25, color: GuardadoLocal.colores[0]),
+                    ),
 
-                    IconButton(
-                        onPressed: () async {
-                          await dialogNombre("").then((e) {
-                            if (e != null) {
-                              formularios.add(e);
-                              formularios.add(0);
-                              controladorStream.add("");
-                            }
-                          });
-                        },
-                        icon: Icon(Icons.add)),
+                    Container(
+                        margin: EdgeInsets.only(top: 15, bottom: 10),
+                        child: FloatingActionButton(
+                            onPressed: () async {
+                              await dialogNombre("").then((e) {
+                                if (e != null) {
+                                  formularios.add(e);
+                                  formularios.add(0);
+                                  controladorStream.add("");
+                                }
+                              });
+                            },
+                            child: Icon(Icons.add))),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Container(
-                            margin: EdgeInsets.all(10),
+                            margin: EdgeInsets.all(0),
                             child: ElevatedButton(
                                 onPressed: () {
                                   formularios = [];
                                   Navigator.pop(context);
                                 },
                                 child: Column(children: [
-                                  Text('\nCancelar'),
+                                  Text(
+                                    '\nCancelar'.toUpperCase(),
+                                    style: TextStyle(
+                                        fontSize: 25,
+                                        color: GuardadoLocal.colores[2]),
+                                  ),
                                   Image.asset(
                                     "assets/cerrar.png",
                                     height: 100,
@@ -576,7 +615,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                                   )
                                 ]))),
                         Container(
-                          margin: EdgeInsets.all(10),
+                          margin: EdgeInsets.all(0),
                           child: ElevatedButton(
                               onPressed: () {
                                 actualizar();
@@ -584,7 +623,10 @@ class PerfilTareaState extends State<PerfilTarea> {
                                 Navigator.pop(context);
                               },
                               child: Column(children: [
-                                Text('\n Crear'),
+                                Text('\n Crear'.toUpperCase(),
+                                    style: TextStyle(
+                                        fontSize: 25,
+                                        color: GuardadoLocal.colores[2])),
                                 Image.asset(
                                   "assets/enviarunemail.png",
                                   height: 100,
@@ -602,7 +644,7 @@ class PerfilTareaState extends State<PerfilTarea> {
 
   dialogNombre(texto) {
     var controlador = TextEditingController();
-    controlador.text = texto;
+    controlador.text = texto.toUpperCase();
     return showDialog(
         context: context,
         builder: (context) {
@@ -611,28 +653,39 @@ class PerfilTareaState extends State<PerfilTarea> {
             children: [
               TextField(
                 controller: controlador,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 35, color: GuardadoLocal.colores[0]),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
-                      margin: EdgeInsets.all(10),
+                      margin: EdgeInsets.all(15),
                       child: ElevatedButton(
                           onPressed: () {
                             Navigator.pop(context);
                           },
                           child: Column(children: [
-                            Text('No'),
+                            Text(
+                              'No'.toUpperCase(),
+                              style: TextStyle(
+                                  fontSize: 40,
+                                  color: GuardadoLocal.colores[2]),
+                            ),
                           ]))),
                   Container(
-                      margin: EdgeInsets.all(10),
+                      margin: EdgeInsets.all(15),
                       child: ElevatedButton(
                         onPressed: () {
                           if (controlador.text != "") {
                             Navigator.pop(context, controlador.text);
                           }
                         },
-                        child: Text('Ok'),
+                        child: Text(
+                          'Ok'.toUpperCase(),
+                          style: TextStyle(
+                              fontSize: 40, color: GuardadoLocal.colores[2]),
+                        ),
                       ))
                 ],
               )
@@ -645,6 +698,7 @@ class PerfilTareaState extends State<PerfilTarea> {
     var imagenEscogida = "";
     var controlador = TextEditingController();
     var controladorStream = StreamController();
+    controlador.text = "Nombre Elemento:".toUpperCase();
 
     return showDialog(
         context: context,
@@ -655,48 +709,69 @@ class PerfilTareaState extends State<PerfilTarea> {
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 return Dialog(
                     child: Column(children: [
-                  Row(children: [
-                    Flexible(
-                      child: TextField(
-                        controller: controlador,
-                      ),
+                  Flexible(
+                    child: TextField(
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 30, color: GuardadoLocal.colores[0]),
+                      controller: controlador,
                     ),
+                  ),
+                  Flexible(
+                      child: Container(
+                          margin: EdgeInsets.all(10),
+                          child: ElevatedButton(
+                              child: Text(
+                                  'Elige un pictograma desde la web de ARASAAC'
+                                      .toUpperCase(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      color: GuardadoLocal.colores[2])),
+                              onPressed: () async {
+                                imagenEscogida =
+                                    await buscadorArasaac(context: context);
+                                controladorStream.add("");
+                              }))),
+                  if (imagenEscogida != "") ...[
+                    Flexible(
+                        child: Image.network(imagenEscogida,
+                            width: 150, height: 150)),
+                  ] else ...[
                     Flexible(
                         child: Container(
-                            margin: EdgeInsets.only(left: 60),
-                            child: ElevatedButton(
-                                child: Text(
-                                    'Elige un pictograma desde la web de ARASAAC'),
-                                onPressed: () async {
-                                  imagenEscogida =
-                                      await buscadorArasaac(context: context);
-                                  controladorStream.add("");
-                                }))),
-                    if (imagenEscogida != "") ...[
-                      Flexible(
-                          child: Image.network(imagenEscogida,
-                              width: 100, height: 100)),
-                    ] else ...[
-                      Flexible(child: Container())
-                    ],
-                  ]),
-                  IconButton(
-                      onPressed: () {
-                        if (imagenEscogida == null) {
-                          imagenEscogida = "";
-                        }
-                        formularios.insert(
-                            i + 2 + formularios[i + 1] * 3, controlador.text);
-                        formularios.insert(
-                            i + 2 + formularios[i + 1] * 3 + 1, imagenEscogida);
-                        formularios.insert(
-                            i + 2 + formularios[i + 1] * 3 + 2, 0);
-                        formularios[i + 1]++;
+                      width: 150,
+                      height: 150,
+                      margin: EdgeInsets.all(10),
+                      decoration: BoxDecoration(border: Border.all(width: 2)),
+                      child: Center(
+                          child: Text("NADA ESCOGIDO**",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 30,
+                                  color: GuardadoLocal.colores[0]))),
+                    ))
+                  ],
+                  Container(
+                      margin: EdgeInsets.only(top: 30),
+                      child: FloatingActionButton(
+                          onPressed: () {
+                            if (imagenEscogida == null) {
+                              imagenEscogida = "";
+                            }
+                            formularios.insert(i + 2 + formularios[i + 1] * 3,
+                                controlador.text);
+                            formularios.insert(
+                                i + 2 + formularios[i + 1] * 3 + 1,
+                                imagenEscogida);
+                            formularios.insert(
+                                i + 2 + formularios[i + 1] * 3 + 2, 0);
+                            formularios[i + 1]++;
 
-                        controlador.text = "";
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.add)),
+                            controlador.text = "";
+                            Navigator.pop(context);
+                          },
+                          child: Icon(Icons.add))),
                 ]));
               });
         });
