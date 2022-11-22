@@ -129,16 +129,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                   alignment: Alignment.center,
                   child: Column(
                     children: [
-                      if (Sesion.rol == Rol.alumno.toString()) ...[
-                        VistaAlumno()
-                      ] else if (Sesion.rol == Rol.profesor.toString()) ...[
-                        VistaProfesor()
-                      ] else if (Sesion.rol ==
-                          Rol.administrador.toString()) ...[
-                        VistaAdministrador()
-                      ] else if (Sesion.rol == Rol.programador.toString()) ...[
-                        VistaProgramador()
-                      ]
+                      cargando(),
                     ],
                   )),
         ));
@@ -818,6 +809,28 @@ class PerfilTareaState extends State<PerfilTarea> {
                 child: Text(mensajeDeValidacion, selectionColor: Colors.black)),
           )),
     );
+  }
+
+  Widget cargando() {
+    if (tareaPerfil == null)
+      return Center(child:
+      Text('\nCARGANDO LAS TAREAS',textAlign: TextAlign.center,),
+      );
+    else {
+      return vista();
+    }
+  }
+
+  vista() {
+    if (Sesion.rol == Rol.alumno.toString()) {
+      return VistaAlumno();
+    } else if (Sesion.rol == Rol.profesor.toString()) {
+      return VistaProfesor();
+    } else if (Sesion.rol == Rol.administrador.toString()) {
+      return VistaAdministrador();
+    } else if (Sesion.rol == Rol.programador.toString()) {
+      return VistaProgramador();
+    }
   }
 
   /// Actualiza la pagina

@@ -197,9 +197,20 @@ class ListaTareasState extends State<ListaTareas> {
   buildPortrait() {
     return SingleChildScrollView(
       controller: homeController,
-      child: lista(),
+      child: cargando(),
     );
   }
+
+  Widget cargando() {
+    if (Sesion.tareas == null)
+      return Center(child:
+      Text('\nCARGANDO LAS TAREAS',textAlign: TextAlign.center,),
+      );
+    else {
+      return lista();
+    }
+  }
+
 
   // segun el tipo de usuario devuelve diferentes tipos de listas
   lista() {
