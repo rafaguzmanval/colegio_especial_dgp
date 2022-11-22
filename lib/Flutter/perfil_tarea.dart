@@ -14,6 +14,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
+import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:flutter/material.dart';
@@ -108,16 +109,10 @@ class PerfilTareaState extends State<PerfilTarea> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-        data: ThemeData(
-            primarySwatch: Sesion.colores[0],
-            canvasColor: Sesion.colores[1],
-            fontFamily: "Escolar",
-            textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30))),
-        child: Scaffold(
+    return Scaffold(
           appBar: AppBar(
             leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios_new, color: Sesion.colores[2]),
+                icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
                 onPressed: () {
                   Navigator.pop(context);
                 }),
@@ -125,7 +120,7 @@ class PerfilTareaState extends State<PerfilTarea> {
               'Editar tarea: ${Sesion.seleccion.nombre}'
                       ''
                   .toUpperCase(),
-              style: TextStyle(color: Sesion.colores[2]),
+              style: TextStyle(color: GuardadoLocal.colores[2]),
             ),
           ),
           body: SingleChildScrollView(
@@ -145,7 +140,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                         VistaProgramador()
                       ]
                     ],
-                  ))),
+                  )),
         ));
   }
 
@@ -395,15 +390,15 @@ class PerfilTareaState extends State<PerfilTarea> {
           if (tareaPerfil != null) ...[
             Text(
               "NOMBRE: " + tareaPerfil.nombre.toUpperCase() + "\n",
-              style: TextStyle(color: Sesion.colores[0]),
+              style: TextStyle(color: GuardadoLocal.colores[0]),
             ),
             Text(
               "DESCRIPCION: " + tareaPerfil.textos[0].toUpperCase() + "\n",
-              style: TextStyle(color: Sesion.colores[0]),
+              style: TextStyle(color: GuardadoLocal.colores[0]),
             ),
             Text(
               "IMAGEN DE PERFIL:\n",
-              style: TextStyle(color: Sesion.colores[0]),
+              style: TextStyle(color: GuardadoLocal.colores[0]),
             ),
             Image(
               width: 100,
