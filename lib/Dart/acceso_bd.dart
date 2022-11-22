@@ -374,6 +374,92 @@ class AccesoBD {
 
   }
 
+  EditarTarea(tarea, tareaPerfil) async {
+    try {
+      //Se encripta la contaseña
+      final ref = db.collection("Tareas");
+      var imagenes = [];
+      var videos = [];
+
+      var futuros = <Future>[];
+
+      int i = 0;
+
+      if (tarea.imagenes.length > 0) {
+
+
+        if(tarea.imagenes[0] is String)
+        {
+          if(tarea.imagenes[0].startsWith("http"))
+          {
+            imagenes.add(tarea.imagenes[0]);
+            i++;
+          }
+        }
+        else
+        {
+          var fotoPath = "Imágenes/pictogramas/" +
+              encriptacionSha256(tarea.imagenes[0].path);
+
+          //se introduce la imágen dentro del storage y cuando se comrpueba que se ha cargado entronces se incrementa 'i' para que se pueda salir del bucle de espera
+          await storageRef
+              .child(fotoPath)
+              .putFile(tarea.imagenes[0])
+              .then((d0) async {
+            await leerImagen(fotoPath).then((value) {
+              log(value);
+              imagenes.add(value);
+              log("Se añadio la imagen al array");
+              i++;
+            });
+            log("Se leido lo de await leerImagen");
+          });
+        }
+
+      }
+
+      if (tarea.videos.length > 0) {
+        var videoPath = "Vídeos/" + encriptacionSha256(tarea.videos[0].path);
+
+        // se espera a que se introduzca el video correctamente en el storage para después salir del bucle de espera
+        await storageRef
+            .child(videoPath)
+            .putFile(tarea.videos[0])
+            .then((p0) async {
+          await leerVideo(videoPath).then((value) {
+            videos.add(value);
+            i++;
+          });
+        });
+      }
+
+      //bucle de espera  para que las imágenes y los vídeos estén cargados
+      while (i != tarea.imagenes.length + tarea.videos.length) {}
+      ;
+
+      //Cuando se han cargado todas las imágenes y vídeos entonces se sube a la base de datos
+      //la nueva tarea con todas las urls de las imágenes y vídeos
+
+      log("Todos los futures se han completado");
+
+      var nuevaTarea = <String, dynamic>{
+        "nombre": tarea.nombre.toString(),
+        "textos": tarea.textos,
+        "imagenes": imagenes,
+        "videos": videos,
+        "formularios":tarea.formularios,
+        "orden": tarea.orden
+      };
+log(nuevaTarea.toString());
+      ref.doc(tareaPerfil.id).update(nuevaTarea);
+
+      return true;
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
+  }
+
   addFeedbackTarea(idTareaAsignada,retroalimentacion) async
   {
     try

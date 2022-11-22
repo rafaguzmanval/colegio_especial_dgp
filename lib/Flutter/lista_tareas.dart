@@ -12,13 +12,13 @@
 *   perfil_profesor.dart : Para acceder al perfil del profeosr
 * */
 
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Flutter/perfil_profesor.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:flutter/material.dart';
+import 'package:colegio_especial_dgp/Flutter/perfil_tarea.dart';
 
 class ListaTareas extends StatefulWidget {
   @override
@@ -31,7 +31,6 @@ class ListaTareasState extends State<ListaTareas> {
   double offSetActual = 0;
   ScrollController homeController = new ScrollController();
 
-
   @override
   void initState() {
     super.initState();
@@ -42,38 +41,53 @@ class ListaTareasState extends State<ListaTareas> {
     Sesion.tareas = [];
 
     if (Sesion.rol != Rol.alumno.toString()) {
-      cargarProfesores();
+      cargarTareas();
     }
+    actualizar();
   }
 
   /// Este es el build de la clase MyHomePage que devuelve toda la vista génerica más la vista especial de cada usuario.
   @override
   Widget build(BuildContext context) {
     return new Theme(
-        data:ThemeData(primarySwatch: Sesion.colores[0],canvasColor: Sesion.colores[1],fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30))),
+        data: ThemeData(
+            primarySwatch: Sesion.colores[0],
+            canvasColor: Sesion.colores[1],
+            fontFamily: "Escolar",
+            textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30))),
         child: Scaffold(
             appBar: AppBar(
               leading: IconButton(
-                  icon: Icon(Icons.arrow_back_ios_new, color: Sesion.colores[2]),
-                  onPressed: (){Navigator.pop(context);}),
-              title: Text('Lista de Profesores',style: TextStyle(color: Sesion.colores[2]),),
+                  icon:
+                      Icon(Icons.arrow_back_ios_new, color: Sesion.colores[2]),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  }),
+              title: Text(
+                'Lista de tareas'.toUpperCase(),
+                style: TextStyle(color: Sesion.colores[2]),
+              ),
             ),
             body: Stack(children: [
               OrientationBuilder(
                 builder: (context, orientation) =>
-                orientation == Orientation.portrait
-                    ? buildPortrait()
-                    : buildLandscape(),
+                    orientation == Orientation.portrait
+                        ? buildPortrait()
+                        : buildLandscape(),
               ),
               Container(
                 alignment: FractionalOffset(0.98, 0.01),
                 child: FloatingActionButton(
                     heroTag: "botonUp",
-                    child: Icon(Icons.arrow_upward,color: Sesion.colores[2],),
+                    child: Icon(
+                      Icons.arrow_upward,
+                      color: Sesion.colores[2],
+                    ),
                     elevation: 1.0,
                     onPressed: () {
                       offSetActual -= 100.0;
-                      if (offSetActual < homeController.position.minScrollExtent)
+                      if (offSetActual <
+                          homeController.position.minScrollExtent)
                         offSetActual = homeController.position.minScrollExtent;
 
                       homeController.animateTo(
@@ -92,7 +106,8 @@ class ListaTareasState extends State<ListaTareas> {
                     onPressed: () {
                       offSetActual += 100;
 
-                      if (offSetActual > homeController.position.maxScrollExtent)
+                      if (offSetActual >
+                          homeController.position.maxScrollExtent)
                         offSetActual = homeController.position.maxScrollExtent;
 
                       homeController.animateTo(
@@ -128,35 +143,38 @@ class ListaTareasState extends State<ListaTareas> {
       //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
       child: Column(
         children: [
-          for (int i = 0; i < tareas.length; i++)
+          for (int i = 0; i < Sesion.tareas.length; i++)
             Container(
-                width: 100,
-                height: 100,
+                width: 200,
+                height: 220,
                 margin: EdgeInsets.all(10),
                 alignment: Alignment.center,
                 child: ElevatedButton(
                   child: Column(
                     children: [
                       Text(
-                        tareas[i].nombre.toString().toUpperCase(),
+                        Sesion.tareas[i].nombre.toString().toUpperCase(),
+                        textAlign: TextAlign.center,
                         style: TextStyle(
+                          fontSize: 30,
                           color: Sesion.colores[2],
                         ),
                       ),
                       Image.network(
-                        tareas[i].foto,
-                        width: 100,
-                        height: 70,
+                        Sesion.tareas[i].imagenes[0],
+                        alignment: Alignment.center,
+                        width: 150,
+                        height: 140,
                         fit: BoxFit.fill,
                       ),
                     ],
                   ),
                   onPressed: () {
-                    Sesion.seleccion = tareas[i];
+                    Sesion.seleccion = Sesion.tareas[i];
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => PerfilProfesor()));
+                            builder: (context) => PerfilTarea()));
                   },
                 ))
         ],
@@ -205,8 +223,8 @@ class ListaTareasState extends State<ListaTareas> {
   }
 
   // metodo para cargar la lista de profesores
-  cargarProfesores() async {
-    tareas = await Sesion.db.consultarTodosProfesores();
+  cargarTareas() async {
+    Sesion.tareas = await Sesion.db.consultarTodasLasTareas();
     actualizar();
   }
 
