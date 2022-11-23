@@ -177,6 +177,9 @@ class PerfilTareaState extends State<PerfilTarea> {
     if (vez2 == 0) {
       if (!tareaPerfil.videos.isEmpty) {
         videoTomado = tareaPerfil.videos[0];
+        controladorVideo = VideoPlayerController.network(
+            videoTomado);
+         controladorVideo.initialize();
       }
       vez2++;
     }
