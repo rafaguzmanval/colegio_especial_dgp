@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:contrast_checker/contrast_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:geolocator/geolocator.dart';
@@ -81,116 +82,226 @@ class ConfiguracionState extends State<Configuracion> {
 
   ventanaColores() async{
     //Ajusto el color de la ventana
-    int marcosR = (255-GuardadoLocal.colores[0].red) as int;
-    int marcosG =(255-GuardadoLocal.colores[0].green) as int;
-    int marcosB =(255-GuardadoLocal.colores[0].blue) as int;
+    int marcosR = (255-GuardadoLocal.colores[1].red) as int;
+    int marcosG =(255-GuardadoLocal.colores[1].green) as int;
+    int marcosB =(255-GuardadoLocal.colores[1].blue) as int;
     Color marcos = Color.fromRGBO(marcosR, marcosG, marcosB, GuardadoLocal.colores[0].opacity);
 
     return showDialog(
         context: context,
         builder: (context) {
           return Dialog(
-              child: Container(
-                decoration: BoxDecoration(
-                    color: GuardadoLocal.colores[1],
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                padding: const EdgeInsets.all(10),
-                child: Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      //Color primario
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: SingleChildScrollView(
+                child: Container(
+                    decoration: BoxDecoration(
+                        color: GuardadoLocal.colores[1],
+                        borderRadius: BorderRadius.all(Radius.circular(10))),
+                    padding: const EdgeInsets.all(10),
+                    child: Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Expanded(child: Text('COLOR PRINCIPAL Y ELEMENTOS SOBRE FONDO: ',style: TextStyle(color: GuardadoLocal.colores[0]),),),
+                          //Color primario
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Container(
-                                margin: const EdgeInsets.all(5),
-                                padding:  const EdgeInsets.all(1),
-                                decoration: BoxDecoration(
-                                    color: marcos,
-                                    shape: BoxShape.circle),
-                                child: CircleAvatar(backgroundColor: p),),
-                              ElevatedButton(onPressed: (){_elegirColor('p');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),))
+                              Expanded(child: Text('COLOR PRINCIPAL Y ELEMENTOS SOBRE FONDO: ',style: TextStyle(color: GuardadoLocal.colores[0]),),),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.all(5),
+                                    padding:  const EdgeInsets.all(1),
+                                    decoration: BoxDecoration(
+                                        color: marcos,
+                                        shape: BoxShape.circle),
+                                    child: CircleAvatar(backgroundColor: p),),
+                                  ElevatedButton(onPressed: (){_elegirColor('p');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),))
+                                ],
+                              )
                             ],
-                          )
-                        ],
-                      ),
-                      //Color fondo
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(child:Text('COLOR DE FONDO: ',style: TextStyle(color: GuardadoLocal.colores[0]))),
+                          ),
+                          //Color fondo
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(child:Text('COLOR DE FONDO: ',style: TextStyle(color: GuardadoLocal.colores[0]))),
+                              Row(
 
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                margin: const EdgeInsets.all(5),
-                                padding:  const EdgeInsets.all(1),
-                                decoration: BoxDecoration(
-                                    color: marcos,
-                                    shape: BoxShape.circle),
-                                child: CircleAvatar(backgroundColor: b),),
-                              ElevatedButton(onPressed: (){_elegirColor('b');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),))
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.all(5),
+                                    padding:  const EdgeInsets.all(1),
+                                    decoration: BoxDecoration(
+                                        color: marcos,
+                                        shape: BoxShape.circle),
+                                    child: CircleAvatar(backgroundColor: b),),
+                                  ElevatedButton(onPressed: (){_elegirColor('b');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),))
+                                ],
+                              )
                             ],
-                          )
-                        ],
-                      ),
-                      //Color fuente
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(child:Text('COLOR LETRAS SOBRE ELEMENTOS: ',style: TextStyle(color: GuardadoLocal.colores[0]))),
+                          ),
+                          //Color fuente
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(child:Text('COLOR LETRAS SOBRE ELEMENTOS: ',style: TextStyle(color: GuardadoLocal.colores[0]))),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    margin: const EdgeInsets.all(5),
+                                    padding:  const EdgeInsets.all(1),
+                                    decoration: BoxDecoration(
+                                        color: marcos,
+                                        shape: BoxShape.circle),
+                                    child: CircleAvatar(backgroundColor: l),),
+                                  ElevatedButton(onPressed: (){_elegirColor('l');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),))
+                                ],
+                              )
+                            ],
+                          ),
+                          //Previsulizacion
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Container(
-                                margin: const EdgeInsets.all(5),
-                                padding:  const EdgeInsets.all(1),
-                                decoration: BoxDecoration(
-                                    color: marcos,
-                                    shape: BoxShape.circle),
-                                child: CircleAvatar(backgroundColor: l),),
-                              ElevatedButton(onPressed: (){_elegirColor('l');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),))
+                                  margin: EdgeInsets.only(top:30),
+                                  child:  Expanded(
+                                    child:Text('PREVISUALIZACIÓN',style: TextStyle(fontSize:30,color: GuardadoLocal.colores[0])),)
+                              ),
+                              Container(
+                                  margin: EdgeInsets.only(top:10,bottom: 10),
+                                  child:  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                          child:Expanded(
+                                            child: Column(
+                                                children: [
+                                                  Text('ACTUAL',style: TextStyle(fontSize:30,color: GuardadoLocal.colores[0]),),
+                                                  Container(
+                                                    color: marcos,
+                                                    padding:  const EdgeInsets.all(1),
+                                                    child: previsualizacionColores(GuardadoLocal.colores[0],GuardadoLocal.colores[1],GuardadoLocal.colores[2]),
+                                                  )]
+                                            ),
+                                          )
+                                      ),
+
+                                      Container(
+                                          child:Expanded(
+                                              child: Column(
+                                                  children: [
+                                                    Text('SELECCIONADO',style: TextStyle(fontSize:30,color: GuardadoLocal.colores[0])),
+                                                    Container(
+                                                      color: marcos,
+                                                      padding:  const EdgeInsets.all(1),
+                                                      child: previsualizacionColores(p,b,l),
+                                                    )]
+                                              )
+                                          )
+                                      ),
+                                    ],
+                                  )
+                              ),
                             ],
-                          )
+                          ),
+                          //Cancelar/Aplicar
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Expanded(
+                                  child: Container(
+                                    margin: EdgeInsets.all(2),
+                                    child:ElevatedButton(onPressed: (){
+                                      p=GuardadoLocal.colores[0];
+                                      b=GuardadoLocal.colores[1];
+                                      l=GuardadoLocal.colores[2];
+                                      Navigator.pop(context);
+                                    },
+                                        child: Text('Cancelar'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),)),
+                                  )
+                              ),
+                              Expanded(
+                                  child: Container(
+                                    margin: EdgeInsets.all(2),
+                                    child:ElevatedButton(
+                                      child: Text('Por defecto'.toUpperCase(), style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),),
+                                      onPressed: () async{
+                                        await GuardadoLocal.eliminarColores();
+                                        _aplicarColor();
+                                      },),
+                                  )
+                              ),
+                              Expanded(
+                                  child: Container(
+                                      margin: EdgeInsets.all(2),
+                                      child:ElevatedButton(
+                                        child: Text('Aplicar'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),),
+                                        onPressed: () async{
+                                          await GuardadoLocal.almacenarColores(p, b, l);
+                                          _aplicarColor();
+                                        },)
+                                  )
+                              ),
+                            ],
+                          ),
                         ],
                       ),
-                      //Cancelar/Aplicar
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          ElevatedButton(onPressed: (){Navigator.pop(context);}, child: Text('Cancelar'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),)),
-                          ElevatedButton(child: Text('Por defecto'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),),
-                            onPressed: () async{
-                              await GuardadoLocal.eliminarColores();
-                              _aplicarColor();
-                            },),
-                          ElevatedButton(child: Text('Aplicar'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),),
-                            onPressed: () async{
-                              await GuardadoLocal.almacenarColores(p, b, l);
-                                _aplicarColor();
-                            },)
-                        ],
-                      )
-                    ],
-                  ),
-                )
+                    )
+                ),
               )
           );
         });
+  }
+
+  //Widget de previsualizacion de colores
+  Widget previsualizacionColores(Color p, Color b, Color l){
+    return Expanded(
+        child: Column(
+          children: [
+            Container(
+              color:p,
+              child:
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.arrow_back,color: l,),
+                  Expanded(child: Text('       TuCole       ',style: TextStyle(color: l),),),
+                  Icon(Icons.settings,color: l,)
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(bottom: 5),
+              alignment: Alignment.center,
+              color:b,
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text('TEXTO SOBRE FONDO',style: TextStyle(color: p),),
+                    ElevatedButton(onPressed: (){},
+                      style: ElevatedButton.styleFrom(primary: p),
+                      child: Text('BOTON',style: TextStyle(color: l),),)
+                  ],
+                ),
+              )
+          ],
+        ));
   }
 
   _elegirColor(String actual){
@@ -231,21 +342,56 @@ class ConfiguracionState extends State<Configuracion> {
             ElevatedButton(
               child: Text('Aplicar'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),),
               onPressed: () {
+                ContrastChecker comprobadorDeContraste = new ContrastChecker();
+                bool esAccesible = false;
                 setState(() {
                   switch(actual){
                     case 'p':
-                      p = pickerColor;
+                      if(comprobadorDeContraste.contrastCheck(100,pickerColor,b,WCAG.AA)
+                          && comprobadorDeContraste.contrastCheck(100,pickerColor,l,WCAG.AA)){
+                        p = pickerColor;
+                        esAccesible = true;
+                      }
                       break;
                     case 'b':
-                      b = pickerColor;
+                      if(comprobadorDeContraste.contrastCheck(100,pickerColor,p,WCAG.AA)){
+                        b = pickerColor;
+                        esAccesible = true;
+                      }
                       break;
                     case 'l':
-                      l = pickerColor;
+                      if(comprobadorDeContraste.contrastCheck(100,pickerColor,p,WCAG.AA)){
+                        l = pickerColor;
+                        esAccesible = true;
+                      }
                       break;
                 }});
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-                ventanaColores();
+
+                //Si es accesible actualizo los colores
+                if(esAccesible){
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                  ventanaColores();
+                }
+                //Si no es accesible lo indico y no aplico ese color
+                else{
+                  showDialog(context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          backgroundColor: Colors.red,
+                          title: Text('EL COLOR SELECCIONADO NO PRESENTA UN CONTRASTE ADECUADO',style: TextStyle(fontSize:30,color: Colors.white)),
+                          content: Text('Selecciona otro color'.toUpperCase(),style: TextStyle(fontSize:25,color: Colors.white)),
+                          actions: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(primary: Colors.red[900]),
+                              onPressed: (){
+                                Navigator.pop(context, false);
+                              },
+                              child: Text('ACEPTAR',style: TextStyle(fontSize:30,color: Colors.white))),
+                          ],
+                        );}
+                  );
+                }
               },
             ),
           ],
