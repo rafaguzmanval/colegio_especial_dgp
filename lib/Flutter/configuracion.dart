@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:contrast_checker/contrast_checker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_map/flutter_map.dart';
 import "package:latlong2/latlong.dart";
@@ -10,6 +9,25 @@ import "package:latlong2/latlong.dart";
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:restart_app/restart_app.dart';
+
+import '../Dart/colorpicker.dart';
+
+//Boton con Advertencia
+class BotonWarning extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() => _BotonWarningState();
+}
+
+class _BotonWarningState extends State<BotonWarning> {
+  @override
+  Widget build(BuildContext context) {
+
+    return Container(
+
+    );
+  }
+
+}
 
 class Configuracion extends StatefulWidget {
   @override
@@ -305,6 +323,26 @@ class ConfiguracionState extends State<Configuracion> {
   }
 
   _elegirColor(String actual){
+
+    ContrastChecker comprobadorDeContraste = new ContrastChecker();
+    ColorPicker colorPicker = new ColorPicker(pickerColor: Colors.white, onColorChanged: (Color){});
+    StreamController<String> controladorStream = StreamController<String>.broadcast();
+
+
+    //Comprobar color
+    bool comprobarColor(pC){
+      switch(actual){
+        case 'p':
+            return (comprobadorDeContraste.contrastCheck(100,pC,b,WCAG.AA)
+                  && comprobadorDeContraste.contrastCheck(100,pC,l,WCAG.AA));
+        case 'b':
+          return (comprobadorDeContraste.contrastCheck(100,pC,p,WCAG.AA));
+        case 'l':
+          return (comprobadorDeContraste.contrastCheck(100,pC,p,WCAG.AA));
+      }
+      return false;
+    }
+
     //Crear las variables
     Color currentColor = Colors.white;
     switch(actual){
@@ -322,9 +360,13 @@ class ConfiguracionState extends State<Configuracion> {
 
 // ValueChanged<Color> callback
     void changeColor(Color color) {
-      setState(() => pickerColor = color);
+      setState(() {
+        pickerColor = color;
+      });
+      controladorStream.add("");
     }
 
+    colorPicker = new ColorPicker(pickerColor: currentColor, onColorChanged: changeColor);
 // raise the [showDialog] widget
     return showDialog(
       context: context,
@@ -333,67 +375,72 @@ class ConfiguracionState extends State<Configuracion> {
           backgroundColor: GuardadoLocal.colores[1],
           title: Text('Elige un color'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[0]),),
           content: SingleChildScrollView(
-            child: ColorPicker(
-              pickerColor: currentColor,
-              onColorChanged: changeColor,
-            ),
+            child: colorPicker,
           ),
           actions: <Widget>[
-            ElevatedButton(
-              child: Text('Aplicar'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),),
-              onPressed: () {
-                ContrastChecker comprobadorDeContraste = new ContrastChecker();
-                bool esAccesible = false;
-                setState(() {
-                  switch(actual){
-                    case 'p':
-                      if(comprobadorDeContraste.contrastCheck(100,pickerColor,b,WCAG.AA)
-                          && comprobadorDeContraste.contrastCheck(100,pickerColor,l,WCAG.AA)){
-                        p = pickerColor;
-                        esAccesible = true;
-                      }
-                      break;
-                    case 'b':
-                      if(comprobadorDeContraste.contrastCheck(100,pickerColor,p,WCAG.AA)){
-                        b = pickerColor;
-                        esAccesible = true;
-                      }
-                      break;
-                    case 'l':
-                      if(comprobadorDeContraste.contrastCheck(100,pickerColor,p,WCAG.AA)){
-                        l = pickerColor;
-                        esAccesible = true;
-                      }
-                      break;
-                }});
+            StreamBuilder(
+              stream: controladorStream.stream,
+              initialData: "",
+              builder: (context,AsyncSnapshot snapshot){
+                return ElevatedButton(
+                  style: comprobarColor(pickerColor)?
+                    ElevatedButton.styleFrom(primary: GuardadoLocal.colores[0]):ElevatedButton.styleFrom(primary: Colors.red),
+                  child: comprobarColor(pickerColor)?
+                    Text('Aplicar'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),):
+                    Icon(Icons.warning,color: Colors.red[900],size: 30,),
+                  onPressed: () {
+                    bool esAccesible = false;
+                    setState(() {
+                      switch(actual){
+                        case 'p':
+                          if(comprobarColor(pickerColor)){
+                            p = pickerColor;
+                            esAccesible = true;
+                          }
+                          break;
+                        case 'b':
+                          if(comprobarColor(pickerColor)){
+                            b = pickerColor;
+                            esAccesible = true;
+                          }
+                          break;
+                        case 'l':
+                          if(comprobarColor(pickerColor)){
+                            l = pickerColor;
+                            esAccesible = true;
+                          }
+                          break;
+                      }});
 
-                //Si es accesible actualizo los colores
-                if(esAccesible){
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                  ventanaColores();
-                }
-                //Si no es accesible lo indico y no aplico ese color
-                else{
-                  showDialog(context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          backgroundColor: Colors.red,
-                          title: Text('EL COLOR SELECCIONADO NO PRESENTA UN CONTRASTE ADECUADO',style: TextStyle(fontSize:30,color: Colors.white)),
-                          content: Text('Selecciona otro color'.toUpperCase(),style: TextStyle(fontSize:25,color: Colors.white)),
-                          actions: [
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(primary: Colors.red[900]),
-                              onPressed: (){
-                                Navigator.pop(context, false);
-                              },
-                              child: Text('ACEPTAR',style: TextStyle(fontSize:30,color: Colors.white))),
-                          ],
-                        );}
-                  );
-                }
+                    //Si es accesible actualizo los colores
+                    if(esAccesible){
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                      ventanaColores();
+                    }
+                    //Si no es accesible lo indico y no aplico ese color
+                    else{
+                      showDialog(context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              backgroundColor: Colors.red,
+                              title: Text('EL COLOR SELECCIONADO NO PRESENTA UN CONTRASTE ADECUADO',style: TextStyle(fontSize:30,color: Colors.white)),
+                              content: Text('Selecciona otro color'.toUpperCase(),style: TextStyle(fontSize:25,color: Colors.white)),
+                              actions: [
+                                ElevatedButton(
+                                    style: ElevatedButton.styleFrom(primary: Colors.red[900]),
+                                    onPressed: (){
+                                      Navigator.pop(context, false);
+                                    },
+                                    child: Text('ACEPTAR',style: TextStyle(fontSize:30,color: Colors.white))),
+                              ],
+                            );}
+                      );
+                    }
+                  },
+                );
               },
-            ),
+            )
           ],
         );
       }
