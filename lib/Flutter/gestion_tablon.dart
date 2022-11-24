@@ -106,8 +106,7 @@ class GestionTablonState extends State<GestionTablon> {
 
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
   Widget VistaProfesor() {
-    Navigator.pop(context);
-    return Container();
+    return VistaAdministrador();
   }
 
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.

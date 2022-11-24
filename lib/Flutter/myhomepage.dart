@@ -110,7 +110,39 @@ class MyHomePageState extends State<MyHomePage> {
               fit: FlexFit.tight,
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
+                  children: [Flexible(
+                    flex: 1,
+                    fit: FlexFit.tight,
+                    child: Container(
+                      margin: EdgeInsets.all(50),
+                      child: ElevatedButton(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "GESTION DEL TABLON",
+                              style: TextStyle(
+                                fontSize: 30,
+                                color: GuardadoLocal.colores[2],
+                              ),
+                            ),
+                            Flexible(
+                                flex: 1,
+                                child: Image.asset(
+                                  "assets/tableroDeComunicacion.png",
+                                )),
+                          ],
+                        ),
+                        onPressed: () async{
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => GestionTablon()));
+                          Sesion.paginaActual = this;
+                        },
+                      ),
+                    ),
+                  ),
                         Flexible(
                         flex: 1,
                         fit: FlexFit.tight,
