@@ -199,10 +199,11 @@ class PerfilTareaState extends State<PerfilTarea> {
             child: TextField(
               obscureText: false,
               maxLength: 40,
-              style: TextStyle(fontSize: 25),
+              style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[0]),
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
-              ),
+                enabledBorder:  OutlineInputBorder(
+                  borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
+                )),
               controller: controladorNombre,
             ),
           ),
@@ -213,17 +214,18 @@ class PerfilTareaState extends State<PerfilTarea> {
             width: 500,
             child: TextField(
               obscureText: false,
-              style: TextStyle(fontSize: 25),
+              style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[0]),
               maxLength: 500,
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
-              ),
+                  enabledBorder:  OutlineInputBorder(
+                    borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
+                  )),
               controller: controladorTexto,
             ),
           ),
-          const Text(
+          Text(
             "ELIGE UNA FOTO PARA LA TAREA: *",
-            style: TextStyle(fontSize: 25.0, height: 2.0, color: Colors.black),
+            style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           SizedBox(
             height: 10,
@@ -231,14 +233,14 @@ class PerfilTareaState extends State<PerfilTarea> {
           ElevatedButton(
               child: Text(
                 'Haz una foto'.toUpperCase(),
-                style: TextStyle(fontSize: 25),
+                style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[2]),
               ),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.camara);
               }),
-          const Text(
+          Text(
             "ELIGE UN PICTOGRAMA PARA LA TAREA: *",
-            style: TextStyle(fontSize: 25.0, height: 2.0, color: Colors.black),
+            style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           SizedBox(
             height: 10,
@@ -246,7 +248,7 @@ class PerfilTareaState extends State<PerfilTarea> {
           ElevatedButton(
               child: Text(
                 'Elige un pictograma de tu galería'.toUpperCase(),
-                style: TextStyle(fontSize: 25),
+                style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[2]),
               ),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.galeria);
@@ -257,15 +259,15 @@ class PerfilTareaState extends State<PerfilTarea> {
           ElevatedButton(
               child: Text(
                 'Elige un pictograma desde la web de ARASAAC'.toUpperCase(),
-                style: TextStyle(fontSize: 25),
+                style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[2]),
               ),
               onPressed: () async {
                 fotoTomada = await buscadorArasaac(context: context);
                 actualizar();
               }),
-          const Text(
+          Text(
             "ELIGE UN VIDEOTUTORIAL PARA LA TAREA: ",
-            style: TextStyle(fontSize: 25.0, height: 2.0, color: Colors.black),
+            style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           SizedBox(
             height: 10,
@@ -273,21 +275,21 @@ class PerfilTareaState extends State<PerfilTarea> {
           ElevatedButton(
               child: Text(
                 'Haz un videOtutorial'.toUpperCase(),
-                style: TextStyle(fontSize: 25),
+                style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[2]),
               ),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.video);
               }),
-          const Text(
+          Text(
             "CREA UN FORMULARIO: ",
-            style: TextStyle(fontSize: 25.0, height: 2.0, color: Colors.black),
+            style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           ElevatedButton(
               child: Text(
                 (formularios == [])
                     ? 'Crea un formulario'.toUpperCase()
                     : "Edita el formulario".toUpperCase(),
-                style: TextStyle(fontSize: 25),
+                style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[2]),
               ),
               onPressed: () async {
                 dialogFormulario();
@@ -296,7 +298,7 @@ class PerfilTareaState extends State<PerfilTarea> {
             height: 20,
           ),
           Container(
-            decoration: BoxDecoration(border: Border.all(width: 2)),
+            decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[0])),
             height: 150,
             width: 210,
             child: fotoTomada == null
@@ -317,7 +319,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                               fotoTomada = null;
                               actualizar();
                             },
-                            child: Icon(Icons.remove)),
+                            child: Icon(Icons.remove,color: GuardadoLocal.colores[2],)),
                         alignment: Alignment.topLeft,
                       )
                     ],
@@ -327,7 +329,7 @@ class PerfilTareaState extends State<PerfilTarea> {
             height: 10,
           ),
           Container(
-            decoration: BoxDecoration(border: Border.all(width: 2)),
+            decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[0])),
             margin: EdgeInsets.only(right: 70, left: 70, top: 20, bottom: 20),
             child: videoTomado == null
                 ? Container(
@@ -366,7 +368,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                     child: Text(
                       "Editar tarea".toUpperCase(),
                       style: TextStyle(
-                        color: Colors.white,
+                        color: GuardadoLocal.colores[2],
                         fontSize: 25,
                       ),
                     ),
@@ -402,243 +404,244 @@ class PerfilTareaState extends State<PerfilTarea> {
               initialData: "",
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 return Dialog(
+                  backgroundColor: GuardadoLocal.colores[1],
                   child: SingleChildScrollView(
                       child: Column(children: [
-                    Text(
-                      "\nCrea un nuevo formulario".toUpperCase(),
-                      style: TextStyle(fontSize: 40),
-                    ),
+                        Text(
+                          "\nCrea un nuevo formulario".toUpperCase(),
+                          style: TextStyle(fontSize: 40),
+                        ),
 
-                    for (int i = 0;
+                        for (int i = 0;
                         i < formularios.length;
                         i = i + 2 + (formularios[i + 1] as int) * 3)
-                      Container(
-                        margin: EdgeInsets.only(top: 15, bottom: 10),
-                        child: Column(children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Flexible(
-                                  flex: 90,
-                                  child: Container(
-                                    margin: EdgeInsets.only(bottom: 10),
-                                    decoration: BoxDecoration(
-                                        border: Border.all(width: 1)),
-                                    child: TextButton(
-                                        child: Text(
-                                          formularios[i],
-                                          style: TextStyle(
-                                              fontSize: 40,
-                                              color: GuardadoLocal.colores[0]),
-                                        ),
-                                        onPressed: () async {
-                                          await dialogNombre(formularios[i])
-                                              .then((e) {
-                                            if (e != null) {
-                                              formularios[i] = e;
+                          Container(
+                            margin: EdgeInsets.only(top: 15, bottom: 10),
+                            child: Column(children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Flexible(
+                                      flex: 90,
+                                      child: Container(
+                                        margin: EdgeInsets.only(bottom: 10),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(width: 1,color: GuardadoLocal.colores[0])),
+                                        child: TextButton(
+                                            child: Text(
+                                              formularios[i],
+                                              style: TextStyle(
+                                                  fontSize: 40,
+                                                  color: GuardadoLocal.colores[0]),
+                                            ),
+                                            onPressed: () async {
+                                              await dialogNombre(formularios[i])
+                                                  .then((e) {
+                                                if (e != null) {
+                                                  formularios[i] = e;
+                                                  controladorStream.add("");
+                                                }
+                                              });
+                                            }),
+                                      )),
+                                  Flexible(
+                                    flex: 30,
+                                    child: Container(
+                                        margin: EdgeInsets.only(bottom: 10),
+                                        child: FloatingActionButton(
+                                            heroTag: "boton" + i.toString(),
+                                            onPressed: () {
+                                              formularios.removeRange(
+                                                  i,
+                                                  i +
+                                                      2 +
+                                                      (formularios[i + 1] as int) *
+                                                          3);
                                               controladorStream.add("");
-                                            }
-                                          });
-                                        }),
-                                  )),
-                              Flexible(
-                                flex: 30,
-                                child: Container(
-                                    margin: EdgeInsets.only(bottom: 10),
-                                    child: FloatingActionButton(
-                                        heroTag: "boton" + i.toString(),
-                                        onPressed: () {
-                                          formularios.removeRange(
-                                              i,
-                                              i +
-                                                  2 +
-                                                  (formularios[i + 1] as int) *
-                                                      3);
-                                          controladorStream.add("");
-                                        },
-                                        child: Icon(Icons.remove))),
-                              ),
-                              Flexible(
-                                flex: 30,
-                                child: Container(
-                                    margin: EdgeInsets.only(bottom: 10),
-                                    child: FloatingActionButton(
-                                        heroTag: "boton" + i.toString(),
-                                        onPressed: () {
-                                          for (int m = i;
+                                            },
+                                            child: Icon(Icons.remove,color: GuardadoLocal.colores[2],))),
+                                  ),
+                                  Flexible(
+                                    flex: 30,
+                                    child: Container(
+                                        margin: EdgeInsets.only(bottom: 10),
+                                        child: FloatingActionButton(
+                                            heroTag: "boton" + i.toString(),
+                                            onPressed: () {
+                                              for (int m = i;
                                               m <
                                                   i +
                                                       2 +
                                                       formularios[i + 1] * 3;
                                               m++)
-                                            formularios.add(formularios[m]);
+                                                formularios.add(formularios[m]);
 
-                                          controladorStream.add("");
-                                        },
-                                        child: Icon(Icons.queue_outlined))),
+                                              controladorStream.add("");
+                                            },
+                                            child: Icon(Icons.queue_outlined,color: GuardadoLocal.colores[2],))),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
 
-                          for (int j = i + 2;
+                              for (int j = i + 2;
                               j < i + 2 + (formularios[i + 1] as int) * 3;
                               j = j + 3)
-                            Container(
-                                decoration:
-                                    BoxDecoration(border: Border.all(width: 2)),
-                                margin: EdgeInsets.all(10),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Flexible(
-                                      child: Container(
-                                          margin: EdgeInsets.only(right: 20),
-                                          child: TextButton(
-                                              child: Text(
-                                                  formularios[j].toUpperCase(),
-                                                  style: TextStyle(
-                                                      fontSize: 30,
-                                                      color: GuardadoLocal
-                                                          .colores[0])),
-                                              onPressed: () async {
-                                                await dialogNombre(
+                                Container(
+                                    decoration:
+                                    BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[0])),
+                                    margin: EdgeInsets.all(10),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Flexible(
+                                          child: Container(
+                                              margin: EdgeInsets.only(right: 20),
+                                              child: TextButton(
+                                                  child: Text(
+                                                      formularios[j].toUpperCase(),
+                                                      style: TextStyle(
+                                                          fontSize: 30,
+                                                          color: GuardadoLocal
+                                                              .colores[0])),
+                                                  onPressed: () async {
+                                                    await dialogNombre(
                                                         formularios[j])
-                                                    .then((e) {
-                                                  if (e != null) {
-                                                    formularios[j] = e;
+                                                        .then((e) {
+                                                      if (e != null) {
+                                                        formularios[j] = e;
+                                                        controladorStream.add("");
+                                                      }
+                                                    });
+                                                  })),
+                                        ),
+                                        if (formularios[j + 1] != "") ...[
+                                          Flexible(
+                                            child: Container(
+                                                margin: EdgeInsets.only(
+                                                    right: 20,
+                                                    left: 20,
+                                                    top: 10,
+                                                    bottom: 10),
+                                                child: Image.network(
+                                                  formularios[j + 1],
+                                                  width: 100,
+                                                  height: 100,
+                                                  fit: BoxFit.fill,
+                                                )),
+                                          ),
+                                        ],
+                                        Flexible(
+                                          child: Container(
+                                              margin: EdgeInsets.only(left: 30),
+                                              child: FloatingActionButton(
+                                                  heroTag: "boton" +
+                                                      i.toString() +
+                                                      j.toString(),
+                                                  onPressed: () {
+                                                    print(
+                                                        formularios[j].toString() +
+                                                            " " +
+                                                            formularios[j + 1]
+                                                                .toString() +
+                                                            "  " +
+                                                            formularios[j + 2]
+                                                                .toString());
+                                                    formularios.removeRange(
+                                                        j, j + 3);
+                                                    formularios[i + 1]--;
+
                                                     controladorStream.add("");
-                                                  }
-                                                });
-                                              })),
-                                    ),
-                                    if (formularios[j + 1] != "") ...[
-                                      Flexible(
-                                        child: Container(
-                                            margin: EdgeInsets.only(
-                                                right: 20,
-                                                left: 20,
-                                                top: 10,
-                                                bottom: 10),
-                                            child: Image.network(
-                                              formularios[j + 1],
-                                              width: 100,
-                                              height: 100,
-                                              fit: BoxFit.fill,
-                                            )),
-                                      ),
-                                    ],
-                                    Flexible(
-                                      child: Container(
-                                          margin: EdgeInsets.only(left: 30),
-                                          child: FloatingActionButton(
-                                              heroTag: "boton" +
-                                                  i.toString() +
-                                                  j.toString(),
-                                              onPressed: () {
-                                                print(
-                                                    formularios[j].toString() +
-                                                        " " +
-                                                        formularios[j + 1]
-                                                            .toString() +
-                                                        "  " +
-                                                        formularios[j + 2]
-                                                            .toString());
-                                                formularios.removeRange(
-                                                    j, j + 3);
-                                                formularios[i + 1]--;
+                                                  },
+                                                  child: Icon(Icons.remove,color: GuardadoLocal.colores[2],))),
+                                        ),
+                                      ],
+                                    )),
 
-                                                controladorStream.add("");
-                                              },
-                                              child: Icon(Icons.remove))),
-                                    ),
-                                  ],
-                                )),
+                              /// ELEMENTO NUEVO
+                              Container(
+                                  margin: EdgeInsets.only(top: 15),
+                                  child: ElevatedButton(
+                                      onPressed: () async {
+                                        await dialogElemento(i);
+                                        controladorStream.add("");
+                                      },
+                                      child: Text(
+                                        "Crea un elemento".toUpperCase(),
+                                        style: TextStyle(
+                                            fontSize: 25,
+                                            color: GuardadoLocal.colores[2]),
+                                      ))),
+                            ]),
+                          ),
 
-                          /// ELEMENTO NUEVO
-                          Container(
-                              margin: EdgeInsets.only(top: 15),
-                              child: ElevatedButton(
-                                  onPressed: () async {
-                                    await dialogElemento(i);
-                                    controladorStream.add("");
-                                  },
-                                  child: Text(
-                                    "Crea un elemento".toUpperCase(),
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        color: GuardadoLocal.colores[2]),
-                                  ))),
-                        ]),
-                      ),
+                        ///
 
-                    ///
+                        Text(
+                          "\n Crea una agrupación".toUpperCase(),
+                          style: TextStyle(
+                              fontSize: 25, color: GuardadoLocal.colores[0]),
+                        ),
 
-                    Text(
-                      "\n Crea una agrupación".toUpperCase(),
-                      style: TextStyle(
-                          fontSize: 25, color: GuardadoLocal.colores[0]),
-                    ),
-
-                    Container(
-                        margin: EdgeInsets.only(top: 15, bottom: 10),
-                        child: FloatingActionButton(
-                            onPressed: () async {
-                              await dialogNombre("").then((e) {
-                                if (e != null) {
-                                  formularios.add(e);
-                                  formularios.add(0);
-                                  controladorStream.add("");
-                                }
-                              });
-                            },
-                            child: Icon(Icons.add))),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
                         Container(
-                            margin: EdgeInsets.all(0),
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  formularios = [];
-                                  Navigator.pop(context);
+                            margin: EdgeInsets.only(top: 15, bottom: 10),
+                            child: FloatingActionButton(
+                                onPressed: () async {
+                                  await dialogNombre("").then((e) {
+                                    if (e != null) {
+                                      formularios.add(e);
+                                      formularios.add(0);
+                                      controladorStream.add("");
+                                    }
+                                  });
                                 },
-                                child: Column(children: [
-                                  Text(
-                                    '\nCancelar'.toUpperCase(),
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        color: GuardadoLocal.colores[2]),
-                                  ),
-                                  Image.asset(
-                                    "assets/cerrar.png",
-                                    height: 100,
-                                    width: 100,
-                                  )
-                                ]))),
-                        Container(
-                          margin: EdgeInsets.all(0),
-                          child: ElevatedButton(
-                              onPressed: () {
-                                actualizar();
+                                child: Icon(Icons.add,color: GuardadoLocal.colores[2],))),
 
-                                Navigator.pop(context);
-                              },
-                              child: Column(children: [
-                                Text('\n Crear'.toUpperCase(),
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        color: GuardadoLocal.colores[2])),
-                                Image.asset(
-                                  "assets/enviarunemail.png",
-                                  height: 100,
-                                  width: 100,
-                                )
-                              ])),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Container(
+                                margin: EdgeInsets.all(0),
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      formularios = [];
+                                      Navigator.pop(context);
+                                    },
+                                    child: Column(children: [
+                                      Text(
+                                        '\nCancelar'.toUpperCase(),
+                                        style: TextStyle(
+                                            fontSize: 25,
+                                            color: GuardadoLocal.colores[2]),
+                                      ),
+                                      Image.asset(
+                                        "assets/cerrar.png",
+                                        height: 100,
+                                        width: 100,
+                                      )
+                                    ]))),
+                            Container(
+                              margin: EdgeInsets.all(0),
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    actualizar();
+
+                                    Navigator.pop(context);
+                                  },
+                                  child: Column(children: [
+                                    Text('\n Crear'.toUpperCase(),
+                                        style: TextStyle(
+                                            fontSize: 25,
+                                            color: GuardadoLocal.colores[2])),
+                                    Image.asset(
+                                      "assets/enviarunemail.png",
+                                      height: 100,
+                                      width: 100,
+                                    )
+                                  ])),
+                            )
+                          ],
                         )
-                      ],
-                    )
-                  ])),
+                      ])),
                 );
               });
         });
@@ -651,48 +654,53 @@ class PerfilTareaState extends State<PerfilTarea> {
         context: context,
         builder: (context) {
           return Dialog(
+              backgroundColor: GuardadoLocal.colores[1],
               child: Column(
-            children: [
-              TextField(
-                controller: controlador,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 35, color: GuardadoLocal.colores[0]),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Container(
-                      margin: EdgeInsets.all(15),
-                      child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Column(children: [
-                            Text(
-                              'No'.toUpperCase(),
+                  TextField(
+                    controller: controlador,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 35, color: GuardadoLocal.colores[0]),
+                    decoration: InputDecoration(
+                        enabledBorder:  OutlineInputBorder(
+                          borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
+                        )),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                          margin: EdgeInsets.all(15),
+                          child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Column(children: [
+                                Text(
+                                  'No'.toUpperCase(),
+                                  style: TextStyle(
+                                      fontSize: 40,
+                                      color: GuardadoLocal.colores[2]),
+                                ),
+                              ]))),
+                      Container(
+                          margin: EdgeInsets.all(15),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (controlador.text != "") {
+                                Navigator.pop(context, controlador.text);
+                              }
+                            },
+                            child: Text(
+                              'Ok'.toUpperCase(),
                               style: TextStyle(
-                                  fontSize: 40,
-                                  color: GuardadoLocal.colores[2]),
+                                  fontSize: 40, color: GuardadoLocal.colores[2]),
                             ),
-                          ]))),
-                  Container(
-                      margin: EdgeInsets.all(15),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if (controlador.text != "") {
-                            Navigator.pop(context, controlador.text);
-                          }
-                        },
-                        child: Text(
-                          'Ok'.toUpperCase(),
-                          style: TextStyle(
-                              fontSize: 40, color: GuardadoLocal.colores[2]),
-                        ),
-                      ))
+                          ))
+                    ],
+                  )
                 ],
-              )
-            ],
-          ));
+              ));
         });
   }
 
@@ -700,7 +708,6 @@ class PerfilTareaState extends State<PerfilTarea> {
     var imagenEscogida = "";
     var controlador = TextEditingController();
     var controladorStream = StreamController();
-    controlador.text = "Nombre Elemento:".toUpperCase();
 
     return showDialog(
         context: context,
@@ -710,71 +717,78 @@ class PerfilTareaState extends State<PerfilTarea> {
               initialData: "",
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 return Dialog(
+                    backgroundColor: GuardadoLocal.colores[1],
                     child: Column(children: [
-                  Flexible(
-                    child: TextField(
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 30, color: GuardadoLocal.colores[0]),
-                      controller: controlador,
-                    ),
-                  ),
-                  Flexible(
-                      child: Container(
-                          margin: EdgeInsets.all(10),
-                          child: ElevatedButton(
-                              child: Text(
-                                  'Elige un pictograma desde la web de ARASAAC'
-                                      .toUpperCase(),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 30,
-                                      color: GuardadoLocal.colores[2])),
-                              onPressed: () async {
-                                imagenEscogida =
+                      Flexible(
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 30, color: GuardadoLocal.colores[0]),
+                          controller: controlador,
+                          decoration: InputDecoration(
+                              enabledBorder:  OutlineInputBorder(
+                                borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
+                              ),
+                              hintText: "Nombre Elemento:".toUpperCase(),
+                              hintStyle: TextStyle(color: GuardadoLocal.colores[0])),
+                        ),
+                      ),
+                      Flexible(
+                          child: Container(
+                              margin: EdgeInsets.all(10),
+                              child: ElevatedButton(
+                                  child: Text(
+                                      'Elige un pictograma desde la web de ARASAAC'
+                                          .toUpperCase(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 30,
+                                          color: GuardadoLocal.colores[2])),
+                                  onPressed: () async {
+                                    imagenEscogida =
                                     await buscadorArasaac(context: context);
-                                controladorStream.add("");
-                              }))),
-                  if (imagenEscogida != "") ...[
-                    Flexible(
-                        child: Image.network(imagenEscogida,
-                            width: 150, height: 150)),
-                  ] else ...[
-                    Flexible(
-                        child: Container(
-                      width: 150,
-                      height: 150,
-                      margin: EdgeInsets.all(10),
-                      decoration: BoxDecoration(border: Border.all(width: 2)),
-                      child: Center(
-                          child: Text("NADA ESCOGIDO**",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 30,
-                                  color: GuardadoLocal.colores[0]))),
-                    ))
-                  ],
-                  Container(
-                      margin: EdgeInsets.only(top: 30),
-                      child: FloatingActionButton(
-                          onPressed: () {
-                            if (imagenEscogida == null) {
-                              imagenEscogida = "";
-                            }
-                            formularios.insert(i + 2 + formularios[i + 1] * 3,
-                                controlador.text);
-                            formularios.insert(
-                                i + 2 + formularios[i + 1] * 3 + 1,
-                                imagenEscogida);
-                            formularios.insert(
-                                i + 2 + formularios[i + 1] * 3 + 2, 0);
-                            formularios[i + 1]++;
+                                    controladorStream.add("");
+                                  }))),
+                      if (imagenEscogida != "") ...[
+                        Flexible(
+                            child: Image.network(imagenEscogida,
+                                width: 150, height: 150)),
+                      ] else ...[
+                        Flexible(
+                            child: Container(
+                              width: 150,
+                              height: 150,
+                              margin: EdgeInsets.all(10),
+                              decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[0])),
+                              child: Center(
+                                  child: Text("NADA ESCOGIDO**",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 30,
+                                          color: GuardadoLocal.colores[0]))),
+                            ))
+                      ],
+                      Container(
+                          margin: EdgeInsets.only(top: 30),
+                          child: FloatingActionButton(
+                              onPressed: () {
+                                if (imagenEscogida == null) {
+                                  imagenEscogida = "";
+                                }
+                                formularios.insert(i + 2 + formularios[i + 1] * 3,
+                                    controlador.text);
+                                formularios.insert(
+                                    i + 2 + formularios[i + 1] * 3 + 1,
+                                    imagenEscogida);
+                                formularios.insert(
+                                    i + 2 + formularios[i + 1] * 3 + 2, 0);
+                                formularios[i + 1]++;
 
-                            controlador.text = "";
-                            Navigator.pop(context);
-                          },
-                          child: Icon(Icons.add))),
-                ]));
+                                controlador.text = "";
+                                Navigator.pop(context);
+                              },
+                              child: Icon(Icons.add,color: GuardadoLocal.colores[2],))),
+                    ]));
               });
         });
   }

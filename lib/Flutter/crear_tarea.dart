@@ -488,6 +488,7 @@ class CrearTareaState extends State<CrearTarea> {
               initialData: "",
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 return Dialog(
+                  backgroundColor: GuardadoLocal.colores[1],
                   child: SingleChildScrollView(
                       child: Column(children: [
                         Text(
@@ -509,7 +510,7 @@ class CrearTareaState extends State<CrearTarea> {
                                       child: Container(
                                         margin: EdgeInsets.only(bottom: 10),
                                         decoration: BoxDecoration(
-                                            border: Border.all(width: 1)),
+                                            border: Border.all(width: 1,color: GuardadoLocal.colores[0])),
                                         child: TextButton(
                                             child: Text(
                                               formularios[i],
@@ -542,7 +543,7 @@ class CrearTareaState extends State<CrearTarea> {
                                                           3);
                                               controladorStream.add("");
                                             },
-                                            child: Icon(Icons.remove))),
+                                            child: Icon(Icons.remove,color: GuardadoLocal.colores[2],))),
                                   ),
                                   Flexible(
                                     flex: 30,
@@ -561,7 +562,7 @@ class CrearTareaState extends State<CrearTarea> {
 
                                               controladorStream.add("");
                                             },
-                                            child: Icon(Icons.queue_outlined))),
+                                            child: Icon(Icons.queue_outlined,color: GuardadoLocal.colores[2],))),
                                   ),
                                 ],
                               ),
@@ -571,7 +572,7 @@ class CrearTareaState extends State<CrearTarea> {
                               j = j + 3)
                                 Container(
                                     decoration:
-                                    BoxDecoration(border: Border.all(width: 2)),
+                                    BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[0])),
                                     margin: EdgeInsets.all(10),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -635,7 +636,7 @@ class CrearTareaState extends State<CrearTarea> {
 
                                                     controladorStream.add("");
                                                   },
-                                                  child: Icon(Icons.remove))),
+                                                  child: Icon(Icons.remove,color: GuardadoLocal.colores[2],))),
                                         ),
                                       ],
                                     )),
@@ -677,7 +678,7 @@ class CrearTareaState extends State<CrearTarea> {
                                     }
                                   });
                                 },
-                                child: Icon(Icons.add))),
+                                child: Icon(Icons.add,color: GuardadoLocal.colores[2],))),
 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -738,12 +739,17 @@ class CrearTareaState extends State<CrearTarea> {
         context: context,
         builder: (context) {
           return Dialog(
+              backgroundColor: GuardadoLocal.colores[1],
               child: Column(
                 children: [
                   TextField(
                     controller: controlador,
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 35, color: GuardadoLocal.colores[0]),
+                    decoration: InputDecoration(
+                        enabledBorder:  OutlineInputBorder(
+                          borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
+                        )),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -787,7 +793,6 @@ class CrearTareaState extends State<CrearTarea> {
     var imagenEscogida = "";
     var controlador = TextEditingController();
     var controladorStream = StreamController();
-    controlador.text = "Nombre Elemento:".toUpperCase();
 
     return showDialog(
         context: context,
@@ -797,6 +802,7 @@ class CrearTareaState extends State<CrearTarea> {
               initialData: "",
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 return Dialog(
+                  backgroundColor: GuardadoLocal.colores[1],
                     child: Column(children: [
                       Flexible(
                         child: TextField(
@@ -804,6 +810,12 @@ class CrearTareaState extends State<CrearTarea> {
                           style: TextStyle(
                               fontSize: 30, color: GuardadoLocal.colores[0]),
                           controller: controlador,
+                          decoration: InputDecoration(
+                              enabledBorder:  OutlineInputBorder(
+                                borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
+                            ),
+                          hintText: "Nombre Elemento:".toUpperCase(),
+                          hintStyle: TextStyle(color: GuardadoLocal.colores[0])),
                         ),
                       ),
                       Flexible(
@@ -832,7 +844,7 @@ class CrearTareaState extends State<CrearTarea> {
                               width: 150,
                               height: 150,
                               margin: EdgeInsets.all(10),
-                              decoration: BoxDecoration(border: Border.all(width: 2)),
+                              decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[0])),
                               child: Center(
                                   child: Text("NADA ESCOGIDO**",
                                       textAlign: TextAlign.center,
@@ -860,7 +872,7 @@ class CrearTareaState extends State<CrearTarea> {
                                 controlador.text = "";
                                 Navigator.pop(context);
                               },
-                              child: Icon(Icons.add))),
+                              child: Icon(Icons.add,color: GuardadoLocal.colores[2],))),
                     ]));
               });
         });

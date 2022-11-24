@@ -52,13 +52,13 @@ class ListaTareasState extends State<ListaTareas> {
     return new Scaffold(
         appBar: AppBar(
           leading: IconButton(
-              icon: Icon(Icons.arrow_back_ios_new,
+              icon: Icon(Icons.arrow_back,
                   color: GuardadoLocal.colores[2]),
               onPressed: () {
                 Navigator.pop(context);
               }),
           title: Text(
-            'Lista de Profesores',
+            'Lista de Tareas'.toUpperCase(),
             style: TextStyle(color: GuardadoLocal.colores[2]),
           ),
         ),

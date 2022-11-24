@@ -101,7 +101,7 @@ class LoginPageState extends State<LoginPage> {
             leading: IconButton(
                 icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
                 onPressed: (){Navigator.pop(context);}),
-            title: Text('TuCole',style: TextStyle(color: GuardadoLocal.colores[2]),)),
+            title: Text('TuCole',style: TextStyle(fontSize:30,color: GuardadoLocal.colores[2],fontWeight: FontWeight.normal),)),
         body: Stack(children: [
           ListaUsuarios(),
           Visibility(

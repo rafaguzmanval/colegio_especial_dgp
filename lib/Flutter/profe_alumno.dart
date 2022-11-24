@@ -59,7 +59,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
       appBar: AppBar(
           title: Text(
         'TuCole',
-        style: TextStyle(color: GuardadoLocal.colores[2]),
+        style: TextStyle(fontSize:30,color: GuardadoLocal.colores[2],fontWeight: FontWeight.normal),
       )),
       body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,

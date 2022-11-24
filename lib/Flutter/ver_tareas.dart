@@ -465,7 +465,7 @@ class VerTareasState extends State<VerTareas> {
                   child: Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        border: Border.all(width: 2),
+                        border: Border.all(width: 2,color: GuardadoLocal.colores[2]),
                         color: GuardadoLocal.colores[0]),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -492,7 +492,7 @@ class VerTareasState extends State<VerTareas> {
                                     child: Column(
                                   children: [
                                     Text(Sesion
-                                        .tareas[tareaActual].formularios[i]),
+                                        .tareas[tareaActual].formularios[i],style: TextStyle(color: GuardadoLocal.colores[2]),),
                                     for (int j = i + 2; j < i + 2 + (Sesion.tareas[tareaActual].formularios[i + 1] as int) * 3; j = j + 3)
                                       comanda(j)
                                   ],
@@ -661,7 +661,7 @@ class VerTareasState extends State<VerTareas> {
       indiceImagenes++;
 
       return Container(
-          decoration: BoxDecoration(border: Border.all(width: 2)),
+          decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[2])),
           margin: EdgeInsets.only(bottom: 15),
           child: Image.network(pathImagen, width: 200, height: 200));
 
@@ -669,7 +669,7 @@ class VerTareasState extends State<VerTareas> {
       var indice = indiceVideos;
       indiceVideos++;
       return Container(
-          decoration: BoxDecoration(border: Border.all(width: 2)),
+          decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[2])),
           margin: EdgeInsets.only(bottom: 15),
           child: ElevatedButton(
             onPressed: (){
@@ -940,17 +940,17 @@ class VerTareasState extends State<VerTareas> {
 
     if(indice >= Sesion.tareas[tareaActual].controladoresComandas.length)
       {
-        return Text("Error : se ha pasao el indice " + indice.toString() + " cuando el máximo es" + Sesion.tareas[tareaActual].controladoresComandas.length.toString());
+        return Text("Error : se ha pasado el indice " + indice.toString() + " cuando el máximo es" + Sesion.tareas[tareaActual].controladoresComandas.length.toString());
       }
 
     return Container(
-        decoration: BoxDecoration(border: Border.all(width: 2)),
+        decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[2])),
         margin: EdgeInsets.all(10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Flexible(
-              child: Text(Sesion.tareas[tareaActual].formularios[j]),
+              child: Text(Sesion.tareas[tareaActual].formularios[j],style: TextStyle(color: GuardadoLocal.colores[2]),),
             ),
             Flexible(
               child: Container(
@@ -967,6 +967,11 @@ class VerTareasState extends State<VerTareas> {
                   child: Container(
                       margin: EdgeInsets.only(left: 20),
                       child: TextFormField(
+                        decoration: InputDecoration(
+                          enabledBorder:  OutlineInputBorder(
+                          borderSide:  BorderSide(color: GuardadoLocal.colores[2], width: 0.0),
+                        )),
+                        style: TextStyle(color:GuardadoLocal.colores[2]),
                         textAlign: TextAlign.center,
                         controller: Sesion.tareas[tareaActual].controladoresComandas[indice],
                         keyboardType: TextInputType.number,
@@ -985,7 +990,7 @@ class VerTareasState extends State<VerTareas> {
 
               Flexible(
                   child: Container(
-                      decoration: BoxDecoration(border: Border.all(width: 2)),
+                      decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[2])),
                       margin: EdgeInsets.only(left: 25),
                       child: ElevatedButton(
                         child: Icon(Icons.remove,color: GuardadoLocal.colores[2],),
@@ -1009,7 +1014,7 @@ class VerTareasState extends State<VerTareas> {
 
               Flexible(
                   child: Container(
-                      decoration: BoxDecoration(border: Border.all(width: 2)),
+                      decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[2])),
                       margin: EdgeInsets.only(left: 25),
                       child: ElevatedButton(
                         child: Icon(Icons.add,color: GuardadoLocal.colores[2],),
@@ -1035,7 +1040,7 @@ class VerTareasState extends State<VerTareas> {
             ] else ...[
               Flexible(
                   child: Text(Sesion.tareas[tareaActual].formularios[j + 2]
-                      .toString())),
+                      .toString(),style: TextStyle(color: GuardadoLocal.colores[2]),)),
             ]
           ],
         ));

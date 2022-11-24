@@ -147,6 +147,34 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           SizedBox(
             height: 5,
           ),
+          Text(
+            "ELIGE ROL PARA EL USUARIO: *",
+            style: TextStyle(fontSize: 20.0, height: 2.0, color:GuardadoLocal.colores[0]),
+          ),
+          DropdownButton(
+            style: TextStyle(color:GuardadoLocal.colores[0]),
+            value: rolElegido,
+            items: [
+              Rol.profesor.toString(),
+              Rol.administrador.toString(),
+              Rol.alumno.toString(),
+              "NINGUN ROL ELEGIDO"
+            ].map((String value) {
+              return DropdownMenuItem(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+            onChanged: (String? value) {
+              setState(() {
+                controladorPassword.text = "";
+                rolElegido = value!;
+              });
+            },
+          ),
+          SizedBox(
+            height: 5,
+          ),
           SizedBox(
             width: 500,
             child: TextField(
@@ -261,31 +289,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                   : DateFormat('d/M/y').format(fechaElegida),style: TextStyle(color: GuardadoLocal.colores[2]),)
                   ,style: ElevatedButton.styleFrom(backgroundColor: GuardadoLocal.colores[0])),
 
-          Text(
-            "ELIGE ROL PARA EL USUARIO: *",
-            style: TextStyle(fontSize: 20.0, height: 2.0, color:GuardadoLocal.colores[0]),
-          ),
-          DropdownButton(
-            style: TextStyle(color:GuardadoLocal.colores[0]),
-            value: rolElegido,
-            items: [
-              Rol.profesor.toString(),
-              Rol.administrador.toString(),
-              Rol.alumno.toString(),
-              "NINGUN ROL ELEGIDO"
-            ].map((String value) {
-              return DropdownMenuItem(
-                value: value,
-                child: Text(value),
-              );
-            }).toList(),
-            onChanged: (String? value) {
-              setState(() {
-                controladorPassword.text = "";
-                rolElegido = value!;
-              });
-            },
-          ),
+
           Text(
             "ELIGE FOTO DE PERFIL (OPCINAL):",
             style: TextStyle(fontSize: 20.0, height: 2.0, color: GuardadoLocal.colores[0]),
