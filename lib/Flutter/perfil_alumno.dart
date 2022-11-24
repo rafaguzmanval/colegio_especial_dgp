@@ -71,8 +71,8 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
           leading: IconButton(
               icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
               onPressed: (){Navigator.pop(context);}),
-          title: Text('PERFIL DE: ${Sesion.seleccion.nombre}'
-              '',style: TextStyle(color: GuardadoLocal.colores[2]),),
+          title: Text('PERFIL DE: ${Sesion.seleccion.nombre.toUpperCase()}'
+              '',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
         ),
         body: Container(
             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
@@ -258,7 +258,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                 items: nombresTareas.map((String value) {
                                   return DropdownMenuItem(
                                     value: value,
-                                    child: Text(value),
+                                    child: Text(value,style: TextStyle(fontSize: 25),),
                                   );
                                 }).toList(),
                                 onChanged: (String? value) {
@@ -305,7 +305,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                   child: Text((fechafinal == null)
                                       ? "ELIGE FECHA DE ENTREGA LIMITE"
                                       : DateFormat('d/M/y')
-                                          .format(fechafinal),style: TextStyle(color: GuardadoLocal.colores[2]),)),
+                                          .format(fechafinal),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),)),
                             ),
                             Container(
                               color: GuardadoLocal.colores[1],
@@ -329,7 +329,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                         ((horafinal.minute > 9)
                                             ? horafinal.minute.toString()
                                             : "0" +
-                                                horafinal.minute.toString()),style: TextStyle(color: GuardadoLocal.colores[2]),),
+                                                horafinal.minute.toString()),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),),
                               ),
                             ),
                             Visibility(
@@ -344,6 +344,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                     "AÑADIR TAREA",
                                     style: TextStyle(
                                       color: GuardadoLocal.colores[2],
+                                      fontSize: 25
                                     ),
                                   ),
                                   onPressed: () async {

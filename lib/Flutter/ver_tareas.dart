@@ -177,7 +177,7 @@ class VerTareasState extends State<VerTareas> {
                   child: Text('Tareas de ' +
                       (Sesion.rol == Rol.alumno.toString()
                           ? Sesion.nombre
-                          : Sesion.seleccion.nombre),style: TextStyle(color: GuardadoLocal.colores[2]),)),
+                          : Sesion.seleccion.nombre),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),)),
             ),
             body: GestureDetector(
               onPanStart: (DragStartDetails details) {
@@ -349,12 +349,12 @@ class VerTareasState extends State<VerTareas> {
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     return
                     Text(
-                    "\n" + mensajeTemporizador + "\n",
+                    "\n" + mensajeTemporizador.toUpperCase() + "\n",
                     //DateFormat('d/M/y HH:mm').format(DateTime.fromMillisecondsSinceEpoch(Sesion.tareas[tareaActual].fechafinal)).toString(),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                     color: GuardadoLocal.colores[0],
-                    fontSize: 20.0,
+                    fontSize: 25.0,
                   ),
                 );
               },
@@ -477,6 +477,7 @@ class VerTareasState extends State<VerTareas> {
                               "\n" + Sesion.tareas[tareaActual].nombre + "\n",
                               style:  TextStyle(
                                 color: GuardadoLocal.colores[2],
+                                fontSize: 25,
                               ),
                             )),
                             resetIndicesTarea(),
@@ -492,7 +493,7 @@ class VerTareasState extends State<VerTareas> {
                                     child: Column(
                                   children: [
                                     Text(Sesion
-                                        .tareas[tareaActual].formularios[i],style: TextStyle(color: GuardadoLocal.colores[2]),),
+                                        .tareas[tareaActual].formularios[i],style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),),
                                     for (int j = i + 2; j < i + 2 + (Sesion.tareas[tareaActual].formularios[i + 1] as int) * 3; j = j + 3)
                                       comanda(j)
                                   ],
@@ -571,7 +572,7 @@ class VerTareasState extends State<VerTareas> {
           visible: Sesion.tareas[tareaActual].respuesta != "",
           child: Column(children: [
             Text(
-              "\nComentario de " +
+              "\nComentario de ".toUpperCase() +
                   (Sesion.rol == Rol.alumno.toString()
                       ? Sesion.nombre + ":\n"
                       : Sesion.seleccion.nombre + ":\n"),
@@ -592,7 +593,7 @@ class VerTareasState extends State<VerTareas> {
         Visibility(
           visible: Sesion.tareas[tareaActual].retroalimentacion != "",
           child: Column(children: [
-            Text("\n Retroalimentacion: \n",
+            Text("\n Retroalimentacion: \n".toUpperCase(),
                 textAlign: TextAlign.center,
                 style: TextStyle(fontWeight: FontWeight.bold)),
             Text(Sesion.tareas[tareaActual].retroalimentacion + "\n")
@@ -606,7 +607,7 @@ class VerTareasState extends State<VerTareas> {
                   dialogRetroalimentacion();
                 },
                 child: Text((Sesion.tareas[tareaActual].retroalimentacion != ""
-                    ? "Editar retroalimentación"
+                    ? "Editar retroalimentación".toUpperCase()
                     : "Enviar retroalimentación").toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2])),
               )),
 
@@ -614,11 +615,13 @@ class VerTareasState extends State<VerTareas> {
 
         Visibility(
           visible: Sesion.tareas[tareaActual].estado != "sinFinalizar",
-          child: ElevatedButton(
+          child: Container(
+              margin: EdgeInsets.only(top: 15, bottom: 15),
+              child: ElevatedButton(
               onPressed: () {
                 Sesion.db.resetTarea(Sesion.tareas[tareaActual].idRelacion);
               },
-              child: Text("Reinicia la tarea".toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),)),
+              child: Text("Reinicia la tarea".toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),))),
         ),
       ] else ...[
         Container(
@@ -631,7 +634,7 @@ class VerTareasState extends State<VerTareas> {
                     width: 250,
                     decoration: BoxDecoration(border: Border.all(width: 2)),
                     child: Center(
-                        child: Text("¡¡¡Bien!!!  \nNo tienes ninguna tarea")))
+                        child: Text("¡¡¡Bien!!!  \nNo tienes ninguna tarea".toUpperCase())))
               ],
             ))
       ]
@@ -654,6 +657,7 @@ class VerTareasState extends State<VerTareas> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: GuardadoLocal.colores[2],
+                fontSize: 25
               )));
     } else if (valor == "I" &&
         Sesion.tareas[i].imagenes.length > indiceImagenes) {
@@ -779,19 +783,19 @@ class VerTareasState extends State<VerTareas> {
         builder: (context) {
           return Dialog(
             child: Column(children: [
-              Text("\nIntroduce un comentario opcional:"),
+              Text("\nIntroduce un comentario opcional:".toUpperCase()),
               TextField(
                 minLines: 3,
                 maxLines: 6,
                 controller: controladorRespuesta,
               ),
-              Text("\Envia una foto (opcional):"),
+              Text("\Envia una foto (opcional):".toUpperCase()),
               ElevatedButton(onPressed: () async{
                 await tomarFoto();
                 controladorStream.add("");
 
               }, child: Column(children: [
-                Text("Tomar foto"),
+                Text("Tomar foto".toUpperCase()),
                 Icon(Icons.camera_alt_outlined)
                 
               ],)),
@@ -802,9 +806,9 @@ class VerTareasState extends State<VerTareas> {
 
 
 
-              Text("\nSeguro que quieres " +
-                  (estado ? "terminar" : "cancelar") +
-                  " la tarea"),
+              Text("\nSeguro que quieres ".toUpperCase() +
+                  (estado ? "terminar".toUpperCase() : "cancelar".toUpperCase()) +
+                  " la tarea".toUpperCase()),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Container(
                     margin: EdgeInsets.all(10),
@@ -814,7 +818,7 @@ class VerTareasState extends State<VerTareas> {
                           Navigator.pop(context);
                         },
                         child: Column(children: [
-                          Text('\nNo'),
+                          Text('\nNo'.toUpperCase()),
                           Image.asset(
                             "assets/no.png",
                             height: 100,
@@ -853,7 +857,7 @@ class VerTareasState extends State<VerTareas> {
                         Navigator.pop(context);
                       },
                       child: Column(children: [
-                        Text('\nEnviar'),
+                        Text('\nEnviar'.toUpperCase()),
                         Image.asset(
                           "assets/enviarunemail.png",
                           height: 100,
@@ -875,9 +879,9 @@ class VerTareasState extends State<VerTareas> {
           return Dialog(
             backgroundColor: GuardadoLocal.colores[1],
             child: Column(children: [
-              Text("\nIntroduce una realimentacion para el alumno:"),
+              Text("\nIntroduce una realimentacion para el alumno:".toUpperCase()),
               TextField(
-                style: TextStyle(color: GuardadoLocal.colores[0]),
+                style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),
                 decoration: InputDecoration(
                     enabledBorder:  OutlineInputBorder(
                       borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
@@ -886,7 +890,7 @@ class VerTareasState extends State<VerTareas> {
                 ),
                 controller: controlador,
               ),
-              Text("\nSeguro que quieres dar" + " esa realimentacion?"),
+              Text("\nSeguro que quieres dar".toUpperCase() + " esa realimentacion?".toUpperCase()),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -940,7 +944,7 @@ class VerTareasState extends State<VerTareas> {
 
     if(indice >= Sesion.tareas[tareaActual].controladoresComandas.length)
       {
-        return Text("Error : se ha pasado el indice " + indice.toString() + " cuando el máximo es" + Sesion.tareas[tareaActual].controladoresComandas.length.toString());
+        return Text("Error : se ha pasado el indice ".toUpperCase() + indice.toString() + " cuando el máximo es".toUpperCase() + Sesion.tareas[tareaActual].controladoresComandas.length.toString());
       }
 
     return Container(
@@ -950,7 +954,7 @@ class VerTareasState extends State<VerTareas> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Flexible(
-              child: Text(Sesion.tareas[tareaActual].formularios[j],style: TextStyle(color: GuardadoLocal.colores[2]),),
+              child: Text(Sesion.tareas[tareaActual].formularios[j],style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),),
             ),
             Flexible(
               child: Container(
@@ -1040,7 +1044,7 @@ class VerTareasState extends State<VerTareas> {
             ] else ...[
               Flexible(
                   child: Text(Sesion.tareas[tareaActual].formularios[j + 2]
-                      .toString(),style: TextStyle(color: GuardadoLocal.colores[2]),)),
+                      .toString(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),)),
             ]
           ],
         ));

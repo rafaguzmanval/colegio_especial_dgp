@@ -84,7 +84,7 @@ class MyHomePageState extends State<MyHomePage> {
                     onPressed: () => _onBackPressed(context)),
 
                 title: Column(children: [
-                  Text('Menú principal'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),),
+                  Text('Menú principal'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
                 ]),
                 actions: [IconButton(onPressed: () => Navigator.push(context,
                     MaterialPageRoute(
@@ -535,21 +535,21 @@ class MyHomePageState extends State<MyHomePage> {
         builder: (context) {
           return AlertDialog(
               backgroundColor: GuardadoLocal.colores[1],
-              title:  Text('¿SEGURO?',style: TextStyle(color: GuardadoLocal.colores[0]),),
-              content: Text('¿QUIERES CERRAR SESIÓN?',style: TextStyle(color: GuardadoLocal.colores[0]),),
+              title:  Text('¿SEGURO?',style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),),
+              content: Text('¿QUIERES CERRAR SESIÓN?',style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),),
               actions: [
                 ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context, false);
                     },
-                    child: Text('NO',style: TextStyle(color: GuardadoLocal.colores[2]),)),
+                    child: Text('NO',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),)),
                 ElevatedButton(
                     onPressed: () {
                       Background.desactivarNotificaciones();
                       Navigator.popUntil(context, (route) => route.isFirst);
 
                     },
-                    child: Text('SÍ',style: TextStyle(color: GuardadoLocal.colores[2]),)),
+                    child: Text('SÍ',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),)),
               ],
           );
         });

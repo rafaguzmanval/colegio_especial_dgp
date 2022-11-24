@@ -59,7 +59,7 @@ class ListaTareasState extends State<ListaTareas> {
               }),
           title: Text(
             'Lista de Tareas'.toUpperCase(),
-            style: TextStyle(color: GuardadoLocal.colores[2]),
+            style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),
           ),
         ),
         body: Stack(children: [

@@ -121,7 +121,7 @@ class PerfilTareaState extends State<PerfilTarea> {
             'Editar tarea: ${Sesion.seleccion.nombre}'
                     ''
                 .toUpperCase(),
-            style: TextStyle(color: GuardadoLocal.colores[2]),
+            style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),
           ),
         ),
         body: SingleChildScrollView(

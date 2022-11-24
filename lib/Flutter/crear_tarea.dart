@@ -140,7 +140,7 @@ class CrearTareaState extends State<CrearTarea> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
             onPressed: (){Navigator.pop(context);}),
-        title: Text('Crea una nueva tarea'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2])),
+        title: Text('Crea una nueva tarea'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30)),
       ),
       body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -195,7 +195,7 @@ class CrearTareaState extends State<CrearTarea> {
                 ),
                 border: OutlineInputBorder(),
                 hintText: 'Introduce el título *'.toUpperCase(),
-                hintStyle: TextStyle(color: GuardadoLocal.colores[0])
+                hintStyle: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25)
               ),
               controller: controladorNombre,
             ),
@@ -215,32 +215,32 @@ class CrearTareaState extends State<CrearTarea> {
                 ),
                 border: OutlineInputBorder(),
                 hintText: 'Introduce una descripción *'.toUpperCase(),
-                hintStyle: TextStyle(color: GuardadoLocal.colores[0])
+                hintStyle: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25)
               ),
               controller: controladorTexto,
             ),
           ),
           Text(
             "ELIGE UNA FOTO PARA LA TAREA: *",
-            style: TextStyle(fontSize: 20.0, height: 2.0, color: GuardadoLocal.colores[0]),
+            style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           SizedBox(
             height: 5,
           ),
           ElevatedButton(
-              child: Text('Haz una foto'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2])),
+              child: Text('Haz una foto'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.camara);
               }),
           Text(
             "ELIGE UN PICTOGRAMA PARA LA TAREA: *",
-            style: TextStyle(fontSize: 20.0, height: 2.0, color:GuardadoLocal.colores[0]),
+            style: TextStyle(fontSize: 25.0, height: 2.0, color:GuardadoLocal.colores[0]),
           ),
           SizedBox(
             height: 5,
           ),
           ElevatedButton(
-              child: Text('Elige un pictograma de tu galería'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2])),
+              child: Text('Elige un pictograma de tu galería'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.galeria);
               }),
@@ -248,7 +248,7 @@ class CrearTareaState extends State<CrearTarea> {
             height: 15,
           ),
           ElevatedButton(
-              child: Text('Elige un pictograma desde la web de ARASAAC'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2])),
+              child: Text('Elige un pictograma desde la web de ARASAAC'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
               onPressed: () async {
                     fotoTomada =  await buscadorArasaac(context: context);
                     actualizar();
@@ -259,23 +259,23 @@ class CrearTareaState extends State<CrearTarea> {
 
           Text(
             "ELIGE UN VIDEOTUTORIAL PARA LA TAREA: ",
-            style: TextStyle(fontSize: 20.0, height: 2.0, color: GuardadoLocal.colores[0]),
+            style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           SizedBox(
             height: 5,
           ),
           ElevatedButton(
-              child: Text('Haz un videOtutorial'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2])),
+              child: Text('Haz un videOtutorial'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.video);
               }),
 
           Text(
             "CREA UN FORMULARIO: ",
-            style: TextStyle(fontSize: 20.0, height: 2.0, color: GuardadoLocal.colores[0]),
+            style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           ElevatedButton(
-              child: Text((formularios == [])?'Crea un formulario'.toUpperCase():"Edita el formulario".toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2])),
+              child: Text((formularios == [])?'Crea un formulario'.toUpperCase():"Edita el formulario".toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
               onPressed: () async {
                   dialogFormulario();
               }
@@ -289,7 +289,7 @@ class CrearTareaState extends State<CrearTarea> {
             height: 150,
             width: 210,
             child: fotoTomada == null
-                ? Center(child: Text('Ninguna foto tomada ****'.toUpperCase(),textAlign: TextAlign.center,))
+                ? Center(child: Text('Ninguna foto tomada ****'.toUpperCase(),textAlign: TextAlign.center,style: TextStyle(fontSize: 25),))
                 : Stack(children: [
               Center(child: fotoTomada is String? Image.network(fotoTomada): Image.file(File(fotoTomada.path)) ),
               Container(child:ElevatedButton(onPressed: (){fotoTomada = null; actualizar();}, child: Icon(Icons.remove,color: GuardadoLocal.colores[0],)),
@@ -305,7 +305,7 @@ class CrearTareaState extends State<CrearTarea> {
             margin: EdgeInsets.only(right: 70, left: 70, top: 20, bottom: 20),
             child: videoTomado == null
                 ? Container(
-                    child: Text('Ningun video tomado ****'.toUpperCase()),
+                    child: Text('Ningun video tomado ****'.toUpperCase(), style: TextStyle(fontSize: 25),),
                     padding: EdgeInsets.only(
                         top: 100, bottom: 100, right: 10, left: 10),
                   )
@@ -315,7 +315,7 @@ class CrearTareaState extends State<CrearTarea> {
                       onPressed: (){
                         ventanaVideo(controladorVideo,context);
                       },
-                      child:Text("ver video".toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),)
+                      child:Text("ver video".toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),)
 
                     ),
                         alignment: Alignment.center,
@@ -337,6 +337,7 @@ class CrearTareaState extends State<CrearTarea> {
                       "Crear nueva tarea".toUpperCase(),
                       style: TextStyle(
                         color: GuardadoLocal.colores[2],
+                          fontSize: 25
                       ),
                     ),
                     onPressed: () {
@@ -436,7 +437,7 @@ class CrearTareaState extends State<CrearTarea> {
               color: Color(error?0xFFC72C41:0xFF6BFF67),
               borderRadius: BorderRadius.all(Radius.circular(29)),
             ),
-            child: Center(child:Text(mensajeDeValidacion, style: TextStyle(color: GuardadoLocal.colores[2]))),
+            child: Center(child:Text(mensajeDeValidacion, style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25))),
           )),
     );
   }

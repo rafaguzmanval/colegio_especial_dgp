@@ -105,7 +105,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           leading: IconButton(
               icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
               onPressed: (){Navigator.pop(context);}),
-          title: Text('REGISTRA UN NUEVO USUARIO',style: TextStyle(color: GuardadoLocal.colores[2]),),
+          title: Text('REGISTRA UN NUEVO USUARIO',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
         ),
         body: SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -149,7 +149,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           ),
           Text(
             "ELIGE ROL PARA EL USUARIO: *",
-            style: TextStyle(fontSize: 20.0, height: 2.0, color:GuardadoLocal.colores[0]),
+            style: TextStyle(fontSize: 25.0, height: 2.0, color:GuardadoLocal.colores[0]),
           ),
           DropdownButton(
             style: TextStyle(color:GuardadoLocal.colores[0]),
@@ -162,7 +162,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
             ].map((String value) {
               return DropdownMenuItem(
                 value: value,
-                child: Text(value),
+                child: Text(value,style: TextStyle(fontSize: 25),),
               );
             }).toList(),
             onChanged: (String? value) {
@@ -178,7 +178,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           SizedBox(
             width: 500,
             child: TextField(
-              style: TextStyle(color: GuardadoLocal.colores[0]),
+              style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),
               obscureText: false,
               maxLength: 20,
               decoration: InputDecoration(
@@ -187,7 +187,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 ),
                 border: OutlineInputBorder(),
                 hintText: 'INTRODUCE EL NOMBRE *',
-                hintStyle: TextStyle(color: GuardadoLocal.colores[0])
+                hintStyle: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25)
               ),
               controller: controladorNombre,
             ),
@@ -195,7 +195,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           SizedBox(
             width: 500,
             child: TextField(
-              style: TextStyle(color: GuardadoLocal.colores[0]),
+              style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),
               obscureText: false,
               maxLength: 40,
               decoration: InputDecoration(
@@ -204,18 +204,18 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 ),
                 border: OutlineInputBorder(),
                 hintText: 'INTRODUCE LOS APELLIDOS *',
-                hintStyle: TextStyle(color: GuardadoLocal.colores[0])
+                hintStyle: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25)
               ),
               controller: controladorApellidos,
             ),
           ),
           DropdownButton(
-            style: TextStyle(color: GuardadoLocal.colores[0]),
+            style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),
             value: metodoElegido,
             items: metodos.map((String value) {
               return DropdownMenuItem(
                 value: value,
-                child: Text(value),
+                child: Text(value,style: TextStyle(fontSize: 25),),
               );
             }).toList(),
             onChanged: (String? value) {
@@ -229,7 +229,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               child: SizedBox(
                 width: 500,
                 child: TextField(
-                  style: TextStyle(color: GuardadoLocal.colores[0]),
+                  style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),
                   obscureText: true,
                   maxLength: 20,
                   decoration: InputDecoration(
@@ -239,7 +239,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                     ),
                     border: OutlineInputBorder(),
                     hintText: 'INTRODUCE LA CONTRASEÑA *',
-                    hintStyle: TextStyle(color: GuardadoLocal.colores[0])
+                    hintStyle: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25)
                   ),
                   controller: controladorPassword,
                 ),
@@ -253,7 +253,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               )),
           Text(
             "INTRODUCE LA FECHA DE NACIMIENTO: *",
-            style: TextStyle(fontSize: 20.0, height: 2.0, color: GuardadoLocal.colores[0]),
+            style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           ElevatedButton(
               onPressed: () async {
@@ -286,13 +286,13 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               },
               child: Text((fechaElegida == null)
                   ? "ELIGE LA FECHA DE NACIMIENTO"
-                  : DateFormat('d/M/y').format(fechaElegida),style: TextStyle(color: GuardadoLocal.colores[2]),)
+                  : DateFormat('d/M/y').format(fechaElegida),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),)
                   ,style: ElevatedButton.styleFrom(backgroundColor: GuardadoLocal.colores[0])),
 
 
           Text(
             "ELIGE FOTO DE PERFIL (OPCINAL):",
-            style: TextStyle(fontSize: 20.0, height: 2.0, color: GuardadoLocal.colores[0]),
+            style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -302,7 +302,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 height: 10,
               ),
               ElevatedButton(
-                  child: Text('HAZ UNA FOTO DESDE LA CAMARA',style: TextStyle(color: GuardadoLocal.colores[2]),),
+                  child: Text('HAZ UNA FOTO DESDE LA CAMARA',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),),
                   onPressed: () {
                     seleccionarImagen(SeleccionImagen.camara);
                   }),
@@ -310,7 +310,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 height: 10,
               ),
               ElevatedButton(
-                  child: Text('ELIGE FOTO DE LA GALERIA',style: TextStyle(color: GuardadoLocal.colores[2])),
+                  child: Text('ELIGE FOTO DE LA GALERIA',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
                   onPressed: () {
                     seleccionarImagen(SeleccionImagen.galeria);
                   }),
@@ -327,11 +327,11 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 child: Container(
                   decoration:
                   BoxDecoration(border: Border.all(color: GuardadoLocal.colores[0])),
-                  child: Text('NINGUNA FOTO TOMADA ***', textAlign: TextAlign.center,),
+                  child: Text('NINGUNA FOTO TOMADA ***', textAlign: TextAlign.center,style: TextStyle(fontSize: 25),),
                 ))
                 : Center(child: Image.file(File(fotoTomada.path))),
           ),
-          Text(mensajeDeRegistro),
+          Text(mensajeDeRegistro,style: TextStyle(fontSize: 25),),
           Visibility(
               visible: !registrando,
               child: TextButton(
@@ -341,7 +341,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 child: Text(
                   "REGISTRAR",
                   style: TextStyle(
-                      backgroundColor: Colors.transparent, color: GuardadoLocal.colores[2]),
+                      backgroundColor: Colors.transparent, color: GuardadoLocal.colores[2],fontSize: 25),
                 ),
                 onPressed: () {
                   registrarUsuario();
@@ -437,7 +437,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               onPressed: () {
                 resetPin();
               },
-              child: Text("VOLVER A INTRODUCIR")),
+              child: Text("VOLVER A INTRODUCIR", style: TextStyle(fontSize: 25),)),
         ]);
   }
 
@@ -523,7 +523,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                     color: Color(0xFF6BFF67),
                     borderRadius: BorderRadius.all(Radius.circular(29)),
                   ),
-                  child: Text(mensajeDeRegistro, style: TextStyle(color: GuardadoLocal.colores[2]),),
+                  child: Text(mensajeDeRegistro, style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),),
                 )),
           );
         } else {
@@ -555,7 +555,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               color: Color(error?0xFFC72C41:0xFF6BFF67),
               borderRadius: BorderRadius.all(Radius.circular(29)),
             ),
-            child: Text(mensaje,style: TextStyle(color: GuardadoLocal.colores[2]),),
+            child: Text(mensaje,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),),
           )),
     );
   }

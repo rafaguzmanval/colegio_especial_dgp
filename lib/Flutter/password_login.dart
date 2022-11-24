@@ -87,7 +87,7 @@ class PasswordLoginState extends State<PasswordLogin> {
             leading: IconButton(
                 icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
                 onPressed: () => _onBackPressed(context)),
-          title: Text('Hola ${Sesion.nombre}'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),),
+          title: Text('Hola ${Sesion.nombre}'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
 
         ),
         body: Container(margin: EdgeInsets.all(5), child: vista()));
@@ -124,7 +124,7 @@ class PasswordLoginState extends State<PasswordLogin> {
                   ),
                   border: OutlineInputBorder(),
                   hintText: 'Introduce la clave'.toUpperCase(),
-                  hintStyle: TextStyle(color: GuardadoLocal.colores[0]),
+                  hintStyle: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),
                 ),
                 controller: myController,
               ),
@@ -246,7 +246,7 @@ class PasswordLoginState extends State<PasswordLogin> {
               onPressed: () {
                 resetPin();
               },
-              child: Text("Volver a introducir".toUpperCase(),style: TextStyle(fontSize: 20,color: GuardadoLocal.colores[2]),)),
+              child: Text("Volver a introducir".toUpperCase(),style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[2]),)),
         ]);
   }
 

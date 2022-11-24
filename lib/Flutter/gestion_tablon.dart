@@ -86,7 +86,7 @@ class GestionTablonState extends State<GestionTablon> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
             onPressed: (){Navigator.pop(context);}),
-        title: Text('CREA UN NUEVO BOTÓN PARA EL TABLÓN',style: TextStyle(color: GuardadoLocal.colores[2]),),
+        title: Text('CREA UN NUEVO BOTÓN PARA EL TABLÓN',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
       ),
       body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),

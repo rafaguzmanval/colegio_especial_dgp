@@ -55,7 +55,7 @@ class ListaAlumnosState extends State<ListaAlumnos> {
             leading: IconButton(
                 icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
                 onPressed: (){Navigator.pop(context);}),
-            title: Text('LISTA DE ALUMNOS',style: TextStyle(color: GuardadoLocal.colores[2]),),
+            title: Text('LISTA DE ALUMNOS',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
           ),
           body: Stack(children: [
             OrientationBuilder(
@@ -130,8 +130,8 @@ class ListaAlumnosState extends State<ListaAlumnos> {
         children: [
           for (int i = 0; i < alumnos.length; i++)
             Container(
-                width: 100,
-                height: 100,
+                width: 130,
+                height: 150,
                 margin: EdgeInsets.all(10),
                 alignment: Alignment.center,
                 child: ElevatedButton(
@@ -141,12 +141,13 @@ class ListaAlumnosState extends State<ListaAlumnos> {
                         alumnos[i].nombre.toString().toUpperCase(),
                         style: TextStyle(
                           color: GuardadoLocal.colores[2],
+                          fontSize: 25,
                         ),
                       ),
                       Image.network(
                         alumnos[i].foto,
                         width: 100,
-                        height: 70,
+                        height: 100,
                         fit: BoxFit.fill,
                       ),
                     ],
