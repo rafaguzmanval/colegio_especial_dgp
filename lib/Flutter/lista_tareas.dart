@@ -31,6 +31,8 @@ class ListaTareasState extends State<ListaTareas> {
 
   double offSetActual = 0;
   ScrollController homeController = new ScrollController();
+  bool esTareaEliminandose = false;
+  int tareaEliminandose = 0;
 
   @override
   void initState() {
@@ -52,14 +54,15 @@ class ListaTareasState extends State<ListaTareas> {
     return new Scaffold(
         appBar: AppBar(
           leading: IconButton(
-              icon: Icon(Icons.arrow_back,
-                  color: GuardadoLocal.colores[2]),
+              icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
               onPressed: () {
                 Navigator.pop(context);
               }),
-          title: Center(child: Text(
-            'Lista de Tareas'.toUpperCase(),textAlign: TextAlign.center,
-            style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),
+          title: Center(
+              child: Text(
+            'Lista de Tareas'.toUpperCase(),
+            textAlign: TextAlign.center,
+            style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
           )),
         ),
         body: Stack(children: [
@@ -115,7 +118,7 @@ class ListaTareasState extends State<ListaTareas> {
 
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
   Widget VistaProfesor() {
-    return _listaProfesores();
+    return _listaTareas();
   }
 
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
@@ -126,50 +129,83 @@ class ListaTareasState extends State<ListaTareas> {
 
   ///Este método devuelve toda la vista que va a ver el administrador en un Widget.
   Widget VistaAdministrador() {
-    return _listaProfesores();
+    return _listaTareas();
   }
 
   // Este metodo devuelve una lista con todos los profesores
-  Widget _listaProfesores() {
+  Widget _listaTareas() {
     return Container(
       alignment: Alignment.center,
       //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          for (int i = 0; i < Sesion.tareas.length; i++)
-            Container(
-                width: 200,
-                height: 220,
-                margin: EdgeInsets.all(10),
-                alignment: Alignment.center,
-                child: ElevatedButton(
-                  child: Column(
-                    children: [
-                      Text(
-                        Sesion.tareas[i].nombre.toString().toUpperCase(),
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 25,
-                          color: GuardadoLocal.colores[2],
+          for (int i = 0; i < Sesion.tareas.length; i++) ...[
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+              Container(
+                  width: 200,
+                  height: 220,
+                  margin: EdgeInsets.all(20),
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    child: Column(
+                      children: [
+                        Text(
+                          Sesion.tareas[i].nombre.toString().toUpperCase(),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 25,
+                            color: GuardadoLocal.colores[2],
+                          ),
                         ),
-                      ),
-                      if (!Sesion.tareas[i].imagenes.isEmpty) ...[
-                        Image.network(
-                          Sesion.tareas[i].imagenes[0],
-                          width: 150,
-                          height: 150,
-                          fit: BoxFit.fill,
-                        ),
-                      ]
-                    ],
-                  ),
-                  onPressed: () async{
-                    Sesion.seleccion = Sesion.tareas[i];
-                    await Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => PerfilTarea()));
-                    cargarTareas();
+                        if (!Sesion.tareas[i].imagenes.isEmpty) ...[
+                          Image.network(
+                            Sesion.tareas[i].imagenes[0],
+                            width: 150,
+                            height: 150,
+                            fit: BoxFit.fill,
+                          ),
+                        ]
+                      ],
+                    ),
+                    onPressed: () async {
+                      Sesion.seleccion = Sesion.tareas[i];
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PerfilTarea()));
+                      cargarTareas();
+                    },
+                  )),
+              IconButton(
+                  onPressed: () async {
+                    await Sesion.db.eliminarTarea(Sesion.tareas[i].id).then(
+                        (){
+                          Sesion.db.db.collection("usuarioTieneTareas").where("idTarea",isEqualTo: Sesion.tareas[i].id).get().then((e){
+                            for(int i = 0; i < e.docs.length; i++){
+                              Sesion.db.db.collection("usuarioTieneTareas").doc(e.docs[i].id).delete();
+                            }
+
+                          });
+                          esTareaEliminandose = true;
+                          tareaEliminandose = i;
+                          actualizar();
+                        }
+                    );
+
+
                   },
-                ))
+                  icon: Icon(
+                    Icons.delete,
+                    color: GuardadoLocal.colores[0],
+                  )),
+              if (esTareaEliminandose && i == tareaEliminandose) ...[
+                new CircularProgressIndicator(),
+              ]
+            ])
+          ]
         ],
       ),
     );
@@ -204,14 +240,16 @@ class ListaTareasState extends State<ListaTareas> {
 
   Widget cargando() {
     if (Sesion.tareas == null)
-      return Center(child:
-      Text('\nCARGANDO LAS TAREAS',textAlign: TextAlign.center,),
+      return Center(
+        child: Text(
+          '\nCARGANDO LAS TAREAS',
+          textAlign: TextAlign.center,
+        ),
       );
     else {
       return lista();
     }
   }
-
 
   // segun el tipo de usuario devuelve diferentes tipos de listas
   lista() {
@@ -235,5 +273,6 @@ class ListaTareasState extends State<ListaTareas> {
   // metodo para actualizar la pagina
   void actualizar() async {
     setState(() {});
+    esTareaEliminandose = false;
   }
 }

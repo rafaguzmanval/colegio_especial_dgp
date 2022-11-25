@@ -549,6 +549,21 @@ class AccesoBD {
     }
   }
 
+  Future eliminarTarea(id) async {
+    try {
+      if (Sesion.tareas != null && Sesion.tareas != []) {
+        await db
+            .collection("Tareas")
+            .doc(id)
+            .delete();
+        return true;
+      }
+    } catch (e) {
+      return false;
+      print(e);
+    }
+  }
+
   // Metodo que te devuelve todos los usuarios de la base de datos
   consultarTodosUsuarios() async {
     try {
