@@ -181,8 +181,9 @@ class ListaTareasState extends State<ListaTareas> {
                   )),
               IconButton(
                   onPressed: () async {
+
                     await Sesion.db.eliminarTarea(Sesion.tareas[i].id).then(
-                        (){
+                        (e){
                           esTareaEliminandose = true;
                           tareaEliminandose = i;
                           cargarTareas();
