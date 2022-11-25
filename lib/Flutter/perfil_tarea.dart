@@ -45,7 +45,6 @@ class PerfilTareaState extends State<PerfilTarea> {
   var formularios = [];
   var vez = 0;
   var vez2 = 0;
-  AccesoBD base = new AccesoBD();
 
   //Todas las tareas que el profesor selecciona para asignar al alumno
   var tareas = [];
@@ -170,7 +169,9 @@ class PerfilTareaState extends State<PerfilTarea> {
     if (vez == 0) {
       controladorNombre.text = tareaPerfil.nombre.toUpperCase();
       controladorTexto.text = tareaPerfil.textos[0].toUpperCase();
+      if(tareaPerfil.imagenes.length > 0)
       fotoTomada = tareaPerfil.imagenes[0];
+
       formularios = tareaPerfil.formularios;
       vez++;
     }
@@ -825,9 +826,7 @@ class PerfilTareaState extends State<PerfilTarea> {
       var videos = [];
       if (videoTomado != null) {
         if (videoTomado is String) {
-          if (videoTomado.startsWith("http")) {
             videos.add(videoTomado);
-          }
         } else {
           log(videos.toString());
           videos.add(File(videoTomado.path));
@@ -840,22 +839,27 @@ class PerfilTareaState extends State<PerfilTarea> {
       Tarea tarea = Tarea();
       tarea.setTarea(nombre, textos, imagenes, videos, formularios, orden);
 
-      await base.EditarTarea(tarea, tareaPerfil).then((value) {
+      await Sesion.db.editarTarea(tarea, tareaPerfil).then((value) {
         creando = false;
 
         if (value) {
+          /*
           controladorNombre.text = "";
           controladorTexto.text = "";
           fotoTomada = null;
           videoTomado = null;
+          */
+
 
           displayMensajeValidacion(
               "Tarea editada correctamente\nPuedes volver a crear otra tarea:"
                   .toUpperCase(),
               false);
+          Navigator.pop(context);
+
         } else {
           displayMensajeValidacion(
-              "Fallo al crear tarea, inténtelo de nuevo".toUpperCase(), true);
+              "Fallo al editar tarea, inténtelo de nuevo".toUpperCase(), true);
         }
 
         actualizar();
