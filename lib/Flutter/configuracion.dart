@@ -136,7 +136,7 @@ class ConfiguracionState extends State<Configuracion> {
                                         color: marcos,
                                         shape: BoxShape.circle),
                                     child: CircleAvatar(backgroundColor: p),),
-                                  ElevatedButton(onPressed: (){_elegirColor('p');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),))
+                                  ElevatedButton(onPressed: (){_elegirColor('p');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),))
                                 ],
                               )
                             ],
@@ -159,7 +159,7 @@ class ConfiguracionState extends State<Configuracion> {
                                         color: marcos,
                                         shape: BoxShape.circle),
                                     child: CircleAvatar(backgroundColor: b),),
-                                  ElevatedButton(onPressed: (){_elegirColor('b');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),))
+                                  ElevatedButton(onPressed: (){_elegirColor('b');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),))
                                 ],
                               )
                             ],
@@ -181,7 +181,7 @@ class ConfiguracionState extends State<Configuracion> {
                                         color: marcos,
                                         shape: BoxShape.circle),
                                     child: CircleAvatar(backgroundColor: l),),
-                                  ElevatedButton(onPressed: (){_elegirColor('l');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),))
+                                  ElevatedButton(onPressed: (){_elegirColor('l');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),))
                                 ],
                               )
                             ],
@@ -306,7 +306,7 @@ class ConfiguracionState extends State<Configuracion> {
                     Text('TEXTO SOBRE FONDO',style: TextStyle(color: p),),
                     ElevatedButton(onPressed: (){},
                       style: ElevatedButton.styleFrom(primary: p),
-                      child: Text('BOTON',style: TextStyle(color: l),),)
+                      child: Text('BOTON',style: TextStyle(color: l,fontSize: 25),),)
                   ],
                 ),
               )
@@ -365,7 +365,7 @@ class ConfiguracionState extends State<Configuracion> {
       builder: (context){
         return AlertDialog(
           backgroundColor: GuardadoLocal.colores[1],
-          title: Text('Elige un color'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[0]),),
+          title: Text('Elige un color'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),),
           content: SingleChildScrollView(
             child: colorPicker,
           ),
@@ -472,8 +472,8 @@ class ConfiguracionState extends State<Configuracion> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
             onPressed: (){Navigator.pop(context);}),
-        title: Text("Configuración".toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2]),),
-      ),
+        title: Center(child: Text("Configuración".toUpperCase(),textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
+      )),
       body: SingleChildScrollView(
           child: Container(
               alignment: Alignment.center,

@@ -66,8 +66,8 @@ class PerfilProfesorState extends State<PerfilProfesor> {
             leading: IconButton(
                 icon: Icon(Icons.arrow_back_ios_new, color: GuardadoLocal.colores[2]),
                 onPressed: (){Navigator.pop(context);}),
-            title: Text('PERFIL DE ${Sesion.seleccion.nombre.toUpperCase()}'
-                '',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
+            title: Center(child: Text('PERFIL DE ${Sesion.seleccion.nombre.toUpperCase()}'
+                '',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),)),
           ),
           body: Container(
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),

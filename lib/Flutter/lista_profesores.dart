@@ -55,8 +55,8 @@ class ListaProfesoresState extends State<ListaProfesores> {
           leading: IconButton(
               icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
               onPressed: (){Navigator.pop(context);}),
-          title: Text('Lista de Profesores'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
-        ),
+          title: Center(child: Text('Lista de Profesores'.toUpperCase(),textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
+        )),
         body: Stack(children: [
           OrientationBuilder(
             builder: (context, orientation) =>

@@ -84,8 +84,8 @@ class MyHomePageState extends State<MyHomePage> {
                     onPressed: () => _onBackPressed(context)),
 
                 title: Column(children: [
-                  Text('Menú principal'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
-                ]),
+                Center(child: Text('Menú principal'.toUpperCase(),textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
+                )]),
                 actions: [IconButton(onPressed: () => Navigator.push(context,
                     MaterialPageRoute(
                         builder: (context) => Configuracion())), icon: Icon(Icons.settings, color: GuardadoLocal.colores[2]))],

@@ -116,12 +116,12 @@ class PerfilTareaState extends State<PerfilTarea> {
               onPressed: () {
                 Navigator.pop(context);
               }),
-          title: Text(
+          title: Center(child: Text(
             'Editar tarea: ${Sesion.seleccion.nombre}'
                     ''
-                .toUpperCase(),
+                .toUpperCase(),textAlign: TextAlign.center,
             style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),
-          ),
+          )),
         ),
         body: SingleChildScrollView(
           child: Container(

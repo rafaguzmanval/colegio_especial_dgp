@@ -140,8 +140,8 @@ class CrearTareaState extends State<CrearTarea> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
             onPressed: (){Navigator.pop(context);}),
-        title: Text('Crea una nueva tarea'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30)),
-      ),
+        title: Center(child: Text('Crea una nueva tarea'.toUpperCase(),textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30)),
+      )),
       body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
           child: Column(

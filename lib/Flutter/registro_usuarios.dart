@@ -105,8 +105,8 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           leading: IconButton(
               icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
               onPressed: (){Navigator.pop(context);}),
-          title: Text('REGISTRA UN NUEVO USUARIO',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
-        ),
+          title: Center(child: Text('REGISTRA UN NUEVO USUARIO',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
+        )),
         body: SingleChildScrollView(
             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
             child: Column(

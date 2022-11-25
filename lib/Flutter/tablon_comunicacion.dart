@@ -79,8 +79,8 @@ class TablonComunicacionState extends State<TablonComunicacion> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
             onPressed: (){Navigator.pop(context);}),
-        title: Text('TABLON DE COMUNICACIÓN',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
-      ),
+        title: Center(child: Text('TABLON DE COMUNICACIÓN',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
+      )),
       body: SingleChildScrollView(
           child: Container(
               padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),

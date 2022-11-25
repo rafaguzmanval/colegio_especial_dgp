@@ -57,10 +57,10 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-          title: Text(
-        'TuCole',
+          title: Center(child: Text(
+        'TuCole',textAlign: TextAlign.center,
         style: TextStyle(fontSize:30,color: GuardadoLocal.colores[2],fontWeight: FontWeight.normal),
-      )),
+      ))),
       body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           mainAxisSize: MainAxisSize.max,

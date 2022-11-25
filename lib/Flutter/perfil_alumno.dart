@@ -71,9 +71,9 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
           leading: IconButton(
               icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
               onPressed: (){Navigator.pop(context);}),
-          title: Text('PERFIL DE: ${Sesion.seleccion.nombre.toUpperCase()}'
-              '',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
-        ),
+          title: Center(child: Text('PERFIL DE: ${Sesion.seleccion.nombre.toUpperCase()}'
+              '',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
+        )),
         body: Container(
             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
             alignment: Alignment.center,

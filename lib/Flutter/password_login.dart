@@ -87,9 +87,9 @@ class PasswordLoginState extends State<PasswordLogin> {
             leading: IconButton(
                 icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
                 onPressed: () => _onBackPressed(context)),
-          title: Text('Hola ${Sesion.nombre}'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
+          title: Center(child: Text('Hola ${Sesion.nombre}'.toUpperCase(),textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
 
-        ),
+        )),
         body: Container(margin: EdgeInsets.all(5), child: vista()));
   }
 

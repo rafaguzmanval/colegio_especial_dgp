@@ -57,10 +57,10 @@ class ListaTareasState extends State<ListaTareas> {
               onPressed: () {
                 Navigator.pop(context);
               }),
-          title: Text(
-            'Lista de Tareas'.toUpperCase(),
+          title: Center(child: Text(
+            'Lista de Tareas'.toUpperCase(),textAlign: TextAlign.center,
             style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),
-          ),
+          )),
         ),
         body: Stack(children: [
           OrientationBuilder(

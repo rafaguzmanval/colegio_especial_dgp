@@ -55,8 +55,8 @@ class ListaAlumnosState extends State<ListaAlumnos> {
             leading: IconButton(
                 icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
                 onPressed: (){Navigator.pop(context);}),
-            title: Text('LISTA DE ALUMNOS',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
-          ),
+            title: Center(child: Text('LISTA DE ALUMNOS',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
+          )),
           body: Stack(children: [
             OrientationBuilder(
               builder: (context, orientation) =>

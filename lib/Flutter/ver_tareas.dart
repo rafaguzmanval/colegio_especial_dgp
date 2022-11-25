@@ -174,11 +174,11 @@ class VerTareasState extends State<VerTareas> {
                 onPressed: () => Navigator.of(context).pop(),
               ),
               title: Center(
-                  child: Text('Tareas de '.toUpperCase() +
+                  child: Center(child: Text('Tareas de '.toUpperCase() +
                       (Sesion.rol == Rol.alumno.toString()
                           ? Sesion.nombre.toUpperCase()
-                          : Sesion.seleccion.nombre.toUpperCase()),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),)),
-            ),
+                          : Sesion.seleccion.nombre.toUpperCase()),textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),)),
+            )),
             body: GestureDetector(
               onPanStart: (DragStartDetails details) {
                 dragInicial = details.globalPosition.dx;
