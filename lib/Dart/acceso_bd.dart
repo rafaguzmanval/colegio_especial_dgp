@@ -218,7 +218,7 @@ class AccesoBD {
   // Metodo para consultar las tareas asignadas a un usuario según el id pasado por parametro y te devuelve las tareas que tiene insertandolas en la
   // sesion
   @deprecated
-  consultarTareasAsignadasAlumno(id, cargarVideos) async {
+  consultarTareasAsignadasAlumno(id, completa) async {
     try {
 
       //Se accede a la relación de las tareas de un usuario
@@ -227,7 +227,7 @@ class AccesoBD {
 
       _subscripcion = await ref.where("idUsuario", isEqualTo: id).orderBy("fechainicio") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
         .snapshots().listen((e) async {
-          print("nueva actualización en ver_tareas");//Escucha los cambios en el servidor
+          //Escucha los cambios en el servidor
           var nuevasTareas = [];
           for (int i = 0; i < e.docs.length; i++) { // itera sobre los elementos de la colección
             var idTarea = e.docs[i].get("idTarea"); // cada tarea tiene una id
@@ -262,11 +262,10 @@ class AccesoBD {
 
                 if (nuevasTareas.length == e.docs.length) {
                   Sesion.tareas = nuevasTareas;
-                  if (cargarVideos) {
+                  if (completa) {
                     try {
                       for (int k = 0; k < Sesion.tareas.length; k++) {
                         var array = [];
-
 
                         for (int j = 0; j < Sesion.tareas[k].videos
                             .length; j++) {
@@ -296,7 +295,7 @@ class AccesoBD {
                       }
 
 
-                      Sesion.paginaActual.actualizar();
+                      //Sesion.paginaActual.actualizar();
                     } catch (e) {
                       print(e);
                     }
@@ -556,6 +555,13 @@ class AccesoBD {
             .collection("Tareas")
             .doc(id)
             .delete();
+
+        await db.collection("usuarioTieneTareas").where("idTarea",isEqualTo: id).get().then((e){
+          for(int i = 0; i < e.docs.length; i++){
+            db.collection("usuarioTieneTareas").doc(e.docs[i].id).delete();
+          }
+
+        });
         return true;
       }
     } catch (e) {
@@ -576,6 +582,7 @@ class AccesoBD {
       final consulta = await ref.get();
 
       consulta.docs.forEach((element) {
+
         final usuarioNuevo = element.data();
         usuarioNuevo.id = element.id;
         usuarios.add(usuarioNuevo);
@@ -746,6 +753,7 @@ class AccesoBD {
 
   crearTablon(tablon) async
   {
+
     try {
       final ref = db.collection("tablero");
       var nuevoTablero = <String, dynamic>{

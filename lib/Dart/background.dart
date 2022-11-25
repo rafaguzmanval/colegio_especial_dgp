@@ -79,11 +79,16 @@ static inicializarBackground() async
         if(e.docs.length > 0 /*&& e.docs.last.get("estado") != "sinFinalizar"*/)
         {
           var idUsuario = e.docs.last.get("idUsuario"); // cada tarea tiene una id
+          var idTarea = e.docs.last.get("idTarea");
 
-          await Sesion.db.consultarIDusuario(idUsuario).then((usuario) {
+          await Sesion.db.consultarIDusuario(idUsuario).then((usuario) async{
 
-            Sesion.argumentos.add(e.docs.length-1);
-            print(usuario.nombre + " ha completado una tarea   " + e.docs.last.get("estado"));
+            //Sesion.argumentos.add(e.docs.length-1);
+
+              await Sesion.db.consultarIDTarea(idTarea).then((tarea) {
+
+                print(usuario.nombre + " ha completado una tarea " + tarea.nombre);
+              });
 
             //if(!kIsWeb)
             //Notificacion.showBigTextNotification(title: "Tarea completada", body: usuario.nombre + " ha completado una tarea   " + e.docs.last.get("estado"), fln: notificaciones );

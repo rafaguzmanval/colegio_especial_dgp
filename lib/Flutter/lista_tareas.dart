@@ -183,12 +183,6 @@ class ListaTareasState extends State<ListaTareas> {
                   onPressed: () async {
                     await Sesion.db.eliminarTarea(Sesion.tareas[i].id).then(
                         (){
-                          Sesion.db.db.collection("usuarioTieneTareas").where("idTarea",isEqualTo: Sesion.tareas[i].id).get().then((e){
-                            for(int i = 0; i < e.docs.length; i++){
-                              Sesion.db.db.collection("usuarioTieneTareas").doc(e.docs[i].id).delete();
-                            }
-
-                          });
                           esTareaEliminandose = true;
                           tareaEliminandose = i;
                           actualizar();
