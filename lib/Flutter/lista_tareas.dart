@@ -185,7 +185,7 @@ class ListaTareasState extends State<ListaTareas> {
                         (){
                           esTareaEliminandose = true;
                           tareaEliminandose = i;
-                          actualizar();
+                          cargarTareas();
                         }
                     );
 

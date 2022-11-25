@@ -554,15 +554,19 @@ class AccesoBD {
         await db
             .collection("Tareas")
             .doc(id)
-            .delete();
+            .delete().then((e) async{
 
-        await db.collection("usuarioTieneTareas").where("idTarea",isEqualTo: id).get().then((e){
-          for(int i = 0; i < e.docs.length; i++){
-            db.collection("usuarioTieneTareas").doc(e.docs[i].id).delete();
-          }
+              await db.collection("usuarioTieneTareas").where("idTarea",isEqualTo: id).get().then((e){
+                for(int i = 0; i < e.docs.length; i++){
+                  db.collection("usuarioTieneTareas").doc(e.docs[i].id).delete();
+                }
+
+                return true;
+              });
 
         });
-        return true;
+
+
       }
     } catch (e) {
       return false;
