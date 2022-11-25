@@ -115,8 +115,7 @@ class ConfiguracionState extends State<Configuracion> {
                         color: GuardadoLocal.colores[1],
                         borderRadius: BorderRadius.all(Radius.circular(10))),
                     padding: const EdgeInsets.all(10),
-                    child: Expanded(
-                      child: Column(
+                    child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
@@ -194,8 +193,7 @@ class ConfiguracionState extends State<Configuracion> {
                             children: [
                               Container(
                                   margin: EdgeInsets.only(top:30),
-                                  child:  Expanded(
-                                    child:Text('PREVISUALIZACIÓN',style: TextStyle(fontSize:30,color: GuardadoLocal.colores[0])),)
+                                  child:Text('PREVISUALIZACIÓN',style: TextStyle(fontSize:30,color: GuardadoLocal.colores[0]),)
                               ),
                               Container(
                                   margin: EdgeInsets.only(top:10,bottom: 10),
@@ -203,8 +201,7 @@ class ConfiguracionState extends State<Configuracion> {
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Container(
-                                          child:Expanded(
+                                      Expanded(
                                             child: Column(
                                                 children: [
                                                   Text('ACTUAL',style: TextStyle(fontSize:30,color: GuardadoLocal.colores[0]),),
@@ -214,11 +211,9 @@ class ConfiguracionState extends State<Configuracion> {
                                                     child: previsualizacionColores(GuardadoLocal.colores[0],GuardadoLocal.colores[1],GuardadoLocal.colores[2]),
                                                   )]
                                             ),
-                                          )
                                       ),
 
-                                      Container(
-                                          child:Expanded(
+                                      Expanded(
                                               child: Column(
                                                   children: [
                                                     Text('SELECCIONADO',style: TextStyle(fontSize:30,color: GuardadoLocal.colores[0])),
@@ -228,7 +223,6 @@ class ConfiguracionState extends State<Configuracion> {
                                                       child: previsualizacionColores(p,b,l),
                                                     )]
                                               )
-                                          )
                                       ),
                                     ],
                                   )
@@ -280,15 +274,13 @@ class ConfiguracionState extends State<Configuracion> {
                       ),
                     )
                 ),
-              )
           );
         });
   }
 
   //Widget de previsualizacion de colores
   Widget previsualizacionColores(Color p, Color b, Color l){
-    return Expanded(
-        child: Column(
+    return Column(
           children: [
             Container(
               color:p,
@@ -319,7 +311,7 @@ class ConfiguracionState extends State<Configuracion> {
                 ),
               )
           ],
-        ));
+        );
   }
 
   _elegirColor(String actual){
@@ -387,7 +379,7 @@ class ConfiguracionState extends State<Configuracion> {
                     ElevatedButton.styleFrom(primary: GuardadoLocal.colores[0]):ElevatedButton.styleFrom(primary: Colors.red),
                   child: comprobarColor(pickerColor)?
                     Text('Aplicar'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),):
-                    Icon(Icons.warning,color: Colors.red[900],size: 30,),
+                    Icon(Icons.warning,color: Colors.red[900],size: 36,),
                   onPressed: () {
                     bool esAccesible = false;
                     setState(() {
