@@ -42,7 +42,7 @@ class ListaTareasState extends State<ListaTareas> {
     Sesion.tareas = [];
 
     if (Sesion.rol != Rol.alumno.toString()) {
-      cargarProfesores();
+      cargarTareas();
     }
   }
 
@@ -163,10 +163,11 @@ class ListaTareasState extends State<ListaTareas> {
                       ]
                     ],
                   ),
-                  onPressed: () {
+                  onPressed: () async{
                     Sesion.seleccion = Sesion.tareas[i];
-                    Navigator.push(context,
+                    await Navigator.push(context,
                         MaterialPageRoute(builder: (context) => PerfilTarea()));
+                    cargarTareas();
                   },
                 ))
         ],
@@ -226,7 +227,7 @@ class ListaTareasState extends State<ListaTareas> {
   }
 
   // metodo para cargar la lista de profesores
-  cargarProfesores() async {
+  cargarTareas() async {
     Sesion.tareas = await Sesion.db.consultarTodasLasTareas();
     actualizar();
   }

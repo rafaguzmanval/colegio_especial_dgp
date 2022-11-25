@@ -1,10 +1,10 @@
 
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'notificacion.dart';
 import 'main.dart';
 import 'package:flutter_background/flutter_background.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class Background
 {
@@ -72,25 +72,37 @@ static inicializarBackground() async
       var ref = Sesion.db.db.collection("usuarioTieneTareas");
 
       _subscripcion = await ref.orderBy("fechaentrega") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
-          .snapshots().listen((e) {
+          .snapshots().listen((e) async{
 
-            print("nueva completada");
-            print(e.docs.last.get("estado"));
-        if(e.docs.length > 0 && e.docs.last.get("estado") != "sinFinalizar")
+
+
+        if(e.docs.length > 0 /*&& e.docs.last.get("estado") != "sinFinalizar"*/)
         {
           var idUsuario = e.docs.last.get("idUsuario"); // cada tarea tiene una id
 
+          await Sesion.db.consultarIDusuario(idUsuario).then((usuario) {
 
-            e.docChanges.forEach((element) async {
+            Sesion.argumentos.add(e.docs.length-1);
+            print(usuario.nombre + " ha completado una tarea   " + e.docs.last.get("estado"));
+
+            //if(!kIsWeb)
+            //Notificacion.showBigTextNotification(title: "Tarea completada", body: usuario.nombre + " ha completado una tarea   " + e.docs.last.get("estado"), fln: notificaciones );
+          });
+
+          //print(idUsuario.toString());
+
+            /*e.docChanges.forEach((element) async {
               if(element.type == DocumentChangeType.added)
               {
+                print(element.get("idUsuario").toString());
+                /*
                 await Sesion.db.consultarIDusuario(idUsuario).then((usuario) {
 
                   Sesion.argumentos.add(e.docs.length-1);
                   Notificacion.showBigTextNotification(title: "Tarea completada", body: usuario.nombre + " ha completado una tarea", fln: notificaciones );
-                });
+                });*/
               }
-            });
+            });*/
 
         }
 

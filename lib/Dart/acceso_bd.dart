@@ -372,6 +372,7 @@ class AccesoBD {
   }
 
 
+
   fallarTarea(idTareaAsignada) async
   {
     try
@@ -421,7 +422,7 @@ class AccesoBD {
 
   }
 
-  EditarTarea(tarea, tareaPerfil) async {
+  editarTarea(tarea, tareaPerfil) async {
     try {
       //Se encripta la contaseña
       final ref = db.collection("Tareas");
@@ -466,18 +467,29 @@ class AccesoBD {
       }
 
       if (tarea.videos.length > 0) {
-        var videoPath = "Vídeos/" + encriptacionSha256(tarea.videos[0].path);
+
 
         // se espera a que se introduzca el video correctamente en el storage para después salir del bucle de espera
-        await storageRef
-            .child(videoPath)
-            .putFile(tarea.videos[0])
-            .then((p0) async {
-          await leerVideo(videoPath).then((value) {
-            videos.add(value);
+        if(!(tarea.videos[0] is String))
+           {
+             var videoPath = "Vídeos/" + encriptacionSha256(tarea.videos[0].path);
+             await storageRef
+                 .child(videoPath)
+                 .putFile(tarea.videos[0])
+                 .then((p0) async {
+               await leerVideo(videoPath).then((value) {
+                 videos.add(value);
+                 i++;
+               });
+             });
+           }
+        else
+          {
+            videos.add(tarea.videos[0]);
             i++;
-          });
-        });
+          }
+
+
       }
 
       //bucle de espera  para que las imágenes y los vídeos estén cargados
