@@ -250,7 +250,7 @@ class LoginPageState extends State<LoginPage> {
   }
 
   buildLandscape() {
-    maxUsuariosPorFila = 5;
+    maxUsuariosPorFila = 4;
     return SingleChildScrollView(
         controller: homeController, child: buildLista());
   }

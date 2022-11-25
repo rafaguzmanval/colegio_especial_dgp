@@ -101,6 +101,7 @@ class MyHomePageState extends State<MyHomePage> {
 
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
   Widget VistaProfesor() {
+    double media = MediaQuery.of(context).size.width;
     return Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.max,
@@ -108,7 +109,8 @@ class MyHomePageState extends State<MyHomePage> {
           Flexible(
               flex: 1,
               fit: FlexFit.tight,
-              child: Row(
+              child:
+                  media > 600 ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [Flexible(
                     flex: 1,
@@ -178,12 +180,90 @@ class MyHomePageState extends State<MyHomePage> {
                         ),
                       ),
 
-                  ]))
+                  ]):
+                  Container(
+                    alignment: Alignment.center,
+
+                    child:
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [Flexible(
+                        flex: 1,
+                        fit: FlexFit.tight,
+                        child: Container(
+                          margin: EdgeInsets.all(50),
+                          child: ElevatedButton(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "GESTION DEL TABLON",
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                    color: GuardadoLocal.colores[2],
+                                  ),
+                                ),
+                                Flexible(
+                                    flex: 1,
+                                    child: Image.asset(
+                                      "assets/tableroDeComunicacion.png",
+                                    )),
+                              ],
+                            ),
+                            onPressed: () async{
+                              await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => GestionTablon()));
+                              Sesion.paginaActual = this;
+                            },
+                          ),
+                        ),
+                      ),
+                        Flexible(
+                          flex: 1,
+                          fit: FlexFit.tight,
+                          //margin: EdgeInsets.all(10),
+                          child: Container(
+                            margin: EdgeInsets.all(50),
+                            child: ElevatedButton(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Lista de alumnos".toUpperCase(),
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                      color: GuardadoLocal.colores[2],
+                                    ),
+                                  ),
+                                  Flexible(
+                                      flex: 1,
+                                      child: Image.asset(
+                                        "assets/companeros.png",
+                                      )),
+                                ],
+                              ),
+                              onPressed: () async {
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ListaAlumnos()));
+                                Sesion.paginaActual = this;
+                              },
+                            ),
+                          ),
+                        ),
+
+                      ]),
+                  ),
+          )
         ]);
   }
 
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
   Widget VistaAlumno() {
+    double media = MediaQuery.of(context).size.width;
     return Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.max,
@@ -191,7 +271,93 @@ class MyHomePageState extends State<MyHomePage> {
           Flexible(
             flex: 1,
             fit: FlexFit.tight,
-            child: Row(
+            child:
+            media > 600 ? Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  //margin: EdgeInsets.all(10),
+                  child: Container(
+                    margin: EdgeInsets.all(40),
+                    child: ElevatedButton(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Tablon de Comunicación".toUpperCase(),
+                            style: TextStyle(
+                              fontSize: 30,
+                              color: GuardadoLocal.colores[2],
+                            ),
+                          ),
+                          Flexible(
+                              flex: 1,
+                              child: Image.asset(
+                                "assets/tableroDeComunicacion.png",
+                              )),
+                        ],
+                      ),
+                      onPressed: () async{
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => TablonComunicacion())).then((value) async{
+                          Sesion.paginaActual = this;
+                          if(Sesion.argumentos.length == 1)
+                          {
+                            await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => VerTareas()));
+                            Sesion.paginaActual = this;
+                          }
+                        });
+
+                      },
+                    ),
+                  ),
+                ),
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Container(
+                    margin: EdgeInsets.all(40),
+                    child: ElevatedButton(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Lista de Tareas".toUpperCase(),
+                            style: TextStyle(
+                              fontSize: 30,
+                              color: GuardadoLocal.colores[2],
+                            ),
+                          ),
+                          Flexible(
+                              flex: 1,
+                              child: Image.asset(
+                                "assets/lectoescritura.png",
+                              )),
+                        ],
+                      ),
+                      onPressed: () async {
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => VerTareas()));
+                        Sesion.paginaActual = this;
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ):Container(
+                alignment: Alignment.center,
+
+                child:
+            Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Flexible(
@@ -273,7 +439,9 @@ class MyHomePageState extends State<MyHomePage> {
                 ),
               ],
             ),
-          ),
+            ),
+
+          )
         ]);
   }
 
