@@ -53,7 +53,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
 // Contructor de la estructura de la pagina
   @override
   Widget build(BuildContext context) {
-    //double media = MediaQuery.of(context).size.width;
+    double media = MediaQuery.of(context).size.width;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -68,7 +68,92 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
             Flexible(
               flex: 1,
               fit: FlexFit.tight,
-              child: Row(
+
+              child:
+              media > 600 ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Flexible(
+                    flex: 1,
+                    fit: FlexFit.tight,
+                    //margin: EdgeInsets.all(10),
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          bottom: 40, top: 40, right: 30, left: 30),
+                      child: ElevatedButton(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Alumnos".toUpperCase(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 30,
+                                color: GuardadoLocal.colores[2],
+                              ),
+                            ),
+                            Flexible(
+                                flex: 1,
+                                child: Image.asset(
+                                  "assets/companeros.png",
+                                )),
+                          ],
+                        ),
+                        onPressed: () {
+                          Sesion.argumentos.add("alumnos");
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  Flexible(
+                    flex: 1,
+                    fit: FlexFit.tight,
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          bottom: 40, top: 40, right: 30, left: 30),
+                      child: ElevatedButton(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Profesores".toUpperCase(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 30,
+                                color: GuardadoLocal.colores[2],
+                              ),
+                            ),
+                            Flexible(
+                                flex: 1,
+                                child: Image.asset(
+                                  "assets/profesor.png",
+                                )),
+                          ],
+                        ),
+                        onPressed: () {
+                          Sesion.argumentos.add("profesores");
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ):Container(
+                alignment: Alignment.center,
+
+              child:
+              Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Flexible(
@@ -148,6 +233,10 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
                   ),
                 ],
               ),
+              )
+
+
+
             )
           ]),
     );
