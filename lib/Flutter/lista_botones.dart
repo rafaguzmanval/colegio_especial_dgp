@@ -15,24 +15,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
+import 'package:colegio_especial_dgp/Flutter/perfil_boton.dart';
 import 'package:colegio_especial_dgp/Flutter/perfil_profesor.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:colegio_especial_dgp/Flutter/perfil_tarea.dart';
 import 'package:flutter/material.dart';
 
-class ListaTareas extends StatefulWidget {
+class ListaBotones extends StatefulWidget {
   @override
-  ListaTareasState createState() => ListaTareasState();
+  ListaBotonesState createState() => ListaBotonesState();
 }
 
-class ListaTareasState extends State<ListaTareas> {
-  var tareas = [];
+class ListaBotonesState extends State<ListaBotones> {
+  var botones = [];
 
   double offSetActual = 0;
   ScrollController homeController = new ScrollController();
-  bool esTareaEliminandose = false;
-  int tareaEliminandose = 0;
+  bool esBotonEliminandose = false;
+  int botonEliminandose = 0;
 
   @override
   void initState() {
@@ -41,10 +42,10 @@ class ListaTareasState extends State<ListaTareas> {
     Sesion.paginaActual = this;
 
     Sesion.seleccion = "";
-    Sesion.tareas = [];
+    Sesion.tablon = [];
 
     if (Sesion.rol != Rol.alumno.toString()) {
-      cargarTareas();
+      cargarTablon();
     }
   }
 
@@ -60,17 +61,17 @@ class ListaTareasState extends State<ListaTareas> {
               }),
           title: Center(
               child: Text(
-            'Lista de Tareas'.toUpperCase(),
-            textAlign: TextAlign.center,
-            style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
-          )),
+                'Lista de Tareas'.toUpperCase(),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+              )),
         ),
         body: Stack(children: [
           OrientationBuilder(
             builder: (context, orientation) =>
-                orientation == Orientation.portrait
-                    ? buildPortrait()
-                    : buildLandscape(),
+            orientation == Orientation.portrait
+                ? buildPortrait()
+                : buildLandscape(),
           ),
           Container(
             alignment: FractionalOffset(0.98, 0.01),
@@ -98,7 +99,7 @@ class ListaTareasState extends State<ListaTareas> {
             child: FloatingActionButton(
                 heroTag: "botonDown",
                 child:
-                    Icon(Icons.arrow_downward, color: GuardadoLocal.colores[2]),
+                Icon(Icons.arrow_downward, color: GuardadoLocal.colores[2]),
                 elevation: 1.0,
                 onPressed: () {
                   offSetActual += 100;
@@ -140,66 +141,66 @@ class ListaTareasState extends State<ListaTareas> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          for (int i = 0; i < Sesion.tareas.length; i++) ...[
+          for (int i = 0; i < Sesion.tablon.length; i++) ...[
             Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-              Container(
-                  width: 200,
-                  height: 220,
-                  margin: EdgeInsets.all(20),
-                  alignment: Alignment.center,
-                  child: ElevatedButton(
-                    child: Column(
-                      children: [
-                        Text(
-                          Sesion.tareas[i].nombre.toString().toUpperCase(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 25,
-                            color: GuardadoLocal.colores[2],
-                          ),
+                  Container(
+                      width: 200,
+                      height: 220,
+                      margin: EdgeInsets.all(20),
+                      alignment: Alignment.center,
+                      child: ElevatedButton(
+                        child: Column(
+                          children: [
+                            Text(
+                              Sesion.tablon[i].nombres.toString().toUpperCase(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 25,
+                                color: GuardadoLocal.colores[2],
+                              ),
+                            ),
+                            if (!Sesion.tablon[i].imagenes.isEmpty) ...[
+                              Image.network(
+                                Sesion.tablon[i].imagenes,
+                                width: 150,
+                                height: 150,
+                                fit: BoxFit.fill,
+                              ),
+                            ]
+                          ],
                         ),
-                        if (!Sesion.tareas[i].imagenes.isEmpty) ...[
-                          Image.network(
-                            Sesion.tareas[i].imagenes[0],
-                            width: 150,
-                            height: 150,
-                            fit: BoxFit.fill,
-                          ),
-                        ]
-                      ],
-                    ),
-                    onPressed: () async {
-                      Sesion.seleccion = Sesion.tareas[i];
-                      await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PerfilTarea()));
-                      cargarTareas();
-                    },
-                  )),
-              IconButton(
-                  onPressed: () async {
+                        onPressed: () async {
+                          Sesion.seleccion = Sesion.tablon[i];
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Perfilboton()));
+                          cargarTablon();
+                        },
+                      )),
+                  IconButton(
+                      onPressed: () async {
 
-                    await Sesion.db.eliminarTarea(Sesion.tareas[i].id).then(
-                        (e){
-                          esTareaEliminandose = true;
-                          tareaEliminandose = i;
-                          cargarTareas();
-                        }
-                    );
+                        await Sesion.db.eliminarTablon(Sesion.tablon[i].id).then(
+                                (e){
+                              esBotonEliminandose = true;
+                              botonEliminandose = i;
+                              cargarTablon();
+                            }
+                        );
 
 
-                  },
-                  icon: Icon(
-                    Icons.delete,
-                    color: GuardadoLocal.colores[0],
-                  )),
-              if (esTareaEliminandose && i == tareaEliminandose) ...[
-                new CircularProgressIndicator(),
-              ]
-            ])
+                      },
+                      icon: Icon(
+                        Icons.delete,
+                        color: GuardadoLocal.colores[0],
+                      )),
+                  if (esBotonEliminandose && i == botonEliminandose) ...[
+                    new CircularProgressIndicator(),
+                  ]
+                ])
           ]
         ],
       ),
@@ -234,10 +235,10 @@ class ListaTareasState extends State<ListaTareas> {
   }
 
   Widget cargando() {
-    if (Sesion.tareas == null)
+    if (Sesion.tablon == null)
       return Center(
         child: Text(
-          '\nCARGANDO LAS TAREAS',
+          '\nCARGANDO LOS BOTONES',
           textAlign: TextAlign.center,
         ),
       );
@@ -260,14 +261,14 @@ class ListaTareasState extends State<ListaTareas> {
   }
 
   // metodo para cargar la lista de profesores
-  cargarTareas() async {
-    Sesion.tareas = await Sesion.db.consultarTodasLasTareas();
+  cargarTablon() async {
+    Sesion.tablon = await Sesion.db.consultarTodosTablon();
     actualizar();
   }
 
   // metodo para actualizar la pagina
   void actualizar() async {
     setState(() {});
-    esTareaEliminandose = false;
+    esBotonEliminandose = false;
   }
 }

@@ -40,8 +40,6 @@ String encriptacionSha256(String password) {
   return hashvalue.toString();
 }
 
-
-
 class AccesoBD {
   var db = FirebaseFirestore.instance;
   var storageRef = FirebaseStorage.instance.ref();
@@ -50,15 +48,13 @@ class AccesoBD {
   var fotoDesconocido =
       "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fperfiles%2Fdesconocido.png?alt=media&token=98ba72ac-776e-4f83-9aaa-57761589c974";
 
-  desactivarSubscripcion(){
-    if(_subscripcion != null)
-    _subscripcion.cancel();
+  desactivarSubscripcion() {
+    if (_subscripcion != null) _subscripcion.cancel();
   }
 
   // Metodo para registrar usuario
   registrarUsuario(usuario, foto) async {
     try {
-
       //Se encripta la contaseña
       var nuevaPassword = encriptacionSha256(usuario.password);
       var nombrehaseao =
@@ -118,36 +114,29 @@ class AccesoBD {
       int i = 0;
 
       if (tarea.imagenes.length > 0) {
-
-
-        if(tarea.imagenes[0] is String)
-          {
-            if(tarea.imagenes[0].startsWith("http"))
-              {
-                imagenes.add(tarea.imagenes[0]);
-                i++;
-              }
+        if (tarea.imagenes[0] is String) {
+          if (tarea.imagenes[0].startsWith("http")) {
+            imagenes.add(tarea.imagenes[0]);
+            i++;
           }
-        else
-          {
-            var fotoPath = "Imágenes/pictogramas/" +
-                encriptacionSha256(tarea.imagenes[0].path);
+        } else {
+          var fotoPath = "Imágenes/pictogramas/" +
+              encriptacionSha256(tarea.imagenes[0].path);
 
-            //se introduce la imágen dentro del storage y cuando se comrpueba que se ha cargado entronces se incrementa 'i' para que se pueda salir del bucle de espera
-            await storageRef
-                .child(fotoPath)
-                .putFile(tarea.imagenes[0])
-                .then((d0) async {
-                      await leerImagen(fotoPath).then((value) {
-                        log(value);
-                        imagenes.add(value);
-                        log("Se añadio la imagen al array");
-                        i++;
-                      });
-                      log("Se leido lo de await leerImagen");
-                    });
-          }
-
+          //se introduce la imágen dentro del storage y cuando se comrpueba que se ha cargado entronces se incrementa 'i' para que se pueda salir del bucle de espera
+          await storageRef
+              .child(fotoPath)
+              .putFile(tarea.imagenes[0])
+              .then((d0) async {
+            await leerImagen(fotoPath).then((value) {
+              log(value);
+              imagenes.add(value);
+              log("Se añadio la imagen al array");
+              i++;
+            });
+            log("Se leido lo de await leerImagen");
+          });
+        }
       }
 
       if (tarea.videos.length > 0) {
@@ -179,7 +168,7 @@ class AccesoBD {
         "textos": tarea.textos,
         "imagenes": imagenes,
         "videos": videos,
-        "formularios":tarea.formularios,
+        "formularios": tarea.formularios,
         "orden": tarea.orden
       };
 
@@ -220,205 +209,196 @@ class AccesoBD {
   @deprecated
   consultarTareasAsignadasAlumno(id, completa) async {
     try {
-
       //Se accede a la relación de las tareas de un usuario
       final ref = db.collection("usuarioTieneTareas");
 
+      _subscripcion = await ref
+          .where("idUsuario", isEqualTo: id)
+          .orderBy(
+              "fechainicio") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
+          .snapshots()
+          .listen((e) async {
+        //Escucha los cambios en el servidor
+        var nuevasTareas = [];
+        for (int i = 0; i < e.docs.length; i++) {
+          // itera sobre los elementos de la colección
+          var idTarea = e.docs[i].get("idTarea"); // cada tarea tiene una id
 
-      _subscripcion = await ref.where("idUsuario", isEqualTo: id).orderBy("fechainicio") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
-        .snapshots().listen((e) async {
-          //Escucha los cambios en el servidor
-          var nuevasTareas = [];
-          for (int i = 0; i < e.docs.length; i++) { // itera sobre los elementos de la colección
-            var idTarea = e.docs[i].get("idTarea"); // cada tarea tiene una id
+          try {
+            await consultarIDTarea(idTarea).then((nuevaTarea) {
+              // sobre esa id accedemos a la colección tarea donde se encuentra la información de la tarea
+              nuevaTarea.idRelacion = e.docs[i].id;
+              nuevaTarea.estado = e.docs[i].get("estado");
+              nuevaTarea.fechafinal = e.docs[i].get("fechafinal");
+              nuevaTarea.respuesta = e.docs[i].get("respuesta");
+              try {
+                nuevaTarea.fotoRespuesta = e.docs[i].get("fotoURL");
+              } catch (e) {
+                nuevaTarea.fotoRespuesta = "";
+              }
+              nuevaTarea.retroalimentacion = e.docs[i].get("retroalimentacion");
 
-            try {
-              await consultarIDTarea(idTarea).then((
-                  nuevaTarea) { // sobre esa id accedemos a la colección tarea donde se encuentra la información de la tarea
-                nuevaTarea.idRelacion = e.docs[i].id;
-                nuevaTarea.estado = e.docs[i].get("estado");
-                nuevaTarea.fechafinal = e.docs[i].get("fechafinal");
-                nuevaTarea.respuesta = e.docs[i].get("respuesta");
-                try {
-                  nuevaTarea.fotoRespuesta = e.docs[i].get("fotoURL");
-                } catch (e) {
-                  nuevaTarea.fotoRespuesta = "";
-                }
-                nuevaTarea.retroalimentacion =
-                    e.docs[i].get("retroalimentacion");
+              if (nuevaTarea.estado != "sinFinalizar") {
+                nuevaTarea.fechaentrega =
+                    (DateTime.now().millisecondsSinceEpoch -
+                            e.docs[i].get("fechaentrega")) /
+                        (1000 * 60);
 
-                if (nuevaTarea.estado != "sinFinalizar") {
-                  nuevaTarea.fechaentrega = (DateTime
-                      .now()
-                      .millisecondsSinceEpoch - e.docs[i].get("fechaentrega")) /
-                      (1000 * 60);
+                if (nuevaTarea.formularios !=
+                    []) // si en la tarea no se han actualizado los datos del formulario entonces debemos sobreescribir
+                  //el que viene por defecto
+                  nuevaTarea.formularios = e.docs[i].get("formularios");
+              }
+              nuevasTareas.add(nuevaTarea);
 
-                  if (nuevaTarea.formularios != [
-                  ]) // si en la tarea no se han actualizado los datos del formulario entonces debemos sobreescribir
-                    //el que viene por defecto
-                    nuevaTarea.formularios = e.docs[i].get("formularios");
-                }
-                nuevasTareas.add(nuevaTarea);
+              if (nuevasTareas.length == e.docs.length) {
+                Sesion.tareas = nuevasTareas;
+                if (completa) {
+                  try {
+                    for (int k = 0; k < Sesion.tareas.length; k++) {
+                      var array = [];
 
-                if (nuevasTareas.length == e.docs.length) {
-                  Sesion.tareas = nuevasTareas;
-                  if (completa) {
-                    try {
-                      for (int k = 0; k < Sesion.tareas.length; k++) {
-                        var array = [];
-
-                        for (int j = 0; j < Sesion.tareas[k].videos
-                            .length; j++) {
-                          /*var nuevoControlador = VideoPlayerController.network(
+                      for (int j = 0; j < Sesion.tareas[k].videos.length; j++) {
+                        /*var nuevoControlador = VideoPlayerController.network(
                                 Sesion.tareas[k].videos[j]);*/
-                          Sesion.tareas[k].controladoresVideo
-                              .add(0);
-                          /*Sesion.tareas[k].controladoresVideo.last.initialize();*/
+                        Sesion.tareas[k].controladoresVideo.add(0);
+                        /*Sesion.tareas[k].controladoresVideo.last.initialize();*/
 
-                        }
+                      }
 
-                        //Se cargan los formularios (Mas feo esto que pegarle a un pae la verdad)
-                        if (Sesion.tareas[k].formularios != []) {
-                          for (int l = 0; l <
-                              Sesion.tareas[k].formularios.length;
-                          l = l + 2 +
-                              (Sesion.tareas[k].formularios[l + 1] as int) *
-                                  3) {
-                            for (int j = 0; j <
-                                (Sesion.tareas[k].formularios[l +
-                                    1] as int); j++) {
-                              Sesion.tareas[k].controladoresComandas.add(
-                                  TextEditingController());
-                            }
+                      //Se cargan los formularios (Mas feo esto que pegarle a un pae la verdad)
+                      if (Sesion.tareas[k].formularios != []) {
+                        for (int l = 0;
+                            l < Sesion.tareas[k].formularios.length;
+                            l = l +
+                                2 +
+                                (Sesion.tareas[k].formularios[l + 1] as int) *
+                                    3) {
+                          for (int j = 0;
+                              j < (Sesion.tareas[k].formularios[l + 1] as int);
+                              j++) {
+                            Sesion.tareas[k].controladoresComandas
+                                .add(TextEditingController());
                           }
                         }
                       }
-
-
-                      //Sesion.paginaActual.actualizar();
-                    } catch (e) {
-                      print(e);
                     }
-                    ;
+
+                    //Sesion.paginaActual.actualizar();
+                  } catch (e) {
+                    print(e);
                   }
-                  Sesion.paginaActual.actualizar();
+                  ;
                 }
-              });
-            }catch(e){print(e);}
+                Sesion.paginaActual.actualizar();
+              }
+            });
+          } catch (e) {
+            print(e);
           }
+        }
 
-          if (e.docs.length == 0) Sesion.tareas = [];
-
-        });
-
-
+        if (e.docs.length == 0) Sesion.tareas = [];
+      });
     } catch (e) {
       print(e);
     }
   }
 
   // Metodo para añadir una tarea con el id de tarea a un usuario en especifico con id de usuario
-  addTareaAlumno(idUsuario, idTarea,fechafinal) async {
+  addTareaAlumno(idUsuario, idTarea, fechafinal) async {
     try {
-
       var tar = <String, dynamic>{
         "idUsuario": idUsuario,
         "idTarea": idTarea,
         "fechainicio": DateTime.now().millisecondsSinceEpoch,
-        "fechafinal" : fechafinal,
-        "estado" : "sinFinalizar",
-        "fechaentrega" : 0,
-        "respuesta":"",
-        "retroalimentacion":"",
-        "formularios":[]
-
+        "fechafinal": fechafinal,
+        "estado": "sinFinalizar",
+        "fechaentrega": 0,
+        "respuesta": "",
+        "retroalimentacion": "",
+        "formularios": []
       };
 
-      await db.collection("usuarioTieneTareas").add(tar).then((value) { return true;});
-
+      await db.collection("usuarioTieneTareas").add(tar).then((value) {
+        return true;
+      });
     } catch (e) {
       print(e);
       return false;
     }
   }
 
-  completarTarea(idTareaAsignada) async
-  {
-    try
-    {
+  completarTarea(idTareaAsignada) async {
+    try {
       final ref = db.collection("usuarioTieneTareas");
-      return await ref.doc(idTareaAsignada).update({"estado" : "completada", "fechaentrega" : DateTime.now().millisecondsSinceEpoch});
-
-    }catch(e){
+      return await ref.doc(idTareaAsignada).update({
+        "estado": "completada",
+        "fechaentrega": DateTime.now().millisecondsSinceEpoch
+      });
+    } catch (e) {
       log(e.toString());
       return false;
     }
-
   }
 
-  resetTarea(idTareaAsignada) async
-  {
-    try
-    {
+  resetTarea(idTareaAsignada) async {
+    try {
       final ref = db.collection("usuarioTieneTareas");
-      return await ref.doc(idTareaAsignada).update({"estado" : "sinFinalizar", "fechaentrega" : 0,"respuesta":"","retroalimentacion":"","fotoURL":"","fotopath":""});
-
-    }catch(e){
+      return await ref.doc(idTareaAsignada).update({
+        "estado": "sinFinalizar",
+        "fechaentrega": 0,
+        "respuesta": "",
+        "retroalimentacion": "",
+        "fotoURL": "",
+        "fotopath": ""
+      });
+    } catch (e) {
       log(e.toString());
       return false;
     }
-
   }
 
-
-
-  fallarTarea(idTareaAsignada) async
-  {
-    try
-    {
+  fallarTarea(idTareaAsignada) async {
+    try {
       final ref = db.collection("usuarioTieneTareas");
-      return await ref.doc(idTareaAsignada).update({"estado" : "cancelada", "fechaentrega" : DateTime.now().millisecondsSinceEpoch});
-
-    }catch(e){
+      return await ref.doc(idTareaAsignada).update({
+        "estado": "cancelada",
+        "fechaentrega": DateTime.now().millisecondsSinceEpoch
+      });
+    } catch (e) {
       log(e.toString());
       return false;
     }
-
   }
 
-  addRespuestaTarea(idTareaAsignada,comentario,foto) async
-  {
-    try
-    {
-
+  addRespuestaTarea(idTareaAsignada, comentario, foto) async {
+    try {
       final ref = db.collection("usuarioTieneTareas");
       var fotoURL = "";
       var fotoPath = "";
 
-      if(foto != null)
-        {
-          fotoPath = "Imágenes/comentarios/"+idTareaAsignada;
-          storageRef.child(fotoPath).putFile(foto).then((p0) async{
-
-               await leerImagen(fotoPath).then((url) async{
-                 fotoURL = url;
-                 return await ref.doc(idTareaAsignada).update({"respuesta" : comentario,'fotopath':fotoPath, 'fotoURL':fotoURL});
-               });
+      if (foto != null) {
+        fotoPath = "Imágenes/comentarios/" + idTareaAsignada;
+        storageRef.child(fotoPath).putFile(foto).then((p0) async {
+          await leerImagen(fotoPath).then((url) async {
+            fotoURL = url;
+            return await ref.doc(idTareaAsignada).update({
+              "respuesta": comentario,
+              'fotopath': fotoPath,
+              'fotoURL': fotoURL
+            });
           });
-        }
-      else
-        {
-          return await ref.doc(idTareaAsignada).update({"respuesta" : comentario,'fotopath':"", 'fotoURL':""});
-        }
-
-
-
-
-    }catch(e){
+        });
+      } else {
+        return await ref
+            .doc(idTareaAsignada)
+            .update({"respuesta": comentario, 'fotopath': "", 'fotoURL': ""});
+      }
+    } catch (e) {
       log(e.toString());
       return false;
     }
-
   }
 
   editarTarea(tarea, tareaPerfil) async {
@@ -433,18 +413,12 @@ class AccesoBD {
       int i = 0;
 
       if (tarea.imagenes.length > 0) {
-
-
-        if(tarea.imagenes[0] is String)
-        {
-          if(tarea.imagenes[0].startsWith("http"))
-          {
+        if (tarea.imagenes[0] is String) {
+          if (tarea.imagenes[0].startsWith("http")) {
             imagenes.add(tarea.imagenes[0]);
             i++;
           }
-        }
-        else
-        {
+        } else {
           var fotoPath = "Imágenes/pictogramas/" +
               encriptacionSha256(tarea.imagenes[0].path);
 
@@ -462,33 +436,25 @@ class AccesoBD {
             log("Se leido lo de await leerImagen");
           });
         }
-
       }
 
       if (tarea.videos.length > 0) {
-
-
         // se espera a que se introduzca el video correctamente en el storage para después salir del bucle de espera
-        if(!(tarea.videos[0] is String))
-           {
-             var videoPath = "Vídeos/" + encriptacionSha256(tarea.videos[0].path);
-             await storageRef
-                 .child(videoPath)
-                 .putFile(tarea.videos[0])
-                 .then((p0) async {
-               await leerVideo(videoPath).then((value) {
-                 videos.add(value);
-                 i++;
-               });
-             });
-           }
-        else
-          {
-            videos.add(tarea.videos[0]);
-            i++;
-          }
-
-
+        if (!(tarea.videos[0] is String)) {
+          var videoPath = "Vídeos/" + encriptacionSha256(tarea.videos[0].path);
+          await storageRef
+              .child(videoPath)
+              .putFile(tarea.videos[0])
+              .then((p0) async {
+            await leerVideo(videoPath).then((value) {
+              videos.add(value);
+              i++;
+            });
+          });
+        } else {
+          videos.add(tarea.videos[0]);
+          i++;
+        }
       }
 
       //bucle de espera  para que las imágenes y los vídeos estén cargados
@@ -505,7 +471,7 @@ class AccesoBD {
         "textos": tarea.textos,
         "imagenes": imagenes,
         "videos": videos,
-        "formularios":tarea.formularios,
+        "formularios": tarea.formularios,
         "orden": tarea.orden
       };
       log(nuevaTarea.toString());
@@ -518,28 +484,23 @@ class AccesoBD {
     }
   }
 
-  addFeedbackTarea(idTareaAsignada,retroalimentacion) async
-  {
-    try
-    {
+  addFeedbackTarea(idTareaAsignada, retroalimentacion) async {
+    try {
       final ref = db.collection("usuarioTieneTareas");
-      return await ref.doc(idTareaAsignada).update({"retroalimentacion" : retroalimentacion});
-
-    }catch(e){
+      return await ref
+          .doc(idTareaAsignada)
+          .update({"retroalimentacion": retroalimentacion});
+    } catch (e) {
       log(e.toString());
       return false;
     }
-
   }
 
   // Metodo para eliminar una tarea de un usuario pasandole el id de la relacion entre el usuario y la tarea
   Future eliminarTareaAlumno(id) async {
     try {
       if (Sesion.tareas != null && Sesion.tareas != []) {
-        await db
-            .collection("usuarioTieneTareas")
-            .doc(id)
-            .delete();
+        await db.collection("usuarioTieneTareas").doc(id).delete();
         return true;
       }
     } catch (e) {
@@ -551,22 +512,19 @@ class AccesoBD {
   Future eliminarTarea(id) async {
     try {
       if (Sesion.tareas != null && Sesion.tareas != []) {
-        await db
-            .collection("Tareas")
-            .doc(id)
-            .delete().then((e) async{
+        await db.collection("Tareas").doc(id).delete().then((e) async {
+          await db
+              .collection("usuarioTieneTareas")
+              .where("idTarea", isEqualTo: id)
+              .get()
+              .then((e) {
+            for (int i = 0; i < e.docs.length; i++) {
+              db.collection("usuarioTieneTareas").doc(e.docs[i].id).delete();
+            }
 
-              await db.collection("usuarioTieneTareas").where("idTarea",isEqualTo: id).get().then((e){
-                for(int i = 0; i < e.docs.length; i++){
-                  db.collection("usuarioTieneTareas").doc(e.docs[i].id).delete();
-                }
-
-                return true;
-              });
-
+            return true;
+          });
         });
-
-
       }
     } catch (e) {
       return false;
@@ -586,7 +544,6 @@ class AccesoBD {
       final consulta = await ref.get();
 
       consulta.docs.forEach((element) {
-
         final usuarioNuevo = element.data();
         usuarioNuevo.id = element.id;
         usuarios.add(usuarioNuevo);
@@ -667,14 +624,11 @@ class AccesoBD {
     }
   }
 
-  updateComanda(idTareaAsignada,formulario) async
-  {
-    try
-    {
+  updateComanda(idTareaAsignada, formulario) async {
+    try {
       final ref = db.collection("usuarioTieneTareas");
-      return await ref.doc(idTareaAsignada).update({"formularios" : formulario});
-
-    }catch(e){
+      return await ref.doc(idTareaAsignada).update({"formularios": formulario});
+    } catch (e) {
       log(e.toString());
       return false;
     }
@@ -691,12 +645,10 @@ class AccesoBD {
 
       final docSnap = await consulta.get();
 
-
       var tarea = null;
       if (docSnap != null) {
         tarea = docSnap.data();
         tarea?.id = docSnap.id;
-
       }
 
       return tarea;
@@ -755,21 +707,65 @@ class AccesoBD {
     }
   }
 
-  crearTablon(tablon) async
-  {
-
+  crearTablon(tablon) async {
     try {
       final ref = db.collection("tablero");
       var nuevoTablero = <String, dynamic>{
-          "nombre" : tablon.nombres,
-          "imagene" : tablon.imagenes,
-          "tipo" : tablon.tipos,
+        "nombre": tablon.nombres,
+        "imagene": tablon.imagenes,
+        "tipo": tablon.tipos,
       };
       ref.add(nuevoTablero);
       return true;
-    }
-    catch(e){
+    } catch (e) {
       print(e);
+      return false;
+    }
+  }
+
+  editarTablon(tablon, tablonPerfil) async {
+    try {
+      //Se encripta la contaseña
+      final ref = db.collection("tablero");
+      var imagenes;
+
+      if (tablon.imagenes is String) {
+        if (tablon.imagenes.startsWith("http")) {
+          imagenes= tablon.imagenes;
+        }
+      } else {
+        var fotoPath = "Imágenes/pictogramas/" +
+            encriptacionSha256(tablon.imagenes.path);
+
+        //se introduce la imágen dentro del storage y cuando se comrpueba que se ha cargado entronces se incrementa 'i' para que se pueda salir del bucle de espera
+        await storageRef
+            .child(fotoPath)
+            .putFile(tablon.imagenes)
+            .then((d0) async {
+          await leerImagen(fotoPath).then((value) {
+            log(value);
+            imagenes = value;
+            log("Se añadio la imagen al array");
+          });
+          log("Se leido lo de await leerImagen");
+        });
+      }
+      //Cuando se han cargado todas las imágenes y vídeos entonces se sube a la base de datos
+      //la nueva tarea con todas las urls de las imágenes y vídeos
+
+      log("Todos los futures se han completado");
+
+      var nuevaTablon = <String, dynamic>{
+        "nombre": tablon.nombres.toString(),
+        "imagene": imagenes,
+        "tipo": tablon.tipos
+      };
+      log(nuevaTablon.toString());
+      ref.doc(tablonPerfil.id).update(nuevaTablon);
+
+      return true;
+    } catch (e) {
+      log(e.toString());
       return false;
     }
   }
@@ -791,10 +787,42 @@ class AccesoBD {
         tablon.add(tableroNuevo);
       });
       return tablon;
-
     } catch (e) {
       print(e);
     }
   }
 
+  Future eliminarTablon(id) async {
+    try {
+      if (Sesion.tablon != null && Sesion.tablon != []) {
+        await db.collection("tablero").doc(id).delete();
+        return true;
+      }
+    } catch (e) {
+      return false;
+      print(e);
+    }
+  }
+
+  consultarIDTablon(id) async {
+    try {
+      final ref = db.collection("tablero");
+
+      final consulta = ref.doc(id).withConverter(
+          fromFirestore: Tablon.fromFirestore,
+          toFirestore: (Tablon tablon, _) => tablon.toFirestore());
+
+      final docSnap = await consulta.get();
+
+      var tablon = null;
+      if (docSnap != null) {
+        tablon = docSnap.data();
+        tablon?.id = docSnap.id;
+      }
+
+      return tablon;
+    } catch (e) {
+      print(e);
+    }
+  }
 }

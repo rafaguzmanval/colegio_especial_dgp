@@ -29,6 +29,7 @@ import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:colegio_especial_dgp/Flutter/gestion_tablon.dart';
 import 'package:colegio_especial_dgp/Flutter/registro_usuarios.dart';
+import 'package:colegio_especial_dgp/Flutter/tablon_admin.dart';
 import 'package:colegio_especial_dgp/Flutter/tablon_comunicacion.dart';
 import 'package:colegio_especial_dgp/Flutter/ver_tareas.dart';
 import 'package:flutter/material.dart';
@@ -636,7 +637,7 @@ class MyHomePageState extends State<MyHomePage> {
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => GestionTablon()));
+                                builder: (context) => TablonAdmin()));
                         Sesion.paginaActual = this;
                       },
                     ),

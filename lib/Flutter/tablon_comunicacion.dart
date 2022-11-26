@@ -138,7 +138,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                             child: Column(children: [
                               Image(image: NetworkImage(tablon[i].imagenes)),
                               Text(
-                                tablon[i].nombres,
+                                tablon[i].nombres.toUpperCase(),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 25,
@@ -241,7 +241,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                             child: Column(children: [
                               Image(image: NetworkImage(tablon[i].imagenes)),
                               Text(
-                                tablon[i].nombres,
+                                tablon[i].nombres.toUpperCase(),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 25,
@@ -346,7 +346,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                             child: Column(children: [
                               Image(image: NetworkImage(tablon[i].imagenes)),
                               Text(
-                                tablon[i].nombres,
+                                tablon[i].nombres.toUpperCase(),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 25,

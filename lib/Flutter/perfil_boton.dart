@@ -1,115 +1,172 @@
 /*
-*   Archivo: crear_tarea.dart
+*   Archivo: perfil_profesor.dart
 *
 *   Descripción:
-*   Formulario para crear una tarea para el usuario
+*   Pagina para ver el perfil del profesor
+*
 *   Includes:
-*   cloud_firestore.dart : Necesario para implementar los métodos que acceden a la base de datos
-*   sesion.dart : Contiene los datos de la sesion actual (sirve de puntero a la página actual donde se encuentra el usuario)
-*   video_player.dart : Necesario para cargar los videos del storage y cargarlos en el controlador de los reproductores de video.
 *   rol.dart : Enumerado con los roles de usuarios que existen en la aplicacion.
+*   sesion.dart : Contiene los datos de la sesion actual (sirve de puntero a la página actual donde se encuentra el usuario)
 *   acceso_bd.dart: Metodos de acceso a la base de datos.
 *   material.dart: Se utiliza para dar colores y diseño a la aplicacion.
-*   image_picker.dart : Libreria para acceder a la cámara y a la galería de imagenes del dispositivo.
-*   tarea.dart: Se utiliza para construir el objeto tarea y enviarlo a la base de datos
 * */
 
+import 'dart:async';
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:colegio_especial_dgp/Dart/arasaac.dart';
-import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
+import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
-import 'package:colegio_especial_dgp/Dart/tipo_tablon.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 import "package:image_picker/image_picker.dart";
+import 'package:video_player/video_player.dart';
+import 'package:colegio_especial_dgp/Dart/arasaac.dart';
+import 'package:colegio_especial_dgp/Flutter/reproductor_video.dart';
 import '../Dart/tarea.dart';
+import 'dart:developer';
 import '../Dart/tablon.dart';
+import 'package:colegio_especial_dgp/Dart/tipo_tablon.dart';
 
 enum SeleccionImagen { camara, galeria, video }
 
-class GestionTablon extends StatefulWidget {
+class Perfilboton extends StatefulWidget {
   @override
-  GestionTablonState createState() => GestionTablonState();
+  PerfilbotonState createState() => PerfilbotonState();
 }
 
-// Clase para crear tarea
-class GestionTablonState extends State<GestionTablon> {
-  var db = FirebaseFirestore.instance;
-
-  AccesoBD base = new AccesoBD();
-  var tipoElegido = "NINGÚN TIPO ELEGIDO";
-  var tipo;
-  var fotoTomada;
-
-  var creando = false;
-
+class PerfilbotonState extends State<Perfilboton> {
+  var botonPerfil;
   final controladorNombre = TextEditingController();
+  final controladorTexto = TextEditingController();
+  var fotoTomada;
+  var videoTomado;
+  ImagePicker capturador = new ImagePicker();
+  var creando = false;
+  var controladorVideo;
+  var formularios = [];
+  var vez = 0;
+  var vez2 = 0;
 
-  ///Cuándo se pasa de página es necesario que todos los controladores de los formularios y de los reproductores de vídeo se destruyan.
+  var tipoElegido = "";
+  var tipo;
+
+
+  final myController = TextEditingController();
+
   @override
   void dispose() {
+    myController.dispose();
     super.dispose();
-    if (controladorNombre != null) controladorNombre.dispose();
   }
 
   @override
   void initState() {
     super.initState();
-    //Notificacion.showBigTextNotification(title: "Vaya vaya", body: "¿Que dices? ¿creando tu primera tarea?", fln: flutterLocalNotificationsPlugin);
-
-    /*
-    controladorStream.stream.listen((event) async{
-
-
-
-    });*/
 
     Sesion.paginaActual = this;
+    cargarBoton();
+    actualizar();
   }
 
-  /// Este es el build de la clase MyHomePage que devuelve toda la vista génerica más la vista especial de cada usuario.
+  seleccionarImagen(seleccion) async {
+    try {
+      if (seleccion == SeleccionImagen.camara) {
+        print("Se va a abrir la cámara de fotos");
+        fotoTomada = await capturador.pickImage(
+          source: ImageSource.camera,
+          imageQuality: 15,
+        );
+      } else if (seleccion == SeleccionImagen.galeria) {
+        print("Se va a coger una foto de la galería");
+        fotoTomada = await capturador.pickImage(
+            source: ImageSource.gallery, imageQuality: 5);
+      } else {
+        print("Hacer un video");
+        await capturador
+            .pickVideo(
+            source: ImageSource.camera, maxDuration: Duration(seconds: 10))
+            .then((value) async {
+          videoTomado = value;
+          controladorVideo =
+          await VideoPlayerController.file(File(value?.path as String));
+          await controladorVideo.initialize();
+          actualizar();
+
+          print(controladorVideo.value.duration.toString());
+        });
+      }
+    } catch (e) {
+      print(e);
+    }
+    actualizar();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
-            onPressed: (){Navigator.pop(context);}),
-        title: Center(child: Text('CREA UN NUEVO BOTÓN PARA EL TABLÓN',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
-      )),
-      body: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-          child: Column(
-            children: [
-              if (Sesion.rol == Rol.alumno.toString()) ...[
-                VistaAlumno(),
-              ] else if (Sesion.rol == Rol.profesor.toString()) ...[
-                VistaProfesor()
-              ] else if (Sesion.rol == Rol.administrador.toString()) ...[
-                VistaAdministrador()
-              ]
-            ],
+    return Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          title: Center(child: Text(
+            'Editar boton: ${Sesion.seleccion.nombres}'
+                ''
+                .toUpperCase(),textAlign: TextAlign.center,
+            style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),
           )),
+        ),
+        body: SingleChildScrollView(
+          child: Container(
+              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+              alignment: Alignment.center,
+              child: Column(
+                children: [
+                  cargando(),
+                ],
+              )),
+        ));
+  }
+
+  // Carga el perfil del profesor
+  Widget VistaProfesor() {
+    return perfilProfesor();
+  }
+
+  Widget VistaAlumno() {
+    Navigator.pop(context);
+    return Container(
+      //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+      child: Column(
+        children: [],
+      ),
     );
   }
 
-  ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
-  Widget VistaProfesor() {
-    return VistaAdministrador();
-  }
-
-  ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
-  Widget VistaAlumno() {
-    Navigator.pop(context);
-    return Container();
-  }
-
-  ///Este método devuelve toda la vista que va a ver el administrador en un Widget.
+  // Carga el perfil del profesor
   Widget VistaAdministrador() {
+    return perfilProfesor();
+  }
+
+  Widget VistaProgramador() {
+    return Container(
+      //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
+      child: Column(
+        children: [],
+      ),
+    );
+  }
+
+  /// Carga el perfil del profesor
+  Widget perfilProfesor() {
+    if (vez == 0) {
+      controladorNombre.text = botonPerfil.nombres.toUpperCase();
+      fotoTomada = botonPerfil.imagenes;
+      tipoElegido = botonPerfil.tipos.toUpperCase();
+      vez++;
+    }
+
     return Container(
       //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
       alignment: Alignment.center,
@@ -127,12 +184,12 @@ class GestionTablonState extends State<GestionTablon> {
               obscureText: false,
               maxLength: 40,
               decoration: InputDecoration(
-                enabledBorder:  OutlineInputBorder(
-                  borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
-                ),
-                border: OutlineInputBorder(),
-                hintText: 'INTRODUCE EL NOMBRE DEL PICTOGRAMA *',
-                hintStyle: TextStyle(color: GuardadoLocal.colores[0])
+                  enabledBorder:  OutlineInputBorder(
+                    borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
+                  ),
+                  border: OutlineInputBorder(),
+                  hintText: 'INTRODUCE EL NOMBRE DEL PICTOGRAMA *',
+                  hintStyle: TextStyle(color: GuardadoLocal.colores[0])
               ),
               controller: controladorNombre,
             ),
@@ -151,9 +208,9 @@ class GestionTablonState extends State<GestionTablon> {
             style: TextStyle(color: GuardadoLocal.colores[0]),
             value: tipoElegido,
             items: [
-              Tipo.sustantivo.toString(),
-              Tipo.adjetivo.toString(),
-              Tipo.verbo.toString(),
+              "adjetivo".toUpperCase(),
+              "verbo".toUpperCase(),
+              "sustantivo".toUpperCase(),
               "NINGÚN TIPO ELEGIDO"
             ].map((String value) {
               return DropdownMenuItem(
@@ -225,14 +282,14 @@ class GestionTablonState extends State<GestionTablon> {
                   margin: EdgeInsets.only(top: 0),
                   child: ElevatedButton(
                     child: Text(
-                      "CREAR NUEVO BOTÓN TABLÓN",
+                      "EDITAR BOTÓN TABLÓN",
                       style: TextStyle(
                         fontSize: 30.0,
                         color: GuardadoLocal.colores[2],
                       ),
                     ),
                     onPressed: () {
-                      crearTablon();
+                      editarTablon();
                     },
                   ))),
           SizedBox(
@@ -244,48 +301,65 @@ class GestionTablonState extends State<GestionTablon> {
     );
   }
 
-  //Método para crear tarea
-  crearTablon() async {
+  /// Carga el usuario del profesor
+  cargarBoton() async // EN sesion seleccion estara el id del usuario que se ha elegido
+      {
+    botonPerfil = await Sesion.db.consultarIDTablon(Sesion.seleccion.id);
+    actualizar();
+  }
+
+  editarTablon() async {
     if (controladorNombre.text.isNotEmpty) {
       creando = true;
       actualizar();
 
       var nombre = "" + controladorNombre.text;
 
-      var imagenes = "";
+      var imagenes;
       if (fotoTomada != null) {
         if (fotoTomada is String) {
           if (fotoTomada.startsWith("http")) {
             imagenes = fotoTomada;
           }
+        } else {
+          imagenes = File(fotoTomada.path);
+          log(imagenes.toString());
         }
       }
 
-      if (tipoElegido == "Tipo.sustantivo") {
-        tipo = "sustantivo";
-      } else if (tipoElegido == "Tipo.verbo") {
-        tipo = "verbo";
-      } else if (tipoElegido == "Tipo.adjetivo") tipo = "adjetivo";
+      var tipos = tipoElegido.toLowerCase();
 
       Tablon tablon = Tablon();
-      tablon.setTablon(nombre, imagenes, tipo);
-      await base.crearTablon(tablon).then((value) {
+      tablon.setTablon(nombre, imagenes, tipos);
+
+      await Sesion.db.editarTablon(tablon, botonPerfil).then((value) {
         creando = false;
+
         if (value) {
+          /*
           controladorNombre.text = "";
+          controladorTexto.text = "";
           fotoTomada = null;
+          videoTomado = null;
+          */
+
+
           displayMensajeValidacion(
-              "TABLON CREADO CORRECTAMENTE\nPUEDES VOLVER A CREAR OTRO BOTON:",
+              "Tablon editadO correctamente\nPuedes volver a crear otra tarea:"
+                  .toUpperCase(),
               false);
+          Navigator.pop(context);
+
         } else {
           displayMensajeValidacion(
-              "FALLO AL CREAR TABLON, INTÉNTELO DE NUEVO", true);
+              "Fallo al editar tablon, inténtelo de nuevo".toUpperCase(), true);
         }
 
         actualizar();
       });
     } else {
-      displayMensajeValidacion("ES NECESARIO RELLENAR TODOS LOS CAMPOS", true);
+      displayMensajeValidacion(
+          "Es necesario rellenar todos los campos".toUpperCase(), true);
       actualizar();
     }
   }
@@ -305,13 +379,38 @@ class GestionTablonState extends State<GestionTablon> {
               borderRadius: BorderRadius.all(Radius.circular(29)),
             ),
             child: Center(
-                child: Text(mensajeDeValidacion, style: TextStyle(color: GuardadoLocal.colores[2]))),
+                child: Text(mensajeDeValidacion, selectionColor: Colors.black)),
           )),
     );
   }
 
-  // Actualizar las páginas
-  void actualizar() async {
+  Widget cargando() {
+    if (botonPerfil == null)
+      return Center(
+        child: Text(
+          '\nCARGANDO EL BOTON',
+          textAlign: TextAlign.center,
+        ),
+      );
+    else {
+      return vista();
+    }
+  }
+
+  vista() {
+    if (Sesion.rol == Rol.alumno.toString()) {
+      return VistaAlumno();
+    } else if (Sesion.rol == Rol.profesor.toString()) {
+      return VistaProfesor();
+    } else if (Sesion.rol == Rol.administrador.toString()) {
+      return VistaAdministrador();
+    } else if (Sesion.rol == Rol.programador.toString()) {
+      return VistaProgramador();
+    }
+  }
+
+  /// Actualiza la pagina
+  void actualizar() {
     setState(() {});
   }
 }
