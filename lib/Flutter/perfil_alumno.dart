@@ -32,11 +32,6 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
 
   var usuarioPerfil;
 
-  var imagenPerfil;
-
-  //Tareas del alumno que están asignadas y se muestran en su perfil
-  var tareasAlumno = [];
-
   //Todas las tareas que el profesor selecciona para asignar al alumno
   var tareas = [];
   var nombresTareas = ["NADA SELECCIONADO"];

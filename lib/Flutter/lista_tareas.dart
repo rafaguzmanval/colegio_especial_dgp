@@ -27,8 +27,6 @@ class ListaTareas extends StatefulWidget {
 }
 
 class ListaTareasState extends State<ListaTareas> {
-  var tareas = [];
-
   double offSetActual = 0;
   ScrollController homeController = new ScrollController();
   bool esTareaEliminandose = false;

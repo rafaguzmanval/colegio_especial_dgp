@@ -39,17 +39,13 @@ import 'lista_alumnos.dart';
 import 'lista_profesores.dart';
 import 'lista_tareas.dart';
 
-enum SeleccionImagen { camara, galeria }
-
 class TablonAdmin extends StatefulWidget {
   @override
   TablonAdminState createState() => TablonAdminState();
 }
 
 class TablonAdminState extends State<TablonAdmin> {
-
   var maxUsuariosPorFila = 2;
-  double offSetActual = 0;
   ScrollController homeController = new ScrollController();
 
   ///Cuándo se pasa de página es necesario que todos los controladores de los formularios y de los reproductores de vídeo se destruyan.
@@ -65,10 +61,10 @@ class TablonAdminState extends State<TablonAdmin> {
     Sesion.paginaActual = this;
     Sesion.seleccion = "";
     Sesion.tareas = [];
-    Notificacion.initialize(notificaciones,Sesion.rol);
+    Notificacion.initialize(notificaciones, Sesion.rol);
     Background.inicializarBackground();
 
-    if(Sesion.rol == Rol.alumno.toString())
+    if (Sesion.rol == Rol.alumno.toString())
       Background.activarNotificacionesNuevasTareas();
     else
       Background.activarNotificacionesTareasTerminadas();
@@ -78,18 +74,28 @@ class TablonAdminState extends State<TablonAdmin> {
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
-      child:Scaffold(
+      child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
-                icon: Icon(Icons.settings_power, color: GuardadoLocal.colores[2]),
+                icon:
+                    Icon(Icons.settings_power, color: GuardadoLocal.colores[2]),
                 onPressed: () => _onBackPressed(context)),
-
             title: Column(children: [
-              Center(child: Text('GESTION del tablon'.toUpperCase(),textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
-              )]),
-            actions: [IconButton(onPressed: () => Navigator.push(context,
-                MaterialPageRoute(
-                    builder: (context) => Configuracion())), icon: Icon(Icons.settings, color: GuardadoLocal.colores[2]))],
+              Center(
+                child: Text(
+                  'GESTION del tablon'.toUpperCase(),
+                  textAlign: TextAlign.center,
+                  style:
+                      TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+                ),
+              )
+            ]),
+            actions: [
+              IconButton(
+                  onPressed: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Configuracion())),
+                  icon: Icon(Icons.settings, color: GuardadoLocal.colores[2]))
+            ],
             automaticallyImplyLeading: false,
           ),
           body: Container(margin: EdgeInsets.all(5), child: vistaMenu())),
@@ -131,154 +137,154 @@ class TablonAdminState extends State<TablonAdmin> {
           Flexible(
             flex: 1,
             fit: FlexFit.tight,
-            child:
-            media > 600 ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: Container(
-                    margin: EdgeInsets.all(50),
-                    child: ElevatedButton(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+            child: media > 600
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                        Flexible(
+                          flex: 1,
+                          fit: FlexFit.tight,
+                          child: Container(
+                            margin: EdgeInsets.all(50),
+                            child: ElevatedButton(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "AÑADIR BOTON TABLON",
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                      color: GuardadoLocal.colores[2],
+                                    ),
+                                  ),
+                                  Flexible(
+                                      flex: 1,
+                                      child: Image.asset(
+                                        "assets/tableroDeComunicacion.png",
+                                      )),
+                                ],
+                              ),
+                              onPressed: () async {
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => GestionTablon()));
+                                Sesion.paginaActual = this;
+                              },
+                            ),
+                          ),
+                        ),
+                        Flexible(
+                          flex: 1,
+                          fit: FlexFit.tight,
+                          //margin: EdgeInsets.all(10),
+                          child: Container(
+                            margin: EdgeInsets.all(50),
+                            child: ElevatedButton(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Lista de botones".toUpperCase(),
+                                    style: TextStyle(
+                                      fontSize: 30,
+                                      color: GuardadoLocal.colores[2],
+                                    ),
+                                  ),
+                                  Flexible(
+                                      flex: 1,
+                                      child: Image.asset(
+                                        "assets/companeros.png",
+                                      )),
+                                ],
+                              ),
+                              onPressed: () async {
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ListaBotones()));
+                                Sesion.paginaActual = this;
+                              },
+                            ),
+                          ),
+                        ),
+                      ])
+                : Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text(
-                            "AÑADIR BOTON TABLON",
-                            style: TextStyle(
-                              fontSize: 30,
-                              color: GuardadoLocal.colores[2],
+                          Flexible(
+                            flex: 1,
+                            fit: FlexFit.tight,
+                            child: Container(
+                              margin: EdgeInsets.all(50),
+                              child: ElevatedButton(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "GESTION DEL TABLON",
+                                      style: TextStyle(
+                                        fontSize: 30,
+                                        color: GuardadoLocal.colores[2],
+                                      ),
+                                    ),
+                                    Flexible(
+                                        flex: 1,
+                                        child: Image.asset(
+                                          "assets/tableroDeComunicacion.png",
+                                        )),
+                                  ],
+                                ),
+                                onPressed: () async {
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              GestionTablon()));
+                                  Sesion.paginaActual = this;
+                                },
+                              ),
                             ),
                           ),
                           Flexible(
-                              flex: 1,
-                              child: Image.asset(
-                                "assets/tableroDeComunicacion.png",
-                              )),
-                        ],
-                      ),
-                      onPressed: () async{
-                        await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => GestionTablon()));
-                        Sesion.paginaActual = this;
-                      },
-                    ),
-                  ),
-                ),
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    //margin: EdgeInsets.all(10),
-                    child: Container(
-                      margin: EdgeInsets.all(50),
-                      child: ElevatedButton(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Lista de botones".toUpperCase(),
-                              style: TextStyle(
-                                fontSize: 30,
-                                color: GuardadoLocal.colores[2],
-                              ),
-                            ),
-                            Flexible(
-                                flex: 1,
-                                child: Image.asset(
-                                  "assets/companeros.png",
-                                )),
-                          ],
-                        ),
-                        onPressed: () async {
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ListaBotones()));
-                          Sesion.paginaActual = this;
-                        },
-                      ),
-                    ),
-                  ),
-
-                ]):
-            Container(
-              alignment: Alignment.center,
-
-              child:
-              Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    child: Container(
-                      margin: EdgeInsets.all(50),
-                      child: ElevatedButton(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "GESTION DEL TABLON",
-                              style: TextStyle(
-                                fontSize: 30,
-                                color: GuardadoLocal.colores[2],
-                              ),
-                            ),
-                            Flexible(
-                                flex: 1,
-                                child: Image.asset(
-                                  "assets/tableroDeComunicacion.png",
-                                )),
-                          ],
-                        ),
-                        onPressed: () async{
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => GestionTablon()));
-                          Sesion.paginaActual = this;
-                        },
-                      ),
-                    ),
-                  ),
-                    Flexible(
-                      flex: 1,
-                      fit: FlexFit.tight,
-                      //margin: EdgeInsets.all(10),
-                      child: Container(
-                        margin: EdgeInsets.all(50),
-                        child: ElevatedButton(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Lista de alumnos".toUpperCase(),
-                                style: TextStyle(
-                                  fontSize: 30,
-                                  color: GuardadoLocal.colores[2],
+                            flex: 1,
+                            fit: FlexFit.tight,
+                            //margin: EdgeInsets.all(10),
+                            child: Container(
+                              margin: EdgeInsets.all(50),
+                              child: ElevatedButton(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Lista de alumnos".toUpperCase(),
+                                      style: TextStyle(
+                                        fontSize: 30,
+                                        color: GuardadoLocal.colores[2],
+                                      ),
+                                    ),
+                                    Flexible(
+                                        flex: 1,
+                                        child: Image.asset(
+                                          "assets/companeros.png",
+                                        )),
+                                  ],
                                 ),
+                                onPressed: () async {
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ListaBotones()));
+                                  Sesion.paginaActual = this;
+                                },
                               ),
-                              Flexible(
-                                  flex: 1,
-                                  child: Image.asset(
-                                    "assets/companeros.png",
-                                  )),
-                            ],
+                            ),
                           ),
-                          onPressed: () async {
-                            await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ListaBotones()));
-                            Sesion.paginaActual = this;
-                          },
-                        ),
-                      ),
-                    ),
-
-                  ]),
-            ),
+                        ]),
+                  ),
           )
         ]);
   }
@@ -304,21 +310,34 @@ class TablonAdminState extends State<TablonAdmin> {
         builder: (context) {
           return AlertDialog(
             backgroundColor: GuardadoLocal.colores[1],
-            title:  Text('¿SEGURO?',style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),),
-            content: Text('¿QUIERES CERRAR SESIÓN?',style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),),
+            title: Text(
+              '¿SEGURO?',
+              style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 25),
+            ),
+            content: Text(
+              '¿QUIERES CERRAR SESIÓN?',
+              style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 25),
+            ),
             actions: [
               ElevatedButton(
                   onPressed: () {
                     Navigator.pop(context, false);
                   },
-                  child: Text('NO',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),)),
+                  child: Text(
+                    'NO',
+                    style: TextStyle(
+                        color: GuardadoLocal.colores[2], fontSize: 25),
+                  )),
               ElevatedButton(
                   onPressed: () {
                     Background.desactivarNotificaciones();
                     Navigator.popUntil(context, (route) => route.isFirst);
-
                   },
-                  child: Text('SÍ',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),)),
+                  child: Text(
+                    'SÍ',
+                    style: TextStyle(
+                        color: GuardadoLocal.colores[2], fontSize: 25),
+                  )),
             ],
           );
         });

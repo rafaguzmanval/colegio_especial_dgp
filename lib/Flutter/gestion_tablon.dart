@@ -29,8 +29,6 @@ import "package:image_picker/image_picker.dart";
 import '../Dart/tarea.dart';
 import '../Dart/tablon.dart';
 
-enum SeleccionImagen { camara, galeria, video }
-
 class GestionTablon extends StatefulWidget {
   @override
   GestionTablonState createState() => GestionTablonState();
@@ -38,7 +36,6 @@ class GestionTablon extends StatefulWidget {
 
 // Clase para crear tarea
 class GestionTablonState extends State<GestionTablon> {
-  var db = FirebaseFirestore.instance;
 
   AccesoBD base = new AccesoBD();
   var tipoElegido = "NINGÚN TIPO ELEGIDO";

@@ -29,9 +29,6 @@ class PasswordLogin extends StatefulWidget {
 }
 
 class PasswordLoginState extends State<PasswordLogin> {
-  var iconoAtras = Icons.home;
-  var error_inicio = false;
-  var usuarios;
   var concatenacionPin = "";
   var pulsaciones = 0;
   var errorLog = "";

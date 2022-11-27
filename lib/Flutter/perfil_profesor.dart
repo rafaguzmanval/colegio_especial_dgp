@@ -23,25 +23,7 @@ class PerfilProfesor extends StatefulWidget {
 }
 
 class PerfilProfesorState extends State<PerfilProfesor> {
-
-
   var usuarioPerfil;
-
-  var imagenPerfil;
-
-  //Tareas del alumno que están asignadas y se muestran en su perfil
-  var tareasAlumno = [];
-
-  //Todas las tareas que el profesor selecciona para asignar al alumno
-  var tareas = [];
-  var nombresTareas = ["NADA SELECCIONADO"];
-  var tareaElegida = "NADA SELECCIONADO";
-  var idTareaElegida = null;
-
-  bool esNuevaTareaCargando = false;
-  bool esTareaEliminandose = false;
-
-  int tareaEliminandose = 0;
 
   final myController = TextEditingController();
 
@@ -62,37 +44,45 @@ class PerfilProfesorState extends State<PerfilProfesor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-                icon: Icon(Icons.arrow_back_ios_new, color: GuardadoLocal.colores[2]),
-                onPressed: (){Navigator.pop(context);}),
-            title: Center(child: Text('PERFIL DE ${Sesion.seleccion.nombre.toUpperCase()}'
-                '',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),)),
-          ),
-          body: Container(
-              padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-              alignment: Alignment.center,
-              child: Column(
-                children: [
-                  if (Sesion.rol == Rol.alumno.toString()) ...[
-                    VistaAlumno()
-                  ] else if (Sesion.rol == Rol.profesor.toString()) ...[
-                    VistaProfesor()
-                  ] else if (Sesion.rol == Rol.administrador.toString()) ...[
-                    VistaAdministrador()
-                  ] else if (Sesion.rol == Rol.programador.toString()) ...[
-                    VistaProgramador()
-                  ]
-                ],
-              )),
+      appBar: AppBar(
+        leading: IconButton(
+            icon:
+                Icon(Icons.arrow_back_ios_new, color: GuardadoLocal.colores[2]),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+        title: Center(
+            child: Text(
+          'PERFIL DE ${Sesion.seleccion.nombre.toUpperCase()}'
+          '',
+          textAlign: TextAlign.center,
+          style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+        )),
+      ),
+      body: Container(
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              if (Sesion.rol == Rol.alumno.toString()) ...[
+                VistaAlumno()
+              ] else if (Sesion.rol == Rol.profesor.toString()) ...[
+                VistaProfesor()
+              ] else if (Sesion.rol == Rol.administrador.toString()) ...[
+                VistaAdministrador()
+              ] else if (Sesion.rol == Rol.programador.toString()) ...[
+                VistaProgramador()
+              ]
+            ],
+          )),
     );
   }
+
   // Carga el perfil del profesor
   Widget VistaProfesor() {
     return perfilProfesor();
   }
-  
- 
+
   Widget VistaAlumno() {
     Navigator.pop(context);
     return Container(
@@ -102,11 +92,12 @@ class PerfilProfesorState extends State<PerfilProfesor> {
       ),
     );
   }
+
   // Carga el perfil del profesor
   Widget VistaAdministrador() {
     return perfilProfesor();
   }
- 
+
   Widget VistaProgramador() {
     return Container(
       //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
@@ -115,7 +106,7 @@ class PerfilProfesorState extends State<PerfilProfesor> {
       ),
     );
   }
-  
+
   /// Carga el perfil del profesor
   Widget perfilProfesor() {
     return Container(
@@ -123,11 +114,22 @@ class PerfilProfesorState extends State<PerfilProfesor> {
       child: Column(
         children: [
           if (usuarioPerfil != null) ...[
-            Text("NOMBRE: " + usuarioPerfil.nombre + "\n",style: TextStyle(color: GuardadoLocal.colores[0]),),
-            Text("APELLIDOS: " + usuarioPerfil.apellidos + "\n",style: TextStyle(color: GuardadoLocal.colores[0]),),
             Text(
-                "FECHA DE NACIMIENTO: " + usuarioPerfil.fechanacimiento + "\n",style: TextStyle(color: GuardadoLocal.colores[0]),),
-            Text("IMAGEN DE PERFIL:\n",style: TextStyle(color: GuardadoLocal.colores[0]),),
+              "NOMBRE: " + usuarioPerfil.nombre + "\n",
+              style: TextStyle(color: GuardadoLocal.colores[0]),
+            ),
+            Text(
+              "APELLIDOS: " + usuarioPerfil.apellidos + "\n",
+              style: TextStyle(color: GuardadoLocal.colores[0]),
+            ),
+            Text(
+              "FECHA DE NACIMIENTO: " + usuarioPerfil.fechanacimiento + "\n",
+              style: TextStyle(color: GuardadoLocal.colores[0]),
+            ),
+            Text(
+              "IMAGEN DE PERFIL:\n",
+              style: TextStyle(color: GuardadoLocal.colores[0]),
+            ),
             Image(
               width: 100,
               height: 100,
@@ -146,13 +148,14 @@ class PerfilProfesorState extends State<PerfilProfesor> {
       ),
     );
   }
-  
+
   /// Carga el usuario del profesor
   cargarUsuario() async // EN sesion seleccion estara el id del usuario que se ha elegido
   {
     usuarioPerfil = await Sesion.db.consultarIDusuario(Sesion.seleccion.id);
     actualizar();
   }
+
   /// Actualiza la pagina
   void actualizar() {
     setState(() {});

@@ -26,8 +26,6 @@ class TablonComunicacion extends StatefulWidget {
 }
 
 class TablonComunicacionState extends State<TablonComunicacion> {
-  var indiceTextos = 0;
-  var indiceImagenes = 0;
   bool verFlechaIzquierda = true;
   bool verFlechaDerecha = true;
   double offSetActual = 0;

@@ -28,7 +28,6 @@ class ListaBotones extends StatefulWidget {
 }
 
 class ListaBotonesState extends State<ListaBotones> {
-  var botones = [];
 
   double offSetActual = 0;
   ScrollController homeController = new ScrollController();
@@ -119,7 +118,7 @@ class ListaBotonesState extends State<ListaBotones> {
 
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
   Widget VistaProfesor() {
-    return _listaTareas();
+    return _listaBotones();
   }
 
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
@@ -130,11 +129,11 @@ class ListaBotonesState extends State<ListaBotones> {
 
   ///Este método devuelve toda la vista que va a ver el administrador en un Widget.
   Widget VistaAdministrador() {
-    return _listaTareas();
+    return _listaBotones();
   }
 
   // Este metodo devuelve una lista con todos los profesores
-  Widget _listaTareas() {
+  Widget _listaBotones() {
     return Container(
       alignment: Alignment.center,
       //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),

@@ -39,16 +39,12 @@ class CrearTarea extends StatefulWidget {
 
 // Clase para crear tarea
 class CrearTareaState extends State<CrearTarea> {
-  var db = FirebaseFirestore.instance;
-
   AccesoBD base = new AccesoBD();
 
   var controladorVideo;
   var fotoTomada;
   var videoTomado;
   var formularios = [];
-  //var indiceAgrupacion = 1;
-  //var numCampos = 0;
   ImagePicker capturador = new ImagePicker();
 
   var creando = false;
@@ -57,12 +53,6 @@ class CrearTareaState extends State<CrearTarea> {
   final controladorTexto = TextEditingController();
 
   var busqueda = "";
-  var busquedaPrevia = "";
-
-
-
-
-
 
 
   ///Cuándo se pasa de página es necesario que todos los controladores de los formularios y de los reproductores de vídeo se destruyan.

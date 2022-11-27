@@ -33,15 +33,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-
   var usuarios;
   var imagenUgr;
   var maxUsuariosPorFila = 2;
   double offSetActual = 0;
 
   bool verBotonAbajo = false, verBotonArriba = false;
-
-
 
   var homeController;
 
@@ -55,7 +52,6 @@ class LoginPageState extends State<LoginPage> {
     Sesion.paginaActual = this;
     homeController = new ScrollController();
     homeController.addListener(_scrollListener);
-
   }
 
   _scrollListener() {
@@ -90,8 +86,6 @@ class LoginPageState extends State<LoginPage> {
     }
   }
 
-
-
   // Contructor de la estructura de la pagina
   @override
   Widget build(BuildContext context) {
@@ -100,8 +94,18 @@ class LoginPageState extends State<LoginPage> {
         appBar: AppBar(
             leading: IconButton(
                 icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
-                onPressed: (){Navigator.pop(context);}),
-            title: Center(child: Text('TuCole',textAlign: TextAlign.center,style: TextStyle(fontSize:30,color: GuardadoLocal.colores[2],fontWeight: FontWeight.normal),))),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+            title: Center(
+                child: Text(
+              'TuCole',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 30,
+                  color: GuardadoLocal.colores[2],
+                  fontWeight: FontWeight.normal),
+            ))),
         body: Stack(children: [
           ListaUsuarios(),
           Visibility(
@@ -110,7 +114,10 @@ class LoginPageState extends State<LoginPage> {
               alignment: FractionalOffset(0.98, 0.01),
               child: FloatingActionButton(
                   heroTag: "botonUp",
-                  child: Icon(Icons.arrow_upward,color: GuardadoLocal.colores[2],),
+                  child: Icon(
+                    Icons.arrow_upward,
+                    color: GuardadoLocal.colores[2],
+                  ),
                   elevation: 1.0,
                   onPressed: () {
                     offSetActual -= 150.0;
@@ -137,7 +144,10 @@ class LoginPageState extends State<LoginPage> {
               alignment: FractionalOffset(0.98, 0.99),
               child: FloatingActionButton(
                   heroTag: "botonDown",
-                  child: Icon(Icons.arrow_downward,color: GuardadoLocal.colores[2],),
+                  child: Icon(
+                    Icons.arrow_downward,
+                    color: GuardadoLocal.colores[2],
+                  ),
                   elevation: 1.0,
                   onPressed: () {
                     offSetActual += 150;
@@ -164,53 +174,37 @@ class LoginPageState extends State<LoginPage> {
 
   // Metodo para inicializar y cargar los datos necesarios
   inicializar() async {
-
-    if(Sesion.argumentos.length == 0)
-      {
-        await Sesion.db.consultarTodosUsuarios().then((e){
-          usuarios = e;
-          if (usuarios.length > 10) verBotonAbajo = true;
-          _actualizar();
-        });
-
-
-      }
-    else if(Sesion.argumentos.first == "profesores")
-      {
-        await Sesion.db.consultarTodosProfesores().then((e){
-          usuarios = e;
-          if (usuarios.length > 10) verBotonAbajo = true;
-          _actualizar();
-        });
-
-      }
-    else
-      {
-        await Sesion.db.consultarTodosAlumnos().then((e){
-          usuarios = e;
-          if (usuarios.length > 10) verBotonAbajo = true;
-          _actualizar();
-        });
-      }
-
+    if (Sesion.argumentos.length == 0) {
+      await Sesion.db.consultarTodosUsuarios().then((e) {
+        usuarios = e;
+        if (usuarios.length > 10) verBotonAbajo = true;
+        _actualizar();
+      });
+    } else if (Sesion.argumentos.first == "profesores") {
+      await Sesion.db.consultarTodosProfesores().then((e) {
+        usuarios = e;
+        if (usuarios.length > 10) verBotonAbajo = true;
+        _actualizar();
+      });
+    } else {
+      await Sesion.db.consultarTodosAlumnos().then((e) {
+        usuarios = e;
+        if (usuarios.length > 10) verBotonAbajo = true;
+        _actualizar();
+      });
+    }
 
     Sesion.argumentos.clear();
-
   }
 
   SeleccionUsuario() async {
-
-    if(Sesion.metodoLogin == "free")
-    {
+    if (Sesion.metodoLogin == "free") {
       await Navigator.push(
           context, MaterialPageRoute(builder: (context) => MyHomePage()));
+    } else {
+      await Navigator.push(
+          context, MaterialPageRoute(builder: (context) => PasswordLogin()));
     }
-    else
-      {
-        await Navigator.push(
-            context, MaterialPageRoute(builder: (context) => PasswordLogin()));
-      }
-
 
     inicializar();
   }
@@ -238,7 +232,8 @@ class LoginPageState extends State<LoginPage> {
         ImagenUGR(),
         Text('Créditos: Los mochileros'),
         Text(
-            'Rafael Guzmán , Blanca Abril , Javier Mesa , José Paneque , Hicham Bouchemma , Emilio Vargas'.toUpperCase()),
+            'Rafael Guzmán , Blanca Abril , Javier Mesa , José Paneque , Hicham Bouchemma , Emilio Vargas'
+                .toUpperCase()),
       ]);
     else {
       return OrientationBuilder(
@@ -290,10 +285,10 @@ class LoginPageState extends State<LoginPage> {
                             width: 90,
                             height: 90,
                             fit: BoxFit.fill,
-                            errorBuilder: (context,exception,stacktrace){
+                            errorBuilder: (context, exception, stacktrace) {
                               print(exception.toString());
-                              return Image.asset('assets/desconocido.jpg',width: 90,
-                                height: 90);
+                              return Image.asset('assets/desconocido.jpg',
+                                  width: 90, height: 90);
                             },
                           ),
                         ],
@@ -303,17 +298,15 @@ class LoginPageState extends State<LoginPage> {
                     Sesion.nombre = usuarios[j].nombre;
                     Sesion.rol = usuarios[j].rol;
                     Sesion.foto = usuarios[j].foto;
-                    if(usuarios[j].metodoLogeo == Passportmethod.free.toString())
-                      {
-                        Sesion.metodoLogin = "free";
-                      }
-                    else
-                      {
-                        Sesion.metodoLogin =
-                        usuarios[j].metodoLogeo == Passportmethod.pin.toString()
-                            ? Passportmethod.pin.toString()
-                            : Passportmethod.text.toString();
-                      }
+                    if (usuarios[j].metodoLogeo ==
+                        Passportmethod.free.toString()) {
+                      Sesion.metodoLogin = "free";
+                    } else {
+                      Sesion.metodoLogin = usuarios[j].metodoLogeo ==
+                              Passportmethod.pin.toString()
+                          ? Passportmethod.pin.toString()
+                          : Passportmethod.text.toString();
+                    }
                     SeleccionUsuario();
                   },
                 ))

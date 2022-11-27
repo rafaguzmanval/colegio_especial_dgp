@@ -63,41 +63,20 @@ class VerTareas extends StatefulWidget {
 
 // Clase que construye la pagina
 class VerTareasState extends State<VerTareas> {
-  var msg = "null";
-  var imagen = null;
-  var video = null;
-  var alumnos = [];
   var fotoTomada;
   var mostrarBotones = true;
-
   ImagePicker capturador = new ImagePicker();
-
-  var registrando = false;
-  var mensajeDeRegistro = "";
-
   var indiceTextos = 0;
   var indiceImagenes = 0;
   var indiceVideos = 0;
   int tareaActual = 0;
-
   var iconoAtras = Icons.home;
-
-  double offSetActual = 0;
   ScrollController homeController = new ScrollController();
-  var db = FirebaseFirestore.instance;
-
-  AccesoBD base = new AccesoBD();
-
-  var controladoresVideo = [];
-
-  var lenguajes;
-
   bool verFlechaIzquierda = false;
   bool verFlechaDerecha = false;
   var temporizador = null;
   var mensajeTemporizador = "";
   var controladorTemporizador = StreamController();
-
   var indiceComanda = 0;
 
   tomarFoto() async

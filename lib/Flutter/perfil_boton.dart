@@ -27,8 +27,6 @@ import 'dart:developer';
 import '../Dart/tablon.dart';
 import 'package:colegio_especial_dgp/Dart/tipo_tablon.dart';
 
-enum SeleccionImagen { camara, galeria, video }
-
 class Perfilboton extends StatefulWidget {
   @override
   PerfilbotonState createState() => PerfilbotonState();
@@ -37,20 +35,10 @@ class Perfilboton extends StatefulWidget {
 class PerfilbotonState extends State<Perfilboton> {
   var botonPerfil;
   final controladorNombre = TextEditingController();
-  final controladorTexto = TextEditingController();
   var fotoTomada;
-  var videoTomado;
-  ImagePicker capturador = new ImagePicker();
   var creando = false;
-  var controladorVideo;
-  var formularios = [];
   var vez = 0;
-  var vez2 = 0;
-
   var tipoElegido = "";
-  var tipo;
-
-
   final myController = TextEditingController();
 
   @override
@@ -65,39 +53,6 @@ class PerfilbotonState extends State<Perfilboton> {
 
     Sesion.paginaActual = this;
     cargarBoton();
-    actualizar();
-  }
-
-  seleccionarImagen(seleccion) async {
-    try {
-      if (seleccion == SeleccionImagen.camara) {
-        print("Se va a abrir la cámara de fotos");
-        fotoTomada = await capturador.pickImage(
-          source: ImageSource.camera,
-          imageQuality: 15,
-        );
-      } else if (seleccion == SeleccionImagen.galeria) {
-        print("Se va a coger una foto de la galería");
-        fotoTomada = await capturador.pickImage(
-            source: ImageSource.gallery, imageQuality: 5);
-      } else {
-        print("Hacer un video");
-        await capturador
-            .pickVideo(
-            source: ImageSource.camera, maxDuration: Duration(seconds: 10))
-            .then((value) async {
-          videoTomado = value;
-          controladorVideo =
-          await VideoPlayerController.file(File(value?.path as String));
-          await controladorVideo.initialize();
-          actualizar();
-
-          print(controladorVideo.value.duration.toString());
-        });
-      }
-    } catch (e) {
-      print(e);
-    }
     actualizar();
   }
 
@@ -131,7 +86,7 @@ class PerfilbotonState extends State<Perfilboton> {
 
   // Carga el perfil del profesor
   Widget VistaProfesor() {
-    return perfilProfesor();
+    return perfilBoton();
   }
 
   Widget VistaAlumno() {
@@ -146,7 +101,7 @@ class PerfilbotonState extends State<Perfilboton> {
 
   // Carga el perfil del profesor
   Widget VistaAdministrador() {
-    return perfilProfesor();
+    return perfilBoton();
   }
 
   Widget VistaProgramador() {
@@ -159,7 +114,7 @@ class PerfilbotonState extends State<Perfilboton> {
   }
 
   /// Carga el perfil del profesor
-  Widget perfilProfesor() {
+  Widget perfilBoton() {
     if (vez == 0) {
       controladorNombre.text = botonPerfil.nombres.toUpperCase();
       fotoTomada = botonPerfil.imagenes;

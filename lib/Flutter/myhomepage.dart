@@ -39,7 +39,6 @@ import 'lista_alumnos.dart';
 import 'lista_profesores.dart';
 import 'lista_tareas.dart';
 
-enum SeleccionImagen { camara, galeria }
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -49,7 +48,6 @@ class MyHomePage extends StatefulWidget {
 class MyHomePageState extends State<MyHomePage> {
 
   var maxUsuariosPorFila = 2;
-  double offSetActual = 0;
   ScrollController homeController = new ScrollController();
 
   ///Cuándo se pasa de página es necesario que todos los controladores de los formularios y de los reproductores de vídeo se destruyan.

@@ -36,7 +36,6 @@ class PerfilTareaState extends State<PerfilTarea> {
   var tareaPerfil;
   final controladorNombre = TextEditingController();
   final controladorTexto = TextEditingController();
-  var imagenPerfil;
   var fotoTomada;
   var videoTomado;
   ImagePicker capturador = new ImagePicker();
@@ -45,18 +44,6 @@ class PerfilTareaState extends State<PerfilTarea> {
   var formularios = [];
   var vez = 0;
   var vez2 = 0;
-
-  //Todas las tareas que el profesor selecciona para asignar al alumno
-  var tareas = [];
-  var nombresTareas = ["NADA SELECCIONADO"];
-  var tareaElegida = "NADA SELECCIONADO";
-  var idTareaElegida = null;
-
-  bool esNuevaTareaCargando = false;
-  bool esTareaEliminandose = false;
-
-  int tareaEliminandose = 0;
-
   final myController = TextEditingController();
 
   @override
@@ -137,7 +124,7 @@ class PerfilTareaState extends State<PerfilTarea> {
 
   // Carga el perfil del profesor
   Widget VistaProfesor() {
-    return perfilProfesor();
+    return perfilTarea();
   }
 
   Widget VistaAlumno() {
@@ -152,7 +139,7 @@ class PerfilTareaState extends State<PerfilTarea> {
 
   // Carga el perfil del profesor
   Widget VistaAdministrador() {
-    return perfilProfesor();
+    return perfilTarea();
   }
 
   Widget VistaProgramador() {
@@ -165,7 +152,7 @@ class PerfilTareaState extends State<PerfilTarea> {
   }
 
   /// Carga el perfil del profesor
-  Widget perfilProfesor() {
+  Widget perfilTarea() {
     if (vez == 0) {
       controladorNombre.text = tareaPerfil.nombre.toUpperCase();
       controladorTexto.text = tareaPerfil.textos[0].toUpperCase();

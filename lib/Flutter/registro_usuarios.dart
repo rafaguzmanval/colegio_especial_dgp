@@ -1,4 +1,3 @@
-
 /*
 *   Archivo: registro_usuarios.dart
 *
@@ -35,9 +34,6 @@ class RegistroUsuarios extends StatefulWidget {
 }
 
 class RegistroUsuariosState extends State<RegistroUsuarios> {
-
-
-
   var fotoTomada;
   ImagePicker capturador = new ImagePicker();
 
@@ -49,8 +45,6 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
   final controladorNombre = TextEditingController();
   final controladorApellidos = TextEditingController();
   final controladorPassword = TextEditingController();
-  final controladorFechanacimiento = TextEditingController();
-  final controladorRol = TextEditingController();
 
   var pictogramasPin = [
     "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fpin%2Fconejo.png?alt=media&token=b93aefd5-f2f8-4056-949d-863b6bbec317",
@@ -101,25 +95,32 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-        appBar: AppBar(
+      appBar: AppBar(
           leading: IconButton(
               icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
-              onPressed: (){Navigator.pop(context);}),
-          title: Center(child: Text('REGISTRA UN NUEVO USUARIO',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
-        )),
-        body: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-            child: Column(
-              children: [
-                if (Sesion.rol == Rol.alumno.toString()) ...[
-                  VistaAlumno(),
-                ] else if (Sesion.rol == Rol.profesor.toString()) ...[
-                  VistaProfesor()
-                ] else if (Sesion.rol == Rol.administrador.toString()) ...[
-                  VistaAdministrador()
-                ]
-              ],
-            )),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          title: Center(
+            child: Text(
+              'REGISTRA UN NUEVO USUARIO',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+            ),
+          )),
+      body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+          child: Column(
+            children: [
+              if (Sesion.rol == Rol.alumno.toString()) ...[
+                VistaAlumno(),
+              ] else if (Sesion.rol == Rol.profesor.toString()) ...[
+                VistaProfesor()
+              ] else if (Sesion.rol == Rol.administrador.toString()) ...[
+                VistaAdministrador()
+              ]
+            ],
+          )),
     );
   }
 
@@ -149,10 +150,11 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           ),
           Text(
             "ELIGE ROL PARA EL USUARIO: *",
-            style: TextStyle(fontSize: 25.0, height: 2.0, color:GuardadoLocal.colores[0]),
+            style: TextStyle(
+                fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           DropdownButton(
-            style: TextStyle(color:GuardadoLocal.colores[0]),
+            style: TextStyle(color: GuardadoLocal.colores[0]),
             value: rolElegido,
             items: [
               Rol.profesor.toString(),
@@ -162,7 +164,10 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
             ].map((String value) {
               return DropdownMenuItem(
                 value: value,
-                child: Text(value,style: TextStyle(fontSize: 25),),
+                child: Text(
+                  value,
+                  style: TextStyle(fontSize: 25),
+                ),
               );
             }).toList(),
             onChanged: (String? value) {
@@ -178,44 +183,49 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           SizedBox(
             width: 500,
             child: TextField(
-              style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),
+              style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 25),
               obscureText: false,
               maxLength: 20,
               decoration: InputDecoration(
-                enabledBorder:  OutlineInputBorder(
-                  borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
-                ),
-                border: OutlineInputBorder(),
-                hintText: 'INTRODUCE EL NOMBRE *',
-                hintStyle: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25)
-              ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
+                  ),
+                  border: OutlineInputBorder(),
+                  hintText: 'INTRODUCE EL NOMBRE *',
+                  hintStyle:
+                      TextStyle(color: GuardadoLocal.colores[0], fontSize: 25)),
               controller: controladorNombre,
             ),
           ),
           SizedBox(
             width: 500,
             child: TextField(
-              style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),
+              style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 25),
               obscureText: false,
               maxLength: 40,
               decoration: InputDecoration(
-                enabledBorder:  OutlineInputBorder(
-                  borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
-                ),
-                border: OutlineInputBorder(),
-                hintText: 'INTRODUCE LOS APELLIDOS *',
-                hintStyle: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25)
-              ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
+                  ),
+                  border: OutlineInputBorder(),
+                  hintText: 'INTRODUCE LOS APELLIDOS *',
+                  hintStyle:
+                      TextStyle(color: GuardadoLocal.colores[0], fontSize: 25)),
               controller: controladorApellidos,
             ),
           ),
           DropdownButton(
-            style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),
+            style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 25),
             value: metodoElegido,
             items: metodos.map((String value) {
               return DropdownMenuItem(
                 value: value,
-                child: Text(value,style: TextStyle(fontSize: 25),),
+                child: Text(
+                  value,
+                  style: TextStyle(fontSize: 25),
+                ),
               );
             }).toList(),
             onChanged: (String? value) {
@@ -229,18 +239,20 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               child: SizedBox(
                 width: 500,
                 child: TextField(
-                  style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),
+                  style:
+                      TextStyle(color: GuardadoLocal.colores[0], fontSize: 25),
                   obscureText: true,
                   maxLength: 20,
                   decoration: InputDecoration(
-                    focusColor: GuardadoLocal.colores[0],
-                    enabledBorder:  OutlineInputBorder(
-                      borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
-                    ),
-                    border: OutlineInputBorder(),
-                    hintText: 'INTRODUCE LA CONTRASEÑA *',
-                    hintStyle: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25)
-                  ),
+                      focusColor: GuardadoLocal.colores[0],
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: GuardadoLocal.colores[0], width: 0.0),
+                      ),
+                      border: OutlineInputBorder(),
+                      hintText: 'INTRODUCE LA CONTRASEÑA *',
+                      hintStyle: TextStyle(
+                          color: GuardadoLocal.colores[0], fontSize: 25)),
                   controller: controladorPassword,
                 ),
               )),
@@ -253,46 +265,52 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               )),
           Text(
             "INTRODUCE LA FECHA DE NACIMIENTO: *",
-            style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
+            style: TextStyle(
+                fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           ElevatedButton(
               onPressed: () async {
                 await showDatePicker(
-                    builder: (context, child) {
-                      return Theme(
-                        data: Theme.of(context).copyWith(
-                          canvasColor: GuardadoLocal.colores[1],
-                          colorScheme: ColorScheme.light(
-                              primary: GuardadoLocal.colores[0]// <-- SEE HERE
-                          ),
-                          textButtonTheme: TextButtonThemeData(
-                            style: TextButton.styleFrom(
-                              primary: GuardadoLocal.colores[0], // button text color
+                        builder: (context, child) {
+                          return Theme(
+                            data: Theme.of(context).copyWith(
+                              canvasColor: GuardadoLocal.colores[1],
+                              colorScheme: ColorScheme.light(
+                                  primary:
+                                      GuardadoLocal.colores[0] // <-- SEE HERE
+                                  ),
+                              textButtonTheme: TextButtonThemeData(
+                                style: TextButton.styleFrom(
+                                  primary: GuardadoLocal
+                                      .colores[0], // button text color
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        child: child!,
-                      );
-                    },
-                    context: context,
-                    locale: const Locale("es", "ES"),
-                    initialDate: DateTime.now(),
-                    firstDate: DateTime(1940),
-                    lastDate: DateTime.now())
+                            child: child!,
+                          );
+                        },
+                        context: context,
+                        locale: const Locale("es", "ES"),
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1940),
+                        lastDate: DateTime.now())
                     .then((e) {
                   fechaElegida = e;
                   actualizar();
                 });
               },
-              child: Text((fechaElegida == null)
-                  ? "ELIGE LA FECHA DE NACIMIENTO"
-                  : DateFormat('d/M/y').format(fechaElegida),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),)
-                  ,style: ElevatedButton.styleFrom(backgroundColor: GuardadoLocal.colores[0])),
-
-
+              child: Text(
+                (fechaElegida == null)
+                    ? "ELIGE LA FECHA DE NACIMIENTO"
+                    : DateFormat('d/M/y').format(fechaElegida),
+                style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 25),
+              ),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: GuardadoLocal.colores[0])),
           Text(
             "ELIGE FOTO DE PERFIL (OPCINAL):",
-            style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
+            style: TextStyle(
+                fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -302,7 +320,11 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 height: 10,
               ),
               ElevatedButton(
-                  child: Text('HAZ UNA FOTO DESDE LA CAMARA',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),),
+                  child: Text(
+                    'HAZ UNA FOTO DESDE LA CAMARA',
+                    style: TextStyle(
+                        color: GuardadoLocal.colores[2], fontSize: 25),
+                  ),
                   onPressed: () {
                     seleccionarImagen(SeleccionImagen.camara);
                   }),
@@ -310,7 +332,9 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 height: 10,
               ),
               ElevatedButton(
-                  child: Text('ELIGE FOTO DE LA GALERIA',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
+                  child: Text('ELIGE FOTO DE LA GALERIA',
+                      style: TextStyle(
+                          color: GuardadoLocal.colores[2], fontSize: 25)),
                   onPressed: () {
                     seleccionarImagen(SeleccionImagen.galeria);
                   }),
@@ -324,24 +348,34 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
             width: 120,
             child: fotoTomada == null
                 ? Center(
-                child: Container(
-                  decoration:
-                  BoxDecoration(border: Border.all(color: GuardadoLocal.colores[0])),
-                  child: Text('NINGUNA FOTO TOMADA ***', textAlign: TextAlign.center,style: TextStyle(fontSize: 25),),
-                ))
+                    child: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(color: GuardadoLocal.colores[0])),
+                    child: Text(
+                      'NINGUNA FOTO TOMADA ***',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 25),
+                    ),
+                  ))
                 : Center(child: Image.file(File(fotoTomada.path))),
           ),
-          Text(mensajeDeRegistro,style: TextStyle(fontSize: 25),),
+          Text(
+            mensajeDeRegistro,
+            style: TextStyle(fontSize: 25),
+          ),
           Visibility(
               visible: !registrando,
               child: TextButton(
                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(GuardadoLocal.colores[0]),
+                  backgroundColor:
+                      MaterialStateProperty.all(GuardadoLocal.colores[0]),
                 ),
                 child: Text(
                   "REGISTRAR",
                   style: TextStyle(
-                      backgroundColor: Colors.transparent, color: GuardadoLocal.colores[2],fontSize: 25),
+                      backgroundColor: Colors.transparent,
+                      color: GuardadoLocal.colores[2],
+                      fontSize: 25),
                 ),
                 onPressed: () {
                   registrarUsuario();
@@ -375,7 +409,10 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                             concatenarPin("conejo", 0);
                           },
                           child: Column(children: [
-                            Text(ordenPin[0],style: TextStyle(color: GuardadoLocal.colores[2]),),
+                            Text(
+                              ordenPin[0],
+                              style: TextStyle(color: GuardadoLocal.colores[2]),
+                            ),
                             Image.network(pictogramasPin[0])
                           ]))),
                 ),
@@ -437,7 +474,10 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               onPressed: () {
                 resetPin();
               },
-              child: Text("VOLVER A INTRODUCIR", style: TextStyle(fontSize: 25),)),
+              child: Text(
+                "VOLVER A INTRODUCIR",
+                style: TextStyle(fontSize: 25),
+              )),
         ]);
   }
 
@@ -509,7 +549,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           rolElegido = "NINGUN ROL ELEGIDO";
 
           mensajeDeRegistro =
-          "REGISTRO COMPLETADO PERFECTAMENETE\nPUEDES VOLVER A REGISTRAR OTRO USUARIO";
+              "REGISTRO COMPLETADO PERFECTAMENETE\nPUEDES VOLVER A REGISTRAR OTRO USUARIO";
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 behavior: SnackBarBehavior.floating,
@@ -523,25 +563,29 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                     color: Color(0xFF6BFF67),
                     borderRadius: BorderRadius.all(Radius.circular(29)),
                   ),
-                  child: Text(mensajeDeRegistro, style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),),
+                  child: Text(
+                    mensajeDeRegistro,
+                    style: TextStyle(
+                        color: GuardadoLocal.colores[2], fontSize: 25),
+                  ),
                 )),
           );
         } else {
           mensajeDeRegistro =
-          "FALLO EN EL PROCESO DE REGISTRO, INTENTELO DE NUEVO";
-          mostrarError(mensajeDeRegistro,true);
+              "FALLO EN EL PROCESO DE REGISTRO, INTENTELO DE NUEVO";
+          mostrarError(mensajeDeRegistro, true);
         }
 
         actualizar();
       });
     } else {
       mensajeDeRegistro = "DEBE RELLENAR TODOS LOS CAMPOS CON *";
-      mostrarError(mensajeDeRegistro,true);
+      mostrarError(mensajeDeRegistro, true);
       actualizar();
     }
   }
 
-  mostrarError(mensaje,error) {
+  mostrarError(mensaje, error) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
           behavior: SnackBarBehavior.floating,
@@ -551,11 +595,14 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           content: Container(
             padding: const EdgeInsets.all(16),
             height: 90,
-            decoration:  BoxDecoration(
-              color: Color(error?0xFFC72C41:0xFF6BFF67),
+            decoration: BoxDecoration(
+              color: Color(error ? 0xFFC72C41 : 0xFF6BFF67),
               borderRadius: BorderRadius.all(Radius.circular(29)),
             ),
-            child: Text(mensaje,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),),
+            child: Text(
+              mensaje,
+              style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 25),
+            ),
           )),
     );
   }
