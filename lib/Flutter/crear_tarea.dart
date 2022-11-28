@@ -39,7 +39,6 @@ class CrearTarea extends StatefulWidget {
 
 // Clase para crear tarea
 class CrearTareaState extends State<CrearTarea> {
-  AccesoBD base = new AccesoBD();
 
   var controladorVideo;
   var fotoTomada;
@@ -389,7 +388,7 @@ class CrearTareaState extends State<CrearTarea> {
       Tarea tarea = Tarea();
       tarea.setTarea(nombre, textos, imagenes, videos, formularios,orden);
 
-      await base.crearTarea(tarea).then((value) {
+      await Sesion.db.crearTarea(tarea).then((value) {
         creando = false;
 
         if (value) {
