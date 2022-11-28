@@ -597,8 +597,13 @@ class VerTareasState extends State<VerTareas> {
           child: Container(
               margin: EdgeInsets.only(top: 15, bottom: 15),
               child: ElevatedButton(
-              onPressed: () {
-                Sesion.db.resetTarea(Sesion.tareas[tareaActual].idRelacion);
+              onPressed: () async{
+                await Sesion.db.resetTarea(Sesion.tareas[tareaActual].idRelacion);
+                mostrarBotones = Sesion.tareas[tareaActual].estado == "sinFinalizar";
+                temporizador = Timer.periodic(Duration(seconds: 1), (timer) {
+                  formatTiempoRestante();
+                });
+                actualizar();
               },
               child: Text("Reinicia la tarea".toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),))),
         ),
@@ -748,6 +753,8 @@ class VerTareasState extends State<VerTareas> {
       tareaActual = Sesion.tareas.length - 1;
       formatTiempoRestante();
     }
+
+
 
 
     if (!mounted) return;
