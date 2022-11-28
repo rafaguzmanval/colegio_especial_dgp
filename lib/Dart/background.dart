@@ -1,6 +1,8 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'notificacion.dart';
 import 'main.dart';
 import 'package:flutter_background/flutter_background.dart';
@@ -24,7 +26,14 @@ static inicializarBackground() async
     if(success)
     {
       print("Servicio de background activado");
-      await FlutterBackground.enableBackgroundExecution();
+      await FlutterBackground.enableBackgroundExecution().then((value) {
+        if(Sesion.rol == Rol.alumno.toString())
+          Background.activarNotificacionesNuevasTareas();
+        else
+          Background.activarNotificacionesTareasTerminadas();
+      });
+
+
 
     }
   }
@@ -75,24 +84,39 @@ static inicializarBackground() async
           .snapshots().listen((e) async{
 
 
+        var entrega = e.docs.last.get("fechaentrega");
+        var diferencia = DateTime.fromMillisecondsSinceEpoch(
+            entrega)
+            .difference(DateTime.now());
 
-        if(e.docs.length > 0 /*&& e.docs.last.get("estado") != "sinFinalizar"*/)
+        print(e.docChanges.last.type.toString());
+
+        if(e.docs.length > 0 && e.docs.last.get("estado") == "completada" &&  e.docChanges.last.type == DocumentChangeType.modified)
         {
+
           var idUsuario = e.docs.last.get("idUsuario"); // cada tarea tiene una id
           var idTarea = e.docs.last.get("idTarea");
 
-          await Sesion.db.consultarIDusuario(idUsuario).then((usuario) async{
+          try{
+            await Sesion.db.consultarIDusuario(idUsuario).then((usuario) async{
 
-            //Sesion.argumentos.add(e.docs.length-1);
+              //Sesion.argumentos.add(e.docs.length-1);
 
               await Sesion.db.consultarIDTarea(idTarea).then((tarea) {
 
                 print(usuario.nombre + " ha completado una tarea " + tarea.nombre);
+                Notificacion.showBigTextNotification(title: "Tarea completada", body: usuario.nombre + " ha completado una tarea " + tarea.nombre, fln: notificaciones );
+
               });
 
-            //if(!kIsWeb)
-            //Notificacion.showBigTextNotification(title: "Tarea completada", body: usuario.nombre + " ha completado una tarea   " + e.docs.last.get("estado"), fln: notificaciones );
-          });
+              //if(!kIsWeb)
+
+            });
+          }
+          catch(e){
+            print(e);
+          }
+
 
           //print(idUsuario.toString());
 

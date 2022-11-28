@@ -19,6 +19,8 @@
 *   image_picker.dart : Libreria para acceder a la cámara y a la galería de imagenes del dispositivo.
 * */
 
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/background.dart';
 import 'package:colegio_especial_dgp/Dart/notificacion.dart';
@@ -38,6 +40,7 @@ import 'configuracion.dart';
 import 'lista_alumnos.dart';
 import 'lista_profesores.dart';
 import 'lista_tareas.dart';
+import 'package:universal_io/io.dart';
 
 
 class MyHomePage extends StatefulWidget {
@@ -63,13 +66,12 @@ class MyHomePageState extends State<MyHomePage> {
     Sesion.paginaActual = this;
     Sesion.seleccion = "";
     Sesion.tareas = [];
-    Notificacion.initialize(notificaciones,Sesion.rol);
-    Background.inicializarBackground();
+    if(Platform.isAndroid)
+      {
+        Notificacion.initialize(notificaciones,Sesion.rol);
+        Background.inicializarBackground();
+      }
 
-    if(Sesion.rol == Rol.alumno.toString())
-    Background.activarNotificacionesNuevasTareas();
-    else
-      Background.activarNotificacionesTareasTerminadas();
   }
 
   /// Este es el build de la clase MyHomePage que devuelve toda la vista génerica más la vista especial de cada usuario.

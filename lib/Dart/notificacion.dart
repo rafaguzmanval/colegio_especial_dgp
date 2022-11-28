@@ -39,6 +39,7 @@ class Notificacion {
     );
   }
 
+  //Se va a quedar sin implementar
   static redireccionProfesor() async
   {
     if(Sesion.paginaActual.toString().startsWith("MyHomePageState"))
@@ -52,6 +53,7 @@ class Notificacion {
     }
   }
 
+  //Redirige la aplicación cuando tiene el perfil de un alumno hacia la última tarea añadida
   static redireccionAlumno() async
   {
     if(Sesion.paginaActual.toString().startsWith("MyHomePageState"))
