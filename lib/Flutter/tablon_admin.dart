@@ -77,9 +77,8 @@ class TablonAdminState extends State<TablonAdmin> {
       child: Scaffold(
           appBar: AppBar(
             leading: IconButton(
-                icon:
-                    Icon(Icons.settings_power, color: GuardadoLocal.colores[2]),
-                onPressed: () => _onBackPressed(context)),
+                icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
+                onPressed: (){Navigator.pop(context);}),
             title: Column(children: [
               Center(
                 child: Text(
@@ -129,7 +128,7 @@ class TablonAdminState extends State<TablonAdmin> {
 
   ///Este método devuelve toda la vista que va a ver el administrador en un Widget.
   Widget VistaAdministrador() {
-    double media = MediaQuery.of(context).size.width;
+    Orientation orientacion = MediaQuery.of(context).orientation;
     return Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.max,
@@ -137,7 +136,7 @@ class TablonAdminState extends State<TablonAdmin> {
           Flexible(
             flex: 1,
             fit: FlexFit.tight,
-            child: media > 600
+            child: orientacion==Orientation.landscape
                 ? Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
