@@ -194,7 +194,7 @@ class TablonAdminState extends State<TablonAdmin> {
                                   Flexible(
                                       flex: 1,
                                       child: Image.asset(
-                                        "assets/companeros.png",
+                                        "assets/listaDeBotones.png",
                                       )),
                                 ],
                               ),

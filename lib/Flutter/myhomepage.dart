@@ -100,7 +100,7 @@ class MyHomePageState extends State<MyHomePage> {
 
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
   Widget VistaProfesor() {
-    double media = MediaQuery.of(context).size.width;
+    Orientation orientacion = MediaQuery.of(context).orientation;
     return Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.max,
@@ -109,7 +109,7 @@ class MyHomePageState extends State<MyHomePage> {
               flex: 1,
               fit: FlexFit.tight,
               child:
-                  media > 600 ? Row(
+                orientacion==Orientation.landscape ? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [Flexible(
                     flex: 1,
@@ -262,7 +262,7 @@ class MyHomePageState extends State<MyHomePage> {
 
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
   Widget VistaAlumno() {
-    double media = MediaQuery.of(context).size.width;
+    Orientation orientacion = MediaQuery.of(context).orientation;
     return Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         mainAxisSize: MainAxisSize.max,
@@ -271,7 +271,7 @@ class MyHomePageState extends State<MyHomePage> {
             flex: 1,
             fit: FlexFit.tight,
             child:
-            media > 600 ? Row(
+            orientacion==Orientation.landscape ? Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Flexible(

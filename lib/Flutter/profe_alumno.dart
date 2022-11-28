@@ -49,7 +49,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
 // Contructor de la estructura de la pagina
   @override
   Widget build(BuildContext context) {
-    double media = MediaQuery.of(context).size.width;
+    Orientation orientacion = MediaQuery.of(context).orientation;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -66,7 +66,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
               fit: FlexFit.tight,
 
               child:
-              media > 600 ? Row(
+              orientacion==Orientation.landscape ? Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Flexible(
