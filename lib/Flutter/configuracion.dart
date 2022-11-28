@@ -9,8 +9,7 @@ import "package:latlong2/latlong.dart";
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:restart_app/restart_app.dart';
-
-import '../Dart/colorpicker.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 //Boton con Advertencia
 class BotonWarning extends StatefulWidget{
