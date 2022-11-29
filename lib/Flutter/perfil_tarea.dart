@@ -201,6 +201,7 @@ class PerfilTareaState extends State<PerfilTarea> {
           SizedBox(
             width: 500,
             child: TextField(
+              key: Key('instrucciones'),
               obscureText: false,
               style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[0]),
               maxLength: 500,

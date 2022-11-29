@@ -531,6 +531,7 @@ class VerTareasState extends State<VerTareas> {
                   width: 150,
                   height: 150,
                   child: FloatingActionButton(
+                      key: Key('aceptarTarea'),
                       heroTag: "aceptarTarea",
                       child: Image.asset(
                         "assets/correcto.png",
@@ -768,92 +769,95 @@ class VerTareasState extends State<VerTareas> {
         context: context,
         builder: (context) {
           return Dialog(
-            child: Column(children: [
-              Text("\nIntroduce un comentario opcional:".toUpperCase(),style: TextStyle(fontSize: 25),),
-              TextField(
-                minLines: 3,
-                maxLines: 6,
-                controller: controladorRespuesta,
-                style: TextStyle(fontSize: 25),
-              ),
-              Text("\Envia una foto (opcional):".toUpperCase(),style: TextStyle(fontSize: 25),),
-              ElevatedButton(onPressed: () async{
-                await tomarFoto();
-                controladorStream.add("");
+            child: SingleChildScrollView(
+              child: Column(children: [
+                Text("\nIntroduce un comentario opcional:".toUpperCase(),style: TextStyle(fontSize: 25),),
+                TextField(
+                  key: Key('comentarioRetroalimentacion'),
+                  minLines: 3,
+                  maxLines: 6,
+                  controller: controladorRespuesta,
+                  style: TextStyle(fontSize: 25),
+                ),
+                Text("\Envia una foto (opcional):".toUpperCase(),style: TextStyle(fontSize: 25),),
+                ElevatedButton(onPressed: () async{
+                  await tomarFoto();
+                  controladorStream.add("");
 
-              }, child: Column(children: [
-                Text("Tomar foto".toUpperCase(),style: TextStyle(fontSize: 25),),
-                Icon(Icons.camera_alt_outlined)
-                
-              ],)),
+                }, child: Column(children: [
+                  Text("Tomar foto".toUpperCase(),style: TextStyle(fontSize: 25),),
+                  Icon(Icons.camera_alt_outlined)
 
-              StreamBuilder(stream: controladorStream.stream,builder: (context,snapshot){
-                return fotoTomada==null?Container(width: 100,height: 100):Container(width: 200,height: 200,child:Image.file(File(fotoTomada.path)),);
-              }),
+                ],)),
+
+                StreamBuilder(stream: controladorStream.stream,builder: (context,snapshot){
+                  return fotoTomada==null?Container(width: 100,height: 100):Container(width: 200,height: 200,child:Image.file(File(fotoTomada.path)),);
+                }),
 
 
 
-              Text("\nSeguro que quieres ".toUpperCase() +
-                  (estado ? "terminar".toUpperCase() : "cancelar".toUpperCase()) +
-                  " la tarea".toUpperCase(),style: TextStyle(fontSize: 25),),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Container(
+                Text("\nSeguro que quieres ".toUpperCase() +
+                    (estado ? "terminar".toUpperCase() : "cancelar".toUpperCase()) +
+                    " la tarea".toUpperCase(),style: TextStyle(fontSize: 25),),
+                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  Container(
+                      margin: EdgeInsets.all(10),
+                      child: ElevatedButton(
+                          onPressed: () {
+
+                            Navigator.pop(context);
+                          },
+                          child: Column(children: [
+                            Text('\nNo'.toUpperCase(),style: TextStyle(fontSize: 25),),
+                            Image.asset(
+                              "assets/no.png",
+                              height: 100,
+                              width: 100,
+                            )
+                          ]))),
+                  Container(
                     margin: EdgeInsets.all(10),
                     child: ElevatedButton(
                         onPressed: () {
+                          if (estado) {
+                            Sesion.db.updateComanda(
+                                Sesion.tareas[tareaActual].idRelacion,
+                                Sesion.tareas[tareaActual].formularios);
+                            Sesion.db.completarTarea(
+                                Sesion.tareas[tareaActual].idRelacion);
+                          } else {
+                            Sesion.db.fallarTarea(
+                                Sesion.tareas[tareaActual].idRelacion);
+                          }
+
+                          if (controladorRespuesta.text != null) {
+                            var file = null;
+                            if(fotoTomada != null)
+                            {
+                              file = File(fotoTomada.path);
+                            }
+                            Sesion.db.addRespuestaTarea(
+                                Sesion.tareas[tareaActual].idRelacion,
+                                controladorRespuesta.text,file);
+                          }
+
+                          mostrarBotones = false;
+                          actualizar();
 
                           Navigator.pop(context);
                         },
                         child: Column(children: [
-                          Text('\nNo'.toUpperCase(),style: TextStyle(fontSize: 25),),
+                          Text('\nEnviar'.toUpperCase(),style: TextStyle(fontSize: 25),),
                           Image.asset(
-                            "assets/no.png",
+                            "assets/enviarunemail.png",
                             height: 100,
                             width: 100,
                           )
-                        ]))),
-                Container(
-                  margin: EdgeInsets.all(10),
-                  child: ElevatedButton(
-                      onPressed: () {
-                        if (estado) {
-                          Sesion.db.updateComanda(
-                              Sesion.tareas[tareaActual].idRelacion,
-                              Sesion.tareas[tareaActual].formularios);
-                          Sesion.db.completarTarea(
-                              Sesion.tareas[tareaActual].idRelacion);
-                        } else {
-                          Sesion.db.fallarTarea(
-                              Sesion.tareas[tareaActual].idRelacion);
-                        }
-
-                        if (controladorRespuesta.text != null) {
-                          var file = null;
-                          if(fotoTomada != null)
-                            {
-                              file = File(fotoTomada.path);
-                            }
-                          Sesion.db.addRespuestaTarea(
-                              Sesion.tareas[tareaActual].idRelacion,
-                              controladorRespuesta.text,file);
-                        }
-
-                        mostrarBotones = false;
-                        actualizar();
-
-                        Navigator.pop(context);
-                      },
-                      child: Column(children: [
-                        Text('\nEnviar'.toUpperCase(),style: TextStyle(fontSize: 25),),
-                        Image.asset(
-                          "assets/enviarunemail.png",
-                          height: 100,
-                          width: 100,
-                        )
-                      ])),
-                )
-              ])
-            ]),
+                        ])),
+                  )
+                ])
+              ]),
+            ),
           );
         });
   }
@@ -868,6 +872,7 @@ class VerTareasState extends State<VerTareas> {
             child: Column(children: [
               Text("\nIntroduce una realimentacion para el alumno:".toUpperCase(),style: TextStyle(fontSize: 25),),
               TextField(
+                key: Key('profesorRetroalimentacion'),
                 style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),
                 decoration: InputDecoration(
                     enabledBorder:  OutlineInputBorder(

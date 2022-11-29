@@ -5,8 +5,11 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'dart:io';
+
 import 'package:colegio_especial_dgp/Dart/firebase_options.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:colegio_especial_dgp/Dart/main.dart';
@@ -24,9 +27,10 @@ void main() {
   }
 
   inicializacion();
-  test_inicio_sesion();
+  //test_inicio_sesion();
   //test_gestion_alumnos();
   //test_lista_profesores();
+  test_editar_tarea();
 }
 
 /************************ INICIALIZACIÓN **************************************/
@@ -36,12 +40,15 @@ void inicializacion() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await cargarPreajustes();
 }
 
 /********************* INICIO DE SESION ***************************************/
 /*
 Historias probadas:
 - Inicio de sesión
+- Dividir Login Page en profesor y alumno
 */
 
 void test_inicio_sesion(){
@@ -58,6 +65,8 @@ void test_inicio_sesion(){
       await tester.tap(boton);
       await tester.pump();
 
+      await Future.delayed(const Duration(seconds: 2), (){});
+
       expect(find.text("EMILIO"),findsOneWidget);
     });
 
@@ -72,6 +81,8 @@ void test_inicio_sesion(){
       var boton = find.text("PROFESORES");
       await tester.tap(boton);
       await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
 
       //Pulsamos el boton
       var boton1 = find.text("EMILIO");
@@ -95,6 +106,8 @@ void test_inicio_sesion(){
       var boton = find.text("PROFESORES");
       await tester.tap(boton);
       await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
 
       //Pulsamos el boton
       var boton1 = find.text("EMILIO");
@@ -127,6 +140,8 @@ void test_inicio_sesion(){
       var boton = find.text("ALUMNOS");
       await tester.tap(boton);
       await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
 
       //Pulsamos el boton
       var boton1 = find.text("BLANCA");
@@ -163,7 +178,9 @@ Historias probadas:
 -Lista de tareas (Profesor/Admin)
 -Tareas asignadas a un Alumno (Admin/Profesor)
 -Lista de estudiantes matriculados (Admin)
--Videotutorial en tarea (Alumno)
+
+-Enviar retroalimentación por completar tarea (Profesor)
+-Recibir retroalimentación por completar tarea (Alumno)
 */
 
 void test_gestion_alumnos(){
@@ -175,8 +192,15 @@ void test_gestion_alumnos(){
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
+      //Pulsamos el boton Profesores
+      var tipo = find.text("PROFESORES");
+      await tester.tap(tipo);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
       //Pulsamos el boton
-      var boton = find.text("Emilio");
+      var boton = find.text("EMILIO");
       await tester.tap(boton);
       await tester.pump();
 
@@ -186,20 +210,20 @@ void test_gestion_alumnos(){
       var contrasenia = "123";
       await tester.enterText(find.byKey(Key("campoContraseña")), contrasenia);
 
-      var botonEnviar = find.text("Enviar");
+      var botonEnviar = find.text("ENVIAR");
       await tester.tap(botonEnviar);
       await tester.pump();
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
       //Pulsamos el boton alumnos
-      var botonA = find.text("Lista de alumnos");
+      var botonA = find.text("LISTA DE ALUMNOS");
       await tester.tap(botonA);
       await tester.pump();
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
-      expect(find.text("Jaime"),findsOneWidget);
+      expect(find.text("JAIME"),findsOneWidget);
     });
 
     testWidgets('Test de añadir tarea', (WidgetTester tester) async {
@@ -208,8 +232,15 @@ void test_gestion_alumnos(){
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
+      //Pulsamos el boton Profesores
+      var tipo = find.text("PROFESORES");
+      await tester.tap(tipo);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
       //Pulsamos el boton
-      var boton = find.text("Emilio");
+      var boton = find.text("EMILIO");
       await tester.tap(boton);
       await tester.pump();
 
@@ -219,22 +250,28 @@ void test_gestion_alumnos(){
       var contrasenia = "123";
       await tester.enterText(find.byKey(Key("campoContraseña")), contrasenia);
 
-      var botonEnviar = find.text("Enviar");
+      var botonEnviar = find.text("ENVIAR");
       await tester.tap(botonEnviar);
       await tester.pump();
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
       //Pulsamos el boton alumnos
-      var botonA = find.text("Lista de alumnos");
+      var botonA = find.text("LISTA DE ALUMNOS");
       await tester.tap(botonA);
       await tester.pump();
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
       //Pulsamos el boton antonio
-      var botonAn = find.text("Jaime");
+      var botonAn = find.text("JAIME");
       await tester.tap(botonAn);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 1), (){});
+
+      //Pulsamos el boton antonio
+      await tester.tap(find.byIcon(Icons.add));
       await tester.pump();
 
       await Future.delayed(const Duration(seconds: 1), (){});
@@ -245,17 +282,17 @@ void test_gestion_alumnos(){
       await tester.pumpAndSettle();
 
       //Pulsamos el boton hacer fotocopia
-      await tester.tap(find.text("Hacer fotocopia").last,warnIfMissed: false);
+      await tester.tap(find.text("HACER FOTOCOPIA").last,warnIfMissed: false);
       await tester.pumpAndSettle();
 
       //Pulsamos el boton añadir tarea
-      var botonAT = find.text("Añadir Tarea");
+      var botonAT = find.text("AÑADIR TAREA");
       await tester.tap(botonAT);
       await tester.pumpAndSettle();
 
       await Future.delayed(const Duration(seconds: 1), (){});
 
-      expect(find.text("Hacer fotocopia"),findsAtLeastNWidgets(2));
+      expect(find.text("HACER FOTOCOPIA"),findsOneWidget);
     });
 
     testWidgets('Comprobar tarea en alumno', (WidgetTester tester) async {
@@ -264,8 +301,15 @@ void test_gestion_alumnos(){
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
+      //Pulsamos el boton Profesores
+      var tipo = find.text("ALUMNOS");
+      await tester.tap(tipo);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
       //Pulsamos el boton
-      var boton = find.text("Jaime");
+      var boton = find.text("JAIME");
       await tester.tap(boton);
       await tester.pump();
 
@@ -275,28 +319,142 @@ void test_gestion_alumnos(){
       var contrasenia = "123";
       await tester.enterText(find.byKey(Key("campoContraseña")), contrasenia);
 
-      var botonEnviar = find.text("Enviar");
+      var botonEnviar = find.text("ENVIAR");
       await tester.tap(botonEnviar);
       await tester.pump();
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
       //Pulsamos el boton tareas
-      var botonT = find.text("Lista de Tareas");
+      var botonT = find.text("LISTA DE TAREAS");
       await tester.tap(botonT);
       await tester.pump();
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
-      expect(find.text("\nHacer fotocopia\n"),findsOneWidget);
+      expect(find.text("\nHACER FOTOCOPIA\n"),findsOneWidget);
 
-      //Pulsamos el boton play
-      await tester.tap(find.byType(ElevatedButton));
+      var botonAceptar = find.byKey(Key('aceptarTarea'));
+
+      //Pulsamos el boton aceptar
+      await tester.tap(botonAceptar);
       await tester.pump();
 
-      await Future.delayed(const Duration(seconds: 4), (){});
-      
-      expect(find.byIcon(Icons.pause), findsOneWidget);
+      await Future.delayed(const Duration(milliseconds: 500), (){});
+
+      //Introducimos un comentario
+      await tester.enterText(find.byKey(Key("comentarioRetroalimentacion")), 'Test');
+
+      //Pulsamos el boton enviar
+      await tester.tap(find.text("\nENVIAR"));
+      await tester.pump();
+    });
+
+    testWidgets('Test de enviar retroalimentacion', (WidgetTester tester) async {
+
+      await tester.pumpWidget(App());
+      await tester.pumpAndSettle();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
+      //Pulsamos el boton Profesores
+      var tipo = find.text("PROFESORES");
+      await tester.tap(tipo);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
+      //Pulsamos el boton
+      var boton = find.text("EMILIO");
+      await tester.tap(boton);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 1), (){});
+
+      //Introducimos la contraseña
+      var contrasenia = "123";
+      await tester.enterText(find.byKey(Key("campoContraseña")), contrasenia);
+
+      var botonEnviar = find.text("ENVIAR");
+      await tester.tap(botonEnviar);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
+      //Pulsamos el boton alumnos
+      var botonA = find.text("LISTA DE ALUMNOS");
+      await tester.tap(botonA);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
+      //Pulsamos el boton antonio
+      var botonAn = find.text("JAIME");
+      await tester.tap(botonAn);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
+      //Pulsamos el boton hacer fotocopia
+      await tester.tap(find.text("HACER FOTOCOPIA"));
+      await tester.pumpAndSettle();
+
+      //Comprobar comentario alumno
+      expect(find.text("TEST"),findsOneWidget);
+
+      //Pulsamos boton enviar retroalimentacion
+      await tester.scrollUntilVisible(find.text("ENVIAR RETROALIMENTACIÓN"), 500);
+      await tester.tap(find.text("ENVIAR RETROALIMENTACIÓN"));
+      await tester.pumpAndSettle();
+
+      await Future.delayed(const Duration(seconds: 1), (){});
+
+      //Introducimos un comentario
+      await tester.enterText(find.byKey(Key("profesorRetroalimentacion")), 'Bien hecho');
+
+      //Pulsamos el boton enviar
+      await tester.tap(find.text("\nENVIAR"));
+      await tester.pump();
+    });
+
+    testWidgets('Comprobar retroalimentacion en alumno', (WidgetTester tester) async {
+      await tester.pumpWidget(App());
+      await tester.pumpAndSettle();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
+      //Pulsamos el boton Profesores
+      var tipo = find.text("ALUMNOS");
+      await tester.tap(tipo);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
+      //Pulsamos el boton
+      var boton = find.text("JAIME");
+      await tester.tap(boton);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 1), (){});
+
+      //Introducimos la contraseña
+      var contrasenia = "123";
+      await tester.enterText(find.byKey(Key("campoContraseña")), contrasenia);
+
+      var botonEnviar = find.text("ENVIAR");
+      await tester.tap(botonEnviar);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
+      //Pulsamos el boton tareas
+      var botonT = find.text("LISTA DE TAREAS");
+      await tester.tap(botonT);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
+      expect(find.text("BIEN HECHO\n"),findsOneWidget);
     });
 
     testWidgets('Test de eliminar tarea', (WidgetTester tester) async {
@@ -306,8 +464,15 @@ void test_gestion_alumnos(){
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
+      //Pulsamos el boton Profesores
+      var tipo = find.text("PROFESORES");
+      await tester.tap(tipo);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
       //Pulsamos el boton
-      var boton = find.text("Emilio");
+      var boton = find.text("EMILIO");
       await tester.tap(boton);
       await tester.pump();
 
@@ -317,21 +482,21 @@ void test_gestion_alumnos(){
       var contrasenia = "123";
       await tester.enterText(find.byKey(Key("campoContraseña")), contrasenia);
 
-      var botonEnviar = find.text("Enviar");
+      var botonEnviar = find.text("ENVIAR");
       await tester.tap(botonEnviar);
       await tester.pump();
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
       //Pulsamos el boton alumnos
-      var botonA = find.text("Lista de alumnos");
+      var botonA = find.text("LISTA DE ALUMNOS");
       await tester.tap(botonA);
       await tester.pump();
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
       //Pulsamos el boton antonio
-      var botonAn = find.text("Jaime");
+      var botonAn = find.text("JAIME");
       await tester.tap(botonAn);
       await tester.pump();
 
@@ -343,7 +508,7 @@ void test_gestion_alumnos(){
 
       await Future.delayed(const Duration(seconds: 1), (){});
 
-      expect(find.text("Hacer fotocopia"),findsOneWidget);
+      expect(find.text("HACER FOTOCOPIA"),findsNothing);
     });
   });
 }
@@ -365,8 +530,15 @@ void test_lista_profesores(){
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
+      //Pulsamos el boton Profesores
+      var tipo = find.text("PROFESORES");
+      await tester.tap(tipo);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
       //Pulsamos el boton
-      var boton = find.text("Emilio");
+      var boton = find.text("EMILIO");
       await tester.tap(boton);
       await tester.pump();
 
@@ -376,20 +548,20 @@ void test_lista_profesores(){
       var contrasenia = "123";
       await tester.enterText(find.byKey(Key("campoContraseña")), contrasenia);
 
-      var botonEnviar = find.text("Enviar");
+      var botonEnviar = find.text("ENVIAR");
       await tester.tap(botonEnviar);
       await tester.pump();
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
       //Pulsamos el boton profesores
-      var botonP = find.text("Lista de Profesores");
+      var botonP = find.text("LISTA DE PROFESORES");
       await tester.tap(botonP);
       await tester.pump();
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
-      expect(find.text("Flavia"),findsOneWidget);
+      expect(find.text("FLAVIA"),findsOneWidget);
     });
 
     testWidgets('Datos correctos', (WidgetTester tester) async {
@@ -398,8 +570,15 @@ void test_lista_profesores(){
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
+      //Pulsamos el boton Profesores
+      var tipo = find.text("PROFESORES");
+      await tester.tap(tipo);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
       //Pulsamos el boton
-      var boton = find.text("Emilio");
+      var boton = find.text("EMILIO");
       await tester.tap(boton);
       await tester.pump();
 
@@ -409,31 +588,113 @@ void test_lista_profesores(){
       var contrasenia = "123";
       await tester.enterText(find.byKey(Key("campoContraseña")), contrasenia);
 
-      var botonEnviar = find.text("Enviar");
+      var botonEnviar = find.text("ENVIAR");
       await tester.tap(botonEnviar);
       await tester.pump();
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
       //Pulsamos el boton profesores
-      var botonP= find.text("Lista de Profesores");
+      var botonP= find.text("LISTA DE PROFESORES");
       await tester.tap(botonP);
       await tester.pump();
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
       //Pulsamos el boton antonio
-      var botonF = find.text("Flavia");
+      var botonF = find.text("FLAVIA");
       await tester.tap(botonF);
       await tester.pump();
 
       await Future.delayed(const Duration(seconds: 2), (){});
 
-      expect(find.text("Nombre: Flavia\n"),findsOneWidget);
-      expect(find.text("Apellidos: Viño\n"),findsOneWidget);
-      expect(find.text("Fecha de nacimiento: 3/7/1986\n"),findsOneWidget);
+      expect(find.text("NOMBRE: Flavia\n"),findsOneWidget);
+      expect(find.text("APELLIDOS: Viño\n"),findsOneWidget);
+      expect(find.text("FECHA DE NACIMIENTO: 3/7/1986\n"),findsOneWidget);
     });
 
   });
 }
 
+/*************************** EDICIÓN DE TAREA *********************************/
+/*
+Historias probadas:
+- Edición de tarea (Admin)
+*/
+
+void test_editar_tarea(){
+
+  group('Editar tarea', () {
+    testWidgets('Test de edición de tareas', (WidgetTester tester) async {
+
+      await tester.pumpWidget(App());
+      await tester.pumpAndSettle();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
+      //Pulsamos el boton Profesores
+      var tipo = find.text("PROFESORES");
+      await tester.tap(tipo);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
+      //Pulsamos el boton
+      var boton = find.text("ADMIN");
+      await tester.tap(boton);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
+      //Pulsamos el boton profesores
+      var botonP = find.text("LISTA DE TAREAS");
+      await tester.tap(botonP);
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
+      //Pulsamos el boton hacer fotocopia
+      await tester.tap(find.text("HACER FOTOCOPIA"));
+      await tester.pump();
+
+      await Future.delayed(const Duration(seconds: 2), (){});
+
+      //Cambiamos las instrucciones
+      await tester.tap(find.byKey(Key("instrucciones")));
+      await tester.pump();
+      for(int i = 0; i<'PRIMERO TIENES QUE ENCENDER LA FOTOCOPIADORA Y ESPERARTE'.length;i++){
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.delete);
+      }
+      await tester.enterText(find.byKey(Key("instrucciones")), 'TEST');
+
+      final gesture = await tester.startGesture(Offset.zero);
+      await gesture.moveBy(const Offset(0, 200));
+      await tester.pump();
+
+      await tester.tap(find.text('EDITAR TAREA'),warnIfMissed: false);
+      await tester.pump();
+
+      //Pulsamos el boton hacer fotocopia
+      await tester.tap(find.text("HACER FOTOCOPIA"));
+      await tester.pump();
+
+      expect(find.text('TEST'),findsOneWidget);
+
+      //Ponemos las instrucciones como estaban
+      await tester.tap(find.byKey(Key("instrucciones")));
+      await tester.pump();
+      for(int i = 0; i<'TEST'.length;i++){
+        await tester.sendKeyDownEvent(LogicalKeyboardKey.delete);
+      }
+      await tester.enterText(find.byKey(Key("instrucciones")),
+          'PRIMERO TIENES QUE ENCENDER LA FOTOCOPIADORA Y ESPERARTE');
+
+      final gesture2 = await tester.startGesture(Offset.zero);
+      await gesture2.moveBy(const Offset(0, 200));
+      await tester.pump();
+
+      await tester.tap(find.text('EDITAR TAREA'),warnIfMissed: false);
+      await tester.pump();
+    });
+  });
+}
