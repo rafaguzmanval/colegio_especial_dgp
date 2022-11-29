@@ -20,6 +20,7 @@ import 'package:colegio_especial_dgp/Flutter/perfil_profesor.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:flutter/material.dart';
+import 'package:colegio_especial_dgp/Flutter/search_prof.dart';
 
 class ListaProfesores extends StatefulWidget {
   @override
@@ -27,7 +28,6 @@ class ListaProfesores extends StatefulWidget {
 }
 
 class ListaProfesoresState extends State<ListaProfesores> {
-  var profesores = [];
 
   double offSetActual = 0;
   ScrollController homeController = new ScrollController();
@@ -41,6 +41,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
 
     Sesion.seleccion = "";
     Sesion.tareas = [];
+    Sesion.profesores = [];
 
     if (Sesion.rol != Rol.alumno.toString()) {
       cargarProfesores();
@@ -55,6 +56,14 @@ class ListaProfesoresState extends State<ListaProfesores> {
           leading: IconButton(
               icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
               onPressed: (){Navigator.pop(context);}),
+            actions: [
+              IconButton(
+                onPressed: (){
+                  showSearch(context: context, delegate: CustomSearchDelegate(),);
+                },
+                icon: const Icon(Icons.search),
+              ),
+            ],
           title: Center(child: Text('Lista de Profesores'.toUpperCase(),textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
         )),
         body: Stack(children: [
@@ -127,7 +136,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
       //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
       child: Column(
         children: [
-          for (int i = 0; i < profesores.length; i++)
+          for (int i = 0; i < Sesion.profesores.length; i++)
             Container(
                 width: 130,
                 height: 150,
@@ -137,14 +146,14 @@ class ListaProfesoresState extends State<ListaProfesores> {
                   child: Column(
                     children: [
                       Text(
-                        profesores[i].nombre.toString().toUpperCase(),
+                        Sesion.profesores[i].nombre.toString().toUpperCase(),
                         style: TextStyle(
                           color: GuardadoLocal.colores[2],
                           fontSize: 25
                         ),
                       ),
                       Image.network(
-                        profesores[i].foto,
+                        Sesion.profesores[i].foto,
                         width: 100,
                         height: 100,
                         fit: BoxFit.fill,
@@ -152,7 +161,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
                     ],
                   ),
                   onPressed: () {
-                    Sesion.seleccion = profesores[i];
+                    Sesion.seleccion = Sesion.profesores[i];
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -206,7 +215,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
 
   // metodo para cargar la lista de profesores
   cargarProfesores() async {
-    profesores = await Sesion.db.consultarTodosProfesores();
+    Sesion.profesores = await Sesion.db.consultarTodosProfesores();
     actualizar();
   }
 

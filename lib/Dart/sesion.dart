@@ -18,6 +18,8 @@ class Sesion {
   static var nombre;
   static var rol;
   static var foto;
+  static var alumnos;
+  static var profesores;
   static var tareas;
   static var tablon;
   static var seleccion;

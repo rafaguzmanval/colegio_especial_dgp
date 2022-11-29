@@ -21,6 +21,7 @@ import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:colegio_especial_dgp/Flutter/perfil_tarea.dart';
 import 'package:flutter/material.dart';
+import 'package:colegio_especial_dgp/Flutter/search_boton.dart';
 
 class ListaBotones extends StatefulWidget {
   @override
@@ -58,9 +59,17 @@ class ListaBotonesState extends State<ListaBotones> {
               onPressed: () {
                 Navigator.pop(context);
               }),
+          actions: [
+            IconButton(
+              onPressed: (){
+                showSearch(context: context, delegate: CustomSearchDelegate(),);
+              },
+              icon: const Icon(Icons.search),
+            ),
+          ],
           title: Center(
               child: Text(
-                'Lista de Tareas'.toUpperCase(),
+                'Lista de botones'.toUpperCase(),
                 textAlign: TextAlign.center,
                 style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
               )),
