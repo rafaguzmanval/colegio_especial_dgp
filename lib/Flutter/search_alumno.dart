@@ -89,13 +89,17 @@ class CustomSearchDelegate extends SearchDelegate {
                       ],
                     ),
                     onPressed: () {
-                      if (matchQuery.length == 1) {
-                        Sesion.seleccion = Sesion.alumnos[pos];
+                      var alumnos = [];
+                      for(int i=0;i<Sesion.alumnos.length;i++){
+                        if(matchQuery.contains(Sesion.alumnos[i].nombre.toString())){
+                          alumnos.add(Sesion.alumnos[i]);
+                        }
+                      }
+                      Sesion.seleccion = alumnos[index];
                         Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => PerfilAlumno()));
-                      }
                     },
                   ))
             ],
@@ -152,13 +156,17 @@ class CustomSearchDelegate extends SearchDelegate {
                         ],
                       ),
                       onPressed: () {
-                        if (matchQuery.length == 1) {
-                          Sesion.seleccion = Sesion.alumnos[pos];
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PerfilAlumno()));
+                        var alumnos = [];
+                        for(int i=0;i<Sesion.alumnos.length;i++){
+                          if(matchQuery.contains(Sesion.alumnos[i].nombre.toString())){
+                            alumnos.add(Sesion.alumnos[i]);
+                          }
                         }
+                        Sesion.seleccion = alumnos[index];
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PerfilAlumno()));
                       }))
             ],
           ),

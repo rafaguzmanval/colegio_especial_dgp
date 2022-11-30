@@ -258,7 +258,7 @@ class TablonAdminState extends State<TablonAdmin> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "Lista de alumnos".toUpperCase(),
+                                      "Lista de botones".toUpperCase(),
                                       style: TextStyle(
                                         fontSize: 30,
                                         color: GuardadoLocal.colores[2],
@@ -267,7 +267,7 @@ class TablonAdminState extends State<TablonAdmin> {
                                     Flexible(
                                         flex: 1,
                                         child: Image.asset(
-                                          "assets/companeros.png",
+                                          "assets/listaDeBotones.png",
                                         )),
                                   ],
                                 ),

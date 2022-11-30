@@ -103,27 +103,35 @@ class CustomSearchDelegate extends SearchDelegate {
                         ],
                       ),
                       onPressed: () async {
-                        if (matchQuery.length == 1) {
-                          Sesion.seleccion = Sesion.tareas[pos];
+                        var tareas = [];
+                        for(int i=0;i<Sesion.tareas.length;i++){
+                          if(matchQuery.contains(Sesion.tareas[i].nombre.toString())){
+                            tareas.add(Sesion.tareas[i]);
+                          }
+                        }
+                          Sesion.seleccion = tareas[index];
                           await Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => PerfilTarea()));
                           cargarTareas();
-                        }
                       },
                     )),
                 IconButton(
                     onPressed: () async {
-                      if (matchQuery.length == 1) {
-                        await Sesion.db
-                            .eliminarTarea(Sesion.tareas[pos].id)
-                            .then((e) {
-                          esTareaEliminandose = true;
-                          tareaEliminandose = pos;
-                          cargarTareas();
-                        });
+                      var tareas = [];
+                      for(int i=0;i<Sesion.tareas.length;i++){
+                        if(matchQuery.contains(Sesion.tareas[i].nombre.toString())){
+                          tareas.add(Sesion.tareas[i]);
+                        }
                       }
+                      await Sesion.db
+                          .eliminarTarea(tareas[index].id)
+                          .then((e) {
+                        esTareaEliminandose = true;
+                        tareaEliminandose = pos;
+                        cargarTareas();
+                      });
                     },
                     icon: Icon(
                       Icons.delete,
@@ -194,26 +202,34 @@ class CustomSearchDelegate extends SearchDelegate {
                           ],
                         ),
                         onPressed: () async {
-                          if (matchQuery.length == 1) {
-                            Sesion.seleccion = Sesion.tareas[pos];
+                          var tareas = [];
+                          for(int i=0;i<Sesion.tareas.length;i++){
+                            if(matchQuery.contains(Sesion.tareas[i].nombre.toString())){
+                              tareas.add(Sesion.tareas[i]);
+                            }
+                          }
+                          Sesion.seleccion = tareas[index];
                             await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => PerfilTarea()));
                             cargarTareas();
-                          }
                         })),
                 IconButton(
                     onPressed: () async {
-                      if (matchQuery.length == 1) {
+                      var tareas = [];
+                      for(int i=0;i<Sesion.tareas.length;i++){
+                        if(matchQuery.contains(Sesion.tareas[i].nombre.toString())){
+                          tareas.add(Sesion.tareas[i]);
+                        }
+                      }
                         await Sesion.db
-                            .eliminarTarea(Sesion.tareas[pos].id)
+                            .eliminarTarea(tareas[index].id)
                             .then((e) {
                           esTareaEliminandose = true;
                           tareaEliminandose = pos;
                           cargarTareas();
                         });
-                      }
                     },
                     icon: Icon(
                       Icons.delete,

@@ -103,27 +103,35 @@ class CustomSearchDelegate extends SearchDelegate {
                         ],
                       ),
                       onPressed: () async {
-                        if (matchQuery.length == 1) {
-                          Sesion.seleccion = Sesion.tablon[pos];
+                        var tablon = [];
+                        for(int i=0;i<Sesion.tablon.length;i++){
+                          if(matchQuery.contains(Sesion.tablon[i].nombres.toString())){
+                            tablon.add(Sesion.tablon[i]);
+                          }
+                        }
+                        Sesion.seleccion = tablon[index];
                           await Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => Perfilboton()));
                           cargarTablon();
-                        }
                       },
                     )),
                 IconButton(
                     onPressed: () async {
-                      if (matchQuery.length == 1) {
-                        await Sesion.db
-                            .eliminarTablon(Sesion.tablon[pos].id)
-                            .then((e) {
-                          esBotonEliminandose = true;
-                          botonEliminandose = pos;
-                          cargarTablon();
-                        });
+                      var tablon = [];
+                      for(int i=0;i<Sesion.tablon.length;i++){
+                        if(matchQuery.contains(Sesion.tablon[i].nombres.toString())){
+                          tablon.add(Sesion.tablon[i]);
+                        }
                       }
+                      await Sesion.db
+                          .eliminarTablon(tablon[index].id)
+                          .then((e) {
+                        esBotonEliminandose = true;
+                        botonEliminandose = pos;
+                        cargarTablon();
+                      });
                     },
                     icon: Icon(
                       Icons.delete,
@@ -194,26 +202,34 @@ class CustomSearchDelegate extends SearchDelegate {
                           ],
                         ),
                         onPressed: () async {
-                          if (matchQuery.length == 1) {
-                            Sesion.seleccion = Sesion.tablon[pos];
+                          var tablon = [];
+                          for(int i=0;i<Sesion.tablon.length;i++){
+                            if(matchQuery.contains(Sesion.tablon[i].nombres.toString())){
+                              tablon.add(Sesion.tablon[i]);
+                            }
+                          }
+                          Sesion.seleccion = tablon[index];
                             await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => Perfilboton()));
                             cargarTablon();
-                          }
                         })),
                 IconButton(
                     onPressed: () async {
-                      if (matchQuery.length == 1) {
+                      var tablon = [];
+                      for(int i=0;i<Sesion.tablon.length;i++){
+                        if(matchQuery.contains(Sesion.tablon[i].nombres.toString())){
+                          tablon.add(Sesion.tablon[i]);
+                        }
+                      }
                         await Sesion.db
-                            .eliminarTablon(Sesion.tablon[pos].id)
+                            .eliminarTablon(tablon[index].id)
                             .then((e) {
                           esBotonEliminandose = true;
                           botonEliminandose = pos;
                           cargarTablon();
                         });
-                      }
                     },
                     icon: Icon(
                       Icons.delete,

@@ -27,9 +27,9 @@ void main() {
   }
 
   inicializacion();
-  //test_inicio_sesion();
-  //test_gestion_alumnos();
-  //test_lista_profesores();
+  test_inicio_sesion();
+  test_gestion_alumnos();
+  test_lista_profesores();
   test_editar_tarea();
 }
 

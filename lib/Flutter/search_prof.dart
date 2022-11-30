@@ -91,13 +91,17 @@ class CustomSearchDelegate extends SearchDelegate {
                       ],
                     ),
                     onPressed: () {
-                      if (matchQuery.length == 1) {
-                        Sesion.seleccion = Sesion.profesores[pos];
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PerfilProfesor()));
+                      var profesores = [];
+                      for(int i=0;i<Sesion.profesores.length;i++){
+                        if(matchQuery.contains(Sesion.profesores[i].nombre.toString())){
+                          profesores.add(Sesion.profesores[i]);
+                        }
                       }
+                      Sesion.seleccion = profesores[index];
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PerfilProfesor()));
                     },
                   ))
             ],
@@ -156,13 +160,17 @@ class CustomSearchDelegate extends SearchDelegate {
                         ],
                       ),
                       onPressed: () {
-                        if (matchQuery.length == 1) {
-                          Sesion.seleccion = Sesion.profesores[pos];
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => PerfilProfesor()));
+                        var profesores = [];
+                        for(int i=0;i<Sesion.profesores.length;i++){
+                          if(matchQuery.contains(Sesion.profesores[i].nombre.toString())){
+                            profesores.add(Sesion.profesores[i]);
+                          }
                         }
+                        Sesion.seleccion = profesores[index];
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                            builder: (context) => PerfilProfesor()));
                       }))
             ],
           ),
