@@ -27,6 +27,7 @@ class CustomSearchDelegate extends SearchDelegate {
     return [
       IconButton(
         onPressed: () {
+          query = '';
           cargarTareas();
         },
         icon: Icon(Icons.update),
