@@ -29,6 +29,12 @@ class CustomSearchDelegate extends SearchDelegate {
     return [
       IconButton(
         onPressed: () {
+          cargarTareas();
+        },
+        icon: Icon(Icons.update),
+      ),
+      IconButton(
+        onPressed: () {
           query = '';
         },
         icon: Icon(Icons.cleaning_services),
@@ -234,5 +240,7 @@ class CustomSearchDelegate extends SearchDelegate {
   // metodo para actualizar la pagina
   void actualizar() async {
     esTareaEliminandose = false;
+    searchTerms.clear();
+    crearLista();
   }
 }

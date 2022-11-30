@@ -26,7 +26,13 @@ class CustomSearchDelegate extends SearchDelegate {
       crearLista();
       vez++;
     }
-    return [
+    return[
+      IconButton(
+        onPressed: () {
+          cargarTablon();
+        },
+        icon: Icon(Icons.update),
+      ),
       IconButton(
         onPressed: () {
           query = '';
@@ -235,5 +241,7 @@ class CustomSearchDelegate extends SearchDelegate {
   // metodo para actualizar la pagina
   void actualizar() async {
     esBotonEliminandose = false;
+    searchTerms.clear();
+    crearLista();
   }
 }
