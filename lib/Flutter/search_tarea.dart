@@ -132,6 +132,7 @@ class CustomSearchDelegate extends SearchDelegate {
                         tareaEliminandose = pos;
                         cargarTareas();
                       });
+                      query = '';
                     },
                     icon: Icon(
                       Icons.delete,
@@ -230,6 +231,7 @@ class CustomSearchDelegate extends SearchDelegate {
                           tareaEliminandose = pos;
                           cargarTareas();
                         });
+                      query = '';
                     },
                     icon: Icon(
                       Icons.delete,

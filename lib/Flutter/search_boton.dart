@@ -134,6 +134,7 @@ class CustomSearchDelegate extends SearchDelegate {
                         botonEliminandose = pos;
                         cargarTablon();
                       });
+                      query = '';
                     },
                     icon: Icon(
                       Icons.delete,
@@ -232,6 +233,7 @@ class CustomSearchDelegate extends SearchDelegate {
                           botonEliminandose = pos;
                           cargarTablon();
                         });
+                      query = '';
                     },
                     icon: Icon(
                       Icons.delete,
