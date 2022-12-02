@@ -135,6 +135,9 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
               height: 100,
               image: NetworkImage(usuarioPerfil.foto),
             ),
+            ElevatedButton(onPressed: (){
+
+            }, child: Icon(Icons.map_outlined)),
             Text("\nTAREAS: ",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
             if (Sesion.tareas != null) ...[
               for (int i = 0; i < Sesion.tareas.length; i++)
