@@ -66,7 +66,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
           leading: IconButton(
               icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
               onPressed: (){Navigator.pop(context);}),
-          title: Center(child: Text('PERFIL DE: ${Sesion.seleccion.nombre.toUpperCase()}'
+          title: Center(child: Text('${Sesion.seleccion.nombre.toUpperCase()}'
               '',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
         )),
         body: Container(
@@ -127,8 +127,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
       child: Column(
         children: [
           if (usuarioPerfil != null) ...[
-            Text(usuarioPerfil.nombre.toString().toUpperCase() + "\n",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
-            Text(usuarioPerfil.apellidos.toString().toUpperCase() + "\n",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
+            Text(usuarioPerfil.nombre.toString().toUpperCase() + " " + usuarioPerfil.apellidos.toString().toUpperCase() +"\n",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
             Text(
                 "FECHA DE NACIMIENTO: " + usuarioPerfil.fechanacimiento.toString().toUpperCase() + "\n",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
             Image(
@@ -136,7 +135,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
               height: 100,
               image: NetworkImage(usuarioPerfil.foto),
             ),
-            Text("\nTAREAS ASIGNADAS:",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
+            Text("\nTAREAS: ",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
             if (Sesion.tareas != null) ...[
               for (int i = 0; i < Sesion.tareas.length; i++)
                 if (Sesion.tareas[i] is Tarea) ...[
