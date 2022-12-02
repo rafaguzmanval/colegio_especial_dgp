@@ -183,7 +183,7 @@ class CrearTareaState extends State<CrearTarea> {
                   borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
                 ),
                 border: OutlineInputBorder(),
-                hintText: 'Introduce el título *'.toUpperCase(),
+                hintText: 'Título *'.toUpperCase(),
                 hintStyle: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25)
               ),
               controller: controladorNombre,
@@ -203,14 +203,14 @@ class CrearTareaState extends State<CrearTarea> {
                   borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
                 ),
                 border: OutlineInputBorder(),
-                hintText: 'Introduce una descripción *'.toUpperCase(),
+                hintText: 'Descripción *'.toUpperCase(),
                 hintStyle: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25)
               ),
               controller: controladorTexto,
             ),
           ),
           Text(
-            "ELIGE UNA FOTO PARA LA TAREA: *",
+            "ELIGE UNA FOTO: *",
             style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           SizedBox(
@@ -222,14 +222,14 @@ class CrearTareaState extends State<CrearTarea> {
                 seleccionarImagen(SeleccionImagen.camara);
               }),
           Text(
-            "ELIGE UN PICTOGRAMA PARA LA TAREA: *",
+            "ELIGE UN PICTOGRAMA: *",
             style: TextStyle(fontSize: 25.0, height: 2.0, color:GuardadoLocal.colores[0]),
           ),
           SizedBox(
             height: 5,
           ),
           ElevatedButton(
-              child: Text('Elige un pictograma de tu galería'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
+              child: Text('Pictograma de tu galería'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.galeria);
               }),
@@ -237,7 +237,7 @@ class CrearTareaState extends State<CrearTarea> {
             height: 15,
           ),
           ElevatedButton(
-              child: Text('Elige un pictograma desde la web de ARASAAC'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
+              child: Text('Pictograma desde la web de ARASAAC'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
               onPressed: () async {
                     fotoTomada =  await buscadorArasaac(context: context);
                     actualizar();
@@ -254,7 +254,7 @@ class CrearTareaState extends State<CrearTarea> {
             height: 5,
           ),
           ElevatedButton(
-              child: Text('Haz un videOtutorial'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
+              child: Text('Haz un videotutorial'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.video);
               }),
@@ -813,7 +813,7 @@ class CrearTareaState extends State<CrearTarea> {
                               margin: EdgeInsets.all(10),
                               child: ElevatedButton(
                                   child: Text(
-                                      'Elige un pictograma desde la web de ARASAAC'
+                                      'Pictograma desde la web de ARASAAC'
                                           .toUpperCase(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
