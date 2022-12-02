@@ -158,40 +158,74 @@ class VerTareasState extends State<VerTareas> {
                           ? Sesion.nombre.toUpperCase()
                           : Sesion.seleccion.nombre.toUpperCase()),textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),)),
             )),
-            body: GestureDetector(
-              onPanStart: (DragStartDetails details) {
-                dragInicial = details.globalPosition.dx;
-              },
-              onPanUpdate: (details) {
-                distancia = details.globalPosition.dx - dragInicial;
-              },
-              onPanEnd: (details) {
-                dragInicial = 0;
-                if (Sesion.tareas.length > 0) {
-                  if (distancia > 100) {
-                    desplazarIzquierda();
-                    actualizar();
-                  } else if (distancia < -100) {
-                    desplazarDerecha();
-                    actualizar();
+            body: Stack(children: [
+              GestureDetector(
+                onPanStart: (DragStartDetails details) {
+                  dragInicial = details.globalPosition.dx;
+                },
+                onPanUpdate: (details) {
+                  distancia = details.globalPosition.dx - dragInicial;
+                },
+                onPanEnd: (details) {
+                  dragInicial = 0;
+                  if (Sesion.tareas.length > 0) {
+                    if (distancia > 100) {
+                      desplazarIzquierda();
+                      actualizar();
+                    } else if (distancia < -100) {
+                      desplazarDerecha();
+                      actualizar();
+                    }
                   }
-                }
-              },
-              child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                  child: Stack(
-                    children: [
-                      if (Sesion.rol == Rol.alumno.toString()) ...[
-                        VistaAlumno(),
-                      ] else if (Sesion.rol == Rol.profesor.toString()) ...[
-                        VistaProfesor()
-                      ] else if (Sesion.rol == Rol.administrador.toString()) ...[
-                        VistaAdministrador()
-                      ] else if (Sesion.rol == Rol.programador.toString()) ...[
-                        VistaProgramador()
-                      ]
-                    ],
-                  )),
+                },
+                child: SingleChildScrollView(
+                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                    child: Stack(
+                      children: [
+                        if (Sesion.rol == Rol.alumno.toString()) ...[
+                          VistaAlumno(),
+                        ] else if (Sesion.rol == Rol.profesor.toString()) ...[
+                          VistaProfesor()
+                        ] else if (Sesion.rol == Rol.administrador.toString()) ...[
+                          VistaAdministrador()
+                        ] else if (Sesion.rol == Rol.programador.toString()) ...[
+                          VistaProgramador()
+                        ]
+                      ],
+                    )),
+              ),
+              ///FLECHA IZQUIERDA
+              Align(
+                  alignment: FractionalOffset(0.01,0.5),
+                  child: Visibility(
+                      child: FloatingActionButton(
+                          elevation: 1.0,
+                          heroTag: "flechaIzquierda",
+                          onPressed: () {
+                            desplazarIzquierda();
+                            actualizar();
+                          },
+                          child: Icon(Icons.arrow_left,color: GuardadoLocal.colores[2],)),
+                      visible: verFlechaIzquierda,
+                    ),
+                  ),
+              ///FLECHA DERECHA
+              Align(
+                  alignment: FractionalOffset(0.99,0.5),
+                  child: Visibility(
+                      child: FloatingActionButton(
+                          elevation: 1.0,
+                          heroTag: "flechaDerecha",
+                          onPressed: () {
+                            desplazarDerecha();
+                            actualizar();
+                          },
+                          child:  Icon(Icons.arrow_right,color: GuardadoLocal.colores[2],)),
+                      visible: verFlechaDerecha,
+                    ),
+                  ),
+            ],
+
             ));
   }
 
@@ -418,30 +452,11 @@ class VerTareasState extends State<VerTareas> {
             //ROW 2
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ///FLECHA IZQUIERDA
-              Container(
-                  height: 60,
-                  width: 60,
-                  margin: EdgeInsets.only(top: 100.0, left: 10.0, right: 10),
-                  child: FittedBox(
-                    child: Visibility(
-                      child: FloatingActionButton(
-                          heroTag: "flechaIzquierda",
-                          onPressed: () {
-                            desplazarIzquierda();
-                            actualizar();
-                          },
-                          child: Icon(Icons.arrow_left,color: GuardadoLocal.colores[2],)),
-                      visible: verFlechaIzquierda,
-                    ),
-                  )),
-
-
-
               ///CONTENEDOR DE LA TAREA
               Flexible(
                   flex: 40,
                   child: Container(
+                    margin: EdgeInsets.only(right: 100,left: 100),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                         border: Border.all(width: 2,color: GuardadoLocal.colores[2]),
@@ -481,36 +496,18 @@ class VerTareasState extends State<VerTareas> {
                           ]
                         ]),
                   )),
-
-              ///FLECHA DERECHA
-              Container(
-                  height: 60,
-                  width: 60,
-                  margin: EdgeInsets.only(top: 100.0, left: 10.0, right: 10),
-                  child: FittedBox(
-                    child: Visibility(
-                      child: FloatingActionButton(
-                          heroTag: "flechaDerecha",
-                          onPressed: () {
-                            desplazarDerecha();
-                            actualizar();
-                          },
-                          child:  Icon(Icons.arrow_right,color: GuardadoLocal.colores[2],)),
-                      visible: verFlechaDerecha,
-                    ),
-                  ))
             ]),
         if (Sesion.rol == Rol.alumno.toString()) ...[
           ///BOTONES DE COMPLETAR O RECHAZAR TAREA QUE VE SOLO EL ALUMNO
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Visibility(
                   visible:
                       Sesion.tareas[tareaActual].estado == "sinFinalizar" &&
                           mostrarBotones,
                   child: Container(
-                      margin: EdgeInsets.all(15),
+                      margin: EdgeInsets.only(right: 30, top: 15),
                       width: 150,
                       height: 150,
                       child: FloatingActionButton(
@@ -527,7 +524,7 @@ class VerTareasState extends State<VerTareas> {
                 visible: Sesion.tareas[tareaActual].estado == "sinFinalizar" &&
                     mostrarBotones,
                 child: Container(
-                  margin: EdgeInsets.all(15),
+                  margin: EdgeInsets.only(left: 30, top: 15),
                   width: 150,
                   height: 150,
                   child: FloatingActionButton(

@@ -305,7 +305,7 @@ class ConfiguracionState extends State<Configuracion> {
                     Text('TEXTO SOBRE FONDO',style: TextStyle(color: p),),
                     ElevatedButton(onPressed: (){},
                       style: ElevatedButton.styleFrom(primary: p),
-                      child: Text('BOTON',style: TextStyle(color: l,fontSize: 25),),)
+                      child: Text('BOTÓN',style: TextStyle(color: l,fontSize: 25),),)
                   ],
                 ),
               )

@@ -191,7 +191,7 @@ class App extends StatelessWidget {
       },
 
       theme:
-          ThemeData(primarySwatch: cambioColor?colorCustom:Colors.orange,canvasColor: colorFondo,fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30,color: colorCustom))),
+          ThemeData(primarySwatch: cambioColor?colorCustom:Colors.orange,canvasColor: colorFondo,fontFamily: "Escolar",textTheme: TextTheme(bodyText2: TextStyle(fontSize: 30,color: colorCustom,fontWeight: FontWeight.bold))),
       //home: ProfeAlumno(),
     );
   }
