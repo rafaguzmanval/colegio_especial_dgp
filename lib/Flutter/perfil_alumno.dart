@@ -127,11 +127,10 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
       child: Column(
         children: [
           if (usuarioPerfil != null) ...[
-            Text("NOMBRE: " + usuarioPerfil.nombre.toString().toUpperCase() + "\n",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
-            Text("APELLIDOS: " + usuarioPerfil.apellidos.toString().toUpperCase() + "\n",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
+            Text(usuarioPerfil.nombre.toString().toUpperCase() + "\n",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
+            Text(usuarioPerfil.apellidos.toString().toUpperCase() + "\n",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
             Text(
                 "FECHA DE NACIMIENTO: " + usuarioPerfil.fechanacimiento.toString().toUpperCase() + "\n",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
-            Text("IMAGEN DE PERFIL:\n",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
             Image(
               width: 100,
               height: 100,

@@ -115,19 +115,15 @@ class PerfilProfesorState extends State<PerfilProfesor> {
         children: [
           if (usuarioPerfil != null) ...[
             Text(
-              "NOMBRE: " + usuarioPerfil.nombre + "\n",
+              usuarioPerfil.nombre + "\n",
               style: TextStyle(color: GuardadoLocal.colores[0]),
             ),
             Text(
-              "APELLIDOS: " + usuarioPerfil.apellidos + "\n",
+               usuarioPerfil.apellidos + "\n",
               style: TextStyle(color: GuardadoLocal.colores[0]),
             ),
             Text(
-              "FECHA DE NACIMIENTO: " + usuarioPerfil.fechanacimiento + "\n",
-              style: TextStyle(color: GuardadoLocal.colores[0]),
-            ),
-            Text(
-              "IMAGEN DE PERFIL:\n",
+              usuarioPerfil.fechanacimiento + "\n",
               style: TextStyle(color: GuardadoLocal.colores[0]),
             ),
             Image(
