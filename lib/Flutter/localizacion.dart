@@ -19,7 +19,6 @@ class Localizacion extends StatefulWidget {
 }
 
 class LocalizacionState extends State<Localizacion> {
-  var posicion = null;
   var latitudColegio = 37.18085;
   var longitudColegio = -3.60270;
 
@@ -101,7 +100,7 @@ class LocalizacionState extends State<Localizacion> {
             (Position? position) {
           if(position != null)
             {
-              posicion = position;
+              Sesion.posicion = position;
               setState(() {
 
               });
@@ -121,21 +120,10 @@ class LocalizacionState extends State<Localizacion> {
             onPressed: (){Navigator.pop(context);}),
         title: Center(child: Text("LOCALIZACIÓN",textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
       )),
-      body: SingleChildScrollView(
-
-              child:
-                  Container(
-                    alignment: Alignment.center,
-                    child:
-                  Container(
-                      alignment: Alignment.center,
-                      width: 650,
-                      height: 600,
-                      margin: EdgeInsets.only(bottom: 20),
-                      child: posicion == null
-                          ? Text("Calculando posición".toUpperCase())
-                          : Flexible(
-                              child: FlutterMap(
+      body:
+                      Sesion.posicion == null
+                          ? Center(child:Text("Calculando posición".toUpperCase()))
+                          : FlutterMap(
                               options: MapOptions(
                                 center:  LatLng(
                                     Sesion.argumentos[0],
@@ -154,8 +142,8 @@ class LocalizacionState extends State<Localizacion> {
                                 MarkerLayer(
                                   markers: [
                                     Marker(
-                                        point: LatLng(posicion.latitude,
-                                            posicion.longitude),
+                                        point: LatLng(Sesion.posicion.latitude,
+                                            Sesion.posicion.longitude),
                                         width: 30,
                                         height: 30,
                                         builder: (context) =>
@@ -180,8 +168,8 @@ class LocalizacionState extends State<Localizacion> {
                                   ],
                                 )
                               ],
-                            ))),
-              ))
+                            )
+
     );
   }
 }

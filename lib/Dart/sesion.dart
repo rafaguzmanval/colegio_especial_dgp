@@ -27,6 +27,7 @@ class Sesion {
   static var metodoLogin = "";
   static var argumentos = [];
   static var db;
+  static var posicion;
 
   // Sesion por defecto
   static reload() {
