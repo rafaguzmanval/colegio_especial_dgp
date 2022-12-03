@@ -17,6 +17,7 @@ import 'dart:async';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
+import 'package:colegio_especial_dgp/Flutter/localizacion.dart';
 import 'package:colegio_especial_dgp/Flutter/ver_tareas.dart';
 import '../Dart/tarea.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
@@ -135,9 +136,17 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
               height: 100,
               image: NetworkImage(usuarioPerfil.foto),
             ),
-            ElevatedButton(onPressed: (){
+
+            ///BOTON DE LOCALIZACION
+            ElevatedButton(onPressed: () async{
+              await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => Localizacion()));
+              Sesion.paginaActual = this;
 
             }, child: Icon(Icons.map_outlined)),
+
             Text("\nTAREAS: ",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
             if (Sesion.tareas != null) ...[
               for (int i = 0; i < Sesion.tareas.length; i++)

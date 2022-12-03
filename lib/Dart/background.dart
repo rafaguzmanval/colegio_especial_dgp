@@ -1,17 +1,19 @@
 
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:geolocator/geolocator.dart';
 import 'notificacion.dart';
 import 'main.dart';
 import 'package:flutter_background/flutter_background.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class Background
 {
   static var _subscripcion ;
   static  bool primera= false;
+  static var _positionStream;
 
 static inicializarBackground() async
   {
@@ -19,7 +21,6 @@ static inicializarBackground() async
     notificationTitle: "flutter_background example app",
     notificationText: "Background notification for keeping the example app running in the background",
     notificationImportance: AndroidNotificationImportance.Default,
-    notificationIcon: AndroidResource(name: 'background_icon', defType: 'drawable'),
     enableWifiLock: true,// Default is ic_launcher from folder mipmap
   );
   bool success = await FlutterBackground.initialize(androidConfig: androidConfig);
@@ -28,7 +29,11 @@ static inicializarBackground() async
       print("Servicio de background activado");
       await FlutterBackground.enableBackgroundExecution().then((value) {
         if(Sesion.rol == Rol.alumno.toString())
-          Background.activarNotificacionesNuevasTareas();
+          {
+            obtenerPosicion();
+            Background.activarNotificacionesNuevasTareas();
+          }
+
         else
           Background.activarNotificacionesTareasTerminadas();
       });
@@ -139,10 +144,63 @@ static inicializarBackground() async
     }
   }
 
+
+  static obtenerPosicion() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    final LocationSettings locationSettings = LocationSettings(
+      accuracy: LocationAccuracy.high,
+      distanceFilter: 5,
+
+    );
+
+    _positionStream = Geolocator.getPositionStream( locationSettings: locationSettings).listen(
+            (Position? position) {
+          if(position != null)
+          {
+            print("nueva pos");
+            Sesion.db.cambiarPosicion(Sesion.id,position.latitude,position.longitude);
+          }
+        });
+
+  }
+
   static desactivarNotificaciones()
   {
     if(_subscripcion != null)
     _subscripcion.cancel();
+
+    if(_positionStream != null)
+      _positionStream.cancel();
   }
 
 }

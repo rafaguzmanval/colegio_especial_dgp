@@ -44,6 +44,7 @@ class AccesoBD {
   var db = FirebaseFirestore.instance;
   var storageRef = FirebaseStorage.instance.ref();
   var _subscripcion;
+  var _subscripcionLoc;
 
   var fotoDesconocido =
       "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fperfiles%2Fdesconocido.png?alt=media&token=98ba72ac-776e-4f83-9aaa-57761589c974";
@@ -494,6 +495,42 @@ class AccesoBD {
       log(e.toString());
       return false;
     }
+  }
+
+
+  cambiarPosicion(idUsuario,latitud,longitud) async {
+    try {
+      final ref = db.collection("usuarios");
+      return await ref
+          .doc(idUsuario)
+          .update({"latitud": latitud,
+                    "longitud":longitud});
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
+  }
+
+  obtenerPosicion(idUsuario) async{
+    try{
+      final ref = db.collection("usuarios").doc(idUsuario);
+      _subscripcionLoc = await ref// consulta todas las tareas de un usuario ordenadas por fecha de asignación
+          .snapshots()
+          .listen((e) async {
+            if(Sesion.argumentos.length == 0)
+              {
+                Sesion.argumentos.add(0.0);
+                Sesion.argumentos.add(0.0);
+              }
+            Sesion.argumentos[0] = e.get("latitud");
+            Sesion.argumentos[1] = e.get("longitud");
+            Sesion.paginaActual.actualizar();
+      });
+    }catch(e){
+      print(e);
+      }
+
+
   }
 
   // Metodo para eliminar una tarea de un usuario pasandole el id de la relacion entre el usuario y la tarea
