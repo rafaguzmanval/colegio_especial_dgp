@@ -113,6 +113,7 @@ class LocalizacionState extends State<Localizacion> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -121,7 +122,11 @@ class LocalizacionState extends State<Localizacion> {
         title: Center(child: Text("LOCALIZACIÓN",textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
       )),
       body: SingleChildScrollView(
+
               child:
+                  Container(
+                    alignment: Alignment.center,
+                    child:
                   Container(
                       alignment: Alignment.center,
                       width: 650,
@@ -139,10 +144,6 @@ class LocalizacionState extends State<Localizacion> {
                                 maxZoom: 18,
                               ),
                               nonRotatedChildren: [
-                                AttributionWidget.defaultWidget(
-                                  source: '',
-                                  onSourceTapped: null,
-                                ),
                               ],
                               children: [
                                 TileLayer(
@@ -180,7 +181,7 @@ class LocalizacionState extends State<Localizacion> {
                                 )
                               ],
                             ))),
-              )
+              ))
     );
   }
 }
