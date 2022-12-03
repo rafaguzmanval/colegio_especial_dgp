@@ -133,7 +133,8 @@ class LocalizacionState extends State<Localizacion> {
                               child: FlutterMap(
                               options: MapOptions(
                                 center:  LatLng(
-                                    posicion.latitude, posicion.longitude),
+                                    Sesion.argumentos[0],
+                                    Sesion.argumentos[1]),
                                 zoom: 18,
                                 maxZoom: 18,
                               ),
