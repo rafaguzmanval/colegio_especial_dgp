@@ -51,6 +51,10 @@ class AccesoBD {
 
   desactivarSubscripcion() {
     if (_subscripcion != null) _subscripcion.cancel();
+
+  }
+  desactivarSubscripcionUbicacion(){
+    if(_subscripcionLoc != null) _subscripcionLoc.cancel();
   }
 
   // Metodo para registrar usuario

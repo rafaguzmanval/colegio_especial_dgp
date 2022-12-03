@@ -21,6 +21,8 @@ class Localizacion extends StatefulWidget {
 class LocalizacionState extends State<Localizacion> {
   var latitudColegio = 37.18085;
   var longitudColegio = -3.60270;
+  var posicionStream;
+  MapController _mapController = new MapController();
 
   @override
   initState() {
@@ -31,9 +33,19 @@ class LocalizacionState extends State<Localizacion> {
     Sesion.db.obtenerPosicion(Sesion.seleccion.id);
   }
 
-  actualizar() {setState(() {
+  @override
+  dispose(){
+    super.dispose();
+    Sesion.db.desactivarSubscripcionUbicacion();
+    posicionStream.cancel();
+    _mapController.dispose();
+  }
 
-  });}
+  actualizar() {
+
+    if(mounted) setState(() {})
+
+    ;}
 
   Widget marcadorPersonal(foto) {
     return CircleAvatar(
@@ -96,16 +108,15 @@ class LocalizacionState extends State<Localizacion> {
 
     );
 
-    StreamSubscription<Position> positionStream = Geolocator.getPositionStream( locationSettings: locationSettings).listen(
+    posicionStream = Geolocator.getPositionStream( locationSettings: locationSettings).listen(
             (Position? position) {
           if(position != null)
             {
               Sesion.posicion = position;
-              setState(() {
-
-              });
+              actualizar();
             }
     });
+
 
   }
 
@@ -124,14 +135,29 @@ class LocalizacionState extends State<Localizacion> {
                       Sesion.posicion == null
                           ? Center(child:Text("Calculando posición".toUpperCase()))
                           : FlutterMap(
+                              mapController: _mapController,
                               options: MapOptions(
                                 center:  LatLng(
                                     Sesion.argumentos[0],
                                     Sesion.argumentos[1]),
                                 zoom: 18,
                                 maxZoom: 18,
+                                minZoom: 10
                               ),
                               nonRotatedChildren: [
+                                Container(alignment:FractionalOffset(0.97,0.97),
+                                    
+
+                                    child:ElevatedButton(onPressed: (){
+                                      _mapController.moveAndRotate(LatLng(
+                                          Sesion.argumentos[0],
+                                          Sesion.argumentos[1]), 18, 0);
+                                    }, child: Icon(Icons.location_on,size: 60,),
+                                    style: ElevatedButton.styleFrom(shape: CircleBorder(
+
+                                    )),)
+                                )
+
                               ],
                               children: [
                                 TileLayer(
@@ -172,4 +198,5 @@ class LocalizacionState extends State<Localizacion> {
 
     );
   }
+
 }
