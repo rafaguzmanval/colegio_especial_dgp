@@ -643,11 +643,9 @@ class AccesoBD {
   Future eliminarProfesor(id) async {
     try {
       if (Sesion.profesores != null) {
-        await db.collection("usuarios").doc(id).delete().then((e) async {
-          return true;
-        });
+        await db.collection("usuarios").doc(id).delete();
+        return true;
       }
-      ;
     } catch (e) {
       return false;
       print(e);

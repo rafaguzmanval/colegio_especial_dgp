@@ -7,6 +7,8 @@ class CustomSearchDelegate extends SearchDelegate {
 // Demo list to show querying
   List<String> searchTerms = [];
   var vez = 0;
+  bool esAlumnoEliminandose = false;
+  int alumnoEliminandose = 0;
 
   crearLista() {
     for (var i = 0; i < Sesion.alumnos.length; i++) {
@@ -65,6 +67,7 @@ class CustomSearchDelegate extends SearchDelegate {
           //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
           child: Column(
             children: [
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Container(
                   width: 130,
                   height: 150,
@@ -101,7 +104,33 @@ class CustomSearchDelegate extends SearchDelegate {
                             MaterialPageRoute(
                                 builder: (context) => PerfilAlumno()));
                     },
-                  ))
+                  )),
+              IconButton(
+                  onPressed: () async {
+                    var alumnos = [];
+                    for (int i = 0; i < Sesion.alumnos.length; i++) {
+                      if (matchQuery
+                          .contains(Sesion.alumnos[i].nombre.toString())) {
+                        alumnos.add(Sesion.alumnos[i]);
+                      }
+                    }
+                    await Sesion.db
+                        .eliminarAlumno(alumnos[index].id)
+                        .then((e) {
+                      esAlumnoEliminandose = true;
+                      alumnoEliminandose = pos;
+                      cargarAlumnos();
+                    });
+                    query = '';
+                  },
+                  icon: Icon(
+                    Icons.delete,
+                    color: GuardadoLocal.colores[0],
+                  )),
+              if (esAlumnoEliminandose && pos == alumnoEliminandose) ...[
+                new CircularProgressIndicator(),
+              ]
+            ])
             ],
           ),
         );
@@ -132,6 +161,7 @@ class CustomSearchDelegate extends SearchDelegate {
           //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
           child: Column(
             children: [
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Container(
                   width: 130,
                   height: 150,
@@ -167,11 +197,49 @@ class CustomSearchDelegate extends SearchDelegate {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => PerfilAlumno()));
-                      }))
+                      })),
+              IconButton(
+                  onPressed: () async {
+                    var alumnos = [];
+                    for (int i = 0; i < Sesion.alumnos.length; i++) {
+                      if (matchQuery
+                          .contains(Sesion.alumnos[i].nombre.toString())) {
+                        alumnos.add(Sesion.alumnos[i]);
+                      }
+                    }
+                    await Sesion.db
+                        .eliminarAlumno(alumnos[index].id)
+                        .then((e) {
+                      esAlumnoEliminandose = true;
+                      alumnoEliminandose = pos;
+                      cargarAlumnos();
+                    });
+                    query = '';
+                  },
+                  icon: Icon(
+                    Icons.delete,
+                    color: GuardadoLocal.colores[0],
+                  )),
+              if (esAlumnoEliminandose && pos == alumnoEliminandose) ...[
+                new CircularProgressIndicator(),
+              ]
+            ])
             ],
           ),
         );
       },
     );
+  }
+
+  cargarAlumnos() async {
+    Sesion.profesores = await Sesion.db.consultarTodosAlumnos();
+    actualizar();
+  }
+
+  // metodo para actualizar la pagina
+  void actualizar() async {
+    esAlumnoEliminandose = false;
+    searchTerms.clear();
+    crearLista();
   }
 }

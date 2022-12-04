@@ -1,3 +1,4 @@
+import 'package:colegio_especial_dgp/Dart/main.dart';
 import 'package:flutter/material.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Flutter/perfil_profesor.dart';
@@ -7,6 +8,8 @@ class CustomSearchDelegate extends SearchDelegate {
 // Demo list to show querying
   List<String> searchTerms = [];
   var vez = 0;
+  bool esProfesorEliminandose = false;
+  int profesorEliminandose = 0;
 
   crearLista() {
     for (var i = 0; i < Sesion.profesores.length; i++) {
@@ -65,45 +68,74 @@ class CustomSearchDelegate extends SearchDelegate {
           //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
           child: Column(
             children: [
-              Container(
-                  width: 130,
-                  height: 150,
-                  margin: EdgeInsets.all(10),
-                  alignment: Alignment.center,
-                  child: ElevatedButton(
-                    child: Column(
-                      children: [
-                        Text(
-                          Sesion.profesores[pos].nombre
-                              .toString()
-                              .toUpperCase(),
-                          style: TextStyle(
-                            color: GuardadoLocal.colores[2],
-                            fontSize: 25,
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Container(
+                    width: 130,
+                    height: 150,
+                    margin: EdgeInsets.all(10),
+                    alignment: Alignment.center,
+                    child: ElevatedButton(
+                      child: Column(
+                        children: [
+                          Text(
+                            Sesion.profesores[pos].nombre
+                                .toString()
+                                .toUpperCase(),
+                            style: TextStyle(
+                              color: GuardadoLocal.colores[2],
+                              fontSize: 25,
+                            ),
                           ),
-                        ),
-                        Image.network(
-                          Sesion.profesores[pos].foto,
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.fill,
-                        ),
-                      ],
-                    ),
-                    onPressed: () {
+                          Image.network(
+                            Sesion.profesores[pos].foto,
+                            width: 100,
+                            height: 100,
+                            fit: BoxFit.fill,
+                          ),
+                        ],
+                      ),
+                      onPressed: () {
+                        var profesores = [];
+                        for (int i = 0; i < Sesion.profesores.length; i++) {
+                          if (matchQuery.contains(
+                              Sesion.profesores[i].nombre.toString())) {
+                            profesores.add(Sesion.profesores[i]);
+                          }
+                        }
+                        Sesion.seleccion = profesores[index];
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PerfilProfesor()));
+                        cargarProfesores();
+                      },
+                    )),
+                IconButton(
+                    onPressed: () async {
                       var profesores = [];
-                      for(int i=0;i<Sesion.profesores.length;i++){
-                        if(matchQuery.contains(Sesion.profesores[i].nombre.toString())){
+                      for (int i = 0; i < Sesion.profesores.length; i++) {
+                        if (matchQuery
+                            .contains(Sesion.profesores[i].nombre.toString())) {
                           profesores.add(Sesion.profesores[i]);
                         }
                       }
-                      Sesion.seleccion = profesores[index];
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => PerfilProfesor()));
+                      await Sesion.db
+                          .eliminarProfesor(profesores[index].id)
+                          .then((e) {
+                        esProfesorEliminandose = true;
+                        profesorEliminandose = pos;
+                        cargarProfesores();
+                      });
+                      query = '';
                     },
-                  ))
+                    icon: Icon(
+                      Icons.delete,
+                      color: GuardadoLocal.colores[0],
+                    )),
+                if (esProfesorEliminandose && pos == profesorEliminandose) ...[
+                  new CircularProgressIndicator(),
+                ]
+              ])
             ],
           ),
         );
@@ -134,48 +166,89 @@ class CustomSearchDelegate extends SearchDelegate {
           //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
           child: Column(
             children: [
-              Container(
-                  width: 130,
-                  height: 150,
-                  margin: EdgeInsets.all(10),
-                  alignment: Alignment.center,
-                  child: ElevatedButton(
-                      child: Column(
-                        children: [
-                          Text(
-                            Sesion.profesores[pos].nombre
-                                .toString()
-                                .toUpperCase(),
-                            style: TextStyle(
-                              color: GuardadoLocal.colores[2],
-                              fontSize: 25,
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Container(
+                    width: 130,
+                    height: 150,
+                    margin: EdgeInsets.all(10),
+                    alignment: Alignment.center,
+                    child: ElevatedButton(
+                        child: Column(
+                          children: [
+                            Text(
+                              Sesion.profesores[pos].nombre
+                                  .toString()
+                                  .toUpperCase(),
+                              style: TextStyle(
+                                color: GuardadoLocal.colores[2],
+                                fontSize: 25,
+                              ),
                             ),
-                          ),
-                          Image.network(
-                            Sesion.profesores[pos].foto,
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.fill,
-                          ),
-                        ],
-                      ),
-                      onPressed: () {
-                        var profesores = [];
-                        for(int i=0;i<Sesion.profesores.length;i++){
-                          if(matchQuery.contains(Sesion.profesores[i].nombre.toString())){
-                            profesores.add(Sesion.profesores[i]);
+                            Image.network(
+                              Sesion.profesores[pos].foto,
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.fill,
+                            ),
+                          ],
+                        ),
+                        onPressed: () async {
+                          var profesores = [];
+                          for (int i = 0; i < Sesion.profesores.length; i++) {
+                            if (matchQuery.contains(
+                                Sesion.profesores[i].nombre.toString())) {
+                              profesores.add(Sesion.profesores[i]);
+                            }
                           }
+                          Sesion.seleccion = profesores[index];
+                          await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => PerfilProfesor()));
+                          cargarProfesores();
+                        })),
+                IconButton(
+                    onPressed: () async {
+                      var profesores = [];
+                      for (int i = 0; i < Sesion.profesores.length; i++) {
+                        if (matchQuery
+                            .contains(Sesion.profesores[i].nombre.toString())) {
+                          profesores.add(Sesion.profesores[i]);
                         }
-                        Sesion.seleccion = profesores[index];
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                            builder: (context) => PerfilProfesor()));
-                      }))
+                      }
+                      await Sesion.db
+                          .eliminarProfesor(profesores[index].id)
+                          .then((e) {
+                        esProfesorEliminandose = true;
+                        profesorEliminandose = pos;
+                        cargarProfesores();
+                      });
+                      query = '';
+                    },
+                    icon: Icon(
+                      Icons.delete,
+                      color: GuardadoLocal.colores[0],
+                    )),
+                if (esProfesorEliminandose && pos == profesorEliminandose) ...[
+                  new CircularProgressIndicator(),
+                ]
+              ])
             ],
           ),
         );
       },
     );
+  }
+
+  cargarProfesores() async {
+    Sesion.profesores = await Sesion.db.consultarTodosProfesores();
+    actualizar();
+  }
+
+  // metodo para actualizar la pagina
+  void actualizar() async {
+    esProfesorEliminandose = false;
+    searchTerms.clear();
+    crearLista();
   }
 }

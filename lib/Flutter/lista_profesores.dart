@@ -59,11 +59,9 @@ class ListaProfesoresState extends State<ListaProfesores> {
                 }),
             actions: [
               IconButton(
-                onPressed: () {
-                  showSearch(
-                    context: context,
-                    delegate: CustomSearchDelegate(),
-                  );
+                onPressed: () async{
+                  await showSearch(context: context, delegate: CustomSearchDelegate(),);
+                  setState(() {});
                 },
                 icon: const Icon(Icons.search),
               ),
