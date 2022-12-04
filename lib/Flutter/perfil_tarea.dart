@@ -172,6 +172,7 @@ class PerfilTareaState extends State<PerfilTarea> {
       vez2++;
     }
 
+    return Container();
     return Container(
       //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
       alignment: Alignment.center,
@@ -788,15 +789,17 @@ class PerfilTareaState extends State<PerfilTarea> {
       actualizar();
 
       var nombre = "" + controladorNombre.text;
-      var texto = "" + controladorTexto.text;
+      var descripcion = "" + controladorTexto.text;
+      var imagen = "";
 
-      var orden = [];
+
+
 
       var textos = [];
+      /*
       if (texto != "") {
         textos.add(texto);
-        orden.add("T");
-      }
+      }*/
       var imagenes = [];
       if (fotoTomada != null) {
         if (fotoTomada is String) {
@@ -808,7 +811,6 @@ class PerfilTareaState extends State<PerfilTarea> {
           log(imagenes.toString());
         }
 
-        orden.add("I");
       }
 
       var videos = [];
@@ -820,12 +822,10 @@ class PerfilTareaState extends State<PerfilTarea> {
           videos.add(File(videoTomado.path));
           log(videos.toString());
         }
-
-        orden.add("V");
       }
 
       Tarea tarea = Tarea();
-      tarea.setTarea(nombre, textos, imagenes, videos, formularios, orden);
+      tarea.setTarea(nombre,descripcion,imagen ,textos, imagenes, videos, formularios);
 
       await Sesion.db.editarTarea(tarea, tareaPerfil).then((value) {
         creando = false;

@@ -89,12 +89,6 @@ static inicializarBackground() async
           .snapshots().listen((e) async{
 
 
-        var entrega = e.docs.last.get("fechaentrega");
-        var diferencia = DateTime.fromMillisecondsSinceEpoch(
-            entrega)
-            .difference(DateTime.now());
-
-        print(e.docChanges.last.type.toString());
 
         if(e.docs.length > 0 && e.docs.last.get("estado") == "completada" &&  e.docChanges.last.type == DocumentChangeType.modified)
         {

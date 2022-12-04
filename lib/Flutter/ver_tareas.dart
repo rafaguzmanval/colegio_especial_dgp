@@ -475,12 +475,45 @@ class VerTareasState extends State<VerTareas> {
                                 fontSize: 25,
                               ),
                             )),
-                            resetIndicesTarea(),
-                            for (int j = 0;
-                                j < Sesion.tareas[tareaActual].orden.length;
-                                j++)
-                              LecturaTarea(Sesion.tareas[tareaActual].orden[j],
-                                  tareaActual),
+
+                            Center(
+                            child: Text(Sesion.tareas[tareaActual].descripcion.toUpperCase() + "\n",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                            color: GuardadoLocal.colores[2],
+                            fontSize: 25
+                            ))),
+
+
+                             Container(
+                            decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[2])),
+                            margin: EdgeInsets.only(bottom: 15),
+                            child: Image.network(Sesion.tareas[tareaActual].imagen, width: 200, height: 200)),
+
+                           if(Sesion.tareas[tareaActual].controladoresVideo.length == 1)...[
+                             Container(
+                                decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[2])),
+                                margin: EdgeInsets.only(bottom: 15),
+                                child: ElevatedButton(
+                                onPressed: (){
+                                if(Sesion.tareas[tareaActual].controladoresVideo[0] == 0 )
+                                {
+                                var nuevoControlador = VideoPlayerController.network(
+                                Sesion.tareas[tareaActual].videos[0]);
+                                Sesion.tareas[tareaActual].controladoresVideo[0] = nuevoControlador;
+                                Sesion.tareas[tareaActual].controladoresVideo[0].initialize();
+                                }
+
+                                ventanaVideo(
+                                Sesion.tareas[tareaActual].controladoresVideo[0],context);
+                                },
+                                child:Text("ver video".toUpperCase(),style: TextStyle(fontSize:25, color: GuardadoLocal.colores[2]),)
+                                ),
+
+                            ),
+                            ],
+
+
                             if (Sesion.tareas[tareaActual].formularios !=
                                 null && Sesion.tareas[tareaActual].formularios != []) ...[
                               for (int i = 0; i < Sesion.tareas[tareaActual].formularios.length; i = i + 2 + (Sesion.tareas[tareaActual].formularios[i + 1] as int) * 3)
@@ -630,6 +663,7 @@ class VerTareasState extends State<VerTareas> {
   }
 
   // Este metodo itera sobre las tareas que tiene el usuario y las muestra
+  @deprecated
   Widget LecturaTarea(String valor, i) {
 
     if (valor == "T" && Sesion.tareas[i].textos.length > indiceTextos) {
