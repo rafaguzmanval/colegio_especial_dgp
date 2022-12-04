@@ -22,6 +22,7 @@ import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:colegio_especial_dgp/Flutter/reproductor_video.dart';
 import 'package:flutter/material.dart';
+import 'package:get/state_manager.dart';
 import 'package:video_player/video_player.dart';
 import "package:image_picker/image_picker.dart";
 import 'dart:async';
@@ -691,6 +692,7 @@ class VerTareasState extends State<VerTareas> {
   // Accede a las tareas de la base de datos
   cargarTareas(id) async {
     await Sesion.db.consultarTareasAsignadasAlumno(id, true);
+
   }
 
   // Muestra la vista en horizontal

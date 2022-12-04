@@ -29,6 +29,7 @@ import 'package:colegio_especial_dgp/Dart/usuario.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:get/state_manager.dart';
 import 'package:video_player/video_player.dart';
 import 'main.dart';
 import 'notificacion.dart';
@@ -336,14 +337,11 @@ class AccesoBD {
                         }
                       }
                     }
-
-                    //Sesion.paginaActual.actualizar();
                   } catch (e) {
                     print(e);
                   }
                   ;
                 }
-                Sesion.paginaActual.actualizar();
               }
             });
           } catch (e) {
@@ -352,9 +350,15 @@ class AccesoBD {
         }
 
         if (e.docs.length == 0) Sesion.tareas = [];
+
+        Sesion.paginaActual.actualizar();
+
+
       });
+      return true;
     } catch (e) {
       print(e);
+      return false;
     }
   }
 
