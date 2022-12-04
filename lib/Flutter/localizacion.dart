@@ -8,8 +8,10 @@ import "package:latlong2/latlong.dart";
 
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 
 
@@ -126,10 +128,23 @@ class LocalizacionState extends State<Localizacion> {
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
+        actions: [IconButton(onPressed: () async{
+
+              if(Sesion.argumentos.length == 2)
+                {              var url = "https://www.google.com/maps/search/?api=1&query=${Sesion.argumentos[0]},${Sesion.argumentos[1]}";
+                var location = Uri.encodeFull(url);
+                await launchUrlString(location);
+
+                }
+
+
+            }, icon: Icon(Icons.offline_share, color: GuardadoLocal.colores[2]))],
+          leading: IconButton(
             icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
             onPressed: (){Navigator.pop(context);}),
-        title: Center(child: Text("UBICACIÓN",textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
+          title: Center(child: Text("UBICACIÓN",textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
+
+
       )),
       body:
                       Sesion.posicion == null || Sesion.argumentos.length < 2
