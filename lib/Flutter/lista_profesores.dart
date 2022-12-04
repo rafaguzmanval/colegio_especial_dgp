@@ -12,7 +12,6 @@
 *   perfil_profesor.dart : Para acceder al perfil del profeosr
 * */
 
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
@@ -28,10 +27,10 @@ class ListaProfesores extends StatefulWidget {
 }
 
 class ListaProfesoresState extends State<ListaProfesores> {
-
   double offSetActual = 0;
   ScrollController homeController = new ScrollController();
-
+  bool esProfesorEliminandose = false;
+  int profesorEliminandose = 0;
 
   @override
   void initState() {
@@ -53,19 +52,29 @@ class ListaProfesoresState extends State<ListaProfesores> {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
-              onPressed: (){Navigator.pop(context);}),
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
             actions: [
               IconButton(
-                onPressed: (){
-                  showSearch(context: context, delegate: CustomSearchDelegate(),);
+                onPressed: () {
+                  showSearch(
+                    context: context,
+                    delegate: CustomSearchDelegate(),
+                  );
                 },
                 icon: const Icon(Icons.search),
               ),
             ],
-          title: Center(child: Text('Lista de Profesores'.toUpperCase(),textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
-        )),
+            title: Center(
+              child: Text(
+                'Lista de Profesores'.toUpperCase(),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+              ),
+            )),
         body: Stack(children: [
           OrientationBuilder(
             builder: (context, orientation) =>
@@ -77,7 +86,10 @@ class ListaProfesoresState extends State<ListaProfesores> {
             alignment: FractionalOffset(0.98, 0.01),
             child: FloatingActionButton(
                 heroTag: "botonUp",
-                child: Icon(Icons.arrow_upward,color: GuardadoLocal.colores[2],),
+                child: Icon(
+                  Icons.arrow_upward,
+                  color: GuardadoLocal.colores[2],
+                ),
                 elevation: 1.0,
                 onPressed: () {
                   offSetActual -= 100.0;
@@ -95,7 +107,8 @@ class ListaProfesoresState extends State<ListaProfesores> {
             alignment: FractionalOffset(0.98, 0.99),
             child: FloatingActionButton(
                 heroTag: "botonDown",
-                child: Icon(Icons.arrow_downward, color: GuardadoLocal.colores[2]),
+                child:
+                    Icon(Icons.arrow_downward, color: GuardadoLocal.colores[2]),
                 elevation: 1.0,
                 onPressed: () {
                   offSetActual += 100;
@@ -136,39 +149,57 @@ class ListaProfesoresState extends State<ListaProfesores> {
       //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
       child: Column(
         children: [
-          for (int i = 0; i < Sesion.profesores.length; i++)
-            Container(
-                width: 130,
-                height: 150,
-                margin: EdgeInsets.all(10),
-                alignment: Alignment.center,
-                child: ElevatedButton(
-                  child: Column(
-                    children: [
-                      Text(
-                        Sesion.profesores[i].nombre.toString().toUpperCase(),
-                        style: TextStyle(
-                          color: GuardadoLocal.colores[2],
-                          fontSize: 25
+          for (int i = 0; i < Sesion.profesores.length; i++) ...[
+            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+              Container(
+                  width: 130,
+                  height: 150,
+                  margin: EdgeInsets.all(10),
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    child: Column(
+                      children: [
+                        Text(
+                          Sesion.profesores[i].nombre.toString().toUpperCase(),
+                          style: TextStyle(
+                              color: GuardadoLocal.colores[2], fontSize: 25),
                         ),
-                      ),
-                      Image.network(
-                        Sesion.profesores[i].foto,
-                        width: 100,
-                        height: 100,
-                        fit: BoxFit.fill,
-                      ),
-                    ],
-                  ),
-                  onPressed: () async{
-                    Sesion.seleccion = Sesion.profesores[i];
-                    await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PerfilProfesor()));
-                    cargarProfesores();
+                        Image.network(
+                          Sesion.profesores[i].foto,
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.fill,
+                        ),
+                      ],
+                    ),
+                    onPressed: () async {
+                      Sesion.seleccion = Sesion.profesores[i];
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PerfilProfesor()));
+                      cargarProfesores();
+                    },
+                  )),
+              IconButton(
+                  onPressed: () async {
+                    await Sesion.db
+                        .eliminarProfesor(Sesion.profesores[i].id)
+                        .then((e) {
+                      esProfesorEliminandose = true;
+                      profesorEliminandose = i;
+                      cargarProfesores();
+                    });
                   },
-                ))
+                  icon: Icon(
+                    Icons.delete,
+                    color: GuardadoLocal.colores[0],
+                  )),
+              if (esProfesorEliminandose && i == profesorEliminandose) ...[
+                new CircularProgressIndicator(),
+              ]
+            ])
+          ]
         ],
       ),
     );
@@ -223,5 +254,6 @@ class ListaProfesoresState extends State<ListaProfesores> {
   // metodo para actualizar la pagina
   void actualizar() async {
     setState(() {});
+    esProfesorEliminandose = false;
   }
 }

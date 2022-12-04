@@ -51,10 +51,10 @@ class AccesoBD {
 
   desactivarSubscripcion() {
     if (_subscripcion != null) _subscripcion.cancel();
-
   }
-  desactivarSubscripcionUbicacion(){
-    if(_subscripcionLoc != null) _subscripcionLoc.cancel();
+
+  desactivarSubscripcionUbicacion() {
+    if (_subscripcionLoc != null) _subscripcionLoc.cancel();
   }
 
   // Metodo para registrar usuario
@@ -112,7 +112,7 @@ class AccesoBD {
       //Se encripta la contaseña
       var nuevaPassword = usuario.password;
       var nombrehaseao =
-      encriptacionSha256(usuario.apellidos + usuario.fechanacimiento);
+          encriptacionSha256(usuario.apellidos + usuario.fechanacimiento);
 
       if (usuario.foto is String) {
         if (usuario.foto.startsWith("http")) {
@@ -120,8 +120,7 @@ class AccesoBD {
         }
       } else {
         var fotoPath =
-            "Imágenes/perfiles/${usuario.nombre + usuario.apellidos +
-            nombrehaseao}";
+            "Imágenes/perfiles/${usuario.nombre + usuario.apellidos + nombrehaseao}";
 
         //se introduce la imágen dentro del storage y cuando se comrpueba que se ha cargado entronces se incrementa 'i' para que se pueda salir del bucle de espera
         return await storageRef
@@ -149,9 +148,6 @@ class AccesoBD {
       ref.doc(usuarioPerfil.id).update(user);
       log(user.toString());
       return true;
-
-
-
     } catch (e) {
       print(e);
       return false;
@@ -553,40 +549,36 @@ class AccesoBD {
     }
   }
 
-
-  cambiarPosicion(idUsuario,latitud,longitud) async {
+  cambiarPosicion(idUsuario, latitud, longitud) async {
     try {
       final ref = db.collection("usuarios");
       return await ref
           .doc(idUsuario)
-          .update({"latitud": latitud,
-                    "longitud":longitud});
+          .update({"latitud": latitud, "longitud": longitud});
     } catch (e) {
       log(e.toString());
       return false;
     }
   }
 
-  obtenerPosicion(idUsuario) async{
-    try{
+  obtenerPosicion(idUsuario) async {
+    try {
       final ref = db.collection("usuarios").doc(idUsuario);
-      _subscripcionLoc = await ref// consulta todas las tareas de un usuario ordenadas por fecha de asignación
-          .snapshots()
-          .listen((e) async {
-            if(Sesion.argumentos.length == 0)
-              {
-                Sesion.argumentos.add(0.0);
-                Sesion.argumentos.add(0.0);
-              }
-            Sesion.argumentos[0] = e.get("latitud");
-            Sesion.argumentos[1] = e.get("longitud");
-            Sesion.paginaActual.actualizar();
+      _subscripcionLoc =
+          await ref // consulta todas las tareas de un usuario ordenadas por fecha de asignación
+              .snapshots()
+              .listen((e) async {
+        if (Sesion.argumentos.length == 0) {
+          Sesion.argumentos.add(0.0);
+          Sesion.argumentos.add(0.0);
+        }
+        Sesion.argumentos[0] = e.get("latitud");
+        Sesion.argumentos[1] = e.get("longitud");
+        Sesion.paginaActual.actualizar();
       });
-    }catch(e){
+    } catch (e) {
       print(e);
-      }
-
-
+    }
   }
 
   // Metodo para eliminar una tarea de un usuario pasandole el id de la relacion entre el usuario y la tarea
@@ -619,6 +611,43 @@ class AccesoBD {
           });
         });
       }
+    } catch (e) {
+      return false;
+      print(e);
+    }
+  }
+
+  Future eliminarAlumno(id) async {
+    try {
+      if (Sesion.alumnos != null) {
+        await db.collection("usuarios").doc(id).delete().then((e) async {
+          await db
+              .collection("usuarioTieneTareas")
+              .where("idUsuario", isEqualTo: id)
+              .get()
+              .then((e) {
+            for (int i = 0; i < e.docs.length; i++) {
+              db.collection("usuarioTieneTareas").doc(e.docs[i].id).delete();
+            }
+
+            return true;
+          });
+        });
+      }
+    } catch (e) {
+      return false;
+      print(e);
+    }
+  }
+
+  Future eliminarProfesor(id) async {
+    try {
+      if (Sesion.profesores != null) {
+        await db.collection("usuarios").doc(id).delete().then((e) async {
+          return true;
+        });
+      }
+      ;
     } catch (e) {
       return false;
       print(e);
@@ -824,11 +853,11 @@ class AccesoBD {
 
       if (tablon.imagenes is String) {
         if (tablon.imagenes.startsWith("http")) {
-          imagenes= tablon.imagenes;
+          imagenes = tablon.imagenes;
         }
       } else {
-        var fotoPath = "Imágenes/pictogramas/" +
-            encriptacionSha256(tablon.imagenes.path);
+        var fotoPath =
+            "Imágenes/pictogramas/" + encriptacionSha256(tablon.imagenes.path);
 
         //se introduce la imágen dentro del storage y cuando se comrpueba que se ha cargado entronces se incrementa 'i' para que se pueda salir del bucle de espera
         await storageRef

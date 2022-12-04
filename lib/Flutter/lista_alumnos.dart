@@ -29,10 +29,10 @@ class ListaAlumnos extends StatefulWidget {
 }
 
 class ListaAlumnosState extends State<ListaAlumnos> {
-
-
   double offSetActual = 0;
   ScrollController homeController = new ScrollController();
+  bool esAlumnoEliminandose = false;
+  int alumnoEliminandose = 0;
 
   @override
   void initState() {
@@ -42,7 +42,6 @@ class ListaAlumnosState extends State<ListaAlumnos> {
     Sesion.seleccion = "";
     Sesion.tareas = [];
     Sesion.alumnos = [];
-
 
     if (Sesion.rol != Rol.alumno.toString()) {
       cargarAlumnos();
@@ -56,22 +55,30 @@ class ListaAlumnosState extends State<ListaAlumnos> {
       appBar: AppBar(
           leading: IconButton(
               icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
-              onPressed: (){Navigator.pop(context);}),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
           actions: [
             IconButton(
-              onPressed: (){
-                showSearch(context: context, delegate: CustomSearchDelegate(),);
+              onPressed: () {
+                showSearch(
+                  context: context,
+                  delegate: CustomSearchDelegate(),
+                );
               },
               icon: const Icon(Icons.search),
             ),
           ],
-          title: Center(child: Text('LISTA DE ALUMNOS',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
-          )
-      ),
+          title: Center(
+            child: Text(
+              'LISTA DE ALUMNOS',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+            ),
+          )),
       body: Stack(children: [
         OrientationBuilder(
-          builder: (context, orientation) =>
-          orientation == Orientation.portrait
+          builder: (context, orientation) => orientation == Orientation.portrait
               ? buildPortrait()
               : buildLandscape(),
         ),
@@ -79,7 +86,10 @@ class ListaAlumnosState extends State<ListaAlumnos> {
           alignment: FractionalOffset(0.98, 0.01),
           child: FloatingActionButton(
               heroTag: "botonUp",
-              child: Icon(Icons.arrow_upward,color: GuardadoLocal.colores[2],),
+              child: Icon(
+                Icons.arrow_upward,
+                color: GuardadoLocal.colores[2],
+              ),
               elevation: 1.0,
               onPressed: () {
                 offSetActual -= 100.0;
@@ -97,7 +107,10 @@ class ListaAlumnosState extends State<ListaAlumnos> {
           alignment: FractionalOffset(0.98, 0.99),
           child: FloatingActionButton(
               heroTag: "botonDown",
-              child: Icon(Icons.arrow_downward,color: GuardadoLocal.colores[2],),
+              child: Icon(
+                Icons.arrow_downward,
+                color: GuardadoLocal.colores[2],
+              ),
               elevation: 1.0,
               onPressed: () {
                 offSetActual += 100;
@@ -115,8 +128,6 @@ class ListaAlumnosState extends State<ListaAlumnos> {
       ]),
     );
   }
-
-
 
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
   Widget VistaProfesor() {
@@ -139,9 +150,9 @@ class ListaAlumnosState extends State<ListaAlumnos> {
     return Container(
       alignment: Alignment.center,
       //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-      child: Column(
-        children: [
-          for (int i = 0; i < Sesion.alumnos.length; i++)
+      child: Column(children: [
+        for (int i = 0; i < Sesion.alumnos.length; i++) ...[
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Container(
                 width: 130,
                 height: 150,
@@ -165,16 +176,34 @@ class ListaAlumnosState extends State<ListaAlumnos> {
                       ),
                     ],
                   ),
-                  onPressed: () async{
+                  onPressed: () async {
                     Sesion.seleccion = Sesion.alumnos[i];
                     await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => PerfilAlumno()));
                   },
-                ))
+                )),
+            IconButton(
+                onPressed: () async {
+                  await Sesion.db
+                      .eliminarAlumno(Sesion.alumnos[i].id)
+                      .then((e) {
+                    esAlumnoEliminandose = true;
+                    alumnoEliminandose = i;
+                    cargarAlumnos();
+                  });
+                },
+                icon: Icon(
+                  Icons.delete,
+                  color: GuardadoLocal.colores[0],
+                )),
+            if (esAlumnoEliminandose && i == alumnoEliminandose) ...[
+              new CircularProgressIndicator(),
+            ]
+          ])
         ],
-      ),
+      ]),
     );
   }
 
@@ -225,5 +254,6 @@ class ListaAlumnosState extends State<ListaAlumnos> {
   // Actualizar
   void actualizar() async {
     setState(() {});
+    esAlumnoEliminandose = false;
   }
 }
