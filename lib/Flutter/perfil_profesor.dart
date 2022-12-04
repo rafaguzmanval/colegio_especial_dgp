@@ -390,7 +390,7 @@ class PerfilProfesorState extends State<PerfilProfesor> {
         }
       }
 
-      await Sesion.db.edtitarUsuario(usuario, foto, usuarioPerfil).then((value) {
+      await Sesion.db.editarUsuario(usuario, foto, usuarioPerfil).then((value) {
         registrando = false;
 
         if (value) {
@@ -417,11 +417,6 @@ class PerfilProfesorState extends State<PerfilProfesor> {
                 )),
           );
           Navigator.pop(context);
-          Navigator.pop(context);
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ListaProfesores()));
         } else {
           mensajeDeRegistro =
           "FALLO EN EL PROCESO DE REGISTRO, INTENTELO DE NUEVO";

@@ -165,9 +165,9 @@ class ListaAlumnosState extends State<ListaAlumnos> {
                       ),
                     ],
                   ),
-                  onPressed: () {
+                  onPressed: () async{
                     Sesion.seleccion = Sesion.alumnos[i];
-                    Navigator.push(
+                    await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => PerfilAlumno()));

@@ -106,7 +106,7 @@ class AccesoBD {
     }
   }
 
-  edtitarUsuario(usuario, foto, usuarioPerfil) async {
+  editarUsuario(usuario, foto, usuarioPerfil) async {
     try {
       final ref = db.collection("usuarios");
       //Se encripta la contaseña

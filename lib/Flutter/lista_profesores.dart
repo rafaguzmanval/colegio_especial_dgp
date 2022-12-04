@@ -160,9 +160,9 @@ class ListaProfesoresState extends State<ListaProfesores> {
                       ),
                     ],
                   ),
-                  onPressed: () {
+                  onPressed: () async{
                     Sesion.seleccion = Sesion.profesores[i];
-                    Navigator.push(
+                    await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => PerfilProfesor()));
