@@ -19,8 +19,8 @@ class Localizacion extends StatefulWidget {
 }
 
 class LocalizacionState extends State<Localizacion> {
-  var latitudColegio = 37.18085;
-  var longitudColegio = -3.60270;
+  static double latitudColegio = 37.18085;
+  static double longitudColegio = -3.60270;
   var posicionStream;
   MapController _mapController = new MapController();
 
@@ -129,10 +129,10 @@ class LocalizacionState extends State<Localizacion> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
             onPressed: (){Navigator.pop(context);}),
-        title: Center(child: Text("LOCALIZACIÓN",textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
+        title: Center(child: Text("UBICACIÓN",textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
       )),
       body:
-                      Sesion.posicion == null
+                      Sesion.posicion == null || Sesion.argumentos.length < 2
                           ? Center(child:Text("Calculando posición".toUpperCase()))
                           : FlutterMap(
                               mapController: _mapController,
@@ -151,7 +151,7 @@ class LocalizacionState extends State<Localizacion> {
                                     child:ElevatedButton(onPressed: (){
                                       _mapController.moveAndRotate(LatLng(
                                           Sesion.argumentos[0],
-                                          Sesion.argumentos[1]), 18, 0);
+                                          Sesion.argumentos[1]), _mapController.zoom, 0);
                                     }, child: Icon(Icons.location_on,size: 60,),
                                     style: ElevatedButton.styleFrom(shape: CircleBorder(
 

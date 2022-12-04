@@ -38,6 +38,9 @@ class PerfilAlumno extends StatefulWidget {
 class PerfilAlumnoState extends State<PerfilAlumno> {
 
   var usuarioPerfil;
+  var tareasSinFinalizar = [];
+  var tareasCompletadas = [];
+  var tareasCanceladas = [];
   var controladorNombre = TextEditingController();
   var controladorApellidos = TextEditingController();
   final myController = TextEditingController();
@@ -167,6 +170,29 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
       }
       vez++;
     }
+
+    tareasSinFinalizar.clear();
+    tareasCompletadas.clear();
+    tareasCanceladas.clear();
+
+    for(int i = 0; i < Sesion.tareas.length; i++)
+    {
+      if(Sesion.tareas[i].estado == "sinFinalizar")
+      {
+        tareasSinFinalizar.add(Sesion.tareas[i]);
+        tareasSinFinalizar.add(i);
+      }
+      else if(Sesion.tareas[i].estado == "completada")
+      {
+        tareasCompletadas.add(Sesion.tareas[i]);
+        tareasCompletadas.add(i);
+      }
+      else{
+        tareasCanceladas.add(Sesion.tareas[i]);
+        tareasCanceladas.add(i);
+      }
+    }
+
     return Expanded(
 
         //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
@@ -332,50 +358,33 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                   MaterialPageRoute(
                       builder: (context) => Localizacion()));
               Sesion.paginaActual = this;
+              actualizar();
 
             }, child: Icon(Icons.map_outlined)),
 
-            Text("\nTAREAS: ",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
-            if (Sesion.tareas != null) ...[
-              for (int i = 0; i < Sesion.tareas.length; i++)
-                if (Sesion.tareas[i] is Tarea) ...[
-                  Container(
-                      margin: EdgeInsets.only(top: 10),
-                      alignment: Alignment.center,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                            onPressed: () async {
-                              Sesion.argumentos.add(i);
-                              await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => VerTareas()));
-                              Sesion.paginaActual = this;
-                            },
-                            child: Text(Sesion.tareas[i].nombre.toString().toUpperCase(),style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[2]),),
-                          ),
-                          IconButton(
-                              onPressed: () async {
-                                await Sesion.db.eliminarTareaAlumno(
-                                    Sesion.tareas[i].idRelacion);
 
-                                esTareaEliminandose = true;
-                                tareaEliminandose = i;
-                                actualizar();
-                              },
-                              icon: Icon(Icons.delete,color: GuardadoLocal.colores[0],)),
-                          if (esTareaEliminandose &&
-                              i == tareaEliminandose) ...[
-                            new CircularProgressIndicator(),
-                          ]
-                        ],
-                      )),
-                ] else ...[
-                  new CircularProgressIndicator()
-                ],
+            /// se muestran las tareas del alumno
+            if (Sesion.tareas != null) ...[
+              if(tareasSinFinalizar.length != 0)...[
+              Text("\nTAREAS EN CURSO: ",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
+                visualizarTareaLista("sinFinalizar"),
+              ],
+              if(tareasCompletadas.length != 0)...[
+              Text("\nTAREAS COMPLETADAS: ",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
+                visualizarTareaLista("completada"),
+              ],
+
+              if(tareasCanceladas.length != 0)...[
+              Text("\nTAREAS CANCELADAS: ",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
+              visualizarTareaLista("cancelada")
+              ],
+
+              if(tareasSinFinalizar.length == 0 && tareasCompletadas.length != 0 && tareasCanceladas.length != 0)...[
+                Text("SIN TAREAS",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
+              ]
             ],
+
+            /// Añadir una nueva tarea al alumno
             if (tareas != null && nombresTareas.length > 1) ...[
               Container(
                   margin: EdgeInsets.only(top: 20),
@@ -420,6 +429,10 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
   {
     usuarioPerfil = await Sesion.db.consultarIDusuario(Sesion.seleccion.id);
     await Sesion.db.consultarTareasAsignadasAlumno(Sesion.seleccion.id, false);
+
+
+    print(tareasSinFinalizar.length.toString() + " " + tareasCompletadas.length.toString());
+
     actualizar();
   }
 
@@ -733,5 +746,61 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                         ));
                   }));
         });
+  }
+
+  Widget visualizarTareaLista(condicion)
+  {
+    var listaIterar;
+    if(condicion == "sinFinalizar")
+      {
+        listaIterar = tareasSinFinalizar;
+      }
+    else if(condicion == "completada")
+      {
+        listaIterar = tareasCompletadas;
+      }
+    else
+      {
+        listaIterar = tareasCanceladas;
+      }
+    return Column(
+        children: [
+        for (int i = 0; i < listaIterar.length; i+=2)
+            Container(
+            margin: EdgeInsets.only(top: 10),
+            alignment: Alignment.center,
+            child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+            ElevatedButton(
+            onPressed: () async {
+            Sesion.argumentos.add(listaIterar[i+1]);
+            await Navigator.push(
+            context,
+            MaterialPageRoute(
+            builder: (context) => VerTareas()));
+            Sesion.paginaActual = this;
+            },
+            child: Text(listaIterar[i].nombre.toString().toUpperCase(),style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[2]),),
+            ),
+              IconButton(
+              onPressed: () async {
+            await Sesion.db.eliminarTareaAlumno(
+                listaIterar[i].idRelacion);
+
+            esTareaEliminandose = true;
+            tareaEliminandose = i;
+            actualizar();
+            },
+            icon: Icon(Icons.delete,color: GuardadoLocal.colores[0],)),
+            if (esTareaEliminandose &&
+            i == tareaEliminandose) ...[
+            new CircularProgressIndicator(),
+            ]
+            ],
+            )),
+        ]
+    );
+
   }
 }
