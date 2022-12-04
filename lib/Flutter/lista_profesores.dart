@@ -166,6 +166,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => PerfilProfesor()));
+                    cargarProfesores();
                   },
                 ))
         ],

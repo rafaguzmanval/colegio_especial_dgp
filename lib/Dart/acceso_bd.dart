@@ -106,6 +106,58 @@ class AccesoBD {
     }
   }
 
+  edtitarUsuario(usuario, foto, usuarioPerfil) async {
+    try {
+      final ref = db.collection("usuarios");
+      //Se encripta la contaseña
+      var nuevaPassword = usuario.password;
+      var nombrehaseao =
+      encriptacionSha256(usuario.apellidos + usuario.fechanacimiento);
+
+      if (usuario.foto is String) {
+        if (usuario.foto.startsWith("http")) {
+          foto = usuario.foto;
+        }
+      } else {
+        var fotoPath =
+            "Imágenes/perfiles/${usuario.nombre + usuario.apellidos +
+            nombrehaseao}";
+
+        //se introduce la imágen dentro del storage y cuando se comrpueba que se ha cargado entronces se incrementa 'i' para que se pueda salir del bucle de espera
+        return await storageRef
+            .child(fotoPath)
+            .putFile(usuario.foto)
+            .then((d0) async {
+          await leerImagen(fotoPath).then((value) {
+            log(value);
+            foto = value;
+            log("Se añadio la imagen al array");
+          });
+          log("Se leido lo de await leerImagen");
+        });
+      }
+
+      var user = <String, dynamic>{
+        "nombre": usuario.nombre,
+        "apellidos": usuario.apellidos,
+        "password": nuevaPassword,
+        "fechanacimiento": usuario.fechanacimiento,
+        "rol": usuario.rol,
+        "foto": foto,
+        "metodoLogeo": usuario.metodoLogeo
+      };
+      ref.doc(usuarioPerfil.id).update(user);
+      log(user.toString());
+      return true;
+
+
+
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
+
   // Metodo para crear una tarea
   crearTarea(tarea) async {
     try {
