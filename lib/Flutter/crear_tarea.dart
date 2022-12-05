@@ -205,46 +205,51 @@ class CrearTareaState extends State<CrearTarea> {
             ),
           ),
           Text(
-            "ELIGE UNA FOTO: *",
+            "ELIGE UNA FOTO O PICTOGRAMA: *",
             style: TextStyle(
                 fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
-          SizedBox(
-            height: 5,
-          ),
-          ElevatedButton(
-              child: Image.asset('assets/camara.png',
-                width: 140,
-                height: 100,),
-              onPressed: () {
-                seleccionarImagen(SeleccionImagen.camara);
-              }),
-          Text(
-            "ELIGE UN PICTOGRAMA: *",
-            style: TextStyle(
-                fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
-          ),
-          SizedBox(
-            height: 5,
-          ),
-          ElevatedButton(
-              child: Image.asset('assets/galeria.png',
-                width: 140,
-                height: 100,),
-              onPressed: () {
-                seleccionarImagen(SeleccionImagen.galeria);
-              }),
-          SizedBox(
-            height: 15,
-          ),
-          ElevatedButton(
-              child: Image.asset('assets/logo-arasaac.png',
-                width: 140,
-                height: 100,),
-              onPressed: () async {
-                fotoTomada = await buscadorArasaac(context: context);
-                actualizar();
-              }),
+
+          Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children:[
+
+            Flexible(
+              child:
+              ElevatedButton(
+                  child: Image.asset('assets/camara.png',
+                    width: 140,
+                    height: 100,),
+                  onPressed: () {
+                    seleccionarImagen(SeleccionImagen.camara);
+                  }),
+            )    ,
+
+            Flexible(
+              child:
+              ElevatedButton(
+                  child: Image.asset('assets/galeria.png',
+                    width: 140,
+                    height: 100,),
+                  onPressed: () {
+                    seleccionarImagen(SeleccionImagen.galeria);
+                  }),
+            ),
+
+            Flexible(
+              child:
+              ElevatedButton(
+                  child: Image.asset('assets/logo-arasaac.png',
+                    width: 140,
+                    height: 100,),
+                  onPressed: () async {
+                    fotoTomada = await buscadorArasaac(context: context);
+                    actualizar();
+                  }),
+            )
+
+          ]),
+
           Text(
             "HAZ UN VIDEOTUTORIAL : ",
             style: TextStyle(
@@ -270,7 +275,7 @@ class CrearTareaState extends State<CrearTarea> {
           ElevatedButton(
               child: Column(children: [
                 Text(
-                    (formularios == [])
+                    (formularios.isEmpty)
                         ? 'Crea un formulario'.toUpperCase()
                         : "Edita el formulario".toUpperCase(),
                     style: TextStyle(
@@ -286,6 +291,7 @@ class CrearTareaState extends State<CrearTarea> {
           SizedBox(
             height: 20,
           ),
+          /*
           Container(
             decoration: BoxDecoration(
                 border: Border.all(width: 2, color: GuardadoLocal.colores[0])),
@@ -365,9 +371,12 @@ class CrearTareaState extends State<CrearTarea> {
                         top: 10, bottom: 10, right: 10, left: 10),*/
                     ),
           ),
+          */
+
           Visibility(
               visible: !creando,
               child: Container(
+                alignment: Alignment.bottomRight,
                   margin: EdgeInsets.only(top: 0),
                   child: ElevatedButton(
                     child: Image.asset(
