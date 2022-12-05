@@ -295,10 +295,10 @@ class PerfilProfesorState extends State<PerfilProfesor> {
                     height: 10,
                   ),
                   ElevatedButton(
-                      child: Text(
-                        'HAZ UNA FOTO DESDE LA CAMARA',
-                        style: TextStyle(
-                            color: GuardadoLocal.colores[2], fontSize: 25),
+                      child: Image.asset(
+                        "assets/camara.png",
+                        width: 140,
+                        height: 100,
                       ),
                       onPressed: () {
                         seleccionarImagen(SeleccionImagen.camara);
@@ -307,9 +307,10 @@ class PerfilProfesorState extends State<PerfilProfesor> {
                     height: 10,
                   ),
                   ElevatedButton(
-                      child: Text('ELIGE FOTO DE LA GALERIA',
-                          style: TextStyle(
-                              color: GuardadoLocal.colores[2], fontSize: 25)),
+                      child: Image.asset('assets/galeria.png',
+                        width: 140,
+                        height: 100,
+                      ),
                       onPressed: () {
                         seleccionarImagen(SeleccionImagen.galeria);
                       }),
