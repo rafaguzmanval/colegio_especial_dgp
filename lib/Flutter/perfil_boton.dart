@@ -150,14 +150,7 @@ class PerfilbotonState extends State<Perfilboton> {
             ),
           ),
           SizedBox(
-            height: 10,
-          ),
-          Text(
-            "ELIGE EL TIPO PARA EL BOTÓN: *",
-            style: TextStyle(fontSize: 30.0, height: 2.0, color: GuardadoLocal.colores[0]),
-          ),
-          SizedBox(
-            height: 10,
+            height: 5,
           ),
           DropdownButton(
             style: TextStyle(color: GuardadoLocal.colores[0]),
@@ -183,7 +176,7 @@ class PerfilbotonState extends State<Perfilboton> {
             height: 10,
           ),
           Text(
-            "ELIGE UN PICTOGRAMA PARA EL BOTÓN: *",
+            "CAMBIA EL PICTOGRAMA DEL BOTÓN: *",
             style: TextStyle(fontSize: 30.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           SizedBox(
@@ -193,7 +186,11 @@ class PerfilbotonState extends State<Perfilboton> {
             height: 15,
           ),
           ElevatedButton(
-              child: Text('ELIGE UN PICTOGRAMA DESDE LA WEB DE ARASAAC',style: TextStyle(fontSize: 30.0,color: GuardadoLocal.colores[2])),
+              child: Image.asset(
+            'assets/logo-arasaac.png',
+            width: 140,
+            height: 100,
+          ),
               onPressed: () async {
                 fotoTomada = await buscadorArasaac(context: context);
                 actualizar();
@@ -202,7 +199,7 @@ class PerfilbotonState extends State<Perfilboton> {
             height: 5,
           ),
           SizedBox(
-            height: 10,
+            height: 15,
           ),
           Container(
             decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[0])),
@@ -229,19 +226,17 @@ class PerfilbotonState extends State<Perfilboton> {
             ),
           ),
           SizedBox(
-            height: 10,
+            height: 15,
           ),
           Visibility(
               visible: !creando,
               child: Container(
                   margin: EdgeInsets.only(top: 0),
                   child: ElevatedButton(
-                    child: Text(
-                      "EDITAR BOTÓN TABLÓN",
-                      style: TextStyle(
-                        fontSize: 30.0,
-                        color: GuardadoLocal.colores[2],
-                      ),
+                    child: Image.asset(
+                      'assets/disquete.png',
+                      width: 140,
+                      height: 100,
                     ),
                     onPressed: () {
                       editarTablon();

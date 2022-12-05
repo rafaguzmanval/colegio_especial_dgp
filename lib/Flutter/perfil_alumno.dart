@@ -273,13 +273,19 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                     actualizar();
                   });
                 },
-                child: Text(
+              child: Column(children: [
+                  Text(
                   (fechaElegida == null)
                       ? fechaAntigua
                       : DateFormat('d/M/y').format(fechaElegida),
                   style:
                   TextStyle(color: GuardadoLocal.colores[2], fontSize: 25),
                 ),
+                Image.asset("assets/calendario.png",
+                  width: 140,
+                  height: 100,),
+                SizedBox(height: 10,)
+              ]),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: GuardadoLocal.colores[0])),
             SizedBox(
@@ -407,12 +413,10 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                   backgroundColor:
                   MaterialStateProperty.all(GuardadoLocal.colores[0]),
                 ),
-                child: Text(
-                  "EDITAR",
-                  style: TextStyle(
-                      backgroundColor: Colors.transparent,
-                      color: GuardadoLocal.colores[2],
-                      fontSize: 25),
+                child: Image.asset(
+                  "assets/disquete.png",
+                  width: 140,
+                  height: 100,
                 ),
                 onPressed: () {
                   editarUsuario();
@@ -420,6 +424,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
               )),
           Visibility(
               visible: registrando, child: new CircularProgressIndicator()),
+          SizedBox(height: 10,)
         ],
       ),
     ));
