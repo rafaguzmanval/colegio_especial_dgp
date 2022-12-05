@@ -15,13 +15,11 @@
 * */
 
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/passport_method.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/usuario.dart';
-import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:flutter/material.dart';
 import "package:image_picker/image_picker.dart";
 import 'package:intl/intl.dart';
@@ -146,13 +144,9 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            height: 5,
+            height: 15,
           ),
-          Text(
-            "ELIGE ROL PARA EL USUARIO: *",
-            style: TextStyle(
-                fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
-          ),
+
           DropdownButton(
             style: TextStyle(color: GuardadoLocal.colores[0]),
             value: rolElegido,
@@ -178,7 +172,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
             },
           ),
           SizedBox(
-            height: 5,
+            height: 10,
           ),
           SizedBox(
             width: 500,
@@ -234,10 +228,12 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               });
             },
           ),
+          SizedBox(height: 10,),
           Visibility(
               visible: metodoElegido == "clave",
               child: SizedBox(
                 width: 500,
+
                 child: TextField(
                   style:
                       TextStyle(color: GuardadoLocal.colores[0], fontSize: 25),
@@ -299,12 +295,19 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                   actualizar();
                 });
               },
-              child: Text(
-                (fechaElegida == null)
-                    ? "ELIGE LA FECHA DE NACIMIENTO"
-                    : DateFormat('d/M/y').format(fechaElegida),
-                style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 25),
-              ),
+              child: Column(children: [
+                Text(
+                  (fechaElegida == null)
+                      ? "SIN FECHA"
+                      : DateFormat('d/M/y').format(fechaElegida),
+                  style:
+                      TextStyle(color: GuardadoLocal.colores[2], fontSize: 25),
+                ),
+                Image.asset("assets/calendario.png",
+                width: 140,
+                height: 100,),
+                SizedBox(height: 10,)
+              ]),
               style: ElevatedButton.styleFrom(
                   backgroundColor: GuardadoLocal.colores[0])),
           Text(
@@ -320,10 +323,10 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 height: 10,
               ),
               ElevatedButton(
-                  child: Text(
-                    'HAZ UNA FOTO DESDE LA CAMARA',
-                    style: TextStyle(
-                        color: GuardadoLocal.colores[2], fontSize: 25),
+                  child: Image.asset(
+                    "assets/camara.png",
+                    width: 140,
+                    height: 100,
                   ),
                   onPressed: () {
                     seleccionarImagen(SeleccionImagen.camara);
@@ -332,9 +335,10 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 height: 10,
               ),
               ElevatedButton(
-                  child: Text('ELIGE FOTO DE LA GALERIA',
-                      style: TextStyle(
-                          color: GuardadoLocal.colores[2], fontSize: 25)),
+                  child: Image.asset('assets/galeria.png',
+                    width: 140,
+                    height: 100,
+                      ),
                   onPressed: () {
                     seleccionarImagen(SeleccionImagen.galeria);
                   }),
@@ -351,10 +355,10 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                     child: Container(
                     decoration: BoxDecoration(
                         border: Border.all(color: GuardadoLocal.colores[0])),
-                    child: Text(
-                      'NINGUNA FOTO TOMADA ***',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 25),
+                    child: Image.asset(
+                      'assets/desconocido.jpg',
+                      width: 160,
+                      height: 120,
                     ),
                   ))
                 : Center(child: Image.file(File(fotoTomada.path))),
@@ -370,12 +374,10 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                   backgroundColor:
                       MaterialStateProperty.all(GuardadoLocal.colores[0]),
                 ),
-                child: Text(
-                  "REGISTRAR",
-                  style: TextStyle(
-                      backgroundColor: Colors.transparent,
-                      color: GuardadoLocal.colores[2],
-                      fontSize: 25),
+                child: Image.asset(
+                  "assets/disquete.png",
+                  width: 140,
+                  height: 100,
                 ),
                 onPressed: () {
                   registrarUsuario();
@@ -383,6 +385,9 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               )),
           Visibility(
               visible: registrando, child: new CircularProgressIndicator()),
+          SizedBox(
+            height: 20,
+          ),
         ],
       ),
     );
