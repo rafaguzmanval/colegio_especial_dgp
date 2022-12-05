@@ -15,13 +15,14 @@ class Tarea {
   var id;
   var idRelacion;
   var nombre;
+  var descripcion;
+  var imagen;
   var textos;
   var imagenes;
   var videos;
   var formularios;
   var controladoresVideo = [];
   var controladoresComandas = [];
-  var orden;
   var estado;
   var fechafinal;
   var fechaentrega;
@@ -34,11 +35,13 @@ class Tarea {
   Tarea(
       {this.id,
       this.nombre,
+      this.descripcion,
+      this.imagen,
       this.textos,
       this.imagenes,
       this.videos,
       this.formularios,
-      this.orden});
+      });
 
   // Obtiene los datos de la base de datos y los inserta en el objeto
   factory Tarea.fromFirestore(
@@ -48,12 +51,13 @@ class Tarea {
     final data = snapshot.data();
     return Tarea(
       nombre: data?['nombre'],
+      descripcion: data?['descripcion'],
+      imagen: data?['imagen'],
       textos: data?['textos'] is Iterable ? List.from(data?['textos']) : null,
       imagenes:
           data?['imagenes'] is Iterable ? List.from(data?['imagenes']) : null,
       videos: data?['videos'] is Iterable ? List.from(data?['videos']) : null,
       formularios: data?['formularios'] is Iterable? List.from(data?['formularios']):null,
-      orden: data?['orden'] is Iterable ? List.from(data?['orden']) : null,
     );
   }
 
@@ -61,21 +65,23 @@ class Tarea {
   Map<String, dynamic> toFirestore() {
     return {
       if (nombre != null) "nombre": nombre,
+      if (descripcion != null) "descripcion" : descripcion,
+      if (imagen != null) "imagen" : imagen,
       if (textos != null) "textos": textos,
       if (imagenes != null) "imagenes": imagenes,
       if (videos != null) "videos": videos,
       if(formularios != null) "formularios" : formularios,
-      if (orden != null) "orden": orden,
     };
   }
 
   // Modificar una tarea
-  setTarea(nombre, textos, imagenes, videos, formularios, orden) {
+  setTarea(nombre,descripcion,imagen, textos, imagenes, videos, formularios) {
     this.nombre = nombre;
+    this.descripcion = descripcion;
+    this.imagen = imagen;
     this.textos = textos;
     this.imagenes = imagenes;
     this.videos = videos;
     this.formularios = formularios;
-    this.orden = orden;
   }
 }

@@ -160,27 +160,27 @@ class AccesoBD {
     try {
       //Se encripta la contaseña
 
+
       var imagenes = [];
       var videos = [];
 
-      var futuros = <Future>[];
 
       int i = 0;
 
-      if (tarea.imagenes.length > 0) {
-        if (tarea.imagenes[0] is String) {
-          if (tarea.imagenes[0].startsWith("http")) {
-            imagenes.add(tarea.imagenes[0]);
+      for( int j= 0; j < tarea.imagenes.length ; j++) {
+        if (tarea.imagenes[j] is String) {
+          if (tarea.imagenes[j].startsWith("http")) {
+            imagenes.add(tarea.imagenes[j]);
             i++;
           }
         } else {
           var fotoPath = "Imágenes/pictogramas/" +
-              encriptacionSha256(tarea.imagenes[0].path);
+              encriptacionSha256(tarea.imagenes[j].path);
 
           //se introduce la imágen dentro del storage y cuando se comrpueba que se ha cargado entronces se incrementa 'i' para que se pueda salir del bucle de espera
           await storageRef
               .child(fotoPath)
-              .putFile(tarea.imagenes[0])
+              .putFile(tarea.imagenes[j])
               .then((d0) async {
             await leerImagen(fotoPath).then((value) {
               log(value);
@@ -193,13 +193,13 @@ class AccesoBD {
         }
       }
 
-      if (tarea.videos.length > 0) {
-        var videoPath = "Vídeos/" + encriptacionSha256(tarea.videos[0].path);
+      for (int j = 0; j < tarea.videos.length ; j++) {
+        var videoPath = "Vídeos/" + encriptacionSha256(tarea.videos[j].path);
 
         // se espera a que se introduzca el video correctamente en el storage para después salir del bucle de espera
         await storageRef
             .child(videoPath)
-            .putFile(tarea.videos[0])
+            .putFile(tarea.videos[j])
             .then((p0) async {
           await leerVideo(videoPath).then((value) {
             videos.add(value);
@@ -219,11 +219,12 @@ class AccesoBD {
 
       var nuevaTarea = <String, dynamic>{
         "nombre": tarea.nombre,
-        "textos": tarea.textos,
-        "imagenes": imagenes,
+        "descripcion" : tarea.descripcion,
+        "imagen" : tarea.imagen,
+        "textos": [],
+        "imagenes": [],
         "videos": videos,
         "formularios": tarea.formularios,
-        "orden": tarea.orden
       };
 
       db.collection("Tareas").add(nuevaTarea);
@@ -315,7 +316,8 @@ class AccesoBD {
                       for (int j = 0; j < Sesion.tareas[k].videos.length; j++) {
                         /*var nuevoControlador = VideoPlayerController.network(
                                 Sesion.tareas[k].videos[j]);*/
-                        Sesion.tareas[k].controladoresVideo.add(0);
+                        Sesion.tareas[k].controladoresVideo.add(0); /// Se añade un cero porque si se inicializará el video entonces se cargaría de internet
+                        /// y podría haber descargas inncesarias que el usuario no va a ver.
                         /*Sesion.tareas[k].controladoresVideo.last.initialize();*/
 
                       }
@@ -352,7 +354,6 @@ class AccesoBD {
         if (e.docs.length == 0) Sesion.tareas = [];
 
         Sesion.paginaActual.actualizar();
-
 
       });
       return true;

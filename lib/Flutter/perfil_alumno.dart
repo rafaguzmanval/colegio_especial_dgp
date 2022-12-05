@@ -379,7 +379,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
               visualizarTareaLista("cancelada")
               ],
 
-              if(tareasSinFinalizar.length == 0 && tareasCompletadas.length != 0 && tareasCanceladas.length != 0)...[
+              if(tareasSinFinalizar.length == 0 && tareasCompletadas.length == 0 && tareasCanceladas.length == 0)...[
                 Text("SIN TAREAS",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
               ]
             ],

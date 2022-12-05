@@ -246,10 +246,11 @@ class CrearTareaState extends State<CrearTarea> {
               ),
 
 
+          /*
           Text(
             "ELIGE UN VIDEOTUTORIAL PARA LA TAREA: ",
             style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
-          ),
+          ),*/
           SizedBox(
             height: 5,
           ),
@@ -259,10 +260,11 @@ class CrearTareaState extends State<CrearTarea> {
                 seleccionarImagen(SeleccionImagen.video);
               }),
 
+          /*
           Text(
             "CREA UN FORMULARIO: ",
             style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
-          ),
+          ),*/
           ElevatedButton(
               child: Text((formularios == [])?'Crea un formulario'.toUpperCase():"Edita el formulario".toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
               onPressed: () async {
@@ -349,15 +351,13 @@ class CrearTareaState extends State<CrearTarea> {
       actualizar();
 
       var nombre = "" + controladorNombre.text;
-      var texto = "" + controladorTexto.text;
-
-      var orden = [];
+      var descripcion = "" + controladorTexto.text;
+      var imagen = null;
 
       var textos = [];
-      if(texto != "")
+      if(textos != "")
         {
-          textos.add(texto);
-          orden.add("T");
+          textos.add(textos);
         }
       var imagenes = [];
       if(fotoTomada != null)
@@ -366,27 +366,25 @@ class CrearTareaState extends State<CrearTarea> {
             {
               if(fotoTomada.startsWith("http"))
                 {
-                  imagenes.add(fotoTomada);
+                  imagen = fotoTomada;
+                  //imagenes.add(fotoTomada);
                 }
             }
           else
             {
-              imagenes.add(File(fotoTomada.path));
+              imagen = File(fotoTomada.path);
             }
-
-          orden.add("I");
         }
 
       var videos = [];
       if(videoTomado != null)
         {
           videos.add(File(videoTomado.path));
-          orden.add("V");
         }
 
 
       Tarea tarea = Tarea();
-      tarea.setTarea(nombre, textos, imagenes, videos, formularios,orden);
+      tarea.setTarea(nombre,descripcion,imagen ,textos, imagenes, videos, formularios);
 
       await Sesion.db.crearTarea(tarea).then((value) {
         creando = false;
@@ -431,41 +429,6 @@ class CrearTareaState extends State<CrearTarea> {
     );
   }
 
-  // Widget para insertar el reproductor de video
-  /*
-  Widget ReproductorVideo(controlador,controladorStream) {
-    return Container(
-        //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-        child: Column(children: [
-      ElevatedButton(
-        onPressed: () {
-          if (controlador.value.isPlaying) {
-            controlador.pause();
-          } else {
-            controlador.play();
-          }
-          controladorStream.add("");
-        },
-        child: AspectRatio(
-            aspectRatio: controlador.value.aspectRatio,
-            child: Column(children:[VideoPlayer(controlador),
-              Icon(
-                controlador.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                size: 20,
-                semanticLabel: controlador.value.isPlaying ? "Pausa" : "Reanudar",
-              ),
-              Container(
-                //duration of video
-                child: Text("Total Duration: " + controlador.value.duration.toString()),
-              ),
-            ]),
-      ),
-
-
-    ]));
-  }
-
-*/
   dialogFormulario() {
     var controlador = TextEditingController();
     var controladorStream = StreamController();
