@@ -17,18 +17,15 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/arasaac.dart';
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
-import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:colegio_especial_dgp/Flutter/reproductor_video.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import "package:image_picker/image_picker.dart";
 import '../Dart/tarea.dart';
-
 
 enum SeleccionImagen { camara, galeria, video }
 
@@ -39,7 +36,6 @@ class CrearTarea extends StatefulWidget {
 
 // Clase para crear tarea
 class CrearTareaState extends State<CrearTarea> {
-
   var controladorVideo;
   var fotoTomada;
   var videoTomado;
@@ -53,20 +49,15 @@ class CrearTareaState extends State<CrearTarea> {
 
   var busqueda = "";
 
-
   ///Cuándo se pasa de página es necesario que todos los controladores de los formularios y de los reproductores de vídeo se destruyan.
   @override
   void dispose() {
     super.dispose();
-    if(controladorVideo != null)
-    controladorVideo.dispose();
+    if (controladorVideo != null) controladorVideo.dispose();
 
-    if(controladorNombre != null)
-    controladorNombre.dispose();
+    if (controladorNombre != null) controladorNombre.dispose();
 
-    if(controladorTexto != null)
-    controladorTexto.dispose();
-
+    if (controladorTexto != null) controladorTexto.dispose();
   }
 
   @override
@@ -80,7 +71,6 @@ class CrearTareaState extends State<CrearTarea> {
 
 
     });*/
-
 
     Sesion.paginaActual = this;
   }
@@ -102,9 +92,7 @@ class CrearTareaState extends State<CrearTarea> {
         print("Hacer un video");
         await capturador
             .pickVideo(
-          source: ImageSource.camera,
-          maxDuration: Duration(seconds: 10)
-        )
+                source: ImageSource.camera, maxDuration: Duration(seconds: 10))
             .then((value) async {
           videoTomado = value;
           controladorVideo =
@@ -126,11 +114,17 @@ class CrearTareaState extends State<CrearTarea> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
-            onPressed: (){Navigator.pop(context);}),
-        title: Center(child: Text('Crea una nueva tarea'.toUpperCase(),textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30)),
-      )),
+          leading: IconButton(
+              icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
+              onPressed: () {
+                Navigator.pop(context);
+              }),
+          title: Center(
+            child: Text('Crea una nueva tarea'.toUpperCase(),
+                textAlign: TextAlign.center,
+                style:
+                    TextStyle(color: GuardadoLocal.colores[2], fontSize: 30)),
+          )),
       body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
           child: Column(
@@ -146,7 +140,6 @@ class CrearTareaState extends State<CrearTarea> {
           )),
     );
   }
-  
 
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
   Widget VistaProfesor() {
@@ -179,13 +172,14 @@ class CrearTareaState extends State<CrearTarea> {
               obscureText: false,
               maxLength: 40,
               decoration: InputDecoration(
-                enabledBorder:  OutlineInputBorder(
-                  borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
-                ),
-                border: OutlineInputBorder(),
-                hintText: 'Título *'.toUpperCase(),
-                hintStyle: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25)
-              ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
+                  ),
+                  border: OutlineInputBorder(),
+                  hintText: 'Título *'.toUpperCase(),
+                  hintStyle:
+                      TextStyle(color: GuardadoLocal.colores[0], fontSize: 25)),
               controller: controladorNombre,
             ),
           ),
@@ -199,37 +193,44 @@ class CrearTareaState extends State<CrearTarea> {
               obscureText: false,
               maxLength: 500,
               decoration: InputDecoration(
-                enabledBorder:  OutlineInputBorder(
-                  borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
-                ),
-                border: OutlineInputBorder(),
-                hintText: 'Descripción *'.toUpperCase(),
-                hintStyle: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25)
-              ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
+                  ),
+                  border: OutlineInputBorder(),
+                  hintText: 'Descripción *'.toUpperCase(),
+                  hintStyle:
+                      TextStyle(color: GuardadoLocal.colores[0], fontSize: 25)),
               controller: controladorTexto,
             ),
           ),
           Text(
             "ELIGE UNA FOTO: *",
-            style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
+            style: TextStyle(
+                fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           SizedBox(
             height: 5,
           ),
           ElevatedButton(
-              child: Text('Haz una foto'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
+              child: Image.asset('assets/camara.png',
+                width: 140,
+                height: 100,),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.camara);
               }),
           Text(
             "ELIGE UN PICTOGRAMA: *",
-            style: TextStyle(fontSize: 25.0, height: 2.0, color:GuardadoLocal.colores[0]),
+            style: TextStyle(
+                fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           SizedBox(
             height: 5,
           ),
           ElevatedButton(
-              child: Text('Pictograma de tu galería'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
+              child: Image.asset('assets/galeria.png',
+                width: 140,
+                height: 100,),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.galeria);
               }),
@@ -237,99 +238,142 @@ class CrearTareaState extends State<CrearTarea> {
             height: 15,
           ),
           ElevatedButton(
-              child: Text('Pictograma desde la web de ARASAAC'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
+              child: Image.asset('assets/logo-arasaac.png',
+                width: 140,
+                height: 100,),
               onPressed: () async {
-                    fotoTomada =  await buscadorArasaac(context: context);
-                    actualizar();
-            }
-
-              ),
-
-
-          /*
+                fotoTomada = await buscadorArasaac(context: context);
+                actualizar();
+              }),
           Text(
-            "ELIGE UN VIDEOTUTORIAL PARA LA TAREA: ",
-            style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
-          ),*/
+            "HAZ UN VIDEOTUTORIAL : ",
+            style: TextStyle(
+                fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
+          ),
           SizedBox(
-            height: 5,
+            height: 10,
           ),
           ElevatedButton(
-              child: Text('Haz un videotutorial'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
+              child: Image.asset('assets/vieja-camara.png',
+                width: 140,
+                height: 100,),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.video);
               }),
-
-          /*
-          Text(
+          SizedBox(
+            height: 15,
+          ),
+          /*Text(
             "CREA UN FORMULARIO: ",
             style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),*/
           ElevatedButton(
-              child: Text((formularios == [])?'Crea un formulario'.toUpperCase():"Edita el formulario".toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
-              onPressed: () async {
-                  dialogFormulario();
-              }
+              child: Column(children: [
+                Text(
+                    (formularios == [])
+                        ? 'Crea un formulario'.toUpperCase()
+                        : "Edita el formulario".toUpperCase(),
+                    style: TextStyle(
+                        color: GuardadoLocal.colores[2], fontSize: 25)),
+                Image.asset('assets/formulario.png',
+                  width: 140,
+                  height: 100,),
+              ]),
 
-          ),
+              onPressed: () async {
+                dialogFormulario();
+              }),
           SizedBox(
             height: 20,
           ),
           Container(
-            decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[0])),
+            decoration: BoxDecoration(
+                border: Border.all(width: 2, color: GuardadoLocal.colores[0])),
             height: 150,
             width: 210,
             child: fotoTomada == null
-                ? Center(child: Text('Ninguna foto tomada ****'.toUpperCase(),textAlign: TextAlign.center,style: TextStyle(fontSize: 25),))
-                : Stack(children: [
-              Center(child: fotoTomada is String? Image.network(fotoTomada): Image.file(File(fotoTomada.path)) ),
-              Container(child:ElevatedButton(onPressed: (){fotoTomada = null; actualizar();}, child: Icon(Icons.remove,color: GuardadoLocal.colores[0],)),
-                alignment: Alignment.topLeft,)
-
-            ],),
+                ? Center(
+                    child: Text(
+                    'Ninguna foto tomada ****'.toUpperCase(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 25),
+                  ))
+                : Stack(
+                    children: [
+                      Center(
+                          child: fotoTomada is String
+                              ? Image.network(fotoTomada)
+                              : Image.file(File(fotoTomada.path))),
+                      Container(
+                        child: ElevatedButton(
+                            onPressed: () {
+                              fotoTomada = null;
+                              actualizar();
+                            },
+                            child: Icon(
+                              Icons.remove,
+                              color: GuardadoLocal.colores[0],
+                            )),
+                        alignment: Alignment.topLeft,
+                      )
+                    ],
+                  ),
           ),
           SizedBox(
             height: 10,
           ),
           Container(
-            decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[0])),
+            decoration: BoxDecoration(
+                border: Border.all(width: 2, color: GuardadoLocal.colores[0])),
             margin: EdgeInsets.only(right: 70, left: 70, top: 20, bottom: 20),
             child: videoTomado == null
                 ? Container(
-                    child: Text('Ningun video tomado ****'.toUpperCase(), style: TextStyle(fontSize: 25),),
+                    child: Text(
+                      'Ningun video tomado ****'.toUpperCase(),
+                      style: TextStyle(fontSize: 25),
+                    ),
                     padding: EdgeInsets.only(
                         top: 100, bottom: 100, right: 10, left: 10),
                   )
-                : Stack(
-                    children: [
-                      Container(child:ElevatedButton(
-                      onPressed: (){
-                        ventanaVideo(controladorVideo,context);
-                      },
-                      child:Text("ver video".toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),)
-
+                : Stack(children: [
+                    Container(
+                      child: ElevatedButton(
+                          onPressed: () {
+                            ventanaVideo(controladorVideo, context);
+                          },
+                          child: Text(
+                            "ver video".toUpperCase(),
+                            style: TextStyle(
+                                color: GuardadoLocal.colores[2], fontSize: 25),
+                          )),
+                      alignment: Alignment.center,
                     ),
-                        alignment: Alignment.center,
-                      ),
-                      Container(child:ElevatedButton(onPressed: (){videoTomado = null; actualizar();}, child: Icon(Icons.remove,color: GuardadoLocal.colores[0],)),
-                      alignment: Alignment.centerLeft,)
-
-                    ]
+                    Container(
+                      child: ElevatedButton(
+                          onPressed: () {
+                            videoTomado = null;
+                            actualizar();
+                          },
+                          child: Icon(
+                            Icons.remove,
+                            color: GuardadoLocal.colores[0],
+                          )),
+                      alignment: Alignment.centerLeft,
+                    )
+                  ]
                     /*padding: EdgeInsets.only(
                         top: 10, bottom: 10, right: 10, left: 10),*/
-                  ),
+                    ),
           ),
           Visibility(
               visible: !creando,
               child: Container(
                   margin: EdgeInsets.only(top: 0),
                   child: ElevatedButton(
-                    child: Text(
-                      "Crear nueva tarea".toUpperCase(),
-                      style: TextStyle(
-                        color: GuardadoLocal.colores[2],
-                          fontSize: 25
-                      ),
+                    child: Image.asset(
+                      'assets/disquete.png',
+                      width: 140,
+                      height: 100,
                     ),
                     onPressed: () {
                       crearTarea();
@@ -355,36 +399,29 @@ class CrearTareaState extends State<CrearTarea> {
       var imagen = null;
 
       var textos = [];
-      if(textos != "")
-        {
-          textos.add(textos);
-        }
+      if (textos != "") {
+        textos.add(textos);
+      }
       var imagenes = [];
-      if(fotoTomada != null)
-        {
-          if(fotoTomada is String)
-            {
-              if(fotoTomada.startsWith("http"))
-                {
-                  imagen = fotoTomada;
-                  //imagenes.add(fotoTomada);
-                }
-            }
-          else
-            {
-              imagen = File(fotoTomada.path);
-            }
+      if (fotoTomada != null) {
+        if (fotoTomada is String) {
+          if (fotoTomada.startsWith("http")) {
+            imagen = fotoTomada;
+            //imagenes.add(fotoTomada);
+          }
+        } else {
+          imagen = File(fotoTomada.path);
         }
+      }
 
       var videos = [];
-      if(videoTomado != null)
-        {
-          videos.add(File(videoTomado.path));
-        }
-
+      if (videoTomado != null) {
+        videos.add(File(videoTomado.path));
+      }
 
       Tarea tarea = Tarea();
-      tarea.setTarea(nombre,descripcion,imagen ,textos, imagenes, videos, formularios);
+      tarea.setTarea(
+          nombre, descripcion, imagen, textos, imagenes, videos, formularios);
 
       await Sesion.db.crearTarea(tarea).then((value) {
         creando = false;
@@ -395,22 +432,25 @@ class CrearTareaState extends State<CrearTarea> {
           fotoTomada = null;
           videoTomado = null;
 
-          displayMensajeValidacion("Tarea creada correctamente\nPuedes volver a crear otra tarea:".toUpperCase(),false);
+          displayMensajeValidacion(
+              "Tarea creada correctamente\nPuedes volver a crear otra tarea:"
+                  .toUpperCase(),
+              false);
         } else {
-          displayMensajeValidacion("Fallo al crear tarea, inténtelo de nuevo".toUpperCase(),true);
+          displayMensajeValidacion(
+              "Fallo al crear tarea, inténtelo de nuevo".toUpperCase(), true);
         }
 
         actualizar();
       });
     } else {
-      displayMensajeValidacion("Es necesario rellenar todos los campos".toUpperCase(),true);
+      displayMensajeValidacion(
+          "Es necesario rellenar todos los campos".toUpperCase(), true);
       actualizar();
     }
   }
 
-  displayMensajeValidacion(mensajeDeValidacion,error)
-  {
-
+  displayMensajeValidacion(mensajeDeValidacion, error) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
           behavior: SnackBarBehavior.floating,
@@ -420,11 +460,14 @@ class CrearTareaState extends State<CrearTarea> {
           content: Container(
             padding: const EdgeInsets.all(16),
             height: 90,
-            decoration:  BoxDecoration(
-              color: Color(error?0xFFC72C41:0xFF6BFF67),
+            decoration: BoxDecoration(
+              color: Color(error ? 0xFFC72C41 : 0xFF6BFF67),
               borderRadius: BorderRadius.all(Radius.circular(29)),
             ),
-            child: Center(child:Text(mensajeDeValidacion, style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25))),
+            child: Center(
+                child: Text(mensajeDeValidacion,
+                    style: TextStyle(
+                        color: GuardadoLocal.colores[2], fontSize: 25))),
           )),
     );
   }
@@ -444,246 +487,261 @@ class CrearTareaState extends State<CrearTarea> {
                   backgroundColor: GuardadoLocal.colores[1],
                   child: SingleChildScrollView(
                       child: Column(children: [
-                        Text(
-                          "\nCrea un nuevo formulario".toUpperCase(),
-                          style: TextStyle(fontSize: 40),
-                        ),
+                    Text(
+                      "\nCrea un nuevo formulario".toUpperCase(),
+                      style: TextStyle(fontSize: 40),
+                    ),
 
-                        for (int i = 0;
+                    for (int i = 0;
                         i < formularios.length;
                         i = i + 2 + (formularios[i + 1] as int) * 3)
-                          Container(
-                            margin: EdgeInsets.only(top: 15, bottom: 10),
-                            child: Column(children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Flexible(
-                                      flex: 90,
-                                      child: Container(
-                                        margin: EdgeInsets.only(bottom: 10),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(width: 1,color: GuardadoLocal.colores[0])),
-                                        child: TextButton(
-                                            child: Text(
-                                              formularios[i],
-                                              style: TextStyle(
-                                                  fontSize: 40,
-                                                  color: GuardadoLocal.colores[0]),
-                                            ),
-                                            onPressed: () async {
-                                              await dialogNombre(formularios[i])
-                                                  .then((e) {
-                                                if (e != null) {
-                                                  formularios[i] = e;
-                                                  controladorStream.add("");
-                                                }
-                                              });
-                                            }),
-                                      )),
-                                  Flexible(
-                                    flex: 30,
-                                    child: Container(
-                                        margin: EdgeInsets.only(bottom: 10),
-                                        child: FloatingActionButton(
-                                            heroTag: "boton" + i.toString(),
-                                            onPressed: () {
-                                              formularios.removeRange(
-                                                  i,
-                                                  i +
-                                                      2 +
-                                                      (formularios[i + 1] as int) *
-                                                          3);
+                      Container(
+                        margin: EdgeInsets.only(top: 15, bottom: 10),
+                        child: Column(children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Flexible(
+                                  flex: 90,
+                                  child: Container(
+                                    margin: EdgeInsets.only(bottom: 10),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 1,
+                                            color: GuardadoLocal.colores[0])),
+                                    child: TextButton(
+                                        child: Text(
+                                          formularios[i],
+                                          style: TextStyle(
+                                              fontSize: 40,
+                                              color: GuardadoLocal.colores[0]),
+                                        ),
+                                        onPressed: () async {
+                                          await dialogNombre(formularios[i])
+                                              .then((e) {
+                                            if (e != null) {
+                                              formularios[i] = e;
                                               controladorStream.add("");
-                                            },
-                                            child: Icon(Icons.remove,color: GuardadoLocal.colores[2],))),
-                                  ),
-                                  Flexible(
-                                    flex: 30,
-                                    child: Container(
-                                        margin: EdgeInsets.only(bottom: 10),
-                                        child: FloatingActionButton(
-                                            heroTag: "boton" + i.toString(),
-                                            onPressed: () {
-                                              for (int m = i;
+                                            }
+                                          });
+                                        }),
+                                  )),
+                              Flexible(
+                                flex: 30,
+                                child: Container(
+                                    margin: EdgeInsets.only(bottom: 10),
+                                    child: FloatingActionButton(
+                                        heroTag: "boton" + i.toString(),
+                                        onPressed: () {
+                                          formularios.removeRange(
+                                              i,
+                                              i +
+                                                  2 +
+                                                  (formularios[i + 1] as int) *
+                                                      3);
+                                          controladorStream.add("");
+                                        },
+                                        child: Icon(
+                                          Icons.remove,
+                                          color: GuardadoLocal.colores[2],
+                                        ))),
+                              ),
+                              Flexible(
+                                flex: 30,
+                                child: Container(
+                                    margin: EdgeInsets.only(bottom: 10),
+                                    child: FloatingActionButton(
+                                        heroTag: "boton" + i.toString(),
+                                        onPressed: () {
+                                          for (int m = i;
                                               m <
                                                   i +
                                                       2 +
                                                       formularios[i + 1] * 3;
                                               m++)
-                                                formularios.add(formularios[m]);
+                                            formularios.add(formularios[m]);
 
-                                              controladorStream.add("");
-                                            },
-                                            child: Icon(Icons.queue_outlined,color: GuardadoLocal.colores[2],))),
-                                  ),
-                                ],
+                                          controladorStream.add("");
+                                        },
+                                        child: Icon(
+                                          Icons.queue_outlined,
+                                          color: GuardadoLocal.colores[2],
+                                        ))),
                               ),
-
-                              for (int j = i + 2;
-                              j < i + 2 + (formularios[i + 1] as int) * 3;
-                              j = j + 3)
-                                Container(
-                                    decoration:
-                                    BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[0])),
-                                    margin: EdgeInsets.all(10),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Flexible(
-                                          child: Container(
-                                              margin: EdgeInsets.only(right: 20),
-                                              child: TextButton(
-                                                  child: Text(
-                                                      formularios[j].toUpperCase(),
-                                                      style: TextStyle(
-                                                          fontSize: 30,
-                                                          color: GuardadoLocal
-                                                              .colores[0])),
-                                                  onPressed: () async {
-                                                    await dialogNombre(
-                                                        formularios[j])
-                                                        .then((e) {
-                                                      if (e != null) {
-                                                        formularios[j] = e;
-                                                        controladorStream.add("");
-                                                      }
-                                                    });
-                                                  })),
-                                        ),
-                                        if (formularios[j + 1] != "") ...[
-                                          Flexible(
-                                            child: Container(
-                                                margin: EdgeInsets.only(
-                                                    right: 20,
-                                                    left: 20,
-                                                    top: 10,
-                                                    bottom: 10),
-                                                child: Image.network(
-                                                  formularios[j + 1],
-                                                  width: 100,
-                                                  height: 100,
-                                                  fit: BoxFit.fill,
-                                                )),
-                                          ),
-                                        ],
-                                        Flexible(
-                                          child: Container(
-                                              margin: EdgeInsets.only(left: 30),
-                                              child: FloatingActionButton(
-                                                  heroTag: "boton" +
-                                                      i.toString() +
-                                                      j.toString(),
-                                                  onPressed: () {
-                                                    print(
-                                                        formularios[j].toString() +
-                                                            " " +
-                                                            formularios[j + 1]
-                                                                .toString() +
-                                                            "  " +
-                                                            formularios[j + 2]
-                                                                .toString());
-                                                    formularios.removeRange(
-                                                        j, j + 3);
-                                                    formularios[i + 1]--;
-
-                                                    controladorStream.add("");
-                                                  },
-                                                  child: Icon(Icons.remove,color: GuardadoLocal.colores[2],))),
-                                        ),
-                                      ],
-                                    )),
-
-                              /// ELEMENTO NUEVO
-                              Container(
-                                  margin: EdgeInsets.only(top: 15),
-                                  child: ElevatedButton(
-                                      onPressed: () async {
-                                        await dialogElemento(i);
-                                        controladorStream.add("");
-                                      },
-                                      child: Text(
-                                        "Crea un elemento".toUpperCase(),
-                                        style: TextStyle(
-                                            fontSize: 25,
-                                            color: GuardadoLocal.colores[2]),
-                                      ))),
-                            ]),
+                            ],
                           ),
 
-                        ///
-
-                        Text(
-                          "\n Crea una agrupación".toUpperCase(),
-                          style: TextStyle(
-                              fontSize: 25, color: GuardadoLocal.colores[0]),
-                        ),
-
-                        Container(
-                            margin: EdgeInsets.only(top: 15, bottom: 10),
-                            child: FloatingActionButton(
-                                onPressed: () async {
-                                  await dialogNombre("").then((e) {
-                                    if (e != null) {
-                                      formularios.add(e);
-                                      formularios.add(0);
-                                      controladorStream.add("");
-                                    }
-                                  });
-                                },
-                                child: Icon(Icons.add,color: GuardadoLocal.colores[2],))),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
+                          for (int j = i + 2;
+                              j < i + 2 + (formularios[i + 1] as int) * 3;
+                              j = j + 3)
                             Container(
-                                margin: EdgeInsets.all(0),
-                                child: ElevatedButton(
-                                    onPressed: () {
-                                      formularios = [];
-                                      Navigator.pop(context);
-                                    },
-                                    child: Column(children: [
-                                      Text(
-                                        '\nCancelar'.toUpperCase(),
-                                        style: TextStyle(
-                                            fontSize: 25,
-                                            color: GuardadoLocal.colores[2]),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2,
+                                        color: GuardadoLocal.colores[0])),
+                                margin: EdgeInsets.all(10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Flexible(
+                                      child: Container(
+                                          margin: EdgeInsets.only(right: 20),
+                                          child: TextButton(
+                                              child: Text(
+                                                  formularios[j].toUpperCase(),
+                                                  style: TextStyle(
+                                                      fontSize: 30,
+                                                      color: GuardadoLocal
+                                                          .colores[0])),
+                                              onPressed: () async {
+                                                await dialogNombre(
+                                                        formularios[j])
+                                                    .then((e) {
+                                                  if (e != null) {
+                                                    formularios[j] = e;
+                                                    controladorStream.add("");
+                                                  }
+                                                });
+                                              })),
+                                    ),
+                                    if (formularios[j + 1] != "") ...[
+                                      Flexible(
+                                        child: Container(
+                                            margin: EdgeInsets.only(
+                                                right: 20,
+                                                left: 20,
+                                                top: 10,
+                                                bottom: 10),
+                                            child: Image.network(
+                                              formularios[j + 1],
+                                              width: 100,
+                                              height: 100,
+                                              fit: BoxFit.fill,
+                                            )),
                                       ),
-                                      Image.asset(
-                                        "assets/cerrar.png",
-                                        height: 100,
-                                        width: 100,
-                                      )
-                                    ]))),
-                            Container(
-                              margin: EdgeInsets.all(0),
-                              child: ElevatedButton(
-                                  onPressed: () {
-                                    actualizar();
+                                    ],
+                                    Flexible(
+                                      child: Container(
+                                          margin: EdgeInsets.only(left: 30),
+                                          child: FloatingActionButton(
+                                              heroTag: "boton" +
+                                                  i.toString() +
+                                                  j.toString(),
+                                              onPressed: () {
+                                                print(
+                                                    formularios[j].toString() +
+                                                        " " +
+                                                        formularios[j + 1]
+                                                            .toString() +
+                                                        "  " +
+                                                        formularios[j + 2]
+                                                            .toString());
+                                                formularios.removeRange(
+                                                    j, j + 3);
+                                                formularios[i + 1]--;
 
-                                    Navigator.pop(context);
+                                                controladorStream.add("");
+                                              },
+                                              child: Icon(
+                                                Icons.remove,
+                                                color: GuardadoLocal.colores[2],
+                                              ))),
+                                    ),
+                                  ],
+                                )),
+
+                          /// ELEMENTO NUEVO
+                          Container(
+                              margin: EdgeInsets.only(top: 15),
+                              child: ElevatedButton(
+                                  onPressed: () async {
+                                    await dialogElemento(i);
+                                    controladorStream.add("");
                                   },
-                                  child: Column(children: [
-                                    Text('\n Crear'.toUpperCase(),
-                                        style: TextStyle(
-                                            fontSize: 25,
-                                            color: GuardadoLocal.colores[2])),
-                                    Image.asset(
-                                      "assets/enviarunemail.png",
-                                      height: 100,
-                                      width: 100,
-                                    )
-                                  ])),
-                            )
-                          ],
+                                  child: Text(
+                                    "Crea un elemento".toUpperCase(),
+                                    style: TextStyle(
+                                        fontSize: 25,
+                                        color: GuardadoLocal.colores[2]),
+                                  ))),
+                        ]),
+                      ),
+
+                    ///
+
+                    Text(
+                      "\n Crea una agrupación".toUpperCase(),
+                      style: TextStyle(
+                          fontSize: 25, color: GuardadoLocal.colores[0]),
+                    ),
+
+                    Container(
+                        margin: EdgeInsets.only(top: 15, bottom: 10),
+                        child: FloatingActionButton(
+                            onPressed: () async {
+                              await dialogNombre("").then((e) {
+                                if (e != null) {
+                                  formularios.add(e);
+                                  formularios.add(0);
+                                  controladorStream.add("");
+                                }
+                              });
+                            },
+                            child: Icon(
+                              Icons.add,
+                              color: GuardadoLocal.colores[2],
+                            ))),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                            margin: EdgeInsets.all(0),
+                            child: ElevatedButton(
+                                onPressed: () {
+                                  formularios = [];
+                                  Navigator.pop(context);
+                                },
+                                child: Column(children: [
+                                  Text(
+                                    '\nCancelar'.toUpperCase(),
+                                    style: TextStyle(
+                                        fontSize: 25,
+                                        color: GuardadoLocal.colores[2]),
+                                  ),
+                                  Image.asset(
+                                    "assets/cerrar.png",
+                                    height: 100,
+                                    width: 100,
+                                  )
+                                ]))),
+                        Container(
+                          margin: EdgeInsets.all(0),
+                          child: ElevatedButton(
+                              onPressed: () {
+                                actualizar();
+
+                                Navigator.pop(context);
+                              },
+                              child: Column(children: [
+                                Text('\n Crear'.toUpperCase(),
+                                    style: TextStyle(
+                                        fontSize: 25,
+                                        color: GuardadoLocal.colores[2])),
+                                Image.asset(
+                                  "assets/enviarunemail.png",
+                                  height: 100,
+                                  width: 100,
+                                )
+                              ])),
                         )
-                      ])),
+                      ],
+                    )
+                  ])),
                 );
               });
         });
   }
-
 
   dialogNombre(texto) {
     var controlador = TextEditingController();
@@ -698,11 +756,13 @@ class CrearTareaState extends State<CrearTarea> {
                   TextField(
                     controller: controlador,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 35, color: GuardadoLocal.colores[0]),
+                    style: TextStyle(
+                        fontSize: 35, color: GuardadoLocal.colores[0]),
                     decoration: InputDecoration(
-                        enabledBorder:  OutlineInputBorder(
-                          borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
-                        )),
+                        enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                          color: GuardadoLocal.colores[0], width: 0.0),
+                    )),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -732,7 +792,8 @@ class CrearTareaState extends State<CrearTarea> {
                             child: Text(
                               'Ok'.toUpperCase(),
                               style: TextStyle(
-                                  fontSize: 40, color: GuardadoLocal.colores[2]),
+                                  fontSize: 40,
+                                  color: GuardadoLocal.colores[2]),
                             ),
                           ))
                     ],
@@ -755,7 +816,7 @@ class CrearTareaState extends State<CrearTarea> {
               initialData: "",
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 return Dialog(
-                  backgroundColor: GuardadoLocal.colores[1],
+                    backgroundColor: GuardadoLocal.colores[1],
                     child: Column(children: [
                       Flexible(
                         child: TextField(
@@ -764,11 +825,14 @@ class CrearTareaState extends State<CrearTarea> {
                               fontSize: 30, color: GuardadoLocal.colores[0]),
                           controller: controlador,
                           decoration: InputDecoration(
-                              enabledBorder:  OutlineInputBorder(
-                                borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
-                            ),
-                          hintText: "Nombre Elemento:".toUpperCase(),
-                          hintStyle: TextStyle(color: GuardadoLocal.colores[0])),
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: GuardadoLocal.colores[0],
+                                    width: 0.0),
+                              ),
+                              hintText: "Nombre Elemento:".toUpperCase(),
+                              hintStyle:
+                                  TextStyle(color: GuardadoLocal.colores[0])),
                         ),
                       ),
                       Flexible(
@@ -784,7 +848,7 @@ class CrearTareaState extends State<CrearTarea> {
                                           color: GuardadoLocal.colores[2])),
                                   onPressed: () async {
                                     imagenEscogida =
-                                    await buscadorArasaac(context: context);
+                                        await buscadorArasaac(context: context);
                                     controladorStream.add("");
                                   }))),
                       if (imagenEscogida != "") ...[
@@ -794,17 +858,19 @@ class CrearTareaState extends State<CrearTarea> {
                       ] else ...[
                         Flexible(
                             child: Container(
-                              width: 150,
-                              height: 150,
-                              margin: EdgeInsets.all(10),
-                              decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[0])),
-                              child: Center(
-                                  child: Text("NADA ESCOGIDO**",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 30,
-                                          color: GuardadoLocal.colores[0]))),
-                            ))
+                          width: 150,
+                          height: 150,
+                          margin: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  width: 2, color: GuardadoLocal.colores[0])),
+                          child: Center(
+                              child: Text("NADA ESCOGIDO**",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 30,
+                                      color: GuardadoLocal.colores[0]))),
+                        ))
                       ],
                       Container(
                           margin: EdgeInsets.only(top: 30),
@@ -813,7 +879,8 @@ class CrearTareaState extends State<CrearTarea> {
                                 if (imagenEscogida == null) {
                                   imagenEscogida = "";
                                 }
-                                formularios.insert(i + 2 + formularios[i + 1] * 3,
+                                formularios.insert(
+                                    i + 2 + formularios[i + 1] * 3,
                                     controlador.text);
                                 formularios.insert(
                                     i + 2 + formularios[i + 1] * 3 + 1,
@@ -825,7 +892,10 @@ class CrearTareaState extends State<CrearTarea> {
                                 controlador.text = "";
                                 Navigator.pop(context);
                               },
-                              child: Icon(Icons.add,color: GuardadoLocal.colores[2],))),
+                              child: Icon(
+                                Icons.add,
+                                color: GuardadoLocal.colores[2],
+                              ))),
                     ]));
               });
         });
