@@ -91,7 +91,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
           title: Center(child: Text('${Sesion.seleccion.nombre.toUpperCase()}'
               '',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
         )),
-        body: Container(
+        body: SingleChildScrollView(child: Container(
             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
             alignment: Alignment.center,
             child: Column(
@@ -101,7 +101,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
               ],
             ),
       ),
-    );
+    ));
   }
 
   // Carga el perfil del alumno
@@ -193,11 +193,11 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
       }
     }
 
-    return Expanded(
+    return
 
         //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-        child: SingleChildScrollView(
-      child: Column(
+
+      Column(
         children: [
           if (usuarioPerfil != null) ...[
             SizedBox(
@@ -334,10 +334,10 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                     height: 10,
                   ),
                   ElevatedButton(
-                      child: Text(
-                        'HAZ UNA FOTO DESDE LA CAMARA',
-                        style: TextStyle(
-                            color: GuardadoLocal.colores[2], fontSize: 25),
+                      child: Image.asset(
+                        "assets/camara.png",
+                        width: 140,
+                        height: 100,
                       ),
                       onPressed: () {
                         seleccionarImagen(SeleccionImagen.camara);
@@ -346,9 +346,10 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                     height: 10,
                   ),
                   ElevatedButton(
-                      child: Text('ELIGE FOTO DE LA GALERIA',
-                          style: TextStyle(
-                              color: GuardadoLocal.colores[2], fontSize: 25)),
+                      child: Image.asset('assets/galeria.png',
+                        width: 140,
+                        height: 100,
+                      ),
                       onPressed: () {
                         seleccionarImagen(SeleccionImagen.galeria);
                       }),
@@ -366,7 +367,13 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
               Sesion.paginaActual = this;
               actualizar();
 
-            }, child: Icon(Icons.map_outlined)),
+            }, child: Image.asset('assets/mapa.png',
+
+                width: 140,
+                height: 100,
+              )),
+
+            SizedBox(height: 10,),
 
 
             /// se muestran las tareas del alumno
@@ -426,8 +433,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
               visible: registrando, child: new CircularProgressIndicator()),
           SizedBox(height: 10,)
         ],
-      ),
-    ));
+      );
   }
 
   cargarUsuario() async // EN sesion seleccion estara el id del usuario que se ha elegido

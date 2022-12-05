@@ -79,7 +79,7 @@ class PerfilProfesorState extends State<PerfilProfesor> {
           style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
         )),
       ),
-      body: Container(
+      body: SingleChildScrollView(child: Container(
           padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
           alignment: Alignment.center,
           child: Column(
@@ -87,7 +87,7 @@ class PerfilProfesorState extends State<PerfilProfesor> {
               cargando(),
             ],
           )),
-    );
+    ));
   }
 
   // Carga el perfil del profesor
@@ -234,13 +234,19 @@ class PerfilProfesorState extends State<PerfilProfesor> {
                     actualizar();
                   });
                 },
-                child: Text(
-                  (fechaElegida == null)
-                      ? fechaAntigua
-                      : DateFormat('d/M/y').format(fechaElegida),
-                  style:
-                      TextStyle(color: GuardadoLocal.colores[2], fontSize: 25),
-                ),
+                child: Column(children: [
+                  Text(
+                    (fechaElegida == null)
+                        ? fechaAntigua
+                        : DateFormat('d/M/y').format(fechaElegida),
+                    style:
+                    TextStyle(color: GuardadoLocal.colores[2], fontSize: 25),
+                  ),
+                  Image.asset("assets/calendario.png",
+                    width: 140,
+                    height: 100,),
+                  SizedBox(height: 10,)
+                ]),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: GuardadoLocal.colores[0])),
             SizedBox(
@@ -289,10 +295,10 @@ class PerfilProfesorState extends State<PerfilProfesor> {
                     height: 10,
                   ),
                   ElevatedButton(
-                      child: Text(
-                        'HAZ UNA FOTO DESDE LA CAMARA',
-                        style: TextStyle(
-                            color: GuardadoLocal.colores[2], fontSize: 25),
+                      child: Image.asset(
+                        "assets/camara.png",
+                        width: 140,
+                        height: 100,
                       ),
                       onPressed: () {
                         seleccionarImagen(SeleccionImagen.camara);
@@ -301,9 +307,10 @@ class PerfilProfesorState extends State<PerfilProfesor> {
                     height: 10,
                   ),
                   ElevatedButton(
-                      child: Text('ELIGE FOTO DE LA GALERIA',
-                          style: TextStyle(
-                              color: GuardadoLocal.colores[2], fontSize: 25)),
+                      child: Image.asset('assets/galeria.png',
+                        width: 140,
+                        height: 100,
+                      ),
                       onPressed: () {
                         seleccionarImagen(SeleccionImagen.galeria);
                       }),
@@ -321,12 +328,10 @@ class PerfilProfesorState extends State<PerfilProfesor> {
                     backgroundColor:
                     MaterialStateProperty.all(GuardadoLocal.colores[0]),
                   ),
-                  child: Text(
-                    "EDITAR",
-                    style: TextStyle(
-                        backgroundColor: Colors.transparent,
-                        color: GuardadoLocal.colores[2],
-                        fontSize: 25),
+                  child: Image.asset(
+                    "assets/disquete.png",
+                    width: 140,
+                    height: 100,
                   ),
                   onPressed: () {
                     editarUsuario();
