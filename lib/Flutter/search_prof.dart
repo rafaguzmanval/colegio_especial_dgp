@@ -1,4 +1,3 @@
-import 'package:colegio_especial_dgp/Dart/main.dart';
 import 'package:flutter/material.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Flutter/perfil_profesor.dart';
@@ -26,6 +25,13 @@ class CustomSearchDelegate extends SearchDelegate {
       vez++;
     }
     return [
+      IconButton(
+        onPressed: () {
+          query = '';
+          cargarProfesores();
+        },
+        icon: Icon(Icons.update),
+      ),
       IconButton(
         onPressed: () {
           query = '';
@@ -94,7 +100,7 @@ class CustomSearchDelegate extends SearchDelegate {
                           ),
                         ],
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         var profesores = [];
                         for (int i = 0; i < Sesion.profesores.length; i++) {
                           if (matchQuery.contains(
@@ -103,7 +109,7 @@ class CustomSearchDelegate extends SearchDelegate {
                           }
                         }
                         Sesion.seleccion = profesores[index];
-                        Navigator.push(
+                        await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => PerfilProfesor()));

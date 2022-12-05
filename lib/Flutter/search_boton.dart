@@ -3,8 +3,6 @@ import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Flutter/perfil_boton.dart';
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 
-import 'lista_botones.dart';
-
 class CustomSearchDelegate extends SearchDelegate {
 // Demo list to show querying
   List<String> searchTerms = [];

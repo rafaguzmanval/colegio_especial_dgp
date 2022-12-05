@@ -91,7 +91,7 @@ class CustomSearchDelegate extends SearchDelegate {
                         ),
                       ],
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       var alumnos = [];
                       for(int i=0;i<Sesion.alumnos.length;i++){
                         if(matchQuery.contains(Sesion.alumnos[i].nombre.toString())){
@@ -99,7 +99,7 @@ class CustomSearchDelegate extends SearchDelegate {
                         }
                       }
                       Sesion.seleccion = alumnos[index];
-                        Navigator.push(
+                        await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => PerfilAlumno()));
@@ -185,7 +185,7 @@ class CustomSearchDelegate extends SearchDelegate {
                           ),
                         ],
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         var alumnos = [];
                         for(int i=0;i<Sesion.alumnos.length;i++){
                           if(matchQuery.contains(Sesion.alumnos[i].nombre.toString())){
@@ -193,7 +193,7 @@ class CustomSearchDelegate extends SearchDelegate {
                           }
                         }
                         Sesion.seleccion = alumnos[index];
-                        Navigator.push(
+                        await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => PerfilAlumno()));

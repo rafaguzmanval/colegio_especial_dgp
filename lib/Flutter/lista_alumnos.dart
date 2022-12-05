@@ -59,7 +59,6 @@ class ListaAlumnosState extends State<ListaAlumnos> {
                 Navigator.pop(context);
               }),
           actions: [
-
             IconButton(
               onPressed: () async{
                 await showSearch(context: context, delegate: CustomSearchDelegate(),);

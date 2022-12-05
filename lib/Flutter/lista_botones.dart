@@ -12,14 +12,10 @@
 *   perfil_profesor.dart : Para acceder al perfil del profeosr
 * */
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Flutter/perfil_boton.dart';
-import 'package:colegio_especial_dgp/Flutter/perfil_profesor.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
-import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
-import 'package:colegio_especial_dgp/Flutter/perfil_tarea.dart';
 import 'package:flutter/material.dart';
 import 'package:colegio_especial_dgp/Flutter/search_boton.dart';
 
