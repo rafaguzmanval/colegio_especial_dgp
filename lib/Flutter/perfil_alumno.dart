@@ -325,7 +325,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
               ),
             ),
             SizedBox(height: 15),
-            Column(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -343,7 +343,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                         seleccionarImagen(SeleccionImagen.camara);
                       }),
                   SizedBox(
-                    height: 10,
+                    width: 20,
                   ),
                   ElevatedButton(
                       child: Image.asset('assets/galeria.png',
@@ -415,7 +415,10 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
           ),
           Visibility(
               visible: !registrando,
-              child: TextButton(
+              child: Container(
+                  alignment: Alignment.bottomRight,
+                  margin: EdgeInsets.only(right: 10),
+                  child:TextButton(
                 style: ButtonStyle(
                   backgroundColor:
                   MaterialStateProperty.all(GuardadoLocal.colores[0]),
@@ -428,7 +431,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                 onPressed: () {
                   editarUsuario();
                 },
-              )),
+              ))),
           Visibility(
               visible: registrando, child: new CircularProgressIndicator()),
           SizedBox(height: 10,)
