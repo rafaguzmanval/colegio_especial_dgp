@@ -307,7 +307,7 @@ class CrearTareaState extends State<CrearTarea> {
                     style: TextStyle(
                         color: GuardadoLocal.colores[2], fontSize: 25)),
                 Image.asset(
-                  'assets/formulario.png',
+                  'assets/lista.png',
                   width: 140,
                   height: 100,
                 ),

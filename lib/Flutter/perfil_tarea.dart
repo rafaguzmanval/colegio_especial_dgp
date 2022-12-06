@@ -214,73 +214,86 @@ class PerfilTareaState extends State<PerfilTarea> {
             ),
           ),
           Text(
-            "ELIGE UNA FOTO PARA LA TAREA: *",
+            "ELIGE UNA FOTO O PICTOGRAMA: *",
             style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           SizedBox(
             height: 10,
           ),
-          ElevatedButton(
-              child: Text(
-                'Haz una foto'.toUpperCase(),
-                style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[2]),
-              ),
-              onPressed: () {
-                seleccionarImagen(SeleccionImagen.camara);
-              }),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Flexible(
+              child: ElevatedButton(
+                  child: Image.asset(
+                    'assets/camara.png',
+                    width: 140,
+                    height: 100,
+                  ),
+                  onPressed: () {
+                    seleccionarImagen(SeleccionImagen.camara);
+                  }),
+            ),
+            Container(
+                margin: EdgeInsets.only(right: 20, left: 20),
+                child: Flexible(
+                  child: ElevatedButton(
+                      child: Image.asset(
+                        'assets/galeria.png',
+                        width: 140,
+                        height: 100,
+                      ),
+                      onPressed: () {
+                        seleccionarImagen(SeleccionImagen.galeria);
+                      }),
+                )),
+            Flexible(
+              child: ElevatedButton(
+                  child: Image.asset(
+                    'assets/logo-arasaac.png',
+                    width: 140,
+                    height: 100,
+                  ),
+                  onPressed: () async {
+                    imagen = await buscadorArasaac(context: context);
+                    actualizar();
+                  }),
+            )
+          ]),
           Text(
-            "ELIGE UN PICTOGRAMA PARA LA TAREA: *",
+            "HAZ UN VIDEOTUTORIAL: ",
             style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
           SizedBox(
             height: 10,
           ),
           ElevatedButton(
-              child: Text(
-                'Elige un pictograma de tu galería'.toUpperCase(),
-                style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[2]),
-              ),
-              onPressed: () {
-                seleccionarImagen(SeleccionImagen.galeria);
-              }),
-          SizedBox(
-            height: 20,
-          ),
-          ElevatedButton(
-              child: Text(
-                'Elige un pictograma desde la web de ARASAAC'.toUpperCase(),
-                style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[2]),
-              ),
-              onPressed: () async {
-                imagen = await buscadorArasaac(context: context);
-                actualizar();
-              }),
-          Text(
-            "ELIGE UN VIDEOTUTORIAL PARA LA TAREA: ",
-            style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          ElevatedButton(
-              child: Text(
-                'Haz un videOtutorial'.toUpperCase(),
-                style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[2]),
+              child: Image.asset(
+                'assets/vieja-camara.png',
+                width: 140,
+                height: 100,
               ),
               onPressed: () {
                 seleccionarImagen(SeleccionImagen.video);
               }),
-          Text(
-            "CREA UN FORMULARIO: ",
-            style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
+          SizedBox(
+            height: 15,
           ),
           ElevatedButton(
-              child: Text(
-                (formularios.isEmpty)
-                    ? 'Crea un formulario'.toUpperCase()
-                    : "Edita el formulario".toUpperCase(),
-                style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[2]),
-              ),
+              child: Column(children: [
+                Text(
+                    (formularios.isEmpty)
+                        ? 'Crea un formulario'.toUpperCase()
+                        : "Edita el formulario".toUpperCase(),
+                    style: TextStyle(
+                        color: GuardadoLocal.colores[2], fontSize: 25)),
+                Image.asset(
+                  'assets/formulario.png',
+                  width: 140,
+                  height: 100,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+              ]),
               onPressed: () async {
                 dialogFormulario();
               }),
@@ -295,7 +308,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                         : "Edita los pasos".toUpperCase(),
                     style: TextStyle(
                         color: GuardadoLocal.colores[2], fontSize: 25)),
-                Image.asset('assets/formulario.png',
+                Image.asset('assets/lista.png',
                   width: 140,
                   height: 100,),
               ]),
@@ -303,6 +316,9 @@ class PerfilTareaState extends State<PerfilTarea> {
               onPressed: () async {
                 dialogPasos();
               }),
+          SizedBox(
+            height: 20,
+          ),
           Container(
             decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[0])),
             height: 150,
@@ -369,15 +385,14 @@ class PerfilTareaState extends State<PerfilTarea> {
           Visibility(
               visible: !creando,
               child: Container(
+                alignment: Alignment.bottomRight,
                   margin: EdgeInsets.only(top: 0),
                   child: ElevatedButton(
-                    child: Text(
-                      "Editar tarea".toUpperCase(),
-                      style: TextStyle(
-                        color: GuardadoLocal.colores[2],
-                        fontSize: 25,
-                      ),
-                    ),
+                    child: Image.asset(
+                    'assets/disquete.png',
+                    width: 140,
+                    height: 100,
+                  ),
                     onPressed: () {
                       editarTarea();
                     },
