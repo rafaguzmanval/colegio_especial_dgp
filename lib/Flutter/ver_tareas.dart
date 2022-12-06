@@ -670,7 +670,7 @@ class VerTareasState extends State<VerTareas> {
                     width: 250,
                     decoration: BoxDecoration(border: Border.all(width: 2)),
                     child: Center(
-                        child: Text("¡¡¡Bien!!!  \nNo tienes ninguna tarea".toUpperCase(),style: TextStyle(fontSize: 25),)))
+                        child: Text("¡¡¡Bien!!!  \nNo tienes ninguna tarea".toUpperCase(),style: TextStyle(fontSize: 25, ),textAlign: TextAlign.center,)))
               ],
             ))
       ]
