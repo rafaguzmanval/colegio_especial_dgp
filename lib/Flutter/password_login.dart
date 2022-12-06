@@ -83,7 +83,7 @@ class PasswordLoginState extends State<PasswordLogin> {
         appBar: AppBar(
             leading: IconButton(
                 icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
-                onPressed: () => _onBackPressed(context)),
+                onPressed: () => Navigator.popUntil(context, (route) => route.isFirst)),
           title: Center(child: Text('Hola ${Sesion.nombre}'.toUpperCase(),textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
 
         )),
@@ -299,31 +299,6 @@ class PasswordLoginState extends State<PasswordLogin> {
     }
   }
 
-  Future<bool?> _onBackPressed(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: GuardadoLocal.colores[1],
-            title: Text('¿SEGURO?',style: TextStyle(color: GuardadoLocal.colores[0])),
-            content: Text('¿Que quieres volver atras?'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[0])),
-            actions: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context, false);
-                  },
-                  child: Text('NO',style: TextStyle(color: GuardadoLocal.colores[2]))),
-              ElevatedButton(
-                  onPressed: () {
-                    Background.desactivarNotificaciones();
-                    Navigator.popUntil(context, (route) => route.isFirst);
-
-                  },
-                  child: Text('SÍ',style: TextStyle(color: GuardadoLocal.colores[2]))),
-            ],
-          );
-        });
-  }
 
   // Actualizar pagina
   void _actualizar() async {

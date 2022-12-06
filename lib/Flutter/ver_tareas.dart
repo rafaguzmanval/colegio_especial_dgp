@@ -15,15 +15,12 @@
 
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
-import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:colegio_especial_dgp/Flutter/reproductor_video.dart';
 import 'package:colegio_especial_dgp/Flutter/ver_pasos.dart';
 import 'package:flutter/material.dart';
-import 'package:get/state_manager.dart';
 import 'package:video_player/video_player.dart';
 import "package:image_picker/image_picker.dart";
 import 'dart:async';
