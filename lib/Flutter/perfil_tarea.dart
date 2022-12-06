@@ -36,7 +36,9 @@ class PerfilTareaState extends State<PerfilTarea> {
   var tareaPerfil;
   final controladorNombre = TextEditingController();
   final controladorTexto = TextEditingController();
-  var fotoTomada;
+  var textos = [];
+  var imagenes = [];
+  var imagen;
   var videoTomado;
   ImagePicker capturador = new ImagePicker();
   var creando = false;
@@ -65,13 +67,13 @@ class PerfilTareaState extends State<PerfilTarea> {
     try {
       if (seleccion == SeleccionImagen.camara) {
         print("Se va a abrir la cámara de fotos");
-        fotoTomada = await capturador.pickImage(
+        imagen = await capturador.pickImage(
           source: ImageSource.camera,
           imageQuality: 15,
         );
       } else if (seleccion == SeleccionImagen.galeria) {
         print("Se va a coger una foto de la galería");
-        fotoTomada = await capturador.pickImage(
+        imagen = await capturador.pickImage(
             source: ImageSource.gallery, imageQuality: 5);
       } else {
         print("Hacer un video");
@@ -155,9 +157,8 @@ class PerfilTareaState extends State<PerfilTarea> {
   Widget perfilTarea() {
     if (vez == 0) {
       controladorNombre.text = tareaPerfil.nombre.toUpperCase();
-      controladorTexto.text = tareaPerfil.textos[0].toUpperCase();
-      if(tareaPerfil.imagenes.length > 0)
-      fotoTomada = tareaPerfil.imagenes[0];
+      controladorTexto.text = tareaPerfil.descripcion.toUpperCase();
+      imagen = tareaPerfil.imagen;
 
       formularios = tareaPerfil.formularios;
       vez++;
@@ -172,7 +173,6 @@ class PerfilTareaState extends State<PerfilTarea> {
       vez2++;
     }
 
-    return Container();
     return Container(
       //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
       alignment: Alignment.center,
@@ -252,7 +252,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                 style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[2]),
               ),
               onPressed: () async {
-                fotoTomada = await buscadorArasaac(context: context);
+                imagen = await buscadorArasaac(context: context);
                 actualizar();
               }),
           Text(
@@ -276,7 +276,7 @@ class PerfilTareaState extends State<PerfilTarea> {
           ),
           ElevatedButton(
               child: Text(
-                (formularios == [])
+                (formularios.isEmpty)
                     ? 'Crea un formulario'.toUpperCase()
                     : "Edita el formulario".toUpperCase(),
                 style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[2]),
@@ -287,11 +287,27 @@ class PerfilTareaState extends State<PerfilTarea> {
           SizedBox(
             height: 20,
           ),
+          ElevatedButton(
+              child: Column(children: [
+                Text(
+                    (textos.isEmpty && imagenes.isEmpty)
+                        ? 'Crea unos pasos'.toUpperCase()
+                        : "Edita los pasos".toUpperCase(),
+                    style: TextStyle(
+                        color: GuardadoLocal.colores[2], fontSize: 25)),
+                Image.asset('assets/formulario.png',
+                  width: 140,
+                  height: 100,),
+              ]),
+
+              onPressed: () async {
+                dialogPasos();
+              }),
           Container(
             decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[0])),
             height: 150,
             width: 210,
-            child: fotoTomada == null
+            child: imagen == null
                 ? Center(
                     child: Text(
                     'Ninguna foto tomada ****'.toUpperCase(),
@@ -300,13 +316,13 @@ class PerfilTareaState extends State<PerfilTarea> {
                 : Stack(
                     children: [
                       Center(
-                          child: fotoTomada is String
-                              ? Image.network(fotoTomada)
-                              : Image.network(fotoTomada)),
+                          child: imagen is String
+                              ? Image.network(imagen)
+                              : Image.network(imagen)),
                       Container(
                         child: ElevatedButton(
                             onPressed: () {
-                              fotoTomada = null;
+                              imagen = null;
                               actualizar();
                             },
                             child: Icon(Icons.remove,color: GuardadoLocal.colores[2],)),
@@ -379,6 +395,8 @@ class PerfilTareaState extends State<PerfilTarea> {
   cargarTarea() async // EN sesion seleccion estara el id del usuario que se ha elegido
   {
     tareaPerfil = await Sesion.db.consultarIDTarea(Sesion.seleccion.id);
+    textos = tareaPerfil.textos;
+    imagenes = tareaPerfil.imagenes;
     actualizar();
   }
 
@@ -786,32 +804,24 @@ class PerfilTareaState extends State<PerfilTarea> {
   editarTarea() async {
     if (controladorNombre.text.isNotEmpty) {
       creando = true;
+
       actualizar();
 
       var nombre = "" + controladorNombre.text;
       var descripcion = "" + controladorTexto.text;
-      var imagen = "";
 
 
+      if (imagen != null) {
+        if (imagen is String) {
+          if (imagen.startsWith("http")) {
 
-
-      var textos = [];
-      /*
-      if (texto != "") {
-        textos.add(texto);
-      }*/
-      var imagenes = [];
-      if (fotoTomada != null) {
-        if (fotoTomada is String) {
-          if (fotoTomada.startsWith("http")) {
-            imagenes.add(fotoTomada);
           }
         } else {
-          imagenes.add(File(fotoTomada.path));
-          log(imagenes.toString());
+          imagen = File(imagen.path);
         }
 
       }
+
 
       var videos = [];
       if (videoTomado != null) {
@@ -826,8 +836,9 @@ class PerfilTareaState extends State<PerfilTarea> {
 
       Tarea tarea = Tarea();
       tarea.setTarea(nombre,descripcion,imagen ,textos, imagenes, videos, formularios);
+      tarea.id = tareaPerfil.id;
 
-      await Sesion.db.editarTarea(tarea, tareaPerfil).then((value) {
+      await Sesion.db.editarTarea(tarea).then((value) {
         creando = false;
 
         if (value) {
@@ -858,6 +869,280 @@ class PerfilTareaState extends State<PerfilTarea> {
       actualizar();
     }
   }
+
+
+
+  dialogPasos(){
+    var controladorStream = StreamController();
+    showDialog(
+        context: context,
+        builder: (context) {
+          return StreamBuilder(
+              stream: controladorStream.stream,
+              initialData: "",
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                return Dialog(
+                  backgroundColor: GuardadoLocal.colores[1],
+                  child: SingleChildScrollView(
+                      child: Column(children: [
+                        Text(
+                          "\nCrea unos pasos".toUpperCase(),
+                          style: TextStyle(fontSize: 40),
+                        ),
+
+                        ///Previsualizacion de los pasos
+                        for (int i = 0;
+                        i < textos.length;
+                        i ++)
+                          Container(
+                            margin: EdgeInsets.only(top: 15, bottom: 10),
+                            child: Column(children: [
+                              Text("Paso " + (i+1).toString()),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+
+                                  Flexible(
+                                      child: Container(
+                                        margin: EdgeInsets.only(bottom: 10),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                width: 1,
+                                                color: GuardadoLocal.colores[0])),
+
+                                        ///DESCRIPCION DEL PASO
+                                        child: TextButton(
+                                            child: Text(
+                                              textos[i],
+                                              style: TextStyle(
+                                                  fontSize: 40,
+                                                  color: GuardadoLocal.colores[0]),
+                                            ),
+                                            onPressed: () async {
+                                              await dialogNombre(textos[i])
+                                                  .then((e) {
+                                                if (e != null) {
+                                                  textos[i] = e;
+                                                  controladorStream.add("");
+                                                }
+                                              });
+                                            }),
+                                      )),
+
+                                  Flexible(
+                                    child: Container(
+                                      /*margin: EdgeInsets.only(
+                                            right: 20,
+                                            left: 20,
+                                            top: 10,
+                                            bottom: 10),*/
+                                        child: Image.network(
+                                          imagenes[i],
+                                          fit: BoxFit.fill,
+                                        )),
+                                  ),
+
+
+                                  ///ELIMINACION
+                                  Flexible(
+                                    flex: 30,
+                                    child: Container(
+                                        margin: EdgeInsets.only(bottom: 10),
+                                        child: FloatingActionButton(
+                                            heroTag: "boton" + i.toString(),
+                                            onPressed: () {
+
+                                              textos.remove(i);
+                                              imagenes.remove(i);
+                                              controladorStream.add("");
+                                            },
+                                            child: Icon(
+                                              Icons.remove,
+                                              color: GuardadoLocal.colores[2],
+                                            ))),
+                                  ),
+
+                                  ///Duplicacion
+                                  /* Flexible(
+                                    flex: 30,
+                                    child: Container(
+                                        margin: EdgeInsets.only(bottom: 10),
+                                        child: FloatingActionButton(
+                                            heroTag: "boton" + i.toString(),
+                                            onPressed: () {
+                                              textos.add(textos[i]);
+                                              imagenes.add(imagenes[i]);
+
+                                              controladorStream.add("");
+                                            },
+                                            child: Icon(
+                                              Icons.queue_outlined,
+                                              color: GuardadoLocal.colores[2],
+                                            ))),
+                                  ),*/
+                                ],
+                              ),
+
+                            ]),
+                          ),
+
+                        Container(
+                            margin: EdgeInsets.only(top: 15, bottom: 10),
+                            child: FloatingActionButton(
+                                onPressed: () async {
+                                  await dialogAddPaso();
+                                  controladorStream.add("");
+
+                                },
+                                child: Icon(
+                                  Icons.add,
+                                  color: GuardadoLocal.colores[2],
+                                ))),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Container(
+                                margin: EdgeInsets.all(0),
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      formularios = [];
+                                      Navigator.pop(context);
+                                    },
+                                    child: Column(children: [
+                                      Text(
+                                        '\nCancelar'.toUpperCase(),
+                                        style: TextStyle(
+                                            fontSize: 25,
+                                            color: GuardadoLocal.colores[2]),
+                                      ),
+                                      Image.asset(
+                                        "assets/cerrar.png",
+                                        height: 100,
+                                        width: 100,
+                                      )
+                                    ]))),
+                            Container(
+                              margin: EdgeInsets.all(0),
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    actualizar();
+
+                                    Navigator.pop(context);
+                                  },
+                                  child: Column(children: [
+                                    Text('\n Crear'.toUpperCase(),
+                                        style: TextStyle(
+                                            fontSize: 25,
+                                            color: GuardadoLocal.colores[2])),
+                                    Image.asset(
+                                      "assets/enviarunemail.png",
+                                      height: 100,
+                                      width: 100,
+                                    )
+                                  ])),
+                            )
+                          ],
+                        )
+                      ])),
+                );
+              });
+        });
+  }
+
+  dialogAddPaso() {
+    var imagenEscogida = "";
+    var controlador = TextEditingController();
+    var controladorStream = StreamController();
+
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return StreamBuilder(
+              stream: controladorStream.stream,
+              initialData: "",
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                return Dialog(
+                    backgroundColor: GuardadoLocal.colores[1],
+                    child: Column(children: [
+                      Flexible(
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 30, color: GuardadoLocal.colores[0]),
+                          controller: controlador,
+                          decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: GuardadoLocal.colores[0],
+                                    width: 0.0),
+                              ),
+                              hintText: "Descripcion Paso:".toUpperCase(),
+                              hintStyle:
+                              TextStyle(color: GuardadoLocal.colores[0])),
+                        ),
+                      ),
+                      Flexible(
+                          child: Container(
+                              margin: EdgeInsets.all(10),
+                              child: ElevatedButton(
+                                  child: Text(
+                                      'Pictograma desde la web de ARASAAC'
+                                          .toUpperCase(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 30,
+                                          color: GuardadoLocal.colores[2])),
+                                  onPressed: () async {
+                                    imagenEscogida =
+                                    await buscadorArasaac(context: context);
+                                    controladorStream.add("");
+                                  }))),
+                      if (imagenEscogida != "") ...[
+                        Flexible(
+                            child: Image.network(imagenEscogida,
+                                width: 150, height: 150)),
+                      ] else ...[
+                        Flexible(
+                            child: Container(
+                              width: 150,
+                              height: 150,
+                              margin: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 2, color: GuardadoLocal.colores[0])),
+                              child: Center(
+                                  child: Text("NADA ESCOGIDO**",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 30,
+                                          color: GuardadoLocal.colores[0]))),
+                            ))
+                      ],
+                      Container(
+                          margin: EdgeInsets.only(top: 30),
+                          child: FloatingActionButton(
+                              onPressed: () {
+                                if (imagenEscogida == null) {
+                                  imagenEscogida = "";
+                                }
+
+                                textos.add(controlador.text);
+                                imagenes.add(imagenEscogida);
+
+
+                                controlador.text = "";
+                                Navigator.pop(context);
+                              },
+                              child: Icon(
+                                Icons.add,
+                                color: GuardadoLocal.colores[2],
+                              ))),
+                    ]));
+              });
+        });
+  }
+
 
   displayMensajeValidacion(mensajeDeValidacion, error) {
     ScaffoldMessenger.of(context).showSnackBar(

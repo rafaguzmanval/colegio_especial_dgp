@@ -459,42 +459,32 @@ class AccesoBD {
     }
   }
 
-  editarTarea(tarea, tareaPerfil) async {
+  editarTarea(tarea) async {
     try {
       //Se encripta la contaseña
       final ref = db.collection("Tareas");
-      var imagenes = [];
-      var videos = [];
-
-      var futuros = <Future>[];
 
       int i = 0;
 
-      if (tarea.imagenes.length > 0) {
-        if (tarea.imagenes[0] is String) {
-          if (tarea.imagenes[0].startsWith("http")) {
-            imagenes.add(tarea.imagenes[0]);
+        if (tarea.imagen is String) {
+          if (tarea.imagen.startsWith("http")) {
             i++;
           }
         } else {
           var fotoPath = "Imágenes/pictogramas/" +
-              encriptacionSha256(tarea.imagenes[0].path);
+              encriptacionSha256(tarea.imagen.path);
 
           //se introduce la imágen dentro del storage y cuando se comrpueba que se ha cargado entronces se incrementa 'i' para que se pueda salir del bucle de espera
           await storageRef
               .child(fotoPath)
-              .putFile(tarea.imagenes[0])
+              .putFile(tarea.imagen)
               .then((d0) async {
             await leerImagen(fotoPath).then((value) {
-              log(value);
-              imagenes.add(value);
-              log("Se añadio la imagen al array");
+              tarea.imagen = value;
               i++;
             });
-            log("Se leido lo de await leerImagen");
           });
         }
-      }
 
       if (tarea.videos.length > 0) {
         // se espera a que se introduzca el video correctamente en el storage para después salir del bucle de espera
@@ -505,18 +495,17 @@ class AccesoBD {
               .putFile(tarea.videos[0])
               .then((p0) async {
             await leerVideo(videoPath).then((value) {
-              videos.add(value);
+              tarea.videos = [value];
               i++;
             });
           });
         } else {
-          videos.add(tarea.videos[0]);
           i++;
         }
       }
 
       //bucle de espera  para que las imágenes y los vídeos estén cargados
-      while (i != tarea.imagenes.length + tarea.videos.length) {}
+      while (i != 1 + tarea.videos.length) {}
       ;
 
       //Cuando se han cargado todas las imágenes y vídeos entonces se sube a la base de datos
@@ -526,14 +515,14 @@ class AccesoBD {
 
       var nuevaTarea = <String, dynamic>{
         "nombre": tarea.nombre.toString(),
+        "descripcion": tarea.descripcion,
+        "imagen" : tarea.imagen,
         "textos": tarea.textos,
-        "imagenes": imagenes,
-        "videos": videos,
+        "imagenes": tarea.imagenes,
+        "videos": tarea.videos,
         "formularios": tarea.formularios,
-        "orden": tarea.orden
       };
-      log(nuevaTarea.toString());
-      ref.doc(tareaPerfil.id).update(nuevaTarea);
+      ref.doc(tarea.id).update(nuevaTarea);
 
       return true;
     } catch (e) {

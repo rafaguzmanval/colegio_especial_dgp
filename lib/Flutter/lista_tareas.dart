@@ -168,9 +168,9 @@ class ListaTareasState extends State<ListaTareas> {
                             color: GuardadoLocal.colores[2],
                           ),
                         ),
-                        if (!Sesion.tareas[i].imagenes.isEmpty) ...[
+                        if (Sesion.tareas[i].imagen is String) ...[
                           Image.network(
-                            Sesion.tareas[i].imagenes[0],
+                            Sesion.tareas[i].imagen,
                             width: 150,
                             height: 150,
                             fit: BoxFit.fill,
