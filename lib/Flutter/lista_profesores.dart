@@ -176,6 +176,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
                       cargarProfesores();
                     },
                   )),
+              if(Sesion.profesores[i].id != Sesion.id)...[
               IconButton(
                   onPressed: () async {
                     await Sesion.db
@@ -190,6 +191,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
                     Icons.delete,
                     color: GuardadoLocal.colores[0],
                   )),
+              ],
               if (esProfesorEliminandose && i == profesorEliminandose) ...[
                 new CircularProgressIndicator(),
               ]
