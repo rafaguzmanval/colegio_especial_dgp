@@ -221,8 +221,8 @@ class AccesoBD {
         "nombre": tarea.nombre,
         "descripcion" : tarea.descripcion,
         "imagen" : tarea.imagen,
-        "textos": [],
-        "imagenes": [],
+        "textos": tarea.textos,
+        "imagenes": tarea.imagenes,
         "videos": videos,
         "formularios": tarea.formularios,
       };

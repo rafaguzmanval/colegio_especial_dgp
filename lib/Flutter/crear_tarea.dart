@@ -531,7 +531,6 @@ class CrearTareaState extends State<CrearTarea> {
                                 children: [
 
                                   Flexible(
-                                      flex: 90,
                                       child: Container(
                                         margin: EdgeInsets.only(bottom: 10),
                                         decoration: BoxDecoration(
@@ -558,6 +557,19 @@ class CrearTareaState extends State<CrearTarea> {
                                             }),
                                       )),
 
+                                  Flexible(
+                                    child: Container(
+                                        /*margin: EdgeInsets.only(
+                                            right: 20,
+                                            left: 20,
+                                            top: 10,
+                                            bottom: 10),*/
+                                        child: Image.network(
+                                          imagenes[i],
+                                          fit: BoxFit.fill,
+                                        )),
+                                  ),
+
 
                                   ///ELIMINACION
                                   Flexible(
@@ -579,7 +591,7 @@ class CrearTareaState extends State<CrearTarea> {
                                   ),
 
                                   ///Duplicacion
-                                  Flexible(
+                                 /* Flexible(
                                     flex: 30,
                                     child: Container(
                                         margin: EdgeInsets.only(bottom: 10),
@@ -595,7 +607,7 @@ class CrearTareaState extends State<CrearTarea> {
                                               Icons.queue_outlined,
                                               color: GuardadoLocal.colores[2],
                                             ))),
-                                  ),
+                                  ),*/
                                 ],
                               ),
 
@@ -606,13 +618,9 @@ class CrearTareaState extends State<CrearTarea> {
                             margin: EdgeInsets.only(top: 15, bottom: 10),
                             child: FloatingActionButton(
                                 onPressed: () async {
-                                  await dialogNombre("").then((e) {
-                                    if (e != null) {
-                                      textos.add(e);
-                                      imagenes.add("");
-                                      controladorStream.add("");
-                                    }
-                                  });
+                                  await dialogAddPaso();
+                                  controladorStream.add("");
+
                                 },
                                 child: Icon(
                                   Icons.add,
@@ -1084,6 +1092,100 @@ class CrearTareaState extends State<CrearTarea> {
                                 formularios.insert(
                                     i + 2 + formularios[i + 1] * 3 + 2, 0);
                                 formularios[i + 1]++;
+
+                                controlador.text = "";
+                                Navigator.pop(context);
+                              },
+                              child: Icon(
+                                Icons.add,
+                                color: GuardadoLocal.colores[2],
+                              ))),
+                    ]));
+              });
+        });
+  }
+
+
+  dialogAddPaso() {
+    var imagenEscogida = "";
+    var controlador = TextEditingController();
+    var controladorStream = StreamController();
+
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return StreamBuilder(
+              stream: controladorStream.stream,
+              initialData: "",
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                return Dialog(
+                    backgroundColor: GuardadoLocal.colores[1],
+                    child: Column(children: [
+                      Flexible(
+                        child: TextField(
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 30, color: GuardadoLocal.colores[0]),
+                          controller: controlador,
+                          decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: GuardadoLocal.colores[0],
+                                    width: 0.0),
+                              ),
+                              hintText: "Descripcion Paso:".toUpperCase(),
+                              hintStyle:
+                              TextStyle(color: GuardadoLocal.colores[0])),
+                        ),
+                      ),
+                      Flexible(
+                          child: Container(
+                              margin: EdgeInsets.all(10),
+                              child: ElevatedButton(
+                                  child: Text(
+                                      'Pictograma desde la web de ARASAAC'
+                                          .toUpperCase(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 30,
+                                          color: GuardadoLocal.colores[2])),
+                                  onPressed: () async {
+                                    imagenEscogida =
+                                    await buscadorArasaac(context: context);
+                                    controladorStream.add("");
+                                  }))),
+                      if (imagenEscogida != "") ...[
+                        Flexible(
+                            child: Image.network(imagenEscogida,
+                                width: 150, height: 150)),
+                      ] else ...[
+                        Flexible(
+                            child: Container(
+                              width: 150,
+                              height: 150,
+                              margin: EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 2, color: GuardadoLocal.colores[0])),
+                              child: Center(
+                                  child: Text("NADA ESCOGIDO**",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 30,
+                                          color: GuardadoLocal.colores[0]))),
+                            ))
+                      ],
+                      Container(
+                          margin: EdgeInsets.only(top: 30),
+                          child: FloatingActionButton(
+                              onPressed: () {
+                                if (imagenEscogida == null) {
+                                  imagenEscogida = "";
+                                }
+
+                                textos.add(controlador.text);
+                                imagenes.add(imagenEscogida);
+
 
                                 controlador.text = "";
                                 Navigator.pop(context);
