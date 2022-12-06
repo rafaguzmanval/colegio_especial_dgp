@@ -26,7 +26,7 @@ class Sesion {
   static var paginaActual;
   static var metodoLogin = "";
   static var argumentos = [];
-  static var db;
+  static AccesoBD db = new AccesoBD();
   static var posicion;
 
   // Sesion por defecto

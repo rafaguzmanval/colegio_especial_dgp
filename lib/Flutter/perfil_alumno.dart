@@ -41,6 +41,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
   var tareasSinFinalizar = [];
   var tareasCompletadas = [];
   var tareasCanceladas = [];
+  var tareasFinalizadas = [];
   var controladorNombre = TextEditingController();
   var controladorApellidos = TextEditingController();
   final myController = TextEditingController();
@@ -88,7 +89,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
           leading: IconButton(
               icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
               onPressed: (){Navigator.pop(context);}),
-          title: Center(child: Text('${Sesion.seleccion.nombre.toUpperCase()}'
+          title: Center(child: Text('PERFIL DE ${Sesion.seleccion.nombre.toUpperCase()}'
               '',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
         )),
         body: SingleChildScrollView(child: Container(
@@ -137,13 +138,13 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
     try {
       if (seleccion == SeleccionImagen.camara) {
         print("Se va a abrir la cámara de fotos");
-        fotoTomada = await capturador.pickImage(
+        return await capturador.pickImage(
           source: ImageSource.camera,
           imageQuality: 15,
         );
       } else {
         print("Se coger una foto de la galería");
-        fotoTomada = await capturador.pickImage(
+        return await capturador.pickImage(
             source: ImageSource.gallery, imageQuality: 15);
       }
     } catch (e) {
@@ -154,26 +155,12 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
 
   // Carga el perfil del alumno
   Widget perfilAlumno() {
-    if (vez == 0) {
-      controladorNombre.text = usuarioPerfil.nombre.toUpperCase();
-      controladorApellidos.text = usuarioPerfil.apellidos.toUpperCase();
-      fechaAntigua = usuarioPerfil.fechanacimiento;
-      fotoTomada = usuarioPerfil.foto;
-      controladorPassword.text = usuarioPerfil.password;
-      rolElegido = usuarioPerfil.rol;
-      metodoElegido = usuarioPerfil.metodoLogeo;
-      if(metodoElegido == "Passportmethod.text"){
-        metodoElegido = "clave";
-      }
-      else{
-        metodoElegido = "pin";
-      }
-      vez++;
-    }
+
 
     tareasSinFinalizar.clear();
     tareasCompletadas.clear();
     tareasCanceladas.clear();
+    tareasFinalizadas.clear();
 
     for(int i = 0; i < Sesion.tareas.length; i++)
     {
@@ -187,10 +174,15 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
         tareasCompletadas.add(Sesion.tareas[i]);
         tareasCompletadas.add(i);
       }
-      else{
+      else if(Sesion.tareas[i].estado == "cancelada"){
         tareasCanceladas.add(Sesion.tareas[i]);
         tareasCanceladas.add(i);
       }
+      else
+        {
+          tareasFinalizadas.add(Sesion.tareas[i]);
+          tareasFinalizadas.add(i);
+        }
     }
 
     return
@@ -203,127 +195,175 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
             SizedBox(
               height: 10,
             ),
-            SizedBox(
-              width: 500,
-              child: TextField(
-                style:
-                TextStyle(fontSize: 30.0, color: GuardadoLocal.colores[0]),
-                obscureText: false,
-                maxLength: 40,
-                decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: GuardadoLocal.colores[0], width: 0.0),
-                    ),
-                    border: OutlineInputBorder(),
-                    hintText: 'NOMBRE *',
-                    hintStyle: TextStyle(color: GuardadoLocal.colores[0])),
-                controller: controladorNombre,
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children:[
+              Flexible(
+                flex: 25,
+
+    child:                Container(
+
+      child: !(usuarioPerfil.foto is String)
+          ? Column(
+          children: [
+            Text(
+            'NINGUNA FOTO ELEGIDA ****',
+            textAlign: TextAlign.center,
+          ),ElevatedButton(
+                onPressed: () {
+                  dialogEditarFoto();
+                  actualizar();
+                },
+                child: Icon(
+                  Icons.edit,
+                  color: GuardadoLocal.colores[2],
+                  size: 40,
+                ),
+                style: ElevatedButton.styleFrom(shape: CircleBorder(
+
+                )
+                )
+            ),])
+          :
+
+                CircleAvatar(
+                radius: 100,
+                backgroundImage: NetworkImage(usuarioPerfil.foto),
+                child:
+                  Stack(
+                  children: [
+                    Container(
+                      child: ElevatedButton(
+                          onPressed: () {
+                            dialogEditarFoto();
+                            actualizar();
+                          },
+                          child: Icon(
+                            Icons.edit,
+                            color: GuardadoLocal.colores[2],
+                            size: 40,
+                          ),
+                        style: ElevatedButton.styleFrom(shape: CircleBorder(
+
+                        )
+                        )
+                      ),
+                      alignment: Alignment.bottomRight,
+                    )
+
+                  ],
+                  ),
+
+                ),
+
+
+                  ),
+
+
               ),
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              width: 500,
-              child: TextField(
-                style:
-                TextStyle(fontSize: 30.0, color: GuardadoLocal.colores[0]),
-                obscureText: false,
-                maxLength: 40,
-                decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: GuardadoLocal.colores[0], width: 0.0),
+
+              Flexible(
+                  flex: 50,
+                  child: Column(children: [
+
+                    SizedBox(
+                      width: 500,
+                      child:
+                        TextButton(child:Text(usuarioPerfil.nombre.toUpperCase(),style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
+                            onPressed:(){
+
+                            }
+                        ),
                     ),
-                    border: OutlineInputBorder(),
-                    hintText: 'APELLIDOS *',
-                    hintStyle: TextStyle(color: GuardadoLocal.colores[0])),
-                controller: controladorApellidos,
-              ),
-            ),
-            ElevatedButton(
-                onPressed: () async {
-                  await showDatePicker(
-                      builder: (context, child) {
-                        return Theme(
-                          data: Theme.of(context).copyWith(
-                            canvasColor: GuardadoLocal.colores[1],
-                            colorScheme: ColorScheme.light(
-                                primary:
-                                GuardadoLocal.colores[0] // <-- SEE HERE
-                            ),
-                            textButtonTheme: TextButtonThemeData(
-                              style: TextButton.styleFrom(
-                                primary: GuardadoLocal
-                                    .colores[0], // button text color
+                    SizedBox(
+                      height: 10,
+                    ),
+
+                  SizedBox(
+                    width: 500,
+                    child:
+                    TextButton(child:Text(usuarioPerfil.apellidos.toUpperCase(),style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
+                        onPressed:(){
+
+                        }
+                    ),
+                  ),
+
+              ],)),
+                  ///BOTON DE LOCALIZACION
+
+                  Flexible(
+                    flex:25,
+                    child:
+                  ElevatedButton(onPressed: () async{
+                    await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Localizacion()));
+                    Sesion.paginaActual = this;
+                    actualizar();
+
+                  }, child: Image.asset('assets/mapa.png',
+
+                    width: 140,
+                    height: 100,
+                  )),
+                  )
+
+            ]),
+
+
+            Text('FECHA DE NACIMIENTO:'),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+                children:[
+              Text(usuarioPerfil.fechanacimiento),
+              ElevatedButton(
+                  onPressed: () async {
+                    await showDatePicker(
+                        builder: (context, child) {
+                          return Theme(
+                            data: Theme.of(context).copyWith(
+                              canvasColor: GuardadoLocal.colores[1],
+                              colorScheme: ColorScheme.light(
+                                  primary:
+                                  GuardadoLocal.colores[0] // <-- SEE HERE
+                              ),
+                              textButtonTheme: TextButtonThemeData(
+                                style: TextButton.styleFrom(
+                                  primary: GuardadoLocal
+                                      .colores[0], // button text color
+                                ),
                               ),
                             ),
-                          ),
-                          child: child!,
-                        );
-                      },
-                      context: context,
-                      locale: const Locale("es", "ES"),
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(1940),
-                      lastDate: DateTime.now())
-                      .then((e) {
-                    fechaElegida = e;
-                    actualizar();
-                  });
-                },
-              child: Column(children: [
-                  Text(
-                  (fechaElegida == null)
-                      ? fechaAntigua
-                      : DateFormat('d/M/y').format(fechaElegida),
-                  style:
-                  TextStyle(color: GuardadoLocal.colores[2], fontSize: 25),
-                ),
-                Image.asset("assets/calendario.png",
-                  width: 140,
-                  height: 100,),
-                SizedBox(height: 10,)
-              ]),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: GuardadoLocal.colores[0])),
+                            child: child!,
+                          );
+                        },
+                        context: context,
+                        locale: const Locale("es", "ES"),
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(1940),
+                        lastDate: DateTime.now())
+                        .then((e) {
+                      fechaElegida = e;
+                      actualizar();
+                    });
+                  },
+                  child:
+                    Image.asset("assets/calendario.png",
+                      width: 50,
+                      height: 50,),
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: GuardadoLocal.colores[0])),
+
+            ]),
+
             SizedBox(
               height: 15,
             ),
-            Container(
-              decoration: BoxDecoration(
-                  border:
-                  Border.all(width: 2, color: GuardadoLocal.colores[0])),
-              height: 150,
-              width: 230,
-              child: fotoTomada == null
-                  ? Center(
-                  child: Text(
-                    'NINGUNA FOTO ELEGIDA ****',
-                    textAlign: TextAlign.center,
-                  ))
-                  : Stack(
-                children: [
-                  Center(
-                      child: fotoTomada is String
-                          ? Image.network(fotoTomada)
-                          : Image.network(fotoTomada)),
-                  Container(
-                    child: ElevatedButton(
-                        onPressed: () {
-                          fotoTomada = null;
-                          actualizar();
-                        },
-                        child: Icon(
-                          Icons.remove,
-                          color: GuardadoLocal.colores[2],
-                        )),
-                    alignment: Alignment.topLeft,
-                  )
-                ],
-              ),
-            ),
+
             SizedBox(height: 15),
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -333,47 +373,14 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                   SizedBox(
                     height: 10,
                   ),
-                  ElevatedButton(
-                      child: Image.asset(
-                        "assets/camara.png",
-                        width: 140,
-                        height: 100,
-                      ),
-                      onPressed: () {
-                        seleccionarImagen(SeleccionImagen.camara);
-                      }),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ElevatedButton(
-                      child: Image.asset('assets/galeria.png',
-                        width: 140,
-                        height: 100,
-                      ),
-                      onPressed: () {
-                        seleccionarImagen(SeleccionImagen.galeria);
-                      }),
+
                 ]
               ],
             ),
-            ///BOTON DE LOCALIZACION
 
             SizedBox(height: 15),
-            ElevatedButton(onPressed: () async{
-              await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => Localizacion()));
-              Sesion.paginaActual = this;
-              actualizar();
 
-            }, child: Image.asset('assets/mapa.png',
 
-                width: 140,
-                height: 100,
-              )),
-
-            SizedBox(height: 10,),
 
 
             /// se muestran las tareas del alumno
@@ -392,7 +399,13 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
               visualizarTareaLista("cancelada")
               ],
 
-              if(tareasSinFinalizar.length == 0 && tareasCompletadas.length == 0 && tareasCanceladas.length == 0)...[
+
+              if(tareasFinalizadas.length != 0)...[
+                Text("\nTAREAS FINALIZADAS: ",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
+                visualizarTareaLista("finalizada")
+              ],
+
+              if(tareasSinFinalizar.length == 0 && tareasCompletadas.length == 0 && tareasCanceladas.length == 0 && tareasFinalizadas.length == 0)...[
                 Text("SIN TAREAS",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
               ]
             ],
@@ -409,28 +422,6 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
           ] else ...[
             new CircularProgressIndicator()
           ],
-          Text(
-            mensajeDeRegistro,
-            style: TextStyle(fontSize: 25),
-          ),
-          Visibility(
-              visible: !registrando,
-              child: TextButton(
-                style: ButtonStyle(
-                  backgroundColor:
-                  MaterialStateProperty.all(GuardadoLocal.colores[0]),
-                ),
-                child: Image.asset(
-                  "assets/disquete.png",
-                  width: 140,
-                  height: 100,
-                ),
-                onPressed: () {
-                  editarUsuario();
-                },
-              )),
-          Visibility(
-              visible: registrando, child: new CircularProgressIndicator()),
           SizedBox(height: 10,)
         ],
       );
@@ -464,90 +455,6 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
     esTareaEliminandose = false;
   }
 
-  editarUsuario() async{
-    // FALTARIA HACER COMPROBACIÓN DE QUE EL NOMBRE Y APELLIDOS YA ESTÁN REGISTRADOS EN LA BASE DE DATOS
-
-    if (controladorNombre.text.isNotEmpty &&
-        controladorApellidos.text.isNotEmpty &&
-        controladorPassword.text.isNotEmpty &&
-        fechaAntigua != null &&
-        rolElegido != "ningun rol elegido") {
-      registrando = true;
-      actualizar();
-      var fechanacimiento =  "" + fechaAntigua;
-      var nombre = "" + controladorNombre.text;
-      var apellidos = "" + controladorApellidos.text;
-      var password = "" + controladorPassword.text;
-      if(fechaElegida != null){
-        fechanacimiento = "" + DateFormat('d/M/y').format(fechaElegida);
-      }
-
-      var rol = "" + rolElegido;
-
-      Usuario usuario = Usuario();
-      usuario.setUsuario(
-          nombre,
-          apellidos,
-          password,
-          fechanacimiento,
-          rol,
-          "",
-          metodoElegido == "clave"
-              ? Passportmethod.text.toString()
-              : Passportmethod.pin.toString());
-
-      var foto = null;
-      if (fotoTomada != null) {
-        if (fotoTomada is String) {
-          if (fotoTomada.startsWith("http")) {
-            foto = fotoTomada;
-          }
-        } else {
-          foto = File(fotoTomada.path);
-        }
-      }
-
-      await Sesion.db.editarUsuario(usuario, foto, usuarioPerfil).then((value) {
-        registrando = false;
-
-        if (value) {
-          mensajeDeRegistro =
-          "EDICION COMPLETADA PERFECTAMENETE\nPUEDES VOLVER A EDITAR OTRO USUARIO";
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-                behavior: SnackBarBehavior.floating,
-                backgroundColor: Colors.transparent,
-                duration: Duration(seconds: 2),
-                elevation: 0,
-                content: Container(
-                  padding: const EdgeInsets.all(16),
-                  height: 90,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF6BFF67),
-                    borderRadius: BorderRadius.all(Radius.circular(29)),
-                  ),
-                  child: Text(
-                    mensajeDeRegistro,
-                    style: TextStyle(
-                        color: GuardadoLocal.colores[2], fontSize: 25),
-                  ),
-                )),
-          );
-          Navigator.pop(context);
-        } else {
-          mensajeDeRegistro =
-          "FALLO EN EL PROCESO DE REGISTRO, INTENTELO DE NUEVO";
-          mostrarError(mensajeDeRegistro, true);
-        }
-
-        actualizar();
-      });
-    } else {
-      mensajeDeRegistro = "DEBE RELLENAR TODOS LOS CAMPOS CON *";
-      mostrarError(mensajeDeRegistro, true);
-      actualizar();
-    }
-  }
 
   mostrarError(mensaje, error) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -770,9 +677,13 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
       {
         listaIterar = tareasCompletadas;
       }
-    else
+    else if(condicion == "cancelada")
       {
         listaIterar = tareasCanceladas;
+      }
+    else
+      {
+        listaIterar = tareasFinalizadas;
       }
     return Column(
         children: [
@@ -813,5 +724,50 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
         ]
     );
 
+  }
+
+
+  dialogEditarFoto()
+  {
+    showDialog( context: context,
+        builder: (context)
+    {
+      return Dialog(
+        alignment: Alignment.center,
+        child:Row(
+
+            children:[
+                ElevatedButton(
+                    child: Image.asset(
+                      "assets/camara.png",
+                      width: 100,
+                      height: 100,
+                    ),
+                    onPressed: () async{
+                      var imagen = await seleccionarImagen(SeleccionImagen.camara);
+                      await Sesion.db.editarFotoUsuario(usuarioPerfil.id, File(imagen.path));
+                      actualizar();
+                      Navigator.pop(context);
+
+                    }),
+
+         // Container(width: 10,alignment: Alignment.center,),
+
+            ElevatedButton(
+                child: Image.asset('assets/galeria.png',
+                  width: 100,
+                  height: 100,
+                ),
+                onPressed: () async{
+                  var imagen = await seleccionarImagen(SeleccionImagen.galeria);
+                  await Sesion.db.editarFotoUsuario(usuarioPerfil.id, File(imagen.path));
+                  actualizar();
+                  Navigator.pop(context);
+                }),
+
+        ])
+      );
+    }
+    );
   }
 }

@@ -956,7 +956,8 @@ class VerTareasState extends State<VerTareas> {
                         onPressed: () {
                           if (controlador.text != null) {
                             Sesion.db.addFeedbackTarea(
-                                Sesion.tareas[tareaActual].idRelacion,
+                                Sesion.tareas[tareaActual],
+                                Sesion.seleccion.id,
                                 controlador.text);
                           }
 

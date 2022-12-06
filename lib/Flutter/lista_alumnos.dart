@@ -166,12 +166,14 @@ class ListaAlumnosState extends State<ListaAlumnos> {
                           fontSize: 25,
                         ),
                       ),
+                      if(Sesion.alumnos[i].foto is String)...[
                       Image.network(
                         Sesion.alumnos[i].foto,
                         width: 100,
                         height: 100,
                         fit: BoxFit.fill,
                       ),
+    ]
                     ],
                   ),
                   onPressed: () async {

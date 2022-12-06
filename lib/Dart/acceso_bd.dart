@@ -21,6 +21,7 @@ import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/tablon.dart';
 import 'package:colegio_especial_dgp/Dart/tarea.dart';
@@ -107,6 +108,7 @@ class AccesoBD {
     }
   }
 
+  /*
   editarUsuario(usuario, foto, usuarioPerfil) async {
     try {
       final ref = db.collection("usuarios");
@@ -153,7 +155,7 @@ class AccesoBD {
       print(e);
       return false;
     }
-  }
+  }*/
 
   // Metodo para crear una tarea
   crearTarea(tarea) async {
@@ -284,27 +286,33 @@ class AccesoBD {
               // sobre esa id accedemos a la colección tarea donde se encuentra la información de la tarea
               nuevaTarea.idRelacion = e.docs[i].id;
               nuevaTarea.estado = e.docs[i].get("estado");
-              nuevaTarea.fechafinal = e.docs[i].get("fechafinal");
-              nuevaTarea.respuesta = e.docs[i].get("respuesta");
-              try {
-                nuevaTarea.fotoRespuesta = e.docs[i].get("fotoURL");
-              } catch (e) {
-                nuevaTarea.fotoRespuesta = "";
-              }
-              nuevaTarea.retroalimentacion = e.docs[i].get("retroalimentacion");
+              if((nuevaTarea.estado != "finalizada" && Sesion.rol == Rol.alumno.toString()) || Sesion.rol != Rol.alumno.toString()) {
+                nuevaTarea.fechafinal = e.docs[i].get("fechafinal");
+                nuevaTarea.respuesta = e.docs[i].get("respuesta");
+                try {
+                  nuevaTarea.fotoRespuesta = e.docs[i].get("fotoURL");
+                } catch (e) {
+                  nuevaTarea.fotoRespuesta = "";
+                }
+                nuevaTarea.retroalimentacion =
+                    e.docs[i].get("retroalimentacion");
 
-              if (nuevaTarea.estado != "sinFinalizar") {
-                nuevaTarea.fechaentrega =
-                    (DateTime.now().millisecondsSinceEpoch -
-                            e.docs[i].get("fechaentrega")) /
-                        (1000 * 60);
+                if (nuevaTarea.estado != "sinFinalizar") {
+                  nuevaTarea.fechaentrega =
+                      (DateTime
+                          .now()
+                          .millisecondsSinceEpoch -
+                          e.docs[i].get("fechaentrega")) /
+                          (1000 * 60);
 
-                if (nuevaTarea.formularios !=
-                    []) // si en la tarea no se han actualizado los datos del formulario entonces debemos sobreescribir
-                  //el que viene por defecto
-                  nuevaTarea.formularios = e.docs[i].get("formularios");
+                  if (nuevaTarea.formularios !=
+                      [
+                      ]) // si en la tarea no se han actualizado los datos del formulario entonces debemos sobreescribir
+                    //el que viene por defecto
+                    nuevaTarea.formularios = e.docs[i].get("formularios");
+                }
+                nuevasTareas.add(nuevaTarea);
               }
-              nuevasTareas.add(nuevaTarea);
 
               if (nuevasTareas.length == e.docs.length) {
                 Sesion.tareas = nuevasTareas;
@@ -459,6 +467,48 @@ class AccesoBD {
     }
   }
 
+  subirArchivo(archivo,path) async
+  {
+    try {
+      return await storageRef
+          .child(path)
+          .putFile(archivo);
+    }
+    catch(e)
+    {
+      print(e);
+      return "error al subir archivo";
+    }
+  }
+
+  editarFotoUsuario(idUsuario,nuevaFoto) async{
+    try{
+
+      if(nuevaFoto is String)
+        {
+          return db.collection("usuario").doc(idUsuario).update({"foto":nuevaFoto});
+        }
+      else
+        {
+          await subirArchivo(nuevaFoto,"Imágenes/perfiles/"+idUsuario.toString()+".jpg").then((e) async{
+
+                    await leerImagen("Imágenes/perfiles/"+idUsuario.toString()+".jpg").then((value) {
+                      print(value);
+                       db.collection("usuarios").doc(idUsuario).update({"foto":value});
+                       return value;
+                    });
+            }
+          );
+        }
+
+    }catch(e)
+    {
+      print(e);
+      return false;
+    }
+  }
+
+
   editarTarea(tarea) async {
     try {
       //Se encripta la contaseña
@@ -531,12 +581,27 @@ class AccesoBD {
     }
   }
 
-  addFeedbackTarea(idTareaAsignada, retroalimentacion) async {
+
+
+  addFeedbackTarea(tarea,idUsuario, retroalimentacion) async {
     try {
       final ref = db.collection("usuarioTieneTareas");
+      final ref2 = db.collection("historial");
+
+      var tareaHistorial = <String, dynamic>{
+        "idUsuario":idUsuario,
+        "nombre":tarea.nombre,
+        "retroalimentacion":retroalimentacion
+      };
+      ref2.add(tareaHistorial);
+
       return await ref
-          .doc(idTareaAsignada)
-          .update({"retroalimentacion": retroalimentacion});
+          .doc(tarea.idRelacion)
+          .update({"retroalimentacion": retroalimentacion, "estado":"finalizada"});
+
+
+
+
     } catch (e) {
       log(e.toString());
       return false;

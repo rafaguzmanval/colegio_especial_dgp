@@ -334,7 +334,7 @@ class PerfilProfesorState extends State<PerfilProfesor> {
                     height: 100,
                   ),
                   onPressed: () {
-                    editarUsuario();
+                    //editarUsuario();
                   },
                 )),
             Visibility(
@@ -352,6 +352,7 @@ class PerfilProfesorState extends State<PerfilProfesor> {
     actualizar();
   }
 
+  /*
   editarUsuario() async{
     // FALTARIA HACER COMPROBACIÓN DE QUE EL NOMBRE Y APELLIDOS YA ESTÁN REGISTRADOS EN LA BASE DE DATOS
 
@@ -435,7 +436,7 @@ class PerfilProfesorState extends State<PerfilProfesor> {
       mostrarError(mensajeDeRegistro, true);
       actualizar();
     }
-  }
+  }*/
 
   mostrarError(mensaje, error) {
     ScaffoldMessenger.of(context).showSnackBar(
