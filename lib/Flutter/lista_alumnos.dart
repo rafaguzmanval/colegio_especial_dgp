@@ -184,14 +184,8 @@ class ListaAlumnosState extends State<ListaAlumnos> {
                 )),
             IconButton(
                 onPressed: () async {
-                  await Sesion.db
-                      .eliminarAlumno(Sesion.alumnos[i].id)
-                      .then((e) {
-                    esAlumnoEliminandose = true;
-                    alumnoEliminandose = i;
-                    cargarAlumnos();
-                  });
-                },
+                    _onEliminate(context, i);
+                  },
                 icon: Icon(
                   Icons.delete,
                   color: GuardadoLocal.colores[0],
@@ -247,6 +241,39 @@ class ListaAlumnosState extends State<ListaAlumnos> {
     } else if (Sesion.rol == Rol.programador.toString()) {
       return VistaProgramador();
     }
+  }
+
+  Future<bool?> _onEliminate(BuildContext context,i) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: GuardadoLocal.colores[1],
+            title:  Text('¿SEGURO?',style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),),
+            content: Text('¿QUIERES ELIMINAR A ${Sesion.alumnos[i].nombre}?',style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),),
+            actions: [
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('NO',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),)),
+
+              ElevatedButton(
+                  onPressed: () async{
+                    await Sesion.db
+                        .eliminarAlumno(Sesion.alumnos[i].id)
+                        .then((e) {
+                    esAlumnoEliminandose = true;
+                    alumnoEliminandose = i;
+                    cargarAlumnos();
+                    Navigator.pop(context);
+                  }
+                 );},
+                  child: Text('SÍ',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25))
+                )
+            ],
+          );
+        });
   }
 
   // Actualizar
