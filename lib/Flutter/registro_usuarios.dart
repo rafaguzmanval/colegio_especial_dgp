@@ -315,7 +315,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
             style: TextStyle(
                 fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
-          Column(
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -332,7 +332,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                     seleccionarImagen(SeleccionImagen.camara);
                   }),
               SizedBox(
-                height: 10,
+                width: 20,
               ),
               ElevatedButton(
                   child: Image.asset('assets/galeria.png',
@@ -369,7 +369,9 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           ),
           Visibility(
               visible: !registrando,
-              child: TextButton(
+              child: Container(
+                  alignment: Alignment.bottomRight,
+                  child: TextButton(
                 style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all(GuardadoLocal.colores[0]),
@@ -382,7 +384,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                 onPressed: () {
                   registrarUsuario();
                 },
-              )),
+              ))),
           Visibility(
               visible: registrando, child: new CircularProgressIndicator()),
           SizedBox(

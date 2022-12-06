@@ -234,7 +234,8 @@ class GestionTablonState extends State<GestionTablon> {
           Visibility(
               visible: !creando,
               child: Container(
-                  margin: EdgeInsets.only(top: 0),
+                alignment: Alignment.bottomRight,
+                  margin: EdgeInsets.only(right: 10),
                   child: ElevatedButton(
                     child: Image.asset(
                       'assets/disquete.png',
