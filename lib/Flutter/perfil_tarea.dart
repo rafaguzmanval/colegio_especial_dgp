@@ -386,7 +386,7 @@ class PerfilTareaState extends State<PerfilTarea> {
               visible: !creando,
               child: Container(
                 alignment: Alignment.bottomRight,
-                  margin: EdgeInsets.only(top: 0),
+                  margin: EdgeInsets.only(right: 10),
                   child: ElevatedButton(
                     child: Image.asset(
                     'assets/disquete.png',
