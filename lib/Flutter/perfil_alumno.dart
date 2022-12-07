@@ -325,9 +325,12 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                           initialDate: DateTime.now(),
                           firstDate: DateTime(1940),
                           lastDate: DateTime.now())
-                      .then((e) {
-                    fechaElegida = e;
-                    actualizar();
+                      .then((e) async{
+                    var fecha = e;
+                    await Sesion.db.editarNacimientoUsuario(usuarioPerfil.id, DateFormat('d/M/y').format(fecha!)).then((e){
+                      actualizar();
+                    });
+
                   });
                 },
                 child: Image.asset(

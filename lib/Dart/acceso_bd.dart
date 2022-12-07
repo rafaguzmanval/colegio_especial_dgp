@@ -508,6 +508,46 @@ class AccesoBD {
     }
   }
 
+  editarApellidosUsuario(idUsuario,apellidos) async{
+    try{
+
+       await db.collection("usuarios").doc(idUsuario).update({"apellidos":apellidos}).then(
+           (e){
+             return true;
+           }
+       );
+
+    }catch(e)
+    {
+      print(e);
+      return false;
+    }
+  }
+
+  editarNombreUsuario(idUsuario,nombre) async{
+    try{
+
+      return await db.collection("usuarios").doc(idUsuario).update({"nombre":nombre});
+
+    }catch(e)
+    {
+      print(e);
+      return false;
+    }
+  }
+
+  editarNacimientoUsuario(idUsuario,fecha) async{
+    try{
+
+      return await db.collection("usuarios").doc(idUsuario).update({"fechanacimiento":fecha});
+
+    }catch(e)
+    {
+      print(e);
+      return false;
+    }
+  }
+
 
   editarTarea(tarea) async {
     try {
