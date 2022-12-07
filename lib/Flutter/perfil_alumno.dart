@@ -253,7 +253,14 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                             style: TextStyle(
                                 fontSize: 30, fontWeight: FontWeight.bold),
                           ),
-                          onPressed: () {}),
+                          onPressed: () async{
+
+                            var nombre = await dialogNombre(usuarioPerfil.nombre);
+                            Sesion.db.editarNombreUsuario(usuarioPerfil.id, nombre);
+                            usuarioPerfil.nombre = nombre;
+                            actualizar();
+
+                          }),
                     ),
                     SizedBox(
                       height: 10,
@@ -266,7 +273,14 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                             style: TextStyle(
                                 fontSize: 30, fontWeight: FontWeight.bold),
                           ),
-                          onPressed: () {}),
+                          onPressed: () async{
+
+                            var apellidos = await dialogNombre(usuarioPerfil.apellidos);
+                            Sesion.db.editarApellidosUsuario(usuarioPerfil.id, apellidos);
+                            usuarioPerfil.apellidos = apellidos;
+                            actualizar();
+
+                          }),
                     ),
                   ],
                 )),
@@ -741,6 +755,66 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
     ]);
   }
 
+  dialogNombre(texto) {
+    var controlador = TextEditingController();
+    controlador.text = texto.toUpperCase();
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+              backgroundColor: GuardadoLocal.colores[1],
+              child: Column(
+                children: [
+                  TextField(
+                    controller: controlador,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 35, color: GuardadoLocal.colores[0]),
+                    decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: GuardadoLocal.colores[0], width: 0.0),
+                        )),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                          margin: EdgeInsets.all(15),
+                          child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Column(children: [
+                                Text(
+                                  'No'.toUpperCase(),
+                                  style: TextStyle(
+                                      fontSize: 40,
+                                      color: GuardadoLocal.colores[2]),
+                                ),
+                              ]))),
+                      Container(
+                          margin: EdgeInsets.all(15),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (controlador.text != "") {
+                                Navigator.pop(context, controlador.text);
+                              }
+                            },
+                            child: Text(
+                              'Ok'.toUpperCase(),
+                              style: TextStyle(
+                                  fontSize: 40,
+                                  color: GuardadoLocal.colores[2]),
+                            ),
+                          ))
+                    ],
+                  )
+                ],
+              ));
+        });
+  }
+
   dialogEditarFoto() {
     StreamController controlador = new StreamController();
     showDialog(
@@ -754,7 +828,8 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                     builder: (context,snapshot){
                     return
                       snapshot.data == "carga"?
-                          CircularProgressIndicator()
+                          Container(width:50,height:50,child:CircularProgressIndicator())
+
                           :
                       Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                         ElevatedButton(
