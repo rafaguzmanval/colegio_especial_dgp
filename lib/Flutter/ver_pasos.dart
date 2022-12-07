@@ -42,34 +42,37 @@ class VerPasosState extends State<VerPasos> {
               Container(
                   decoration: BoxDecoration(border: Border.all(width: 1)),
                   padding: EdgeInsets.all(5),
-                  child: Text("PASO " + (i + 1).toString().toUpperCase()+": ",
+                  child: Text("PASO " + (i + 1).toString().toUpperCase() + ": ",
                       style: TextStyle(
                           fontSize: 40,
                           color: GuardadoLocal.colores[0],
                           fontWeight: FontWeight.w800))),
-                  SizedBox(
-                    height: 20,
-                  ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Flexible(
-                      flex: 1,
-                      child: Container(
-                        margin: EdgeInsets.only(left: 10),
-                        child: Text(tarea.textos[i].toUpperCase(),
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 30,
-                                color: GuardadoLocal.colores[0])),
-                      )),
-                  Flexible(
-                      flex: 1,
-                      child: Container(
-                          margin: EdgeInsets.only(right: 10),
-                          child: Image.network(tarea.imagenes[i]))),
-                ],
-              )
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                  decoration: BoxDecoration(border: Border.all(width: 1)),
+                  margin: EdgeInsets.all(20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Flexible(
+                          flex: 1,
+                          child: Container(
+                            margin: EdgeInsets.only(left: 10),
+                            child: Text(tarea.textos[i].toUpperCase(),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30,
+                                    color: GuardadoLocal.colores[0])),
+                          )),
+                      Flexible(
+                          flex: 1,
+                          child: Container(
+                              margin: EdgeInsets.only(right: 10),
+                              child: Image.network(tarea.imagenes[i]))),
+                    ],
+                  ))
             ]))
           ]
         ],
