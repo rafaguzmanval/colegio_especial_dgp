@@ -371,6 +371,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
               visible: !registrando,
               child: Container(
                   alignment: Alignment.bottomRight,
+                  margin: EdgeInsets.only(right: 10),
                   child: TextButton(
                 style: ButtonStyle(
                   backgroundColor:
