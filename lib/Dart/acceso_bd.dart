@@ -490,15 +490,16 @@ class AccesoBD {
         }
       else
         {
-          await subirArchivo(nuevaFoto,"Imágenes/perfiles/"+idUsuario.toString()+".jpg").then((e) async{
+          return await subirArchivo(nuevaFoto,"Imágenes/perfiles/"+idUsuario.toString()+".jpg").then((e) async{
 
-                    await leerImagen("Imágenes/perfiles/"+idUsuario.toString()+".jpg").then((value) {
+                     return await leerImagen("Imágenes/perfiles/"+idUsuario.toString()+".jpg").then((value) {
                       print(value);
                        db.collection("usuarios").doc(idUsuario).update({"foto":value});
                        return value;
                     });
             }
           );
+          print("salida");
         }
 
     }catch(e)
@@ -513,6 +514,7 @@ class AccesoBD {
 
        await db.collection("usuarios").doc(idUsuario).update({"apellidos":apellidos}).then(
            (e){
+
              return true;
            }
        );
@@ -539,7 +541,9 @@ class AccesoBD {
   editarNacimientoUsuario(idUsuario,fecha) async{
     try{
 
-      return await db.collection("usuarios").doc(idUsuario).update({"fechanacimiento":fecha});
+       await db.collection("usuarios").doc(idUsuario).update({"fechanacimiento":fecha}).then((e){
+         return true;
+       });
 
     }catch(e)
     {
@@ -900,7 +904,6 @@ class AccesoBD {
     try {
       const oneMegabyte = 1024 * 1024;
       final String? data = await imagen.getDownloadURL();
-      print("imagen cargada ${data}");
       return data;
       // Data for "images/island.jpg" is returned, use this as needed.
     } on FirebaseException catch (e) {

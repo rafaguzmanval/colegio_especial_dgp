@@ -182,6 +182,7 @@ class ListaAlumnosState extends State<ListaAlumnos> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => PerfilAlumno()));
+                    cargarAlumnos();
                   },
                 )),
             IconButton(

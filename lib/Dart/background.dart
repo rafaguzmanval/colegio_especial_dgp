@@ -18,8 +18,8 @@ class Background
 static inicializarBackground() async
   {
     final androidConfig = FlutterBackgroundAndroidConfig(
-    notificationTitle: "flutter_background example app",
-    notificationText: "Background notification for keeping the example app running in the background",
+    notificationTitle: "TuCole",
+    notificationText: "La aplicación se está ejecutando en segundo plano",
     notificationImportance: AndroidNotificationImportance.Default,
     enableWifiLock: true,// Default is ic_launcher from folder mipmap
   );

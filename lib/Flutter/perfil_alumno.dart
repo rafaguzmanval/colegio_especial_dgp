@@ -326,10 +326,14 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                           firstDate: DateTime(1940),
                           lastDate: DateTime.now())
                       .then((e) async{
-                    var fecha = e;
-                    await Sesion.db.editarNacimientoUsuario(usuarioPerfil.id, DateFormat('d/M/y').format(fecha!)).then((e){
-                      actualizar();
-                    });
+                        if(e != null)
+                          {
+                            var fecha = DateFormat('d/M/y').format(e!);
+                            await Sesion.db.editarNacimientoUsuario(usuarioPerfil.id, fecha).then((e){
+                              usuarioPerfil.fechanacimiento = fecha;
+                              actualizar();
+                            });
+                          }
 
                   });
                 },
@@ -738,47 +742,72 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
   }
 
   dialogEditarFoto() {
+    StreamController controlador = new StreamController();
     showDialog(
         context: context,
         builder: (context) {
           return Dialog(
               alignment: Alignment.center,
               child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                ElevatedButton(
-                    child: Image.asset(
-                      "assets/camara.png",
-                      width: 100,
-                      height: 100,
-                    ),
-                    onPressed: () async {
-                      var imagen =
-                          await seleccionarImagen(SeleccionImagen.camara);
-                      await Sesion.db.editarFotoUsuario(
-                          usuarioPerfil.id, File(imagen.path));
-                      actualizar();
-                      Navigator.pop(context);
-                    }),
+                  StreamBuilder(
+                    stream: controlador.stream,
+                    builder: (context,snapshot){
+                    return
+                      snapshot.data == "carga"?
+                          CircularProgressIndicator()
+                          :
+                      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                        ElevatedButton(
+                            child: Image.asset(
+                              "assets/camara.png",
+                              width: 100,
+                              height: 100,
+                            ),
+                            onPressed: () async {
+                              controlador.add("carga");
+                              var imagen =
+                              await seleccionarImagen(SeleccionImagen.camara);
+                              var nuevaURL = await Sesion.db.editarFotoUsuario(
+                                  usuarioPerfil.id, File(imagen.path));
 
-                // Container(width: 10,alignment: Alignment.center,),
-                SizedBox(
-                  width: 20,
-                ),
-                ElevatedButton(
-                    child: Image.asset(
-                      'assets/galeria.png',
-                      width: 100,
-                      height: 100,
-                    ),
-                    onPressed: () async {
-                      var imagen =
-                          await seleccionarImagen(SeleccionImagen.galeria);
-                      await Sesion.db.editarFotoUsuario(
-                          usuarioPerfil.id, File(imagen.path));
-                      actualizar();
-                      Navigator.pop(context);
-                    }),
-              ]));
+                              print("Nueva " + nuevaURL);
+                              usuarioPerfil.foto = nuevaURL;
+                              actualizar();
+
+                              Navigator.pop(context);
+                            }),
+
+                        // Container(width: 10,alignment: Alignment.center,),
+                        SizedBox(
+                          width: 20,
+                        ),
+                        ElevatedButton(
+
+                            child: Image.asset(
+                              'assets/galeria.png',
+                              width: 100,
+                              height: 100,
+                            ),
+                            onPressed: () async {
+                              controlador.add("carga");
+                              var imagen =
+                              await seleccionarImagen(SeleccionImagen.galeria);
+                              await Sesion.db.editarFotoUsuario(
+                                  usuarioPerfil.id, File(imagen.path)).then((foto){
+                                print("Nueva " + foto);
+                                usuarioPerfil.foto = foto;
+                                actualizar();
+
+                              });
+
+
+                              Navigator.pop(context);
+                            }),
+                      ]);
+                  },
+            )
+
+          );
         });
   }
 }
