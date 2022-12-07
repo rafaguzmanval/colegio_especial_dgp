@@ -36,7 +36,6 @@ class PerfilAlumno extends StatefulWidget {
 }
 
 class PerfilAlumnoState extends State<PerfilAlumno> {
-
   var usuarioPerfil;
   var tareasSinFinalizar = [];
   var tareasCompletadas = [];
@@ -64,7 +63,6 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
 
   int tareaEliminandose = 0;
 
-
   @override
   void dispose() {
     myController.dispose();
@@ -86,23 +84,30 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-              icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
-              onPressed: (){Navigator.pop(context);}),
-          title: Center(child: Text('PERFIL DE ${Sesion.seleccion.nombre.toUpperCase()}'
-              '',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
-        )),
-        body: SingleChildScrollView(child: Container(
+            leading: IconButton(
+                icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
+                onPressed: () {
+                  Navigator.pop(context);
+                }),
+            title: Center(
+              child: Text(
+                'PERFIL DE ${Sesion.seleccion.nombre.toUpperCase()}'
+                '',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+              ),
+            )),
+        body: SingleChildScrollView(
+          child: Container(
             padding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
             alignment: Alignment.center,
             child: Column(
               children: [
-               cargando(),
-
+                cargando(),
               ],
             ),
-      ),
-    ));
+          ),
+        ));
   }
 
   // Carga el perfil del alumno
@@ -155,277 +160,270 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
 
   // Carga el perfil del alumno
   Widget perfilAlumno() {
-
-
     tareasSinFinalizar.clear();
     tareasCompletadas.clear();
     tareasCanceladas.clear();
     tareasFinalizadas.clear();
 
-    for(int i = 0; i < Sesion.tareas.length; i++)
-    {
-      if(Sesion.tareas[i].estado == "sinFinalizar")
-      {
+    for (int i = 0; i < Sesion.tareas.length; i++) {
+      if (Sesion.tareas[i].estado == "sinFinalizar") {
         tareasSinFinalizar.add(Sesion.tareas[i]);
         tareasSinFinalizar.add(i);
-      }
-      else if(Sesion.tareas[i].estado == "completada")
-      {
+      } else if (Sesion.tareas[i].estado == "completada") {
         tareasCompletadas.add(Sesion.tareas[i]);
         tareasCompletadas.add(i);
-      }
-      else if(Sesion.tareas[i].estado == "cancelada"){
+      } else if (Sesion.tareas[i].estado == "cancelada") {
         tareasCanceladas.add(Sesion.tareas[i]);
         tareasCanceladas.add(i);
+      } else {
+        tareasFinalizadas.add(Sesion.tareas[i]);
+        tareasFinalizadas.add(i);
       }
-      else
-        {
-          tareasFinalizadas.add(Sesion.tareas[i]);
-          tareasFinalizadas.add(i);
-        }
     }
 
     return
 
         //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
 
-      Column(
-        children: [
-          if (usuarioPerfil != null) ...[
-            SizedBox(
-              height: 10,
+        Column(
+      children: [
+        if (usuarioPerfil != null) ...[
+          SizedBox(
+            height: 10,
+          ),
+
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Flexible(
+              flex: 25,
+              child: Container(
+                child: !(usuarioPerfil.foto is String)
+                    ? Column(children: [
+                        Text(
+                          'NINGUNA FOTO ELEGIDA ****',
+                          textAlign: TextAlign.center,
+                        ),
+                        ElevatedButton(
+                            onPressed: () {
+                              dialogEditarFoto();
+                              actualizar();
+                            },
+                            child: Icon(
+                              Icons.edit,
+                              color: GuardadoLocal.colores[2],
+                              size: 40,
+                            ),
+                            style: ElevatedButton.styleFrom(
+                                shape: CircleBorder())),
+                      ])
+                    : CircleAvatar(
+                        radius: 100,
+                        backgroundImage: NetworkImage(usuarioPerfil.foto),
+                        child: Stack(
+                          children: [
+                            Container(
+                              child: ElevatedButton(
+                                  onPressed: () {
+                                    dialogEditarFoto();
+                                    actualizar();
+                                  },
+                                  child: Icon(
+                                    Icons.edit,
+                                    color: GuardadoLocal.colores[2],
+                                    size: 40,
+                                  ),
+                                  style: ElevatedButton.styleFrom(
+                                      shape: CircleBorder())),
+                              alignment: Alignment.bottomRight,
+                            )
+                          ],
+                        ),
+                      ),
+              ),
             ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children:[
-              Flexible(
-                flex: 25,
-
-    child:                Container(
-
-      child: !(usuarioPerfil.foto is String)
-          ? Column(
-          children: [
-            Text(
-            'NINGUNA FOTO ELEGIDA ****',
-            textAlign: TextAlign.center,
-          ),ElevatedButton(
-                onPressed: () {
-                  dialogEditarFoto();
-                  actualizar();
-                },
-                child: Icon(
-                  Icons.edit,
-                  color: GuardadoLocal.colores[2],
-                  size: 40,
-                ),
-                style: ElevatedButton.styleFrom(shape: CircleBorder(
-
-                )
-                )
-            ),])
-          :
-
-                CircleAvatar(
-                radius: 100,
-                backgroundImage: NetworkImage(usuarioPerfil.foto),
-                child:
-                  Stack(
+            Flexible(
+                flex: 50,
+                child: Column(
                   children: [
-                    Container(
-                      child: ElevatedButton(
-                          onPressed: () {
-                            dialogEditarFoto();
-                            actualizar();
-                          },
-                          child: Icon(
-                            Icons.edit,
-                            color: GuardadoLocal.colores[2],
-                            size: 40,
-                          ),
-                        style: ElevatedButton.styleFrom(shape: CircleBorder(
-
-                        )
-                        )
-                      ),
-                      alignment: Alignment.bottomRight,
-                    )
-
-                  ],
-                  ),
-
-                ),
-
-
-                  ),
-
-
-              ),
-
-              Flexible(
-                  flex: 50,
-                  child: Column(children: [
-
                     SizedBox(
                       width: 500,
-                      child:
-                        TextButton(child:Text(usuarioPerfil.nombre.toUpperCase(),style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
-                            onPressed:(){
-
-                            }
-                        ),
+                      child: TextButton(
+                          child: Text(
+                            usuarioPerfil.nombre.toUpperCase(),
+                            style: TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: () {}),
                     ),
                     SizedBox(
                       height: 10,
                     ),
-
-                  SizedBox(
-                    width: 500,
-                    child:
-                    TextButton(child:Text(usuarioPerfil.apellidos.toUpperCase(),style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
-                        onPressed:(){
-
-                        }
+                    SizedBox(
+                      width: 500,
+                      child: TextButton(
+                          child: Text(
+                            usuarioPerfil.apellidos.toUpperCase(),
+                            style: TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: () {}),
                     ),
-                  ),
+                  ],
+                )),
 
-              ],)),
-                  ///BOTON DE LOCALIZACION
+            ///BOTON DE LOCALIZACION
 
-                  Flexible(
-                    flex:25,
-                    child:
-                  ElevatedButton(onPressed: () async{
+            Flexible(
+              flex: 25,
+              child: ElevatedButton(
+                  onPressed: () async {
                     await Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => Localizacion()));
                     Sesion.paginaActual = this;
                     actualizar();
-
-                  }, child: Image.asset('assets/mapa.png',
-
+                  },
+                  child: Image.asset(
+                    'assets/mapa.png',
                     width: 140,
                     height: 100,
                   )),
-                  )
+            )
+          ]),
 
-            ]),
+          Text('FECHA DE NACIMIENTO:'),
 
-
-            Text('FECHA DE NACIMIENTO:'),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-                children:[
-              Text(usuarioPerfil.fechanacimiento),
-              SizedBox(width: 20,),
-              ElevatedButton(
-                  onPressed: () async {
-                    await showDatePicker(
-                        builder: (context, child) {
-                          return Theme(
-                            data: Theme.of(context).copyWith(
-                              canvasColor: GuardadoLocal.colores[1],
-                              colorScheme: ColorScheme.light(
-                                  primary:
-                                  GuardadoLocal.colores[0] // <-- SEE HERE
-                              ),
-                              textButtonTheme: TextButtonThemeData(
-                                style: TextButton.styleFrom(
-                                  primary: GuardadoLocal
-                                      .colores[0], // button text color
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text(usuarioPerfil.fechanacimiento),
+            SizedBox(
+              width: 20,
+            ),
+            ElevatedButton(
+                onPressed: () async {
+                  await showDatePicker(
+                          builder: (context, child) {
+                            return Theme(
+                              data: Theme.of(context).copyWith(
+                                canvasColor: GuardadoLocal.colores[1],
+                                colorScheme: ColorScheme.light(
+                                    primary:
+                                        GuardadoLocal.colores[0] // <-- SEE HERE
+                                    ),
+                                textButtonTheme: TextButtonThemeData(
+                                  style: TextButton.styleFrom(
+                                    primary: GuardadoLocal
+                                        .colores[0], // button text color
+                                  ),
                                 ),
                               ),
-                            ),
-                            child: child!,
-                          );
-                        },
-                        context: context,
-                        locale: const Locale("es", "ES"),
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1940),
-                        lastDate: DateTime.now())
-                        .then((e) {
-                      fechaElegida = e;
-                      actualizar();
-                    });
-                  },
-                  child:
-                    Image.asset("assets/calendario.png",
-                      width: 50,
-                      height: 50,),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: GuardadoLocal.colores[0])),
+                              child: child!,
+                            );
+                          },
+                          context: context,
+                          locale: const Locale("es", "ES"),
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1940),
+                          lastDate: DateTime.now())
+                      .then((e) {
+                    fechaElegida = e;
+                    actualizar();
+                  });
+                },
+                child: Image.asset(
+                  "assets/calendario.png",
+                  width: 50,
+                  height: 50,
+                ),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: GuardadoLocal.colores[0])),
+          ]),
 
-            ]),
+          SizedBox(
+            height: 15,
+          ),
 
-            SizedBox(
-              height: 15,
-            ),
-
-            SizedBox(height: 15),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (fotoTomada == null) ...[
-                  SizedBox(
-                    height: 10,
-                  ),
-
-                ]
-              ],
-            ),
-
-            SizedBox(height: 15),
-
-
-
-
-            /// se muestran las tareas del alumno
-            if (Sesion.tareas != null) ...[
-              if(tareasSinFinalizar.length != 0)...[
-              Text("\nTAREAS EN CURSO: ",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
-                visualizarTareaLista("sinFinalizar"),
-              ],
-              if(tareasCompletadas.length != 0)...[
-              Text("\nTAREAS COMPLETADAS: ",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
-                visualizarTareaLista("completada"),
-              ],
-
-              if(tareasCanceladas.length != 0)...[
-              Text("\nTAREAS CANCELADAS: ",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
-              visualizarTareaLista("cancelada")
-              ],
-
-
-              if(tareasFinalizadas.length != 0)...[
-                Text("\nTAREAS FINALIZADAS: ",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
-                visualizarTareaLista("finalizada")
-              ],
-
-              if(tareasSinFinalizar.length == 0 && tareasCompletadas.length == 0 && tareasCanceladas.length == 0 && tareasFinalizadas.length == 0)...[
-                Text("SIN TAREAS",style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[0])),
+          SizedBox(height: 15),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (fotoTomada == null) ...[
+                SizedBox(
+                  height: 10,
+                ),
               ]
             ],
+          ),
 
-            /// Añadir una nueva tarea al alumno
-            if (tareas != null && nombresTareas.length > 1) ...[
-              Container(
-                  margin: EdgeInsets.only(top: 20),
-                  child: FloatingActionButton(
-                      heroTag: "addtarea",
-                      onPressed: () => addTarea(context: context),
-                      child: Icon(Icons.add,color: GuardadoLocal.colores[2],)))
+          SizedBox(height: 15),
+
+          /// se muestran las tareas del alumno
+          if (Sesion.tareas != null) ...[
+            if (tareasSinFinalizar.length != 0) ...[
+              Text("\nTAREAS EN CURSO: ",
+                  style: TextStyle(
+                      fontFamily: "Escolar",
+                      fontSize: 30,
+                      color: GuardadoLocal.colores[0])),
+              visualizarTareaLista("sinFinalizar"),
             ],
-          ] else ...[
-            new CircularProgressIndicator()
+            if (tareasCompletadas.length != 0) ...[
+              Text("\nTAREAS COMPLETADAS: ",
+                  style: TextStyle(
+                      fontFamily: "Escolar",
+                      fontSize: 30,
+                      color: GuardadoLocal.colores[0])),
+              visualizarTareaLista("completada"),
+            ],
+            if (tareasCanceladas.length != 0) ...[
+              Text("\nTAREAS CANCELADAS: ",
+                  style: TextStyle(
+                      fontFamily: "Escolar",
+                      fontSize: 30,
+                      color: GuardadoLocal.colores[0])),
+              visualizarTareaLista("cancelada")
+            ],
+            if (tareasFinalizadas.length != 0) ...[
+              Text("\nTAREAS FINALIZADAS: ",
+                  style: TextStyle(
+                      fontFamily: "Escolar",
+                      fontSize: 30,
+                      color: GuardadoLocal.colores[0])),
+              visualizarTareaLista("finalizada")
+            ],
+            if (tareasSinFinalizar.length == 0 &&
+                tareasCompletadas.length == 0 &&
+                tareasCanceladas.length == 0 &&
+                tareasFinalizadas.length == 0) ...[
+              Text("SIN TAREAS",
+                  style: TextStyle(
+                      fontFamily: "Escolar",
+                      fontSize: 30,
+                      color: GuardadoLocal.colores[0])),
+            ]
           ],
-          SizedBox(height: 10,)
+
+          /// Añadir una nueva tarea al alumno
+          if (tareas != null && nombresTareas.length > 1) ...[
+            Container(
+                margin: EdgeInsets.only(top: 20),
+                child: FloatingActionButton(
+                    heroTag: "addtarea",
+                    onPressed: () => addTarea(context: context),
+                    child: Icon(
+                      Icons.add,
+                      color: GuardadoLocal.colores[2],
+                    )))
+          ],
+        ] else ...[
+          new CircularProgressIndicator()
         ],
-      );
+        SizedBox(
+          height: 10,
+        )
+      ],
+    );
   }
 
   cargarUsuario() async // EN sesion seleccion estara el id del usuario que se ha elegido
@@ -433,8 +431,9 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
     usuarioPerfil = await Sesion.db.consultarIDusuario(Sesion.seleccion.id);
     await Sesion.db.consultarTareasAsignadasAlumno(Sesion.seleccion.id, false);
 
-
-    print(tareasSinFinalizar.length.toString() + " " + tareasCompletadas.length.toString());
+    print(tareasSinFinalizar.length.toString() +
+        " " +
+        tareasCompletadas.length.toString());
 
     actualizar();
   }
@@ -455,7 +454,6 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
     setState(() {});
     esTareaEliminandose = false;
   }
-
 
   mostrarError(mensaje, error) {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -478,7 +476,6 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
           )),
     );
   }
-
 
   Widget cargando() {
     if (usuarioPerfil == null)
@@ -522,7 +519,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                   initialData: "",
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     return Container(
-                      color: GuardadoLocal.colores[1],
+                        color: GuardadoLocal.colores[1],
                         height: MediaQuery.of(context).size.height - 100,
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -530,17 +527,21 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                           children: [
                             Container(
                               color: GuardadoLocal.colores[1],
-                              margin:
-                                  EdgeInsets.only(top: 10, left: 10),
+                              margin: EdgeInsets.only(top: 10, left: 10),
                               child: DropdownButton(
-                                style: TextStyle(fontFamily:"Escolar",color: GuardadoLocal.colores[0]),
+                                style: TextStyle(
+                                    fontFamily: "Escolar",
+                                    color: GuardadoLocal.colores[0]),
                                 dropdownColor: GuardadoLocal.colores[1],
                                 key: Key("Multiselección"),
                                 value: tareaElegida,
                                 items: nombresTareas.map((String value) {
                                   return DropdownMenuItem(
                                     value: value,
-                                    child: Text(value,style: TextStyle(fontSize: 25),),
+                                    child: Text(
+                                      value,
+                                      style: TextStyle(fontSize: 25),
+                                    ),
                                   );
                                 }).toList(),
                                 onChanged: (String? value) {
@@ -571,7 +572,8 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                               margin: EdgeInsets.only(top: 5),
                               child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: GuardadoLocal.colores[0]),
+                                      backgroundColor:
+                                          GuardadoLocal.colores[0]),
                                   onPressed: () async {
                                     await showDatePicker(
                                             context: context,
@@ -584,10 +586,15 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                       controladorStream.add("");
                                     });
                                   },
-                                  child: Text((fechafinal == null)
-                                      ? "ELIGE FECHA DE ENTREGA LIMITE"
-                                      : DateFormat('d/M/y')
-                                          .format(fechafinal),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),)),
+                                  child: Text(
+                                    (fechafinal == null)
+                                        ? "ELIGE FECHA DE ENTREGA LIMITE"
+                                        : DateFormat('d/M/y')
+                                            .format(fechafinal),
+                                    style: TextStyle(
+                                        color: GuardadoLocal.colores[2],
+                                        fontSize: 25),
+                                  )),
                             ),
                             Container(
                               color: GuardadoLocal.colores[1],
@@ -604,14 +611,19 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                     controladorStream.add("");
                                   });
                                 },
-                                child: Text((horafinal == null)
-                                    ? "ELIGE HORA DE ENTREGA LIMITE"
-                                    : horafinal.hour.toString() +
-                                        ":" +
-                                        ((horafinal.minute > 9)
-                                            ? horafinal.minute.toString()
-                                            : "0" +
-                                                horafinal.minute.toString()),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),),
+                                child: Text(
+                                  (horafinal == null)
+                                      ? "ELIGE HORA DE ENTREGA LIMITE"
+                                      : horafinal.hour.toString() +
+                                          ":" +
+                                          ((horafinal.minute > 9)
+                                              ? horafinal.minute.toString()
+                                              : "0" +
+                                                  horafinal.minute.toString()),
+                                  style: TextStyle(
+                                      color: GuardadoLocal.colores[2],
+                                      fontSize: 25),
+                                ),
                               ),
                             ),
                             Visibility(
@@ -621,13 +633,13 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                 margin: EdgeInsets.only(bottom: 10),
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      backgroundColor: GuardadoLocal.colores[0]),
+                                      backgroundColor:
+                                          GuardadoLocal.colores[0]),
                                   child: Text(
                                     "AÑADIR TAREA",
                                     style: TextStyle(
-                                      color: GuardadoLocal.colores[2],
-                                      fontSize: 25
-                                    ),
+                                        color: GuardadoLocal.colores[2],
+                                        fontSize: 25),
                                   ),
                                   onPressed: () async {
                                     if (idTareaElegida != null) {
@@ -667,108 +679,103 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
         });
   }
 
-  Widget visualizarTareaLista(condicion)
-  {
+  Widget visualizarTareaLista(condicion) {
     var listaIterar;
-    if(condicion == "sinFinalizar")
-      {
-        listaIterar = tareasSinFinalizar;
-      }
-    else if(condicion == "completada")
-      {
-        listaIterar = tareasCompletadas;
-      }
-    else if(condicion == "cancelada")
-      {
-        listaIterar = tareasCanceladas;
-      }
-    else
-      {
-        listaIterar = tareasFinalizadas;
-      }
-    return Column(
-        children: [
-        for (int i = 0; i < listaIterar.length; i+=2)
-            Container(
+    if (condicion == "sinFinalizar") {
+      listaIterar = tareasSinFinalizar;
+    } else if (condicion == "completada") {
+      listaIterar = tareasCompletadas;
+    } else if (condicion == "cancelada") {
+      listaIterar = tareasCanceladas;
+    } else {
+      listaIterar = tareasFinalizadas;
+    }
+    return Column(children: [
+      for (int i = 0; i < listaIterar.length; i += 2)
+        Container(
             margin: EdgeInsets.only(top: 10),
             alignment: Alignment.center,
             child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-            ElevatedButton(
-            onPressed: () async {
-            Sesion.argumentos.add(listaIterar[i+1]);
-            await Navigator.push(
-            context,
-            MaterialPageRoute(
-            builder: (context) => VerTareas()));
-            Sesion.paginaActual = this;
-            },
-            child: Text(listaIterar[i].nombre.toString().toUpperCase(),style: TextStyle(fontFamily:"Escolar",fontSize: 30,color: GuardadoLocal.colores[2]),),
-            ),
-              IconButton(
-              onPressed: () async {
-            await Sesion.db.eliminarTareaAlumno(
-                listaIterar[i].idRelacion);
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    Sesion.argumentos.add(listaIterar[i + 1]);
+                    await Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => VerTareas()));
+                    Sesion.paginaActual = this;
+                  },
+                  child: Text(
+                    listaIterar[i].nombre.toString().toUpperCase(),
+                    style: TextStyle(
+                        fontFamily: "Escolar",
+                        fontSize: 30,
+                        color: GuardadoLocal.colores[2]),
+                  ),
+                ),
+                IconButton(
+                    onPressed: () async {
+                      await Sesion.db
+                          .eliminarTareaAlumno(listaIterar[i].idRelacion);
 
-            esTareaEliminandose = true;
-            tareaEliminandose = i;
-            actualizar();
-            },
-            icon: Icon(Icons.delete,color: GuardadoLocal.colores[0],)),
-            if (esTareaEliminandose &&
-            i == tareaEliminandose) ...[
-            new CircularProgressIndicator(),
-            ]
-            ],
+                      esTareaEliminandose = true;
+                      tareaEliminandose = i;
+                      actualizar();
+                    },
+                    icon: Icon(
+                      Icons.delete,
+                      color: GuardadoLocal.colores[0],
+                    )),
+                if (esTareaEliminandose && i == tareaEliminandose) ...[
+                  new CircularProgressIndicator(),
+                ]
+              ],
             )),
-        ]
-    );
-
+    ]);
   }
 
-
-  dialogEditarFoto()
-  {
-    showDialog( context: context,
-        builder: (context)
-    {
-      return Dialog(
-        alignment: Alignment.center,
-        child:Row(
-
-            children:[
+  dialogEditarFoto() {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+              alignment: Alignment.center,
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 ElevatedButton(
                     child: Image.asset(
                       "assets/camara.png",
                       width: 100,
                       height: 100,
                     ),
-                    onPressed: () async{
-                      var imagen = await seleccionarImagen(SeleccionImagen.camara);
-                      await Sesion.db.editarFotoUsuario(usuarioPerfil.id, File(imagen.path));
+                    onPressed: () async {
+                      var imagen =
+                          await seleccionarImagen(SeleccionImagen.camara);
+                      await Sesion.db.editarFotoUsuario(
+                          usuarioPerfil.id, File(imagen.path));
                       actualizar();
                       Navigator.pop(context);
-
                     }),
 
-         // Container(width: 10,alignment: Alignment.center,),
-
-            ElevatedButton(
-                child: Image.asset('assets/galeria.png',
-                  width: 100,
-                  height: 100,
+                // Container(width: 10,alignment: Alignment.center,),
+                SizedBox(
+                  width: 20,
                 ),
-                onPressed: () async{
-                  var imagen = await seleccionarImagen(SeleccionImagen.galeria);
-                  await Sesion.db.editarFotoUsuario(usuarioPerfil.id, File(imagen.path));
-                  actualizar();
-                  Navigator.pop(context);
-                }),
-
-        ])
-      );
-    }
-    );
+                ElevatedButton(
+                    child: Image.asset(
+                      'assets/galeria.png',
+                      width: 100,
+                      height: 100,
+                    ),
+                    onPressed: () async {
+                      var imagen =
+                          await seleccionarImagen(SeleccionImagen.galeria);
+                      await Sesion.db.editarFotoUsuario(
+                          usuarioPerfil.id, File(imagen.path));
+                      actualizar();
+                      Navigator.pop(context);
+                    }),
+              ]));
+        });
   }
 }
