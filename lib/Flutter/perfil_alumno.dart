@@ -320,6 +320,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
               mainAxisAlignment: MainAxisAlignment.center,
                 children:[
               Text(usuarioPerfil.fechanacimiento),
+              SizedBox(width: 20,),
               ElevatedButton(
                   onPressed: () async {
                     await showDatePicker(
