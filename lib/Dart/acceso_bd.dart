@@ -1065,13 +1065,16 @@ class AccesoBD {
     try {
       var listaMensajes = [];
 
+      print(idChat);
       _subscripcion = await db
           .collection('mensajes')
           .where('idChat',  isEqualTo: idChat)
           .snapshots().listen((event) {
+
             for(int i = 0; i<event.docs.length;i++){
               Mensaje nuevo = Mensaje(event.docs[i].get('idUsuarioEmisor'),event.docs[i].get('idUsuarioReceptor'),
                 event.docs[i].get('tipo'),event.docs[i].get('contenido'),event.docs[i].get('fechaEnvio'));
+              print(nuevo.toString());
               listaMensajes.add(nuevo);
             }
 
