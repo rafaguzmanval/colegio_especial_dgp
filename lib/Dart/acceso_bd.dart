@@ -1069,8 +1069,6 @@ class AccesoBD {
   obtenerMensajes(idChat) async{
     try {
 
-
-      print(idChat);
       _subscripcionChat = await db
           .collection('mensajes')
           .where('idChat',  isEqualTo: idChat).orderBy("fechaEnvio")
@@ -1081,12 +1079,16 @@ class AccesoBD {
             for(int i = 0; i<event.docs.length;i++){
               Mensaje nuevo = Mensaje(event.docs[i].get('idChat'),event.docs[i].get('idUsuarioEmisor'),event.docs[i].get('idUsuarioReceptor'),
                 event.docs[i].get('tipo'),event.docs[i].get('contenido'),event.docs[i].get('fechaEnvio'));
-              print(nuevo.toString());
               listaMensajes.add(nuevo);
             }
 
-
+            if(Sesion.paginaActual.toString().contains("VistaChat"))
             Sesion.paginaActual.actualizarMensajes(listaMensajes);
+            else
+              {
+
+              }
+
           });
     } catch (e) {
       print(e);
