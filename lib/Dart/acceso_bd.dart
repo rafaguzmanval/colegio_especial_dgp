@@ -1068,15 +1068,31 @@ class AccesoBD {
       print(idChat);
       _subscripcion = await db
           .collection('mensajes')
-          .where('idChat',  isEqualTo: idChat)
+          .where('idChat',  isEqualTo: idChat).orderBy("fechaEnvio")
           .snapshots().listen((event) {
 
+            /*
+            var nuevo = null;
+            event.docChanges.forEach((element) { 
+              
+              if(element.type == DocumentChangeType.added)
+                {
+                   nuevo = Mensaje(element.doc.get('idChat'),element.doc.get('idUsuarioEmisor'),element.doc.get('idUsuarioReceptor'),
+                      element.doc.get('tipo'),element.doc.get('contenido'),element.doc.get('fechaEnvio'));
+                  print(nuevo.toString());
+                }
+            });
+            */
+             
+
+            
             for(int i = 0; i<event.docs.length;i++){
               Mensaje nuevo = Mensaje(event.docs[i].get('idChat'),event.docs[i].get('idUsuarioEmisor'),event.docs[i].get('idUsuarioReceptor'),
                 event.docs[i].get('tipo'),event.docs[i].get('contenido'),event.docs[i].get('fechaEnvio'));
               print(nuevo.toString());
               listaMensajes.add(nuevo);
             }
+            
 
             Sesion.paginaActual.actualizarMensajes(listaMensajes);
           });
