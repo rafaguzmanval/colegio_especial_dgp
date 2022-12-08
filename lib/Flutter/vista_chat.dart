@@ -151,14 +151,11 @@ class _VistaChatState extends State<VistaChat> {
   }
 
   enviarMensaje() {
-    if (messageController.text.isNotEmpty) {/*
-      Map<String, dynamic> chatMessageMap = {
-        "message": messageController.text,
-        "sender": widget.userName,
-        "time": DateTime.now().millisecondsSinceEpoch,
-      };
+    if (messageController.text.isNotEmpty) {
 
-      DatabaseService().sendMessage(widget.groupId, chatMessageMap);*/
+      Mensaje msg = Mensaje(widget.chatId, Sesion.id, widget.idInterlocutor, 'texto', messageController.text, DateTime.now().millisecondsSinceEpoch);
+
+      Sesion.db.addMensaje(msg);
       setState(() {
         messageController.clear();
       });

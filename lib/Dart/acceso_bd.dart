@@ -1072,7 +1072,7 @@ class AccesoBD {
           .snapshots().listen((event) {
 
             for(int i = 0; i<event.docs.length;i++){
-              Mensaje nuevo = Mensaje(event.docs[i].get('idUsuarioEmisor'),event.docs[i].get('idUsuarioReceptor'),
+              Mensaje nuevo = Mensaje(event.docs[i].get('idChat'),event.docs[i].get('idUsuarioEmisor'),event.docs[i].get('idUsuarioReceptor'),
                 event.docs[i].get('tipo'),event.docs[i].get('contenido'),event.docs[i].get('fechaEnvio'));
               print(nuevo.toString());
               listaMensajes.add(nuevo);
@@ -1080,6 +1080,25 @@ class AccesoBD {
 
             Sesion.paginaActual.actualizarMensajes(listaMensajes);
           });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  addMensaje(Mensaje mensaje) async{
+    try {
+
+      Map<String,dynamic> msg = {
+        'idChat': mensaje.idChat,
+        'idUsuarioEmisor': mensaje.idUsuarioEmisor,
+        'idUsuarioReceptor': mensaje.idUsuarioReceptor,
+        'fechaEnvio': mensaje.fechaEnvio,
+        'tipo': mensaje.tipo,
+        'contenido': mensaje.contenido,
+      };
+
+      db.collection('mensajes').add(msg);
+
     } catch (e) {
       print(e);
     }

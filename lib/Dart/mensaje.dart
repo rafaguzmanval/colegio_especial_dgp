@@ -5,7 +5,7 @@ class Mensaje{
   String idUsuarioReceptor;
   String tipo;
   String contenido;
-  String fechaEnvio;
+  int fechaEnvio;
   Mensaje(this.idChat,this.idUsuarioEmisor,this.idUsuarioReceptor,this.tipo,this.contenido,this.fechaEnvio);
 
 }
