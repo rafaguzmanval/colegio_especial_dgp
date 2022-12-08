@@ -1063,7 +1063,7 @@ class AccesoBD {
 
   obtenerMensajes(idChat) async{
     try {
-      var listaMensajes = [];
+
 
       print(idChat);
       _subscripcion = await db
@@ -1071,6 +1071,7 @@ class AccesoBD {
           .where('idChat',  isEqualTo: idChat).orderBy("fechaEnvio")
           .snapshots().listen((event) {
 
+        var listaMensajes = [];
             /*
             var nuevo = null;
             event.docChanges.forEach((element) { 
@@ -1083,9 +1084,7 @@ class AccesoBD {
                 }
             });
             */
-             
 
-            
             for(int i = 0; i<event.docs.length;i++){
               Mensaje nuevo = Mensaje(event.docs[i].get('idChat'),event.docs[i].get('idUsuarioEmisor'),event.docs[i].get('idUsuarioReceptor'),
                 event.docs[i].get('tipo'),event.docs[i].get('contenido'),event.docs[i].get('fechaEnvio'));

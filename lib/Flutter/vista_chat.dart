@@ -167,7 +167,9 @@ class _VistaChatState extends State<VistaChat> {
   }
 
   actualizarMensajes(listaMensajes){
+
     mensajes = listaMensajes;
+    print("numero de mensajes ${mensajes.length}" );
     chatsController.add('');
   }
 }
