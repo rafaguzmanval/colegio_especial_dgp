@@ -64,7 +64,7 @@ class AccesoBD {
   }
 
   desactivarSubscripcionChat() {
-    if (_subscripcionLoc != null) _subscripcionChat.cancel();
+    if (_subscripcionChat != null) _subscripcionChat.cancel();
   }
 
   //endregion
