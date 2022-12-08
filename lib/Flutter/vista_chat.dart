@@ -30,7 +30,6 @@ class VistaChat extends StatefulWidget {
 class _VistaChatState extends State<VistaChat> {
   StreamController chatsController = new StreamController();
   TextEditingController messageController = TextEditingController();
-  var i = 0;
   var mensajes = [];
 
   @override
@@ -166,8 +165,8 @@ class _VistaChatState extends State<VistaChat> {
     }
   }
 
-  cargaMensajes(){
-    Sesion.db.obtenerMensajes(widget.chatId);
+  cargaMensajes() async{
+    await Sesion.db.obtenerMensajes(widget.chatId);
   }
 
   actualizarMensajes(listaMensajes){

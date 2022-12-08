@@ -175,7 +175,7 @@ class PaginaChatsState extends State<PaginaChats> {
                   itemBuilder: (context, index) {
                     int reverseIndex = Sesion.chats.length - index - 1; // int reverseIndex = snapshot.data['chats'].length - index - 1
                     return ListaChats(
-                      chatId: 'id',
+                      chatId: Sesion.chats[reverseIndex].id,
                       nombre:Sesion.chats[reverseIndex].nombre,
                       foto: Sesion.chats[reverseIndex].foto,
                       idInterlocutor: Sesion.chats[reverseIndex].idUsuario1==Sesion.id?Sesion.chats[reverseIndex].idUsuario2:Sesion.chats[reverseIndex].idUsuario1,);
