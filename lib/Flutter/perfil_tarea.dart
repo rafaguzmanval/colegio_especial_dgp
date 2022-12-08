@@ -967,8 +967,8 @@ class PerfilTareaState extends State<PerfilTarea> {
                                             heroTag: "boton" + i.toString(),
                                             onPressed: () {
 
-                                              textos.remove(i);
-                                              imagenes.remove(i);
+                                              textos.removeAt(i);
+                                              imagenes.removeAt(i);
                                               controladorStream.add("");
                                             },
                                             child: Icon(

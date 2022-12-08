@@ -481,6 +481,24 @@ class AccesoBD {
     }
   }
 
+  subirImagen(archivo,path) async{
+    try {
+      return await storageRef // espera hasta subir el archivo en la base de datos
+          .child(path)
+          .putFile(archivo).then((e) async {
+        return await leerImagen( // espera a obtener la url para acceder a dicho archivo y comprobar que existe
+            path).then((value) {
+          return value; // devuelve la url del archivo
+        });
+      });
+    }
+    catch(e)
+    {
+      print(e);
+      return "error al subir archivo";
+    }
+  }
+
   editarFotoUsuario(idUsuario,nuevaFoto) async{
     try{
 
@@ -490,16 +508,17 @@ class AccesoBD {
         }
       else
         {
-          return await subirArchivo(nuevaFoto,"Imágenes/perfiles/"+idUsuario.toString()+".jpg").then((e) async{
+          /*return await subirArchivo(nuevaFoto,"Imágenes/perfiles/"+idUsuario.toString()+".jpg").then((e) async{
 
                      return await leerImagen("Imágenes/perfiles/"+idUsuario.toString()+".jpg").then((value) {
                       print(value);
                        db.collection("usuarios").doc(idUsuario).update({"foto":value});
                        return value;
-                    });
-            }
-          );
-          print("salida");
+                    });*/
+          return await subirImagen(nuevaFoto,"Imágenes/perfiles/"+idUsuario.toString()+".jpg").then((value) async{
+            return await db.collection("usuarios").doc(idUsuario).update({"foto":value});
+          });
+
         }
 
     }catch(e)

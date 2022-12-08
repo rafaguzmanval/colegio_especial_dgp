@@ -515,6 +515,7 @@ class CrearTareaState extends State<CrearTarea> {
               stream: controladorStream.stream,
               initialData: "",
               builder: (BuildContext context, AsyncSnapshot snapshot) {
+                print("actualizacion");
                 return Dialog(
                   backgroundColor: GuardadoLocal.colores[1],
                   child: SingleChildScrollView(
@@ -580,8 +581,8 @@ class CrearTareaState extends State<CrearTarea> {
                                     child: FloatingActionButton(
                                         heroTag: "boton" + i.toString(),
                                         onPressed: () {
-                                          textos.remove(i);
-                                          imagenes.remove(i);
+                                          textos.removeAt(i);
+                                          imagenes.removeAt(i);
                                           controladorStream.add("");
                                         },
                                         child: Icon(
@@ -590,24 +591,6 @@ class CrearTareaState extends State<CrearTarea> {
                                         ))),
                               ),
 
-                              ///Duplicacion
-                              /* Flexible(
-                                    flex: 30,
-                                    child: Container(
-                                        margin: EdgeInsets.only(bottom: 10),
-                                        child: FloatingActionButton(
-                                            heroTag: "boton" + i.toString(),
-                                            onPressed: () {
-                                              textos.add(textos[i]);
-                                              imagenes.add(imagenes[i]);
-
-                                              controladorStream.add("");
-                                            },
-                                            child: Icon(
-                                              Icons.queue_outlined,
-                                              color: GuardadoLocal.colores[2],
-                                            ))),
-                                  ),*/
                             ],
                           ),
                         ]),
