@@ -557,7 +557,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           rolElegido = "NINGUN ROL ELEGIDO";
 
           mensajeDeRegistro =
-              "REGISTRO COMPLETADO PERFECTAMENETE\nPUEDES VOLVER A REGISTRAR OTRO USUARIO";
+              "REGISTRO COMPLETADO PERFECTAMENTE\nPUEDES VOLVER A REGISTRAR OTRO USUARIO";
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 behavior: SnackBarBehavior.floating,

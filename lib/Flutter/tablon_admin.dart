@@ -73,8 +73,7 @@ class TablonAdminState extends State<TablonAdmin> {
   /// Este es el build de la clase MyHomePage que devuelve toda la vista génerica más la vista especial de cada usuario.
   @override
   Widget build(BuildContext context) {
-    return new WillPopScope(
-      child: Scaffold(
+    return Scaffold(
           appBar: AppBar(
             leading: IconButton(
                 icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
@@ -97,12 +96,7 @@ class TablonAdminState extends State<TablonAdmin> {
             ],
             automaticallyImplyLeading: false,
           ),
-          body: Container(margin: EdgeInsets.all(5), child: vistaMenu())),
-      onWillPop: () async {
-        final pop = await _onBackPressed(context);
-        return pop ?? false;
-      },
-    );
+          body: Container(margin: EdgeInsets.all(5), child: vistaMenu()));
   }
 
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
@@ -301,46 +295,6 @@ class TablonAdminState extends State<TablonAdmin> {
     );
   }
 
-  //Método para cambiar la funcionalidad del botón de volver atrás
-
-  Future<bool?> _onBackPressed(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            backgroundColor: GuardadoLocal.colores[1],
-            title: Text(
-              '¿SEGURO?',
-              style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 25),
-            ),
-            content: Text(
-              '¿QUIERES CERRAR SESIÓN?',
-              style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 25),
-            ),
-            actions: [
-              ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context, false);
-                  },
-                  child: Text(
-                    'NO',
-                    style: TextStyle(
-                        color: GuardadoLocal.colores[2], fontSize: 25),
-                  )),
-              ElevatedButton(
-                  onPressed: () {
-                    Background.desactivarNotificaciones();
-                    Navigator.popUntil(context, (route) => route.isFirst);
-                  },
-                  child: Text(
-                    'SÍ',
-                    style: TextStyle(
-                        color: GuardadoLocal.colores[2], fontSize: 25),
-                  )),
-            ],
-          );
-        });
-  }
 
   // Vista del menu dependiendo del rol
   vistaMenu() {

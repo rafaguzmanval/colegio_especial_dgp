@@ -334,7 +334,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                       Center(
                           child: imagen is String
                               ? Image.network(imagen)
-                              : Image.network(imagen)),
+                              : Image.file(File(imagen.path))),
                       Container(
                         child: ElevatedButton(
                             onPressed: () {
@@ -843,9 +843,8 @@ class PerfilTareaState extends State<PerfilTarea> {
         if (videoTomado is String) {
             videos.add(videoTomado);
         } else {
-          log(videos.toString());
+
           videos.add(File(videoTomado.path));
-          log(videos.toString());
         }
       }
 
@@ -857,13 +856,6 @@ class PerfilTareaState extends State<PerfilTarea> {
         creando = false;
 
         if (value) {
-          /*
-          controladorNombre.text = "";
-          controladorTexto.text = "";
-          fotoTomada = null;
-          videoTomado = null;
-          */
-
 
           displayMensajeValidacion(
               "Tarea editada correctamente\nPuedes volver a crear otra tarea:"

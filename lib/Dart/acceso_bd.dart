@@ -67,48 +67,37 @@ class AccesoBD {
       var nombrehaseao =
           encriptacionSha256(usuario.apellidos + usuario.fechanacimiento);
 
+      var url = fotoDesconocido;
       var fotoPath = null;
       if (foto != null) {
         fotoPath =
-            "Imágenes/perfiles/${usuario.nombre + usuario.apellidos + nombrehaseao}";
+        "Imágenes/perfiles/${usuario.nombre + usuario.apellidos +
+            nombrehaseao}";
 
-        return await storageRef.child(fotoPath).putFile(foto).then((p0) async {
-          var fotoURL = await leerImagen(fotoPath);
+         url = await subirArchivo(foto, fotoPath);
+      }
 
-          var user = <String, dynamic>{
-            "nombre": usuario.nombre,
-            "apellidos": usuario.apellidos,
-            "password": nuevaPassword,
-            "fechanacimiento": usuario.fechanacimiento,
-            "rol": usuario.rol,
-            "foto": fotoURL,
-            "metodoLogeo": usuario.metodoLogeo
-          };
-          db.collection("usuarios").add(user);
-
-          return true;
-        });
-      } else {
         var user = <String, dynamic>{
           "nombre": usuario.nombre,
           "apellidos": usuario.apellidos,
           "password": nuevaPassword,
           "fechanacimiento": usuario.fechanacimiento,
           "rol": usuario.rol,
-          "foto": fotoDesconocido,
+          "foto": url,
           "metodoLogeo": usuario.metodoLogeo
         };
-        db.collection("usuarios").add(user);
+        await db.collection("usuarios").add(user);
 
         return true;
-      }
+
+
     } catch (e) {
       print(e);
       return false;
     }
   }
 
-  /*
+  @deprecated
   editarUsuario(usuario, foto, usuarioPerfil) async {
     try {
       final ref = db.collection("usuarios");
@@ -155,64 +144,31 @@ class AccesoBD {
       print(e);
       return false;
     }
-  }*/
+  }
 
   // Metodo para crear una tarea
   crearTarea(tarea) async {
     try {
       //Se encripta la contaseña
 
-
-      var imagenes = [];
       var videos = [];
+      var url = "";
 
-
-      int i = 0;
-
-      for( int j= 0; j < tarea.imagenes.length ; j++) {
-        if (tarea.imagenes[j] is String) {
-          if (tarea.imagenes[j].startsWith("http")) {
-            imagenes.add(tarea.imagenes[j]);
-            i++;
-          }
-        } else {
+      if(!(tarea.imagen is String))
+        {
           var fotoPath = "Imágenes/pictogramas/" +
-              encriptacionSha256(tarea.imagenes[j].path);
-
-          //se introduce la imágen dentro del storage y cuando se comrpueba que se ha cargado entronces se incrementa 'i' para que se pueda salir del bucle de espera
-          await storageRef
-              .child(fotoPath)
-              .putFile(tarea.imagenes[j])
-              .then((d0) async {
-            await leerImagen(fotoPath).then((value) {
-              log(value);
-              imagenes.add(value);
-              log("Se añadio la imagen al array");
-              i++;
-            });
-            log("Se leido lo de await leerImagen");
-          });
+              encriptacionSha256(tarea.imagen.path);
+          tarea.imagen = await subirArchivo(tarea.imagen, fotoPath); // se sube el archivo y se obtiene la url
         }
-      }
 
-      for (int j = 0; j < tarea.videos.length ; j++) {
-        var videoPath = "Vídeos/" + encriptacionSha256(tarea.videos[j].path);
+      // se sube el video
+      if(tarea.videos.length == 1)
+        {
+          var videoPath = "Vídeos/" + encriptacionSha256(tarea.videos[0].path);
+          url = await subirArchivo(tarea.videos[0], videoPath); // se sube el archivo
+          videos.add(url); // se añade el url a la base de datos
+        }
 
-        // se espera a que se introduzca el video correctamente en el storage para después salir del bucle de espera
-        await storageRef
-            .child(videoPath)
-            .putFile(tarea.videos[j])
-            .then((p0) async {
-          await leerVideo(videoPath).then((value) {
-            videos.add(value);
-            i++;
-          });
-        });
-      }
-
-      //bucle de espera  para que las imágenes y los vídeos estén cargados
-      while (i != tarea.imagenes.length + tarea.videos.length) {}
-      ;
 
       //Cuando se han cargado todas las imágenes y vídeos entonces se sube a la base de datos
       //la nueva tarea con todas las urls de las imágenes y vídeos
@@ -229,9 +185,10 @@ class AccesoBD {
         "formularios": tarea.formularios,
       };
 
-      db.collection("Tareas").add(nuevaTarea);
+      await db.collection("Tareas").add(nuevaTarea);
 
       return true;
+
     } catch (e) {
       log(e.toString());
       return false;
@@ -446,7 +403,7 @@ class AccesoBD {
 
       if (foto != null) {
         fotoPath = "Imágenes/comentarios/" + idTareaAsignada;
-        storageRef.child(fotoPath).putFile(foto).then((p0) async {
+        /*storageRef.child(fotoPath).putFile(foto).then((p0) async {
           await leerImagen(fotoPath).then((url) async {
             fotoURL = url;
             return await ref.doc(idTareaAsignada).update({
@@ -455,7 +412,15 @@ class AccesoBD {
               'fotoURL': fotoURL
             });
           });
-        });
+        });*/
+        var url = await subirArchivo(foto,fotoPath);
+          fotoURL = url;
+          return await ref.doc(idTareaAsignada).update({
+            "respuesta": comentario,
+            'fotopath': fotoPath,
+            'fotoURL': fotoURL
+          });
+
       } else {
         return await ref
             .doc(idTareaAsignada)
@@ -470,27 +435,9 @@ class AccesoBD {
   subirArchivo(archivo,path) async
   {
     try {
-      return await storageRef
-          .child(path)
-          .putFile(archivo);
-    }
-    catch(e)
-    {
-      print(e);
-      return "error al subir archivo";
-    }
-  }
-
-  subirImagen(archivo,path) async{
-    try {
-      return await storageRef // espera hasta subir el archivo en la base de datos
-          .child(path)
-          .putFile(archivo).then((e) async {
-        return await leerImagen( // espera a obtener la url para acceder a dicho archivo y comprobar que existe
-            path).then((value) {
-          return value; // devuelve la url del archivo
-        });
-      });
+      await storageRef.child(path).putFile(archivo); // espera hasta subir el archivo en la base de datos
+      var url = await leerArchivo(path);// espera a obtener la url para acceder a dicho archivo y comprobar que existe
+      return url; // devuelve la url del archivo
     }
     catch(e)
     {
@@ -508,16 +455,9 @@ class AccesoBD {
         }
       else
         {
-          /*return await subirArchivo(nuevaFoto,"Imágenes/perfiles/"+idUsuario.toString()+".jpg").then((e) async{
-
-                     return await leerImagen("Imágenes/perfiles/"+idUsuario.toString()+".jpg").then((value) {
-                      print(value);
-                       db.collection("usuarios").doc(idUsuario).update({"foto":value});
-                       return value;
-                    });*/
-          return await subirImagen(nuevaFoto,"Imágenes/perfiles/"+idUsuario.toString()+".jpg").then((value) async{
-            return await db.collection("usuarios").doc(idUsuario).update({"foto":value});
-          });
+          var url =  await subirArchivo(nuevaFoto,"Imágenes/perfiles/"+idUsuario.toString()+".jpg");
+          await db.collection("usuarios").doc(idUsuario).update({"foto":url});
+          return url;
 
         }
 
@@ -577,49 +517,23 @@ class AccesoBD {
       //Se encripta la contaseña
       final ref = db.collection("Tareas");
 
-      int i = 0;
-
-        if (tarea.imagen is String) {
-          if (tarea.imagen.startsWith("http")) {
-            i++;
-          }
-        } else {
+        if (!(tarea.imagen is String)) {
           var fotoPath = "Imágenes/pictogramas/" +
               encriptacionSha256(tarea.imagen.path);
 
-          //se introduce la imágen dentro del storage y cuando se comrpueba que se ha cargado entronces se incrementa 'i' para que se pueda salir del bucle de espera
-          await storageRef
-              .child(fotoPath)
-              .putFile(tarea.imagen)
-              .then((d0) async {
-            await leerImagen(fotoPath).then((value) {
-              tarea.imagen = value;
-              i++;
-            });
-          });
-        }
+          var url = await subirArchivo(tarea.imagen, fotoPath);
+          tarea.imagen = url;
+        };
 
       if (tarea.videos.length > 0) {
         // se espera a que se introduzca el video correctamente en el storage para después salir del bucle de espera
-        if (!(tarea.videos[0] is String)) {
-          var videoPath = "Vídeos/" + encriptacionSha256(tarea.videos[0].path);
-          await storageRef
-              .child(videoPath)
-              .putFile(tarea.videos[0])
-              .then((p0) async {
-            await leerVideo(videoPath).then((value) {
-              tarea.videos = [value];
-              i++;
-            });
-          });
-        } else {
-          i++;
-        }
+        var videoPath = "Vídeos/" + encriptacionSha256(tarea.videos[0].path);
+
+        var url = await subirArchivo(tarea.videos[0], videoPath);
+        tarea.videos = [url];
       }
 
-      //bucle de espera  para que las imágenes y los vídeos estén cargados
-      while (i != 1 + tarea.videos.length) {}
-      ;
+
 
       //Cuando se han cargado todas las imágenes y vídeos entonces se sube a la base de datos
       //la nueva tarea con todas las urls de las imágenes y vídeos
@@ -915,14 +829,30 @@ class AccesoBD {
     }
   }
 
-  // Metodo que te devuelve la URL según el PATH que tenga la imagen en el servidor
-  leerImagen(path) async {
-    final imagen = storageRef.child(path);
+  // Metodo que te devuelve la URL según el PATH que tenga un archivo en el servidor
+  leerArchivo(path) async {
+    final archivo = storageRef.child(path);
 
     print("intentando cargar imagen");
     try {
       const oneMegabyte = 1024 * 1024;
-      final String? data = await imagen.getDownloadURL();
+      final String? data = await archivo.getDownloadURL();
+      return data;
+      // Data for "images/island.jpg" is returned, use this as needed.
+    } on FirebaseException catch (e) {
+      print("ERROR:" + e.toString());
+      // Handle any errors.
+    }
+  }
+
+  @Deprecated("usa leerArchivo mejor")
+  leerImagen(path) async {
+    final archivo = storageRef.child(path);
+
+    print("intentando cargar imagen");
+    try {
+      const oneMegabyte = 1024 * 1024;
+      final String? data = await archivo.getDownloadURL();
       return data;
       // Data for "images/island.jpg" is returned, use this as needed.
     } on FirebaseException catch (e) {
@@ -932,6 +862,7 @@ class AccesoBD {
   }
 
   // Metodo que te devuelve la URL según el PATH que tenga el video en el servidor
+  @Deprecated("usa leerArchivo mejor")
   leerVideo(path) async {
     final video = storageRef.child(path);
 
@@ -941,7 +872,7 @@ class AccesoBD {
       final String? data = await video.getDownloadURL();
       print("video cargado");
       return data;
-      // Data for "images/island.jpg" is returned, use this as needed.
+
     } on FirebaseException catch (e) {
       print("ERROR:" + e.toString());
       // Handle any errors.
@@ -979,7 +910,7 @@ class AccesoBD {
             "Imágenes/pictogramas/" + encriptacionSha256(tablon.imagenes.path);
 
         //se introduce la imágen dentro del storage y cuando se comrpueba que se ha cargado entronces se incrementa 'i' para que se pueda salir del bucle de espera
-        await storageRef
+        /*await storageRef
             .child(fotoPath)
             .putFile(tablon.imagenes)
             .then((d0) async {
@@ -989,6 +920,9 @@ class AccesoBD {
             log("Se añadio la imagen al array");
           });
           log("Se leido lo de await leerImagen");
+        });*/
+        await subirArchivo(tablon.imagenes, fotoPath).then((value){
+          imagenes = value;
         });
       }
       //Cuando se han cargado todas las imágenes y vídeos entonces se sube a la base de datos

@@ -441,7 +441,6 @@ class CrearTareaState extends State<CrearTarea> {
         if (fotoDescripcion is String) {
           if (fotoDescripcion.startsWith("http")) {
             imagen = fotoDescripcion;
-            //imagenes.add(fotoTomada);
           }
         } else {
           imagen = File(fotoDescripcion.path);
