@@ -824,6 +824,8 @@ class PerfilTareaState extends State<PerfilTarea> {
 
       var nombre = "" + controladorNombre.text;
       var descripcion = "" + controladorTexto.text;
+      bool nuevaImagen = false;
+      bool nuevoVideo = false;
 
 
       if (imagen != null) {
@@ -834,7 +836,7 @@ class PerfilTareaState extends State<PerfilTarea> {
         } else {
           imagen = File(imagen.path);
         }
-
+        nuevaImagen = true;
       }
 
 
@@ -846,13 +848,14 @@ class PerfilTareaState extends State<PerfilTarea> {
 
           videos.add(File(videoTomado.path));
         }
+        nuevoVideo = true;
       }
 
       Tarea tarea = Tarea();
       tarea.setTarea(nombre,descripcion,imagen ,textos, imagenes, videos, formularios);
       tarea.id = tareaPerfil.id;
 
-      await Sesion.db.editarTarea(tarea).then((value) {
+      await Sesion.db.editarTarea(tarea,nuevaImagen,nuevoVideo).then((value) {
         creando = false;
 
         if (value) {

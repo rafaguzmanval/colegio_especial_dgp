@@ -314,10 +314,6 @@ class LoginPageState extends State<LoginPage> {
     ]);
   }
 
-  // Metodo para leer la imagen
-  lecturaImagen(path) async {
-    return await Sesion.db.leerImagen(path);
-  }
 
   // Metodo para actualizar la pagina
   void _actualizar() async {

@@ -15,10 +15,10 @@
 *   video_player.dart : Necesario para cargar los videos del storage y cargarlos en el controlador de los reproductores de video. 
 * */
 
+//region imports
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
@@ -30,10 +30,7 @@ import 'package:colegio_especial_dgp/Dart/usuario.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:get/state_manager.dart';
-import 'package:video_player/video_player.dart';
-import 'main.dart';
-import 'notificacion.dart';
+//endregion
 
 String encriptacionSha256(String password) {
   var data = utf8.encode(password);
@@ -502,7 +499,7 @@ class AccesoBD {
 
   // Metodo para consultar las tareas asignadas a un usuario según el id pasado por parametro y te devuelve las tareas que tiene insertandolas en la
   // sesion
-  @deprecated
+
   consultarTareasAsignadasAlumno(id, completa) async {
     try {
       //Se accede a la relación de las tareas de un usuario
@@ -516,16 +513,25 @@ class AccesoBD {
           .listen((e) async {
         //Escucha los cambios en el servidor
         var nuevasTareas = [];
+
+        // se recorren todas las tareas asignadas
         for (int i = 0; i < e.docs.length; i++) {
-          // itera sobre los elementos de la colección
+
           var idTarea = e.docs[i].get("idTarea"); // cada tarea tiene una id
 
           try {
-            await consultarIDTarea(idTarea).then((nuevaTarea) {
-              // sobre esa id accedemos a la colección tarea donde se encuentra la información de la tarea
-              nuevaTarea.idRelacion = e.docs[i].id;
+            // esa id se usa para consultar la información de la tarea
+              var nuevaTarea = await consultarIDTarea(idTarea);
+
+              // necesito saber que estado tiene por que igual esa tarea no tiene que verla el alumno
               nuevaTarea.estado = e.docs[i].get("estado");
+
+              // SI la tarea está finalizada, solo la puede ver el profesor. La tarea finaliza cuando el profesor manda la retroalimentación
+              //el alumno verá la retroalimentación en el historial
               if((nuevaTarea.estado != "finalizada" && Sesion.rol == Rol.alumno.toString()) || Sesion.rol != Rol.alumno.toString()) {
+
+                //meto en la nueva tarea toda la información que necesito
+                nuevaTarea.idRelacion = e.docs[i].id;
                 nuevaTarea.fechafinal = e.docs[i].get("fechafinal");
                 nuevaTarea.respuesta = e.docs[i].get("respuesta");
                 try {
@@ -553,49 +559,49 @@ class AccesoBD {
                 nuevasTareas.add(nuevaTarea);
               }
 
-              if (nuevasTareas.length == e.docs.length) {
-                Sesion.tareas = nuevasTareas;
-                if (completa) {
-                  try {
-                    for (int k = 0; k < Sesion.tareas.length; k++) {
-                      var array = [];
-
-                      for (int j = 0; j < Sesion.tareas[k].videos.length; j++) {
-                        /*var nuevoControlador = VideoPlayerController.network(
-                                Sesion.tareas[k].videos[j]);*/
-                        Sesion.tareas[k].controladoresVideo.add(0); /// Se añade un cero porque si se inicializará el video entonces se cargaría de internet
-                        /// y podría haber descargas inncesarias que el usuario no va a ver.
-                        /*Sesion.tareas[k].controladoresVideo.last.initialize();*/
-
-                      }
-
-                      //Se cargan los formularios (Mas feo esto que pegarle a un pae la verdad)
-                      if (Sesion.tareas[k].formularios != []) {
-                        for (int l = 0;
-                        l < Sesion.tareas[k].formularios.length;
-                        l = l +
-                            2 +
-                            (Sesion.tareas[k].formularios[l + 1] as int) *
-                                3) {
-                          for (int j = 0;
-                          j < (Sesion.tareas[k].formularios[l + 1] as int);
-                          j++) {
-                            Sesion.tareas[k].controladoresComandas
-                                .add(TextEditingController());
-                          }
-                        }
-                      }
-                    }
-                  } catch (e) {
-                    print(e);
-                  }
-                  ;
-                }
-              }
-            });
           } catch (e) {
             print(e);
           }
+        }
+
+        Sesion.tareas = nuevasTareas;
+
+        //Aquí se cargan los videos si se ha requerido
+        if (completa) {
+          try {
+            for (int k = 0; k < Sesion.tareas.length; k++) {
+              var array = [];
+
+              for (int j = 0; j < Sesion.tareas[k].videos.length; j++) {
+                /*var nuevoControlador = VideoPlayerController.network(
+                                Sesion.tareas[k].videos[j]);*/
+                Sesion.tareas[k].controladoresVideo.add(0); /// Se añade un cero porque si se inicializará el video entonces se cargaría de internet
+                /// y podría haber descargas inncesarias que el usuario no va a ver.
+                /*Sesion.tareas[k].controladoresVideo.last.initialize();*/
+
+              }
+
+              //Se cargan los formularios (Mas feo esto que pegarle a un pae la verdad)
+              if (Sesion.tareas[k].formularios != []) {
+                for (int l = 0;
+                l < Sesion.tareas[k].formularios.length;
+                l = l +
+                    2 +
+                    (Sesion.tareas[k].formularios[l + 1] as int) *
+                        3) {
+                  for (int j = 0;
+                  j < (Sesion.tareas[k].formularios[l + 1] as int);
+                  j++) {
+                    Sesion.tareas[k].controladoresComandas
+                        .add(TextEditingController());
+                  }
+                }
+              }
+            }
+          } catch (e) {
+            print(e);
+          }
+          ;
         }
 
         if (e.docs.length == 0) Sesion.tareas = [];
@@ -613,27 +619,36 @@ class AccesoBD {
   //endregion
 
   //region Edicion
-  editarTarea(tarea) async {
+  editarTarea(tarea,nuevaImagen,nuevoVideo) async {
     try {
       //Se encripta la contaseña
       final ref = db.collection("Tareas");
 
-      if (!(tarea.imagen is String)) {
-        var fotoPath = "Imágenes/pictogramas/" +
-            encriptacionSha256(tarea.imagen.path);
+      if(nuevaImagen)
+        {
+          if (!(tarea.imagen is String)) {
+            var fotoPath = "Imágenes/pictogramas/" +
+                encriptacionSha256(tarea.imagen.path);
 
-        var url = await subirArchivo(tarea.imagen, fotoPath);
-        tarea.imagen = url;
-      };
+            var url = await subirArchivo(tarea.imagen, fotoPath);
+            tarea.imagen = url;
+          };
+        }
 
-      if (tarea.videos.length > 0) {
-        // se espera a que se introduzca el video correctamente en el storage para después salir del bucle de espera
-        var videoPath = "Vídeos/" + encriptacionSha256(tarea.videos[0].path);
+      if(nuevoVideo)
+        {
+          if (tarea.videos.length > 0) {
+            // se espera a que se introduzca el video correctamente en el storage para después salir del bucle de espera
+            var url = tarea.videos[0];
+            if (!(tarea.videos[0] is String)) {
+              var videoPath = "Vídeos/" +
+                  encriptacionSha256(tarea.videos[0].path);
 
-        var url = await subirArchivo(tarea.videos[0], videoPath);
-        tarea.videos = [url];
-      }
-
+               url = await subirArchivo(tarea.videos[0], videoPath);
+            }
+            tarea.videos = [url];
+          }
+        }
 
 
       //Cuando se han cargado todas las imágenes y vídeos entonces se sube a la base de datos

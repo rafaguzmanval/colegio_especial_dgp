@@ -15,6 +15,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
+import 'package:colegio_especial_dgp/Flutter/crear_tarea.dart';
 import 'package:colegio_especial_dgp/Flutter/perfil_profesor.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
@@ -58,6 +59,7 @@ class ListaTareasState extends State<ListaTareas> {
                 Navigator.pop(context);
               }),
           actions: [
+            ///Boton para buscar tareas
             IconButton(
               onPressed: () async{
                 await showSearch(context: context, delegate: CustomSearchDelegate(),);
@@ -65,6 +67,20 @@ class ListaTareasState extends State<ListaTareas> {
               },
               icon: const Icon(Icons.search),
             ),
+
+            ///Boton para crear tareas
+            IconButton(
+                onPressed: () async {
+
+                  await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CrearTarea()));
+                  cargarTareas();
+                },
+                icon: Icon(
+                  Icons.add,
+                )),
           ],
           title: Center(
               child: Text(
@@ -202,13 +218,26 @@ class ListaTareasState extends State<ListaTareas> {
                   },
                   icon: Icon(
                     Icons.delete,
-                    color: GuardadoLocal.colores[0],
+                    //color: GuardadoLocal.colores[0],
                   )),
               if (esTareaEliminandose && i == tareaEliminandose) ...[
                 new CircularProgressIndicator(),
               ]
             ])
-          ]
+          ],
+          IconButton(
+              onPressed: () async {
+
+                    await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CrearTarea()));
+                    cargarTareas();
+              },
+              icon: Icon(
+                Icons.add,
+                color: GuardadoLocal.colores[0],
+              )),
         ],
       ),
     );
