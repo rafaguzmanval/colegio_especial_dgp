@@ -30,6 +30,7 @@ import 'package:colegio_especial_dgp/Flutter/crear_tarea.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:colegio_especial_dgp/Flutter/gestion_tablon.dart';
+import 'package:colegio_especial_dgp/Flutter/pagina_chats.dart';
 import 'package:colegio_especial_dgp/Flutter/registro_usuarios.dart';
 import 'package:colegio_especial_dgp/Flutter/tablon_admin.dart';
 import 'package:colegio_especial_dgp/Flutter/tablon_comunicacion.dart';
@@ -38,6 +39,7 @@ import 'package:flutter/material.dart';
 import '../Dart/main.dart';
 import 'configuracion.dart';
 import 'lista_alumnos.dart';
+import 'lista_chats.dart';
 import 'lista_profesores.dart';
 import 'lista_tareas.dart';
 import 'package:universal_io/io.dart';
@@ -88,6 +90,9 @@ class MyHomePageState extends State<MyHomePage> {
                 Center(child: Text('Menú principal'.toUpperCase(),textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
                 )]),
                 actions: [IconButton(onPressed: () => Navigator.push(context,
+                    MaterialPageRoute(
+                        builder: (context) => PaginaChats())), icon: Icon(Icons.chat, color: GuardadoLocal.colores[2])),
+                  IconButton(onPressed: () => Navigator.push(context,
                     MaterialPageRoute(
                         builder: (context) => Configuracion())), icon: Icon(Icons.settings, color: GuardadoLocal.colores[2]))],
                 automaticallyImplyLeading: false,

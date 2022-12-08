@@ -28,6 +28,7 @@ class Sesion {
   static var argumentos = [];
   static AccesoBD db = new AccesoBD();
   static var posicion;
+  static var chats = [];
 
   // Sesion por defecto
   static reload() {

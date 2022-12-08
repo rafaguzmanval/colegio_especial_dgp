@@ -232,7 +232,7 @@ class CustomSearchDelegate extends SearchDelegate {
   }
 
   cargarAlumnos() async {
-    Sesion.profesores = await Sesion.db.consultarTodosAlumnos();
+    Sesion.alumnos = await Sesion.db.consultarTodosAlumnos();
     actualizar();
   }
 

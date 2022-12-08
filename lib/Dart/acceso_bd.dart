@@ -19,6 +19,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:html';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
@@ -1023,4 +1025,58 @@ class AccesoBD {
   }
 
   //endregion
+
+  static obtenerChats(id) async{
+    try {
+        var listaPersonas = [];
+      var snapshot = await FirebaseFirestore.instance
+          .collection('chats')
+          .where('idUsuario1',  isEqualTo: id)
+          .get();
+      for(int i = 0; i<snapshot.docs.length;i++){
+        listaPersonas.add(snapshot.docs[i].data()['idUsuario2']);
+      }
+
+      snapshot = await FirebaseFirestore.instance
+          .collection('chats')
+          .where('idUsuario2',  isEqualTo: id)
+          .get();
+
+      for(int i = 0; i<snapshot.docs.length;i++){
+        listaPersonas.add(snapshot.docs[i].data()['idUsuario1']);
+      }
+      /*
+      final snapshot2 = FirebaseFirestore.instance
+          .collection('chats')
+          .where('idUsuario2',  isEqualTo: id)
+          .get();
+
+      final consulta = ref.doc(id).withConverter(
+          fromFirestore: Tablon.fromFirestore,
+          toFirestore: (Tablon tablon, _) => tablon.toFirestore());
+
+      final docSnap = await consulta.get();
+
+      var listaChats = snapshot1.addsnapshot2;
+      if (docSnap != null) {
+        tablon = docSnap.data();
+        tablon?.id = docSnap.id;
+      }*/
+
+      Map<String,dynamic> listaChats= new Map();
+
+      for(var i = 0; i<listaPersonas.length;i++){
+        var snapshot = await FirebaseFirestore.instance
+            .collection('usuarios')
+            .where('id',  isEqualTo: listaPersonas[i])
+            .get();
+
+        //listaChats.assign(,);
+      }
+
+      return null;
+    } catch (e) {
+      print(e);
+    }
+  }
 }
