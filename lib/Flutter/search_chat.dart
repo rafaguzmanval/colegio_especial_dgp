@@ -109,11 +109,13 @@ class CustomSearchDelegate extends SearchDelegate {
                           }
                         }
                         Sesion.seleccion = profesores[index];
+                        var id = await buscarIdChat(Sesion.id,profesores[index].id);
+                        Navigator.pop(context);
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => VistaChat(
-                                  chatId: buscarIdChat(Sesion.nombre,profesores[index].nombre),
+                                  chatId: id,
                                   nombre: profesores[index].nombre,
                                   foto: profesores[index].foto,
                                   idInterlocutor: profesores[index].id,
@@ -170,11 +172,13 @@ class CustomSearchDelegate extends SearchDelegate {
                         }
                       }
                       Sesion.seleccion = alumnos[index];
+                      var id = await buscarIdChat(Sesion.id,alumnos[index].id);
+                      Navigator.pop(context);
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => VistaChat(
-                                  chatId: buscarIdChat(Sesion.nombre,alumnos[index].nombre),
+                                  chatId: id,
                                   nombre: alumnos[index].nombre,
                                   foto: alumnos[index].foto,
                                   idInterlocutor: alumnos[index].id,
@@ -245,11 +249,13 @@ class CustomSearchDelegate extends SearchDelegate {
                           }
                         }
                         Sesion.seleccion = profesores[index];
+                        var id = await buscarIdChat(Sesion.id,profesores[index].id);
+                        Navigator.pop(context);
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => VistaChat(
-                                  chatId: buscarIdChat(Sesion.nombre,profesores[index].nombre),
+                                  chatId: id,
                                   nombre: profesores[index].nombre,
                                   foto: profesores[index].foto,
                                   idInterlocutor: profesores[index].id,
@@ -306,11 +312,13 @@ class CustomSearchDelegate extends SearchDelegate {
                           }
                         }
                         Sesion.seleccion = alumnos[index];
+                        var id = await buscarIdChat(Sesion.id,alumnos[index].id);
+                        Navigator.pop(context);
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => VistaChat(
-                                  chatId: buscarIdChat(Sesion.nombre,alumnos[index].nombre),
+                                  chatId: id,
                                   nombre: alumnos[index].nombre,
                                   foto: alumnos[index].foto,
                                   idInterlocutor: alumnos[index].id,
@@ -325,11 +333,13 @@ class CustomSearchDelegate extends SearchDelegate {
     );
   }
 
-  buscarIdChat(String miNombre, String nombreAlumno){
+  buscarIdChat(String miId, String idOtro) async{
     //if(encuentro en la basde de datos) return id;
     //else(creo nuevo chat) return nuevoId;
 
-    return "";
+    var id = await Sesion.db.buscarIdChat(miId, idOtro);
+
+    return id;
   }
 
   cargarProfesores() async {

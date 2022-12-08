@@ -31,6 +31,7 @@ class _VistaChatState extends State<VistaChat> {
   StreamController chatsController = new StreamController();
   TextEditingController messageController = TextEditingController();
   ScrollController _scrollController = ScrollController();
+  var idChat;
 
   var mensajes = [];
 
@@ -39,17 +40,10 @@ class _VistaChatState extends State<VistaChat> {
     super.initState();
 
     Sesion.paginaActual = this;
+    idChat = widget.chatId;
 
-    cargaMensajes();
-    /*
-    Timer.periodic(Duration(milliseconds: 100), (timer) {
-      if(i%2==0)
-        mensajes.add(Mensaje(Sesion.id, widget.idInterlocutor, 'texto', 'Mensaje nuevo '+i.toString(), ''));
-      else
-        mensajes.add(Mensaje(widget.idInterlocutor, Sesion.id, 'texto', 'Mensaje nuevo '+i.toString(), ''));
-
-      chatsController.add('');
-      i++;});*/
+    if(widget.chatId!='')
+      cargaMensajes();
   }
 
   @override
@@ -167,12 +161,18 @@ class _VistaChatState extends State<VistaChat> {
     );
   }
 
-  enviarMensaje() {
+  enviarMensaje() async{
     if (messageController.text.isNotEmpty) {
 
-      Mensaje msg = Mensaje(widget.chatId, Sesion.id, widget.idInterlocutor, 'texto', messageController.text.toUpperCase(), DateTime.now().millisecondsSinceEpoch);
+      Mensaje msg = Mensaje(idChat, Sesion.id, widget.idInterlocutor, 'texto', messageController.text.toUpperCase(), DateTime.now().millisecondsSinceEpoch);
 
-      Sesion.db.addMensaje(msg);
+      await Sesion.db.addMensaje(msg);
+
+      if(idChat == ''){
+        idChat = await Sesion.db.buscarIdChat(Sesion.id, widget.idInterlocutor);
+        cargaMensajes();
+      }
+
       setState(() {
         messageController.clear();
       });
@@ -180,7 +180,7 @@ class _VistaChatState extends State<VistaChat> {
   }
 
   cargaMensajes() async{
-    await Sesion.db.obtenerMensajes(widget.chatId);
+    await Sesion.db.obtenerMensajes(idChat);
   }
 
   actualizarMensajes(listaMensajes){

@@ -5,6 +5,7 @@
 *   Pagina para consultar la lista de chats y acceder a ellos
 * */
 
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -24,7 +25,7 @@ class PaginaChats extends StatefulWidget {
 }
 
 class PaginaChatsState extends State<PaginaChats> {
-  Stream? chats;
+  StreamController chatsController = new StreamController();
   double offSetActual = 0;
   ScrollController homeController = new ScrollController();
 
@@ -163,10 +164,10 @@ class PaginaChatsState extends State<PaginaChats> {
 
   Widget _listaChats() {
     return StreamBuilder(
-        stream: chats,
+        stream: chatsController.stream,
         builder: (context, AsyncSnapshot snapshot){
 
-          if(!snapshot.hasData){ //snapshot.hasData
+          if(snapshot.hasData){ //snapshot.hasData
             if(Sesion.chats.length!=0){//snapshot.data['chats']!=null
               return ListView.builder(
                   scrollDirection: Axis.vertical,
@@ -195,11 +196,13 @@ class PaginaChatsState extends State<PaginaChats> {
   noChatsWidget(){
 
     return Center(child:Text('Sin chats creados.\nBusca en la lupa para crear un nuevo chat.'.toUpperCase(),));
+
   }
 
   // Obtiene la lista de alumnos y actualiza la pagina
   cargarChats() async {
     Sesion.chats = await Sesion.db.obtenerChats(Sesion.id);
+    chatsController.add('');
     actualizar();
   }
 
