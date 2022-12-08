@@ -30,6 +30,8 @@ class VistaChat extends StatefulWidget {
 class _VistaChatState extends State<VistaChat> {
   StreamController chatsController = new StreamController();
   TextEditingController messageController = TextEditingController();
+  ScrollController _scrollController = ScrollController();
+
   var mensajes = [];
 
   @override
@@ -81,7 +83,7 @@ class _VistaChatState extends State<VistaChat> {
           ),
         ),
       ),
-      body: Stack(
+      body: Column(
         children: <Widget>[
           // chat messages here
           mensajesChat(),
@@ -115,6 +117,7 @@ class _VistaChatState extends State<VistaChat> {
                 GestureDetector(
                   onTap: () {
                     enviarMensaje();
+                    FocusManager.instance.primaryFocus?.unfocus();
                   },
                   child: Container(
                     height: 50,
@@ -142,15 +145,23 @@ class _VistaChatState extends State<VistaChat> {
     return StreamBuilder(
       stream: chatsController.stream,
       builder: (context, AsyncSnapshot snapshot) {
+        WidgetsBinding.instance.addPostFrameCallback((_){
+          if(_scrollController.hasClients)
+            _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 100), curve: Curves.easeOut);
+        });
         return snapshot.hasData //snapshot.hasData
-            ? ListView.builder(
-          itemCount: mensajes.length,//snapshot.data.docs.length,
-          itemBuilder: (context, index) {
-            return ListaMensajes(
-                mensaje: mensajes[index].contenido,//snapshot.data.docs[index]['message'],
-                enviadoPorMi: mensajes[index].idUsuarioEmisor==Sesion.id);//widget.userName == snapshot.data.docs[index]['sender']);
-          },
-        )
+            ? Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                shrinkWrap: true,
+                itemCount: mensajes.length,
+                itemBuilder: (context, index) {
+                  return ListaMensajes(
+                      mensaje: mensajes[index].contenido,
+                      enviadoPorMi: mensajes[index].idUsuarioEmisor==Sesion.id);
+                },
+              ),
+            )
             : Container();
       },
     );
@@ -159,7 +170,7 @@ class _VistaChatState extends State<VistaChat> {
   enviarMensaje() {
     if (messageController.text.isNotEmpty) {
 
-      Mensaje msg = Mensaje(widget.chatId, Sesion.id, widget.idInterlocutor, 'texto', messageController.text, DateTime.now().millisecondsSinceEpoch);
+      Mensaje msg = Mensaje(widget.chatId, Sesion.id, widget.idInterlocutor, 'texto', messageController.text.toUpperCase(), DateTime.now().millisecondsSinceEpoch);
 
       Sesion.db.addMensaje(msg);
       setState(() {
@@ -173,6 +184,9 @@ class _VistaChatState extends State<VistaChat> {
   }
 
   actualizarMensajes(listaMensajes){
+    mensajes = listaMensajes;
+    chatsController.add('');
+    setState(() {});
 
     if(mounted)
       {
