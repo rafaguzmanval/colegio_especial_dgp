@@ -185,14 +185,16 @@ class ListaAlumnosState extends State<ListaAlumnos> {
                     cargarAlumnos();
                   },
                 )),
-            IconButton(
-                onPressed: () async {
-                    _onEliminate(context, i);
-                  },
-                icon: Icon(
-                  Icons.delete,
-                  color: GuardadoLocal.colores[0],
-                )),
+            if(Sesion.rol == Rol.administrador.toString())...[
+              IconButton(
+                  onPressed: () async {
+                      _onEliminate(context, i);
+                    },
+                  icon: Icon(
+                    Icons.delete,
+                    color: GuardadoLocal.colores[0],
+                  )),
+            ],
             if (esAlumnoEliminandose && i == alumnoEliminandose) ...[
               new CircularProgressIndicator(),
             ]

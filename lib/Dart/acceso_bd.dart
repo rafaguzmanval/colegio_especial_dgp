@@ -43,14 +43,17 @@ String encriptacionSha256(String password) {
 }
 
 class AccesoBD {
+  //region atributos de la clase
   var db = FirebaseFirestore.instance;
   var storageRef = FirebaseStorage.instance.ref();
   var _subscripcion;
   var _subscripcionLoc;
-
   var fotoDesconocido =
       "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fperfiles%2Fdesconocido.png?alt=media&token=98ba72ac-776e-4f83-9aaa-57761589c974";
 
+  //endregion
+
+  //region desactivacion de subscripciones
   desactivarSubscripcion() {
     if (_subscripcion != null) _subscripcion.cancel();
   }
@@ -59,44 +62,161 @@ class AccesoBD {
     if (_subscripcionLoc != null) _subscripcionLoc.cancel();
   }
 
+  //endregion
+
+  //region Usuarios/Inicio de sesion
   // Metodo para registrar usuario
-  registrarUsuario(usuario, foto) async {
-    try {
-      //Se encripta la contaseña
-      var nuevaPassword = encriptacionSha256(usuario.password);
-      var nombrehaseao =
-          encriptacionSha256(usuario.apellidos + usuario.fechanacimiento);
+    registrarUsuario(usuario, foto) async {
+      try {
+        //Se encripta la contaseña
+        var nuevaPassword = encriptacionSha256(usuario.password);
+        var nombrehaseao =
+            encriptacionSha256(usuario.apellidos + usuario.fechanacimiento);
 
-      var url = fotoDesconocido;
-      var fotoPath = null;
-      if (foto != null) {
-        fotoPath =
-        "Imágenes/perfiles/${usuario.nombre + usuario.apellidos +
-            nombrehaseao}";
+        var url = fotoDesconocido;
+        var fotoPath = null;
+        if (foto != null) {
+          fotoPath =
+          "Imágenes/perfiles/${usuario.nombre + usuario.apellidos +
+              nombrehaseao}";
 
-         url = await subirArchivo(foto, fotoPath);
+           url = await subirArchivo(foto, fotoPath);
+        }
+
+          var user = <String, dynamic>{
+            "nombre": usuario.nombre,
+            "apellidos": usuario.apellidos,
+            "password": nuevaPassword,
+            "fechanacimiento": usuario.fechanacimiento,
+            "rol": usuario.rol,
+            "foto": url,
+            "metodoLogeo": usuario.metodoLogeo
+          };
+          await db.collection("usuarios").add(user);
+
+          return true;
+
+
+      } catch (e) {
+        print(e);
+        return false;
       }
-
-        var user = <String, dynamic>{
-          "nombre": usuario.nombre,
-          "apellidos": usuario.apellidos,
-          "password": nuevaPassword,
-          "fechanacimiento": usuario.fechanacimiento,
-          "rol": usuario.rol,
-          "foto": url,
-          "metodoLogeo": usuario.metodoLogeo
-        };
-        await db.collection("usuarios").add(user);
-
-        return true;
-
-
-    } catch (e) {
-      print(e);
-      return false;
     }
-  }
 
+    // Metodo que comprueba la contraseña introducida con la guardada en la base de datos
+    checkearPassword(id, password) async {
+      try {
+        var resultado = await consultarIDusuario(id);
+
+        var PassEncriptada = encriptacionSha256(password);
+
+        if (PassEncriptada == resultado.password) {
+          return true;
+        } else
+          return false;
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    //region Consultas
+  // Metodo al que le pasas por parametro la id del usuario, comprueba si existe y te devuelve el objeto usuario
+    consultarIDusuario(id) async {
+      try {
+        final ref = db.collection("usuarios");
+
+        final consulta = ref.doc(id).withConverter(
+            fromFirestore: Usuario.fromFirestore,
+            toFirestore: (Usuario user, _) => user.toFirestore());
+
+        final docSnap = await consulta.get();
+
+        var usuario = null;
+        if (docSnap != null) {
+          usuario = docSnap.data();
+          usuario?.id = docSnap.id;
+        }
+
+        return usuario;
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    // Metodo que te devuelve todos los usuarios de la base de datos
+    consultarTodosUsuarios() async {
+      try {
+        var usuarios = [];
+
+        final ref = db.collection("usuarios").withConverter(
+            fromFirestore: Usuario.fromFirestore,
+            toFirestore: (Usuario user, _) => user.toFirestore());
+
+        final consulta = await ref.get();
+
+        consulta.docs.forEach((element) {
+          final usuarioNuevo = element.data();
+          usuarioNuevo.id = element.id;
+          usuarios.add(usuarioNuevo);
+        });
+
+        return usuarios;
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    // Metodos que te devuelve todos los alumnos de la base de datos
+    consultarTodosAlumnos() async {
+      try {
+        var usuarios = [];
+
+        final ref = db.collection("usuarios").withConverter(
+            fromFirestore: Usuario.fromFirestore,
+            toFirestore: (Usuario user, _) => user.toFirestore());
+
+        final consulta = await ref.where("rol", isEqualTo: "Rol.alumno").get();
+
+        consulta.docs.forEach((element) {
+          final usuarioNuevo = element.data();
+          usuarioNuevo.id = element.id;
+          usuarios.add(usuarioNuevo);
+        });
+
+        return usuarios;
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    // Metodo que te devuelve todos los profesores de la base de datos
+    consultarTodosProfesores() async {
+      try {
+        var usuarios = [];
+
+        final ref = db.collection("usuarios").withConverter(
+            fromFirestore: Usuario.fromFirestore,
+            toFirestore: (Usuario user, _) => user.toFirestore());
+
+        final consulta = await ref.where("rol", isNotEqualTo: "Rol.alumno").get();
+
+        consulta.docs.forEach((element) {
+          final usuarioNuevo = element.data();
+          usuarioNuevo.id = element.id;
+          usuarios.add(usuarioNuevo);
+        });
+
+        return usuarios;
+      } catch (e) {
+        print(e);
+      }
+    }
+
+    //endregion
+
+    //region Edicion
+
+  /*
   @deprecated
   editarUsuario(usuario, foto, usuarioPerfil) async {
     try {
@@ -104,7 +224,7 @@ class AccesoBD {
       //Se encripta la contaseña
       var nuevaPassword = usuario.password;
       var nombrehaseao =
-          encriptacionSha256(usuario.apellidos + usuario.fechanacimiento);
+      encriptacionSha256(usuario.apellidos + usuario.fechanacimiento);
 
       if (usuario.foto is String) {
         if (usuario.foto.startsWith("http")) {
@@ -145,7 +265,143 @@ class AccesoBD {
       return false;
     }
   }
+  */
 
+  editarFotoUsuario(idUsuario,nuevaFoto) async{
+      try{
+
+        if(nuevaFoto is String)
+        {
+          return db.collection("usuario").doc(idUsuario).update({"foto":nuevaFoto});
+        }
+        else
+        {
+          var url =  await subirArchivo(nuevaFoto,"Imágenes/perfiles/"+idUsuario.toString()+".jpg");
+          await db.collection("usuarios").doc(idUsuario).update({"foto":url});
+          return url;
+
+        }
+
+      }catch(e)
+      {
+        print(e);
+        return false;
+      }
+    }
+
+    editarApellidosUsuario(idUsuario,apellidos) async{
+      try{
+
+        await db.collection("usuarios").doc(idUsuario).update({"apellidos":apellidos}).then(
+                (e){
+
+              return true;
+            }
+        );
+
+      }catch(e)
+      {
+        print(e);
+        return false;
+      }
+    }
+
+    editarNombreUsuario(idUsuario,nombre) async{
+      try{
+
+        return await db.collection("usuarios").doc(idUsuario).update({"nombre":nombre});
+
+      }catch(e)
+      {
+        print(e);
+        return false;
+      }
+    }
+
+    editarNacimientoUsuario(idUsuario,fecha) async{
+      try{
+
+        await db.collection("usuarios").doc(idUsuario).update({"fechanacimiento":fecha}).then((e){
+          return true;
+        });
+
+      }catch(e)
+      {
+        print(e);
+        return false;
+      }
+    }
+
+  addFeedbackTarea(tarea,idUsuario, retroalimentacion) async {
+    try {
+      final ref = db.collection("usuarioTieneTareas");
+      final ref2 = db.collection("historial");
+
+      var tareaHistorial = <String, dynamic>{
+        "idUsuario":idUsuario,
+        "nombre":tarea.nombre,
+        "retroalimentacion":retroalimentacion
+      };
+      ref2.add(tareaHistorial);
+
+      return await ref
+          .doc(tarea.idRelacion)
+          .update({"retroalimentacion": retroalimentacion, "estado":"finalizada"});
+
+
+
+
+    } catch (e) {
+      log(e.toString());
+      return false;
+    }
+  }
+    //endregion
+
+    //region Eliminacion
+
+  Future eliminarAlumno(id) async {
+    try {
+      if (Sesion.alumnos != null) {
+        await db.collection("usuarios").doc(id).delete().then((e) async {
+          await db
+              .collection("usuarioTieneTareas")
+              .where("idUsuario", isEqualTo: id)
+              .get()
+              .then((e) {
+            for (int i = 0; i < e.docs.length; i++) {
+              db.collection("usuarioTieneTareas").doc(e.docs[i].id).delete();
+            }
+
+            return true;
+          });
+        });
+      }
+    } catch (e) {
+      return false;
+      print(e);
+    }
+  }
+
+  Future eliminarProfesor(id) async {
+    try {
+      if (Sesion.profesores != null&& Sesion.profesores != []) {
+        await db.collection("usuarios").doc(id).delete();
+        return true;
+      }
+    } catch (e) {
+      return false;
+      print(e);
+    }
+  }
+
+  //endregion
+
+  //endregion
+
+  //region Tareas
+
+  //region Creacion
   // Metodo para crear una tarea
   crearTarea(tarea) async {
     try {
@@ -195,24 +451,50 @@ class AccesoBD {
     }
   }
 
-  // Metodo al que le pasas por parametro la id del usuario, comprueba si existe y te devuelve el objeto usuario
-  consultarIDusuario(id) async {
+  //endregion
+
+  //region Consultas
+  // Metodo que te devuelve todas las tareas del usuario
+  consultarTodasLasTareas() async {
     try {
-      final ref = db.collection("usuarios");
+      final ref = db.collection("Tareas").withConverter(
+          fromFirestore: Tarea.fromFirestore,
+          toFirestore: (Tarea tarea, _) => tarea.toFirestore());
+
+      final consulta = await ref.get();
+
+      var lista = [];
+
+      consulta.docs.forEach((element) {
+        var nuevaTarea = element.data();
+        nuevaTarea.id = element.id;
+        lista.add(nuevaTarea);
+      });
+
+      return lista;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // Metodo que te devuelve la tarea segun el id de esta
+  consultarIDTarea(id) async {
+    try {
+      final ref = db.collection("Tareas");
 
       final consulta = ref.doc(id).withConverter(
-          fromFirestore: Usuario.fromFirestore,
-          toFirestore: (Usuario user, _) => user.toFirestore());
+          fromFirestore: Tarea.fromFirestore,
+          toFirestore: (Tarea tarea, _) => tarea.toFirestore());
 
       final docSnap = await consulta.get();
 
-      var usuario = null;
+      var tarea = null;
       if (docSnap != null) {
-        usuario = docSnap.data();
-        usuario?.id = docSnap.id;
+        tarea = docSnap.data();
+        tarea?.id = docSnap.id;
       }
 
-      return usuario;
+      return tarea;
     } catch (e) {
       print(e);
     }
@@ -229,7 +511,7 @@ class AccesoBD {
       _subscripcion = await ref
           .where("idUsuario", isEqualTo: id)
           .orderBy(
-              "fechainicio") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
+          "fechainicio") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
           .snapshots()
           .listen((e) async {
         //Escucha los cambios en el servidor
@@ -290,14 +572,14 @@ class AccesoBD {
                       //Se cargan los formularios (Mas feo esto que pegarle a un pae la verdad)
                       if (Sesion.tareas[k].formularios != []) {
                         for (int l = 0;
-                            l < Sesion.tareas[k].formularios.length;
-                            l = l +
-                                2 +
-                                (Sesion.tareas[k].formularios[l + 1] as int) *
-                                    3) {
+                        l < Sesion.tareas[k].formularios.length;
+                        l = l +
+                            2 +
+                            (Sesion.tareas[k].formularios[l + 1] as int) *
+                                3) {
                           for (int j = 0;
-                              j < (Sesion.tareas[k].formularios[l + 1] as int);
-                              j++) {
+                          j < (Sesion.tareas[k].formularios[l + 1] as int);
+                          j++) {
                             Sesion.tareas[k].controladoresComandas
                                 .add(TextEditingController());
                           }
@@ -324,6 +606,55 @@ class AccesoBD {
       return true;
     } catch (e) {
       print(e);
+      return false;
+    }
+  }
+
+  //endregion
+
+  //region Edicion
+  editarTarea(tarea) async {
+    try {
+      //Se encripta la contaseña
+      final ref = db.collection("Tareas");
+
+      if (!(tarea.imagen is String)) {
+        var fotoPath = "Imágenes/pictogramas/" +
+            encriptacionSha256(tarea.imagen.path);
+
+        var url = await subirArchivo(tarea.imagen, fotoPath);
+        tarea.imagen = url;
+      };
+
+      if (tarea.videos.length > 0) {
+        // se espera a que se introduzca el video correctamente en el storage para después salir del bucle de espera
+        var videoPath = "Vídeos/" + encriptacionSha256(tarea.videos[0].path);
+
+        var url = await subirArchivo(tarea.videos[0], videoPath);
+        tarea.videos = [url];
+      }
+
+
+
+      //Cuando se han cargado todas las imágenes y vídeos entonces se sube a la base de datos
+      //la nueva tarea con todas las urls de las imágenes y vídeos
+
+      log("Todos los futures se han completado");
+
+      var nuevaTarea = <String, dynamic>{
+        "nombre": tarea.nombre.toString(),
+        "descripcion": tarea.descripcion,
+        "imagen" : tarea.imagen,
+        "textos": tarea.textos,
+        "imagenes": tarea.imagenes,
+        "videos": tarea.videos,
+        "formularios": tarea.formularios,
+      };
+      ref.doc(tarea.id).update(nuevaTarea);
+
+      return true;
+    } catch (e) {
+      log(e.toString());
       return false;
     }
   }
@@ -414,12 +745,12 @@ class AccesoBD {
           });
         });*/
         var url = await subirArchivo(foto,fotoPath);
-          fotoURL = url;
-          return await ref.doc(idTareaAsignada).update({
-            "respuesta": comentario,
-            'fotopath': fotoPath,
-            'fotoURL': fotoURL
-          });
+        fotoURL = url;
+        return await ref.doc(idTareaAsignada).update({
+          "respuesta": comentario,
+          'fotopath': fotoPath,
+          'fotoURL': fotoURL
+        });
 
       } else {
         return await ref
@@ -432,191 +763,18 @@ class AccesoBD {
     }
   }
 
-  subirArchivo(archivo,path) async
-  {
-    try {
-      await storageRef.child(path).putFile(archivo); // espera hasta subir el archivo en la base de datos
-      var url = await leerArchivo(path);// espera a obtener la url para acceder a dicho archivo y comprobar que existe
-      return url; // devuelve la url del archivo
-    }
-    catch(e)
-    {
-      print(e);
-      return "error al subir archivo";
-    }
-  }
-
-  editarFotoUsuario(idUsuario,nuevaFoto) async{
-    try{
-
-      if(nuevaFoto is String)
-        {
-          return db.collection("usuario").doc(idUsuario).update({"foto":nuevaFoto});
-        }
-      else
-        {
-          var url =  await subirArchivo(nuevaFoto,"Imágenes/perfiles/"+idUsuario.toString()+".jpg");
-          await db.collection("usuarios").doc(idUsuario).update({"foto":url});
-          return url;
-
-        }
-
-    }catch(e)
-    {
-      print(e);
-      return false;
-    }
-  }
-
-  editarApellidosUsuario(idUsuario,apellidos) async{
-    try{
-
-       await db.collection("usuarios").doc(idUsuario).update({"apellidos":apellidos}).then(
-           (e){
-
-             return true;
-           }
-       );
-
-    }catch(e)
-    {
-      print(e);
-      return false;
-    }
-  }
-
-  editarNombreUsuario(idUsuario,nombre) async{
-    try{
-
-      return await db.collection("usuarios").doc(idUsuario).update({"nombre":nombre});
-
-    }catch(e)
-    {
-      print(e);
-      return false;
-    }
-  }
-
-  editarNacimientoUsuario(idUsuario,fecha) async{
-    try{
-
-       await db.collection("usuarios").doc(idUsuario).update({"fechanacimiento":fecha}).then((e){
-         return true;
-       });
-
-    }catch(e)
-    {
-      print(e);
-      return false;
-    }
-  }
-
-
-  editarTarea(tarea) async {
-    try {
-      //Se encripta la contaseña
-      final ref = db.collection("Tareas");
-
-        if (!(tarea.imagen is String)) {
-          var fotoPath = "Imágenes/pictogramas/" +
-              encriptacionSha256(tarea.imagen.path);
-
-          var url = await subirArchivo(tarea.imagen, fotoPath);
-          tarea.imagen = url;
-        };
-
-      if (tarea.videos.length > 0) {
-        // se espera a que se introduzca el video correctamente en el storage para después salir del bucle de espera
-        var videoPath = "Vídeos/" + encriptacionSha256(tarea.videos[0].path);
-
-        var url = await subirArchivo(tarea.videos[0], videoPath);
-        tarea.videos = [url];
-      }
-
-
-
-      //Cuando se han cargado todas las imágenes y vídeos entonces se sube a la base de datos
-      //la nueva tarea con todas las urls de las imágenes y vídeos
-
-      log("Todos los futures se han completado");
-
-      var nuevaTarea = <String, dynamic>{
-        "nombre": tarea.nombre.toString(),
-        "descripcion": tarea.descripcion,
-        "imagen" : tarea.imagen,
-        "textos": tarea.textos,
-        "imagenes": tarea.imagenes,
-        "videos": tarea.videos,
-        "formularios": tarea.formularios,
-      };
-      ref.doc(tarea.id).update(nuevaTarea);
-
-      return true;
-    } catch (e) {
-      log(e.toString());
-      return false;
-    }
-  }
-
-
-
-  addFeedbackTarea(tarea,idUsuario, retroalimentacion) async {
+  updateComanda(idTareaAsignada, formulario) async {
     try {
       final ref = db.collection("usuarioTieneTareas");
-      final ref2 = db.collection("historial");
-
-      var tareaHistorial = <String, dynamic>{
-        "idUsuario":idUsuario,
-        "nombre":tarea.nombre,
-        "retroalimentacion":retroalimentacion
-      };
-      ref2.add(tareaHistorial);
-
-      return await ref
-          .doc(tarea.idRelacion)
-          .update({"retroalimentacion": retroalimentacion, "estado":"finalizada"});
-
-
-
-
+      return await ref.doc(idTareaAsignada).update({"formularios": formulario});
     } catch (e) {
       log(e.toString());
       return false;
     }
   }
+  //endregion
 
-  cambiarPosicion(idUsuario, latitud, longitud) async {
-    try {
-      final ref = db.collection("usuarios");
-      return await ref
-          .doc(idUsuario)
-          .update({"latitud": latitud, "longitud": longitud});
-    } catch (e) {
-      log(e.toString());
-      return false;
-    }
-  }
-
-  obtenerPosicion(idUsuario) async {
-    try {
-      final ref = db.collection("usuarios").doc(idUsuario);
-      _subscripcionLoc =
-          await ref // consulta todas las tareas de un usuario ordenadas por fecha de asignación
-              .snapshots()
-              .listen((e) async {
-        if (Sesion.argumentos.length == 0) {
-          Sesion.argumentos.add(0.0);
-          Sesion.argumentos.add(0.0);
-        }
-        Sesion.argumentos[0] = e.get("latitud");
-        Sesion.argumentos[1] = e.get("longitud");
-        Sesion.paginaActual.actualizar();
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
+  //region Eliminacion
   // Metodo para eliminar una tarea de un usuario pasandole el id de la relacion entre el usuario y la tarea
   Future eliminarTareaAlumno(id) async {
     try {
@@ -653,179 +811,22 @@ class AccesoBD {
     }
   }
 
-  Future eliminarAlumno(id) async {
-    try {
-      if (Sesion.alumnos != null) {
-        await db.collection("usuarios").doc(id).delete().then((e) async {
-          await db
-              .collection("usuarioTieneTareas")
-              .where("idUsuario", isEqualTo: id)
-              .get()
-              .then((e) {
-            for (int i = 0; i < e.docs.length; i++) {
-              db.collection("usuarioTieneTareas").doc(e.docs[i].id).delete();
-            }
+  //endregion
 
-            return true;
-          });
-        });
-      }
-    } catch (e) {
-      return false;
-      print(e);
+  //endregion
+
+  //region Gestión de archivos
+  subirArchivo(archivo,path) async
+  {
+    try {
+      await storageRef.child(path).putFile(archivo); // espera hasta subir el archivo en la base de datos
+      var url = await leerArchivo(path);// espera a obtener la url para acceder a dicho archivo y comprobar que existe
+      return url; // devuelve la url del archivo
     }
-  }
-
-  Future eliminarProfesor(id) async {
-    try {
-      if (Sesion.profesores != null&& Sesion.profesores != []) {
-        await db.collection("usuarios").doc(id).delete();
-        return true;
-      }
-    } catch (e) {
-      return false;
+    catch(e)
+    {
       print(e);
-    }
-  }
-
-  // Metodo que te devuelve todos los usuarios de la base de datos
-  consultarTodosUsuarios() async {
-    try {
-      var usuarios = [];
-
-      final ref = db.collection("usuarios").withConverter(
-          fromFirestore: Usuario.fromFirestore,
-          toFirestore: (Usuario user, _) => user.toFirestore());
-
-      final consulta = await ref.get();
-
-      consulta.docs.forEach((element) {
-        final usuarioNuevo = element.data();
-        usuarioNuevo.id = element.id;
-        usuarios.add(usuarioNuevo);
-      });
-
-      return usuarios;
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  // Metodos que te devuelve todos los alumnos de la base de datos
-  consultarTodosAlumnos() async {
-    try {
-      var usuarios = [];
-
-      final ref = db.collection("usuarios").withConverter(
-          fromFirestore: Usuario.fromFirestore,
-          toFirestore: (Usuario user, _) => user.toFirestore());
-
-      final consulta = await ref.where("rol", isEqualTo: "Rol.alumno").get();
-
-      consulta.docs.forEach((element) {
-        final usuarioNuevo = element.data();
-        usuarioNuevo.id = element.id;
-        usuarios.add(usuarioNuevo);
-      });
-
-      return usuarios;
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  // Metodo que te devuelve todos los profesores de la base de datos
-  consultarTodosProfesores() async {
-    try {
-      var usuarios = [];
-
-      final ref = db.collection("usuarios").withConverter(
-          fromFirestore: Usuario.fromFirestore,
-          toFirestore: (Usuario user, _) => user.toFirestore());
-
-      final consulta = await ref.where("rol", isNotEqualTo: "Rol.alumno").get();
-
-      consulta.docs.forEach((element) {
-        final usuarioNuevo = element.data();
-        usuarioNuevo.id = element.id;
-        usuarios.add(usuarioNuevo);
-      });
-
-      return usuarios;
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  // Metodo que te devuelve todas las tareas del usuario
-  consultarTodasLasTareas() async {
-    try {
-      final ref = db.collection("Tareas").withConverter(
-          fromFirestore: Tarea.fromFirestore,
-          toFirestore: (Tarea tarea, _) => tarea.toFirestore());
-
-      final consulta = await ref.get();
-
-      var lista = [];
-
-      consulta.docs.forEach((element) {
-        var nuevaTarea = element.data();
-        nuevaTarea.id = element.id;
-        lista.add(nuevaTarea);
-      });
-
-      return lista;
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  updateComanda(idTareaAsignada, formulario) async {
-    try {
-      final ref = db.collection("usuarioTieneTareas");
-      return await ref.doc(idTareaAsignada).update({"formularios": formulario});
-    } catch (e) {
-      log(e.toString());
-      return false;
-    }
-  }
-
-  // Metodo que te devuelve la tarea segun el id de esta
-  consultarIDTarea(id) async {
-    try {
-      final ref = db.collection("Tareas");
-
-      final consulta = ref.doc(id).withConverter(
-          fromFirestore: Tarea.fromFirestore,
-          toFirestore: (Tarea tarea, _) => tarea.toFirestore());
-
-      final docSnap = await consulta.get();
-
-      var tarea = null;
-      if (docSnap != null) {
-        tarea = docSnap.data();
-        tarea?.id = docSnap.id;
-      }
-
-      return tarea;
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  // Metodo que comprueba la contraseña introducida con la guardada en la base de datos
-  checkearPassword(id, password) async {
-    try {
-      var resultado = await consultarIDusuario(id);
-
-      var PassEncriptada = encriptacionSha256(password);
-
-      if (PassEncriptada == resultado.password) {
-        return true;
-      } else
-        return false;
-    } catch (e) {
-      print(e);
+      return "error al subir archivo";
     }
   }
 
@@ -845,40 +846,45 @@ class AccesoBD {
     }
   }
 
-  @Deprecated("usa leerArchivo mejor")
-  leerImagen(path) async {
-    final archivo = storageRef.child(path);
+//endregion
 
-    print("intentando cargar imagen");
+  //region Geolocalizacion
+
+  cambiarPosicion(idUsuario, latitud, longitud) async {
     try {
-      const oneMegabyte = 1024 * 1024;
-      final String? data = await archivo.getDownloadURL();
-      return data;
-      // Data for "images/island.jpg" is returned, use this as needed.
-    } on FirebaseException catch (e) {
-      print("ERROR:" + e.toString());
-      // Handle any errors.
+      final ref = db.collection("usuarios");
+      return await ref
+          .doc(idUsuario)
+          .update({"latitud": latitud, "longitud": longitud});
+    } catch (e) {
+      log(e.toString());
+      return false;
     }
   }
 
-  // Metodo que te devuelve la URL según el PATH que tenga el video en el servidor
-  @Deprecated("usa leerArchivo mejor")
-  leerVideo(path) async {
-    final video = storageRef.child(path);
-
-    print("intentando cargar video");
+  obtenerPosicion(idUsuario) async {
     try {
-      const oneMegabyte = 1024 * 1024;
-      final String? data = await video.getDownloadURL();
-      print("video cargado");
-      return data;
-
-    } on FirebaseException catch (e) {
-      print("ERROR:" + e.toString());
-      // Handle any errors.
+      final ref = db.collection("usuarios").doc(idUsuario);
+      _subscripcionLoc =
+          await ref // consulta todas las tareas de un usuario ordenadas por fecha de asignación
+              .snapshots()
+              .listen((e) async {
+        if (Sesion.argumentos.length == 0) {
+          Sesion.argumentos.add(0.0);
+          Sesion.argumentos.add(0.0);
+        }
+        Sesion.argumentos[0] = e.get("latitud");
+        Sesion.argumentos[1] = e.get("longitud");
+        Sesion.paginaActual.actualizar();
+      });
+    } catch (e) {
+      print(e);
     }
   }
 
+  //endregion
+
+  //region Tablon de comunicacion
   crearTablon(tablon) async {
     try {
       final ref = db.collection("tablero");
@@ -1000,4 +1006,6 @@ class AccesoBD {
       print(e);
     }
   }
+
+  //endregion
 }
