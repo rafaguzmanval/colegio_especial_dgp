@@ -256,9 +256,12 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                           onPressed: () async{
 
                             var nombre = await dialogNombre(usuarioPerfil.nombre);
+                            if(nombre != null)
+                            {
                             Sesion.db.editarNombreUsuario(usuarioPerfil.id, nombre);
                             usuarioPerfil.nombre = nombre;
                             actualizar();
+                            }
 
                           }),
                     ),
@@ -276,9 +279,12 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                           onPressed: () async{
 
                             var apellidos = await dialogNombre(usuarioPerfil.apellidos);
-                            Sesion.db.editarApellidosUsuario(usuarioPerfil.id, apellidos);
-                            usuarioPerfil.apellidos = apellidos;
-                            actualizar();
+                            if(apellidos != null)
+                              {
+                                Sesion.db.editarApellidosUsuario(usuarioPerfil.id, apellidos);
+                                usuarioPerfil.apellidos = apellidos;
+                                actualizar();
+                              }
 
                           }),
                     ),
