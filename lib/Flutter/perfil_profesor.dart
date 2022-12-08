@@ -11,6 +11,8 @@
 *   material.dart: Se utiliza para dar colores y diseño a la aplicacion.
 * */
 
+import 'dart:async';
+
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
@@ -46,6 +48,7 @@ class PerfilProfesorState extends State<PerfilProfesor> {
   final controladorPassword = TextEditingController();
   var metodoElegido;
   var rolElegido;
+  StreamController controladorStream = StreamController.broadcast();
 
   @override
   void dispose() {
@@ -156,195 +159,213 @@ class PerfilProfesorState extends State<PerfilProfesor> {
       }
       vez++;
     }
-    return Container(
-      //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-      child: Column(
-        children: [
-          if (usuarioPerfil != null) ...[
-            SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              width: 500,
-              child: TextField(
-                style:
-                    TextStyle(fontSize: 30.0, color: GuardadoLocal.colores[0]),
-                obscureText: false,
-                maxLength: 40,
-                decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: GuardadoLocal.colores[0], width: 0.0),
-                    ),
-                    border: OutlineInputBorder(),
-                    hintText: 'NOMBRE *',
-                    hintStyle: TextStyle(color: GuardadoLocal.colores[0])),
-                controller: controladorNombre,
+    return
+    Column(
+      children: [
+        if (usuarioPerfil != null) ...[
+          SizedBox(
+            height: 10,
+          ),
+
+          Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Flexible(
+              flex: 25,
+              child: Container(
+                child: !(usuarioPerfil.foto is String)
+                    ? Column(children: [
+                  Text(
+                    'NINGUNA FOTO ELEGIDA ****',
+                    textAlign: TextAlign.center,
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        dialogEditarFoto();
+                        actualizar();
+                      },
+                      child: Icon(
+                        Icons.edit,
+                        color: GuardadoLocal.colores[2],
+                        size: 40,
+                      ),
+                      style: ElevatedButton.styleFrom(
+                          shape: CircleBorder())),
+                ])
+                    : CircleAvatar(
+                  radius: 100,
+                  backgroundImage: NetworkImage(usuarioPerfil.foto),
+                  child: Stack(
+                    children: [
+                      Container(
+                        child: ElevatedButton(
+                            onPressed: () {
+                              dialogEditarFoto();
+                              actualizar();
+                            },
+                            child: Icon(
+                              Icons.edit,
+                              color: GuardadoLocal.colores[2],
+                              size: 40,
+                            ),
+                            style: ElevatedButton.styleFrom(
+                                shape: CircleBorder())),
+                        alignment: Alignment.bottomRight,
+                      )
+                    ],
+                  ),
+                ),
               ),
             ),
-            SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              width: 500,
-              child: TextField(
-                style:
-                    TextStyle(fontSize: 30.0, color: GuardadoLocal.colores[0]),
-                obscureText: false,
-                maxLength: 40,
-                decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                          color: GuardadoLocal.colores[0], width: 0.0),
+
+            Flexible(
+                flex: 50,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: 500,
+                      child: TextButton(
+                          child: Text(
+                            usuarioPerfil.nombre.toUpperCase(),
+                            style: TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: () async{
+
+                            var nombre = await dialogNombre(usuarioPerfil.nombre);
+                            if(nombre != null)
+                            {
+                              Sesion.db.editarNombreUsuario(usuarioPerfil.id, nombre);
+                              usuarioPerfil.nombre = nombre;
+                              actualizar();
+                            }
+
+                          }),
                     ),
-                    border: OutlineInputBorder(),
-                    hintText: 'APELLIDOS *',
-                    hintStyle: TextStyle(color: GuardadoLocal.colores[0])),
-                controller: controladorApellidos,
-              ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      width: 500,
+                      child: TextButton(
+                          child: Text(
+                            usuarioPerfil.apellidos.toUpperCase(),
+                            style: TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.bold),
+                          ),
+                          onPressed: () async{
+
+                            var apellidos = await dialogNombre(usuarioPerfil.apellidos);
+                            if(apellidos != null)
+                            {
+                              Sesion.db.editarApellidosUsuario(usuarioPerfil.id, apellidos);
+                              usuarioPerfil.apellidos = apellidos;
+                              actualizar();
+                            }
+
+                          }),
+                    ),
+                  ],
+                )),
+
+            ///BOTON DE LOCALIZACION
+
+            /*Flexible(
+              flex: 25,
+              child: ElevatedButton(
+                  onPressed: () async {
+                    await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Localizacion()));
+                    Sesion.paginaActual = this;
+                    actualizar();
+                  },
+                  child: Image.asset(
+                    'assets/mapa.png',
+                    width: 140,
+                    height: 100,
+                  )),
+            )*/
+          ]),
+
+          Text('FECHA DE NACIMIENTO:'),
+
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            Text(usuarioPerfil.fechanacimiento),
+            SizedBox(
+              width: 20,
             ),
             ElevatedButton(
                 onPressed: () async {
                   await showDatePicker(
-                          builder: (context, child) {
-                            return Theme(
-                              data: Theme.of(context).copyWith(
-                                canvasColor: GuardadoLocal.colores[1],
-                                colorScheme: ColorScheme.light(
-                                    primary:
-                                        GuardadoLocal.colores[0] // <-- SEE HERE
-                                    ),
-                                textButtonTheme: TextButtonThemeData(
-                                  style: TextButton.styleFrom(
-                                    primary: GuardadoLocal
-                                        .colores[0], // button text color
-                                  ),
-                                ),
+                      builder: (context, child) {
+                        return Theme(
+                          data: Theme.of(context).copyWith(
+                            canvasColor: GuardadoLocal.colores[1],
+                            colorScheme: ColorScheme.light(
+                                primary:
+                                GuardadoLocal.colores[0] // <-- SEE HERE
+                            ),
+                            textButtonTheme: TextButtonThemeData(
+                              style: TextButton.styleFrom(
+                                primary: GuardadoLocal
+                                    .colores[0], // button text color
                               ),
-                              child: child!,
-                            );
-                          },
-                          context: context,
-                          locale: const Locale("es", "ES"),
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1940),
-                          lastDate: DateTime.now())
-                      .then((e) {
-                    fechaElegida = e;
-                    actualizar();
+                            ),
+                          ),
+                          child: child!,
+                        );
+                      },
+                      context: context,
+                      locale: const Locale("es", "ES"),
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(1940),
+                      lastDate: DateTime.now())
+                      .then((e) async{
+                    if(e != null)
+                    {
+                      var fecha = DateFormat('d/M/y').format(e!);
+                      await Sesion.db.editarNacimientoUsuario(usuarioPerfil.id, fecha).then((e){
+                        usuarioPerfil.fechanacimiento = fecha;
+                        actualizar();
+                      });
+                    }
+
                   });
                 },
-                child: Column(children: [
-                  Text(
-                    (fechaElegida == null)
-                        ? fechaAntigua
-                        : DateFormat('d/M/y').format(fechaElegida),
-                    style:
-                    TextStyle(color: GuardadoLocal.colores[2], fontSize: 25),
-                  ),
-                  Image.asset("assets/calendario.png",
-                    width: 140,
-                    height: 100,),
-                  SizedBox(height: 10,)
-                ]),
+                child: Image.asset(
+                  "assets/calendario.png",
+                  width: 50,
+                  height: 50,
+                ),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: GuardadoLocal.colores[0])),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  border:
-                      Border.all(width: 2, color: GuardadoLocal.colores[0])),
-              height: 150,
-              width: 230,
-              child: fotoTomada == null
-                  ? Center(
-                      child: Text(
-                      'NINGUNA FOTO ELEGIDA ****',
-                      textAlign: TextAlign.center,
-                    ))
-                  : Stack(
-                      children: [
-                        Center(
-                            child: fotoTomada is String
-                                ? Image.network(fotoTomada)
-                                : Image.network(fotoTomada)),
-                        Container(
-                          child: ElevatedButton(
-                              onPressed: () {
-                                fotoTomada = null;
-                                actualizar();
-                              },
-                              child: Icon(
-                                Icons.remove,
-                                color: GuardadoLocal.colores[2],
-                              )),
-                          alignment: Alignment.topLeft,
-                        )
-                      ],
-                    ),
-            ),
-            SizedBox(height: 15),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if (fotoTomada == null) ...[
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ElevatedButton(
-                      child: Image.asset(
-                        "assets/camara.png",
-                        width: 140,
-                        height: 100,
-                      ),
-                      onPressed: () {
-                        seleccionarImagen(SeleccionImagen.camara);
-                      }),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  ElevatedButton(
-                      child: Image.asset('assets/galeria.png',
-                        width: 140,
-                        height: 100,
-                      ),
-                      onPressed: () {
-                        seleccionarImagen(SeleccionImagen.galeria);
-                      }),
-                ]
-              ],
-            ),
-            Text(
-              mensajeDeRegistro,
-              style: TextStyle(fontSize: 25),
-            ),
-            Visibility(
-                visible: !registrando,
-                child: Container(
-                    alignment: Alignment.bottomRight,
-                    margin: EdgeInsets.only(right: 10),
-                    child: TextButton(
-                  style: ButtonStyle(
-                    backgroundColor:
-                    MaterialStateProperty.all(GuardadoLocal.colores[0]),
-                  ),
-                  child: Image.asset(
-                    "assets/disquete.png",
-                    width: 140,
-                    height: 100,
-                  ),
-                  onPressed: () {
-                    //editarUsuario();
-                  },
-                ))),
-            Visibility(
-                visible: registrando, child: new CircularProgressIndicator()),
-          ]
+          ]),
+
+          SizedBox(
+            height: 15,
+          ),
+
+          SizedBox(height: 15),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (fotoTomada == null) ...[
+                SizedBox(
+                  height: 10,
+                ),
+              ]
+            ],
+          ),
+
+
+        ] else ...[
+          new CircularProgressIndicator()
         ],
-      ),
+        SizedBox(
+          height: 10,
+        )
+      ],
     );
   }
 
@@ -491,5 +512,136 @@ class PerfilProfesorState extends State<PerfilProfesor> {
   /// Actualiza la pagina
   void actualizar() {
     setState(() {});
+  }
+
+  dialogNombre(texto) {
+    var controlador = TextEditingController();
+    controlador.text = texto.toUpperCase();
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+              backgroundColor: GuardadoLocal.colores[1],
+              child: Column(
+                children: [
+                  TextField(
+                    controller: controlador,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 35, color: GuardadoLocal.colores[0]),
+                    decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: GuardadoLocal.colores[0], width: 0.0),
+                        )),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                          margin: EdgeInsets.all(15),
+                          child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Column(children: [
+                                Text(
+                                  'No'.toUpperCase(),
+                                  style: TextStyle(
+                                      fontSize: 40,
+                                      color: GuardadoLocal.colores[2]),
+                                ),
+                              ]))),
+                      Container(
+                          margin: EdgeInsets.all(15),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (controlador.text != "") {
+                                Navigator.pop(context, controlador.text);
+                              }
+                            },
+                            child: Text(
+                              'Ok'.toUpperCase(),
+                              style: TextStyle(
+                                  fontSize: 40,
+                                  color: GuardadoLocal.colores[2]),
+                            ),
+                          ))
+                    ],
+                  )
+                ],
+              ));
+        });
+  }
+
+  dialogEditarFoto() {
+    StreamController controlador = new StreamController();
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+              alignment: Alignment.center,
+              child:
+              StreamBuilder(
+                stream: controlador.stream,
+                builder: (context,snapshot){
+                  return
+                    snapshot.data == "carga"?
+                    Container(width:50,height:50,child:CircularProgressIndicator())
+
+                        :
+                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                      ElevatedButton(
+                          child: Image.asset(
+                            "assets/camara.png",
+                            width: 100,
+                            height: 100,
+                          ),
+                          onPressed: () async {
+                            controlador.add("carga");
+                            var imagen =
+                            await seleccionarImagen(SeleccionImagen.camara);
+                            var nuevaURL = await Sesion.db.editarFotoUsuario(
+                                usuarioPerfil.id, File(imagen.path));
+
+                            print("Nueva " + nuevaURL);
+                            usuarioPerfil.foto = nuevaURL;
+                            actualizar();
+
+                            Navigator.pop(context);
+                          }),
+
+                      // Container(width: 10,alignment: Alignment.center,),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      ElevatedButton(
+
+                          child: Image.asset(
+                            'assets/galeria.png',
+                            width: 100,
+                            height: 100,
+                          ),
+                          onPressed: () async {
+                            controlador.add("carga");
+                            var imagen =
+                            await seleccionarImagen(SeleccionImagen.galeria);
+                            await Sesion.db.editarFotoUsuario(
+                                usuarioPerfil.id, File(imagen.path)).then((foto){
+                              print("Nueva " + foto);
+                              usuarioPerfil.foto = foto;
+                              actualizar();
+
+                            });
+
+
+                            Navigator.pop(context);
+                          }),
+                    ]);
+                },
+              )
+
+          );
+        });
   }
 }
