@@ -1,32 +1,54 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Flutter/lista_mensajes.dart';
 import 'package:flutter/material.dart';
 
+import '../Dart/mensaje.dart';
 import '../Dart/guardado_local.dart';
 import 'lista_mensajes.dart';
 
-class Chat extends StatefulWidget {
-  final String chatId;
-  final String nombre;
-  final String foto;
-  const Chat(
+class VistaChat extends StatefulWidget {
+  final chatId;
+  final foto;
+  final nombre;
+  final idInterlocutor;
+
+  const VistaChat(
       {Key? key,
         required this.chatId,
+        required this.foto,
         required this.nombre,
-        required this.foto})
+        required this.idInterlocutor})
       : super(key: key);
 
   @override
-  State<Chat> createState() => _ChatState();
+  State<VistaChat> createState() => _VistaChatState();
 }
 
-class _ChatState extends State<Chat> {
-  Stream<QuerySnapshot>? chats;
+class _VistaChatState extends State<VistaChat> {
+  StreamController chatsController = new StreamController();
   TextEditingController messageController = TextEditingController();
+  var i = 0;
+  var mensajes = [];
 
   @override
   void initState() {
     super.initState();
+
+    Sesion.paginaActual = this;
+
+    cargaMensajes();
+    /*
+    Timer.periodic(Duration(milliseconds: 100), (timer) {
+      if(i%2==0)
+        mensajes.add(Mensaje(Sesion.id, widget.idInterlocutor, 'texto', 'Mensaje nuevo '+i.toString(), ''));
+      else
+        mensajes.add(Mensaje(widget.idInterlocutor, Sesion.id, 'texto', 'Mensaje nuevo '+i.toString(), ''));
+
+      chatsController.add('');
+      i++;});*/
   }
 
   @override
@@ -113,15 +135,15 @@ class _ChatState extends State<Chat> {
 
   mensajesChat() {
     return StreamBuilder(
-      stream: chats,
+      stream: chatsController.stream,
       builder: (context, AsyncSnapshot snapshot) {
-        return !snapshot.hasData //snapshot.hasData
+        return snapshot.hasData //snapshot.hasData
             ? ListView.builder(
-          itemCount: 2,//snapshot.data.docs.length,
+          itemCount: mensajes.length,//snapshot.data.docs.length,
           itemBuilder: (context, index) {
             return ListaMensajes(
-                mensaje: 'Prueba',//snapshot.data.docs[index]['message'],
-                enviadoPorMi: index<1?false:true);//widget.userName == snapshot.data.docs[index]['sender']);
+                mensaje: mensajes[index].contenido,//snapshot.data.docs[index]['message'],
+                enviadoPorMi: mensajes[index].idUsuarioEmisor==Sesion.id);//widget.userName == snapshot.data.docs[index]['sender']);
           },
         )
             : Container();
@@ -142,5 +164,14 @@ class _ChatState extends State<Chat> {
         messageController.clear();
       });
     }
+  }
+
+  cargaMensajes(){
+    Sesion.db.obtenerMensajes(widget.chatId);
+  }
+
+  actualizarMensajes(listaMensajes){
+    mensajes = listaMensajes;
+    chatsController.add('');
   }
 }

@@ -34,7 +34,8 @@ class PaginaChatsState extends State<PaginaChats> {
 
     cargarAlumnos();
     Sesion.paginaActual = this;
-    AccesoBD.obtenerChats(Sesion.id);
+
+    cargarChats();
   }
 
   @override
@@ -166,17 +167,18 @@ class PaginaChatsState extends State<PaginaChats> {
         builder: (context, AsyncSnapshot snapshot){
 
           if(!snapshot.hasData){ //snapshot.hasData
-            if(true){//snapshot.data['chats']!=null
+            if(Sesion.chats.length!=0){//snapshot.data['chats']!=null
               return ListView.builder(
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  itemCount: Sesion.alumnos.length, //snapshot.data['chats'].length
+                  itemCount: Sesion.chats.length, //snapshot.data['chats'].length
                   itemBuilder: (context, index) {
-                    int reverseIndex = Sesion.alumnos.length - index - 1; // int reverseIndex = snapshot.data['chats'].length - index - 1
+                    int reverseIndex = Sesion.chats.length - index - 1; // int reverseIndex = snapshot.data['chats'].length - index - 1
                     return ListaChats(
                       chatId: 'id',
-                      nombre:Sesion.alumnos[reverseIndex].nombre,
-                      foto: Sesion.alumnos[reverseIndex].foto);
+                      nombre:Sesion.chats[reverseIndex].nombre,
+                      foto: Sesion.chats[reverseIndex].foto,
+                      idInterlocutor: Sesion.chats[reverseIndex].idUsuario1==Sesion.id?Sesion.chats[reverseIndex].idUsuario2:Sesion.chats[reverseIndex].idUsuario1,);
                   },
               );
             }else{
@@ -188,55 +190,17 @@ class PaginaChatsState extends State<PaginaChats> {
           }
         }
     );
-
-    /*Container(
-      alignment: Alignment.center,
-      //padding: EdgeInsets.symmetric(vertical: 0,horizontal: 200),
-      child: Column(children: [
-        for (int i = 0; i < Sesion.alumnos.length; i++) ...[
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Container(
-                width: 130,
-                height: 150,
-                margin: EdgeInsets.all(10),
-                alignment: Alignment.center,
-                child: ElevatedButton(
-                  child: Column(
-                    children: [
-                      Text(
-                        Sesion.alumnos[i].nombre.toString().toUpperCase(),
-                        style: TextStyle(
-                          color: GuardadoLocal.colores[2],
-                          fontSize: 25,
-                        ),
-                      ),
-                      if(Sesion.alumnos[i].foto is String)...[
-                        Image.network(
-                          Sesion.alumnos[i].foto,
-                          width: 100,
-                          height: 100,
-                          fit: BoxFit.fill,
-                        ),
-                      ]
-                    ],
-                  ),
-                  onPressed: () async {
-                    Sesion.seleccion = Sesion.alumnos[i];
-                    await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => PerfilAlumno()));
-                  },
-                )),
-          ])
-        ],
-      ]),
-    );*/
   }
 
   noChatsWidget(){
 
-    return Center(child:Text('Sin chats creados.\nBusca en la lupa para crear un nuevo chat'.toUpperCase(),));
+    return Center(child:Text('Sin chats creados.\nBusca en la lupa para crear un nuevo chat.'.toUpperCase(),));
+  }
+
+  // Obtiene la lista de alumnos y actualiza la pagina
+  cargarChats() async {
+    Sesion.chats = await Sesion.db.obtenerChats(Sesion.id);
+    actualizar();
   }
 
   void actualizar() async {

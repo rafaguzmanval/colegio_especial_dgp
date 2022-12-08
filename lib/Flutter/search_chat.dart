@@ -3,7 +3,7 @@ import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Flutter/perfil_alumno.dart';
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 
-import 'chat.dart';
+import 'vista_chat.dart';
 
 class CustomSearchDelegate extends SearchDelegate {
 // Demo list to show querying
@@ -112,10 +112,11 @@ class CustomSearchDelegate extends SearchDelegate {
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Chat(
+                                builder: (context) => VistaChat(
                                   chatId: buscarIdChat(Sesion.nombre,profesores[index].nombre),
                                   nombre: profesores[index].nombre,
                                   foto: profesores[index].foto,
+                                  idInterlocutor: profesores[index].id,
                                 )));
                       },
                     )),
@@ -172,10 +173,11 @@ class CustomSearchDelegate extends SearchDelegate {
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Chat(
+                                builder: (context) => VistaChat(
                                   chatId: buscarIdChat(Sesion.nombre,alumnos[index].nombre),
                                   nombre: alumnos[index].nombre,
                                   foto: alumnos[index].foto,
+                                  idInterlocutor: alumnos[index].id,
                                 )));
                     },
                   )),
@@ -246,10 +248,11 @@ class CustomSearchDelegate extends SearchDelegate {
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Chat(
+                                builder: (context) => VistaChat(
                                   chatId: buscarIdChat(Sesion.nombre,profesores[index].nombre),
                                   nombre: profesores[index].nombre,
                                   foto: profesores[index].foto,
+                                  idInterlocutor: profesores[index].id,
                                 )));
                       },
                     )),
@@ -306,10 +309,11 @@ class CustomSearchDelegate extends SearchDelegate {
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => Chat(
+                                builder: (context) => VistaChat(
                                   chatId: buscarIdChat(Sesion.nombre,alumnos[index].nombre),
                                   nombre: alumnos[index].nombre,
                                   foto: alumnos[index].foto,
+                                  idInterlocutor: alumnos[index].id,
                                 )));
                       },
                     )),

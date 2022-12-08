@@ -30,6 +30,9 @@ import 'package:colegio_especial_dgp/Dart/usuario.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+
+import 'chat.dart';
+import 'mensaje.dart';
 //endregion
 
 String encriptacionSha256(String password) {
@@ -1024,55 +1027,56 @@ class AccesoBD {
 
   //endregion
 
-  static obtenerChats(id) async{
+  obtenerChats(id) async{
     try {
-        var listaPersonas = [];
-      var snapshot = await FirebaseFirestore.instance
+      var listaChats = [];
+      var snapshot = await db
           .collection('chats')
           .where('idUsuario1',  isEqualTo: id)
           .get();
       for(int i = 0; i<snapshot.docs.length;i++){
-        listaPersonas.add(snapshot.docs[i].data()['idUsuario2']);
+        var snapshot2 = await Sesion.db.consultarIDusuario(snapshot.docs[i].get('idUsuario2'));
+        var foto = snapshot2.foto;
+        var nombre = snapshot2.nombre;
+        Chat nuevo = Chat(snapshot.docs[i].id,snapshot.docs[i].get('idUsuario1'),snapshot2.id,nombre,foto);
+        listaChats.add(nuevo);
       }
 
-      snapshot = await FirebaseFirestore.instance
+      snapshot = await db
           .collection('chats')
           .where('idUsuario2',  isEqualTo: id)
           .get();
 
       for(int i = 0; i<snapshot.docs.length;i++){
-        listaPersonas.add(snapshot.docs[i].data()['idUsuario1']);
-      }
-      /*
-      final snapshot2 = FirebaseFirestore.instance
-          .collection('chats')
-          .where('idUsuario2',  isEqualTo: id)
-          .get();
-
-      final consulta = ref.doc(id).withConverter(
-          fromFirestore: Tablon.fromFirestore,
-          toFirestore: (Tablon tablon, _) => tablon.toFirestore());
-
-      final docSnap = await consulta.get();
-
-      var listaChats = snapshot1.addsnapshot2;
-      if (docSnap != null) {
-        tablon = docSnap.data();
-        tablon?.id = docSnap.id;
-      }*/
-
-      Map<String,dynamic> listaChats= new Map();
-
-      for(var i = 0; i<listaPersonas.length;i++){
-        var snapshot = await FirebaseFirestore.instance
-            .collection('usuarios')
-            .where('id',  isEqualTo: listaPersonas[i])
-            .get();
-
-        //listaChats.assign(,);
+        var snapshot2 = await Sesion.db.consultarIDusuario(snapshot.docs[i].get('idUsuario1'));
+        var foto = snapshot2.foto;
+        var nombre = snapshot2.nombre;
+        Chat nuevo = Chat(snapshot.docs[i].id,snapshot2.id,snapshot.docs[i].get('idUsuario2'),nombre,foto);
+        listaChats.add(nuevo);
       }
 
-      return null;
+      return listaChats;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  obtenerMensajes(idChat) async{
+    try {
+      var listaMensajes = [];
+
+      _subscripcion = await db
+          .collection('mensajes')
+          .where('idChat',  isEqualTo: idChat)
+          .snapshots().listen((event) {
+            for(int i = 0; i<event.docs.length;i++){
+              Mensaje nuevo = Mensaje(event.docs[i].get('idUsuarioEmisor'),event.docs[i].get('idUsuarioReceptor'),
+                event.docs[i].get('tipo'),event.docs[i].get('contenido'),event.docs[i].get('fechaEnvio'));
+              listaMensajes.add(nuevo);
+            }
+
+            Sesion.paginaActual.actualizarMensajes(listaMensajes);
+          });
     } catch (e) {
       print(e);
     }

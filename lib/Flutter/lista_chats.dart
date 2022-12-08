@@ -1,17 +1,19 @@
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:flutter/material.dart';
 
-import 'chat.dart';
+import 'vista_chat.dart';
 
 class ListaChats extends StatefulWidget {
   final String chatId;
   final String nombre;
   final String foto;
+  final String idInterlocutor;
   const ListaChats(
       {Key? key,
         required this.chatId,
         required this.nombre,
-        required this.foto})
+        required this.foto,
+        required this.idInterlocutor})
       : super(key: key);
 
   @override
@@ -26,10 +28,11 @@ class _ListaChatsState extends State<ListaChats> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => Chat(
+                builder: (context) => VistaChat(
                   chatId: widget.chatId,
                   nombre: widget.nombre,
                   foto: widget.foto,
+                  idInterlocutor: widget.idInterlocutor,
                 )));
       },
       child: Container(
