@@ -72,6 +72,14 @@ class ConfiguracionState extends State<Configuracion> {
                           child: Text("Elegir color".toUpperCase(),
                               style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2])))),
 
+                  Container(
+                      margin: EdgeInsets.all(20),
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            Sesion.db.eliminarTodosLosMensajes();
+                          },
+                          child: Text("Limpiar chats".toUpperCase(),
+                              style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2])))),
 
                 ],
               ))),

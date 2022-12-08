@@ -51,6 +51,12 @@ class _VistaChatState extends State<VistaChat> {
   }
 
   @override
+  void dispose(){
+    this.dispose();
+    Sesion.db.desactivarSubscripcionChat();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

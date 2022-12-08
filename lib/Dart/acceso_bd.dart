@@ -48,6 +48,7 @@ class AccesoBD {
   var storageRef = FirebaseStorage.instance.ref();
   var _subscripcion;
   var _subscripcionLoc;
+  var _subscripcionChat;
   var fotoDesconocido =
       "https://firebasestorage.googleapis.com/v0/b/colegioespecialdgp.appspot.com/o/Im%C3%A1genes%2Fperfiles%2Fdesconocido.png?alt=media&token=98ba72ac-776e-4f83-9aaa-57761589c974";
 
@@ -60,6 +61,10 @@ class AccesoBD {
 
   desactivarSubscripcionUbicacion() {
     if (_subscripcionLoc != null) _subscripcionLoc.cancel();
+  }
+
+  desactivarSubscripcionChat() {
+    if (_subscripcionLoc != null) _subscripcionChat.cancel();
   }
 
   //endregion
@@ -1066,24 +1071,12 @@ class AccesoBD {
 
 
       print(idChat);
-      _subscripcion = await db
+      _subscripcionChat = await db
           .collection('mensajes')
           .where('idChat',  isEqualTo: idChat).orderBy("fechaEnvio")
           .snapshots().listen((event) {
 
-        var listaMensajes = [];
-            /*
-            var nuevo = null;
-            event.docChanges.forEach((element) { 
-              
-              if(element.type == DocumentChangeType.added)
-                {
-                   nuevo = Mensaje(element.doc.get('idChat'),element.doc.get('idUsuarioEmisor'),element.doc.get('idUsuarioReceptor'),
-                      element.doc.get('tipo'),element.doc.get('contenido'),element.doc.get('fechaEnvio'));
-                  print(nuevo.toString());
-                }
-            });
-            */
+          var listaMensajes = [];
 
             for(int i = 0; i<event.docs.length;i++){
               Mensaje nuevo = Mensaje(event.docs[i].get('idChat'),event.docs[i].get('idUsuarioEmisor'),event.docs[i].get('idUsuarioReceptor'),
@@ -1091,7 +1084,7 @@ class AccesoBD {
               print(nuevo.toString());
               listaMensajes.add(nuevo);
             }
-            
+
 
             Sesion.paginaActual.actualizarMensajes(listaMensajes);
           });
@@ -1117,5 +1110,18 @@ class AccesoBD {
     } catch (e) {
       print(e);
     }
+  }
+
+  eliminarTodosLosMensajes() {
+    try{
+        db.collection("mensajes").get().then((res) {
+
+          res.docs.forEach((element) {
+            element.reference.delete();
+          });
+        }
+        );
+    }
+    catch(e){print(e);};
   }
 }
