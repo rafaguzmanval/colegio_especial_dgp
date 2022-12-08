@@ -15,6 +15,7 @@ import 'package:colegio_especial_dgp/Flutter/perfil_alumno.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
 import 'package:colegio_especial_dgp/Flutter/search_chat.dart';
+import 'package:colegio_especial_dgp/Flutter/vista_chat.dart';
 import 'package:flutter/material.dart';
 
 import 'lista_chats.dart';
@@ -35,8 +36,17 @@ class PaginaChatsState extends State<PaginaChats> {
 
     cargarAlumnos();
     Sesion.paginaActual = this;
+    Sesion.paginaChats = this;
 
     cargarChats();
+  }
+
+  @override
+  void dispose() {
+    Sesion.db.desactivarSubscripcionListaChat();
+    Sesion.paginaChats = null;
+    super.dispose();
+
   }
 
   @override
@@ -132,6 +142,8 @@ class PaginaChatsState extends State<PaginaChats> {
     return _listaChats();
   }
 
+
+
   buildLandscape() {
     return SingleChildScrollView(
       controller: homeController,
@@ -174,12 +186,16 @@ class PaginaChatsState extends State<PaginaChats> {
                   shrinkWrap: true,
                   itemCount: Sesion.chats.length, //snapshot.data['chats'].length
                   itemBuilder: (context, index) {
+
                     int reverseIndex = Sesion.chats.length - index - 1; // int reverseIndex = snapshot.data['chats'].length - index - 1
-                    return ListaChats(
+                    var idInterlocutor = Sesion.chats[reverseIndex].idUsuario1==Sesion.id?Sesion.chats[reverseIndex].idUsuario2:Sesion.chats[reverseIndex].idUsuario1;
+
+                    return _listachatAux(Sesion.chats[reverseIndex].id, Sesion.chats[reverseIndex].nombre, Sesion.chats[reverseIndex].foto, idInterlocutor);
+                    /*ListaChats(
                       chatId: Sesion.chats[reverseIndex].id,
                       nombre:Sesion.chats[reverseIndex].nombre,
                       foto: Sesion.chats[reverseIndex].foto,
-                      idInterlocutor: Sesion.chats[reverseIndex].idUsuario1==Sesion.id?Sesion.chats[reverseIndex].idUsuario2:Sesion.chats[reverseIndex].idUsuario1,);
+                      idInterlocutor: Sesion.chats[reverseIndex].idUsuario1==Sesion.id?Sesion.chats[reverseIndex].idUsuario2:Sesion.chats[reverseIndex].idUsuario1,);*/
                   },
               );
             }else{
@@ -193,6 +209,55 @@ class PaginaChatsState extends State<PaginaChats> {
     );
   }
 
+  _listachatAux(chatId,nombre,foto,idInterlocutor)
+  {
+    return GestureDetector(
+      onTap: () async {
+        Sesion.db.desactivarSubscripcionListaChat();
+        await Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => VistaChat(
+                  chatId: chatId,
+                  nombre: nombre,
+                  foto: foto,
+                  idInterlocutor: idInterlocutor,
+                )));
+        Sesion.paginaActual = this;
+        cargarChats();
+
+      },
+      child: Container(
+        decoration: BoxDecoration(
+            color: GuardadoLocal.colores[1],
+            borderRadius: BorderRadius.circular(10.0),
+            border: Border.all(
+                color: GuardadoLocal.colores[0],
+                width: 1)
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+        child: ListTile(
+          leading: CircleAvatar(
+              radius: 30,
+              backgroundColor: GuardadoLocal.colores[0],
+              backgroundImage: NetworkImage(
+                foto,
+              ),
+              child: Container(alignment: FractionalOffset(0.98, 0.98),
+                child:Stack(children: [
+                  Icon(Icons.new_releases,color: GuardadoLocal.colores[1],),
+                  Icon(Icons.new_releases_outlined,color: GuardadoLocal.colores[0],),
+                ],),)
+          ),
+          title: Text(
+            nombre.toUpperCase(),
+            style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 30, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+    );
+  }
+
   noChatsWidget(){
 
     return Center(child:Text('Sin chats creados.\nBusca en la lupa para crear un nuevo chat.'.toUpperCase(),));
@@ -201,12 +266,15 @@ class PaginaChatsState extends State<PaginaChats> {
 
   // Obtiene la lista de alumnos y actualiza la pagina
   cargarChats() async {
-    Sesion.chats = await Sesion.db.obtenerChats(Sesion.id);
+    await Sesion.db.obtenerChats(Sesion.id);
+  }
+
+  void actualizarChats() async {
     chatsController.add('');
     actualizar();
   }
 
-  void actualizar() async {
+  void actualizar(){
     setState(() {});
   }
 }

@@ -62,6 +62,7 @@ class _VistaChatState extends State<VistaChat> {
             icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
             onPressed: () {
               Navigator.pop(context);
+
             }),
         title:  ListTile(
           leading: CircleAvatar(

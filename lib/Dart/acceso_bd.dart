@@ -48,7 +48,6 @@ class AccesoBD {
   var storageRef = FirebaseStorage.instance.ref();
   var _subscripcion;
   var _subscripcionListaChat1;
-  var _subscripcionListaChat2;
   var _subscripcionLoc;
   var _subscripcionChat;
   var fotoDesconocido =
@@ -71,7 +70,6 @@ class AccesoBD {
 
   desactivarSubscripcionListaChat() {
     if (_subscripcionListaChat1 != null) _subscripcionListaChat1.cancel();
-    if (_subscripcionListaChat2 != null) _subscripcionListaChat2.cancel();
   }
 
   //endregion
@@ -1041,39 +1039,35 @@ class AccesoBD {
 
   obtenerChats(id) async{
     try {
-      var listaChats = [];
-      _subscripcionListaChat1 = await db
-          .collection('chats')
-          .where('idUsuario1',  isEqualTo: id)
-          .snapshots().listen((event) async {
-          for(int i = 0; i<event.docs.length;i++){
-            var snapshot2 = await Sesion.db.consultarIDusuario(event.docs[i].get('idUsuario2'));
-            var foto = snapshot2.foto;
-            var nombre = snapshot2.nombre;
-            Chat nuevo = Chat(event.docs[i].id,event.docs[i].get('idUsuario1'),snapshot2.id,nombre,foto);
-            listaChats.add(nuevo);
-          }
-          if(Sesion.paginaActual.toString().contains('PaginaChats')){
-            Sesion.paginaActual.actualizarChats(listaChats);
-          }
-      });
 
-       _subscripcionListaChat2 = await db
+          _subscripcionListaChat1 = await db
           .collection('chats')
-          .where('idUsuario2',  isEqualTo: id)
+          .where('idUsuarios',  arrayContains: id )
           .snapshots().listen((event) async{
+            var listaChats = [];
+
             for(int i = 0; i<event.docs.length;i++){
-              var snapshot2 = await Sesion.db.consultarIDusuario(event.docs[i].get('idUsuario1'));
+
+
+              var index = event.docs[i].get("idUsuarios").indexOf(id) == 0 ? 1: 0;
+
+              var snapshot2 = await Sesion.db.consultarIDusuario(event.docs[i].get("idUsuarios")[index]);
+
               var foto = snapshot2.foto;
               var nombre = snapshot2.nombre;
-              Chat nuevo = Chat(event.docs[i].id,snapshot2.id,event.docs[i].get('idUsuario2'),nombre,foto);
+              Chat nuevo = Chat(Sesion.id,event.docs[i].get("idUsuarios")[index],snapshot2.id,nombre,foto);
               listaChats.add(nuevo);
             }
-            if(Sesion.paginaActual.toString().contains('PaginaChats')){
-              Sesion.paginaActual.actualizarChats(listaChats);
-            }
-          }
-      );
+
+            Sesion.chats = listaChats;
+
+            if(Sesion.paginaActual.toString().contains("PaginaChats"))
+              {
+                Sesion.paginaActual.actualizarChats();
+              }
+
+          });
+
 
     } catch (e) {
       print(e);
@@ -1097,7 +1091,7 @@ class AccesoBD {
             }
 
             if(Sesion.paginaActual.toString().contains("VistaChat"))
-            Sesion.paginaActual.actualizarMensajes(listaMensajes);
+              Sesion.paginaActual.actualizarMensajes(listaMensajes);
             else
               {
 
@@ -1114,8 +1108,7 @@ class AccesoBD {
       //Si el id es vacio, creamos un nuevo chat
       if(mensaje.idChat==''){
         Map<String,dynamic> chat = {
-          'idUsuario1': mensaje.idUsuarioEmisor,
-          'idUsuario2': mensaje.idUsuarioReceptor,
+          'idUsuarios': [mensaje.idUsuarioEmisor, mensaje.idUsuarioReceptor],
         };
 
         await db.collection('chats').add(chat);
@@ -1155,22 +1148,11 @@ class AccesoBD {
     try{
       var id = '';
       var snapshot = await db.collection("chats")
-          .where('idUsuario1',  isEqualTo: id1 )
-          .where('idUsuario2',  isEqualTo: id2 )
+          .where('idUsuarios',  arrayContains: id1 )
+          .where('idUsuarios', arrayContains:  id2)
           .get();
 
-      if(snapshot.docs.length<1){
-        snapshot = await db.collection("chats")
-            .where('idUsuario2',  isEqualTo: id1 )
-            .where('idUsuario1',  isEqualTo: id2 )
-            .get();
-      }
-
-      if(snapshot.docs.length==1){
-        id = snapshot.docs[0].id;
-      }
-
-      return id;
+      return snapshot.docs[0].id;
     }
     catch(e){print(e);};
   }

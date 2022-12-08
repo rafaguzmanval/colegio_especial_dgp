@@ -120,6 +120,8 @@ class CustomSearchDelegate extends SearchDelegate {
                                   foto: profesores[index].foto,
                                   idInterlocutor: profesores[index].id,
                                 )));
+
+                        Sesion.paginaChats.actualizarChats();
                       },
                     )),
               ])
@@ -183,6 +185,9 @@ class CustomSearchDelegate extends SearchDelegate {
                                   foto: alumnos[index].foto,
                                   idInterlocutor: alumnos[index].id,
                                 )));
+
+                      Sesion.paginaChats.actualizarChats();
+
                     },
                   )),
             ])
@@ -260,6 +265,7 @@ class CustomSearchDelegate extends SearchDelegate {
                                   foto: profesores[index].foto,
                                   idInterlocutor: profesores[index].id,
                                 )));
+                        Sesion.paginaChats.actualizarChats();
                       },
                     )),
               ])
@@ -323,6 +329,7 @@ class CustomSearchDelegate extends SearchDelegate {
                                   foto: alumnos[index].foto,
                                   idInterlocutor: alumnos[index].id,
                                 )));
+                        Sesion.paginaChats.actualizarChats();
                       },
                     )),
               ])
