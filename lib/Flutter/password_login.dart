@@ -84,7 +84,7 @@ class PasswordLoginState extends State<PasswordLogin> {
             leading: IconButton(
                 icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
                 onPressed: () => Navigator.popUntil(context, (route) => route.isFirst)),
-          title: Center(child: Text('Hola ${Sesion.nombre}'.toUpperCase(),textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
+          title: Center(child: Text('Hola ${Sesion.nombre}'.toUpperCase(),textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 30),),
 
         )),
         body: Container(margin: EdgeInsets.all(5), child: vista()));
@@ -121,7 +121,7 @@ class PasswordLoginState extends State<PasswordLogin> {
                   ),
                   border: OutlineInputBorder(),
                   hintText: 'Introduce la clave'.toUpperCase(),
-                  hintStyle: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),
+                  hintStyle: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0],fontSize: 25),
                 ),
                 controller: myController,
               ),
@@ -133,7 +133,7 @@ class PasswordLoginState extends State<PasswordLogin> {
               child: ElevatedButton(
                 child: Text(
                   "Enviar".toUpperCase(),
-                  style: TextStyle(
+                  style: TextStyle(fontWeight: FontWeight.bold,
                     fontSize: 30,
                     color: GuardadoLocal.colores[2],
                   ),
@@ -243,7 +243,7 @@ class PasswordLoginState extends State<PasswordLogin> {
               onPressed: () {
                 resetPin();
               },
-              child: Text("Volver a introducir".toUpperCase(),style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[2]),)),
+              child: Text("Volver a introducir".toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: GuardadoLocal.colores[2]),)),
         ]);
   }
 
