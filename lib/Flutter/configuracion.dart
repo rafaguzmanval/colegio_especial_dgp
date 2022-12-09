@@ -55,7 +55,7 @@ class ConfiguracionState extends State<Configuracion> {
           leading: IconButton(
               icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
               onPressed: (){Navigator.pop(context);}),
-          title: Center(child: Text("Configuración".toUpperCase(),textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
+          title: Center(child: Text("Configuración".toUpperCase(),textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 30),),
           )),
       body: SingleChildScrollView(
           child: Container(
@@ -70,7 +70,7 @@ class ConfiguracionState extends State<Configuracion> {
                             return await ventanaColores();
                           },
                           child: Text("Elegir color".toUpperCase(),
-                              style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2])))),
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30,color: GuardadoLocal.colores[2])))),
 
                   Container(
                       margin: EdgeInsets.all(20),
@@ -79,7 +79,7 @@ class ConfiguracionState extends State<Configuracion> {
                             Sesion.db.eliminarTodosLosMensajes();
                           },
                           child: Text("Limpiar chats".toUpperCase(),
-                              style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2])))),
+                              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30,color: GuardadoLocal.colores[2])))),
 
                 ],
               ))),
@@ -131,7 +131,7 @@ class ConfiguracionState extends State<Configuracion> {
                                         color: marcos,
                                         shape: BoxShape.circle),
                                     child: CircleAvatar(backgroundColor: p),),
-                                  ElevatedButton(onPressed: (){_elegirColor('p');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),))
+                                  ElevatedButton(onPressed: (){_elegirColor('p');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 25),))
                                 ],
                               )
                             ],
@@ -154,7 +154,7 @@ class ConfiguracionState extends State<Configuracion> {
                                         color: marcos,
                                         shape: BoxShape.circle),
                                     child: CircleAvatar(backgroundColor: b),),
-                                  ElevatedButton(onPressed: (){_elegirColor('b');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),))
+                                  ElevatedButton(onPressed: (){_elegirColor('b');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 25),))
                                 ],
                               )
                             ],
@@ -176,7 +176,7 @@ class ConfiguracionState extends State<Configuracion> {
                                         color: marcos,
                                         shape: BoxShape.circle),
                                     child: CircleAvatar(backgroundColor: l),),
-                                  ElevatedButton(onPressed: (){_elegirColor('l');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),))
+                                  ElevatedButton(onPressed: (){_elegirColor('l');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 25),))
                                 ],
                               )
                             ],
@@ -238,14 +238,14 @@ class ConfiguracionState extends State<Configuracion> {
                                       l=GuardadoLocal.colores[2];
                                       Navigator.pop(context);
                                     },
-                                        child: Text('Cancelar'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),)),
+                                        child: Text('Cancelar'.toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30,color: GuardadoLocal.colores[2]),)),
                                   )
                               ),
                               Expanded(
                                   child: Container(
                                     margin: EdgeInsets.all(2),
                                     child:ElevatedButton(
-                                      child: Text('Por defecto'.toUpperCase(), style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),),
+                                      child: Text('Por defecto'.toUpperCase(), style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30,color: GuardadoLocal.colores[2]),),
                                       onPressed: () async{
                                         await GuardadoLocal.eliminarColores();
                                         _aplicarColor();
@@ -256,7 +256,7 @@ class ConfiguracionState extends State<Configuracion> {
                                   child: Container(
                                       margin: EdgeInsets.all(2),
                                       child:ElevatedButton(
-                                        child: Text('Aplicar'.toUpperCase(),style: TextStyle(fontSize: 30,color: GuardadoLocal.colores[2]),),
+                                        child: Text('Aplicar'.toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30,color: GuardadoLocal.colores[2]),),
                                         onPressed: () async{
                                           await GuardadoLocal.almacenarColores(p, b, l);
                                           _aplicarColor();
@@ -301,7 +301,7 @@ class ConfiguracionState extends State<Configuracion> {
                     Text('TEXTO SOBRE FONDO',style: TextStyle(color: p),),
                     ElevatedButton(onPressed: (){},
                       style: ElevatedButton.styleFrom(primary: p),
-                      child: Text('BOTÓN',style: TextStyle(color: l,fontSize: 25),),)
+                      child: Text('BOTÓN',style: TextStyle(fontWeight: FontWeight.bold,color: l,fontSize: 25),),)
                   ],
                 ),
               )
