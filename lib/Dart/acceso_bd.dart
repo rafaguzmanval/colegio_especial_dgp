@@ -1049,7 +1049,7 @@ class AccesoBD {
             countPeticiones++;
             var listaChats = [];
 
-            for(int i = 0; i<event.docs.length;i++){
+            for(int i = event.docs.length - 1; i>=0;i--){
 
 
               var index = event.docs[i].get("idUsuarios").indexOf(id) == 0 ? 1: 0;
