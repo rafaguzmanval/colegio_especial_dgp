@@ -45,6 +45,7 @@ String encriptacionSha256(String password) {
 class AccesoBD {
   //region atributos de la clase
   var db = FirebaseFirestore.instance;
+  var countPeticiones = 0;
   var storageRef = FirebaseStorage.instance.ref();
   var _subscripcion;
   var _subscripcionListaChat1;
@@ -1044,6 +1045,7 @@ class AccesoBD {
           .collection('chats')
           .where('idUsuarios',  arrayContains: id )
           .snapshots().listen((event) async{
+            countPeticiones++;
             var listaChats = [];
 
             for(int i = 0; i<event.docs.length;i++){
@@ -1082,6 +1084,7 @@ class AccesoBD {
           .collection('mensajes')
           .where('idChat',  isEqualTo: idChat).orderBy("fechaEnvio")
           .snapshots().listen((event) {
+            countPeticiones++;
 
             print(idChat);
 
@@ -1110,12 +1113,14 @@ class AccesoBD {
 
   addMensaje(Mensaje mensaje) async{
     try {
+
       //Si el id es vacio, creamos un nuevo chat
       if(mensaje.idChat==''){
         Map<String,dynamic> chat = {
           'idUsuarios': [mensaje.idUsuarioEmisor, mensaje.idUsuarioReceptor],
         };
 
+        countPeticiones++;
         await db.collection('chats').add(chat);
 
         mensaje.idChat = await buscarIdChat(mensaje.idUsuarioEmisor, mensaje.idUsuarioReceptor);
@@ -1131,6 +1136,7 @@ class AccesoBD {
         'contenido': mensaje.contenido,
       };
 
+      countPeticiones++;
       db.collection('mensajes').add(msg);
 
     } catch (e) {
@@ -1140,9 +1146,11 @@ class AccesoBD {
 
   eliminarTodosLosMensajes() {
     try{
+      countPeticiones++;
         db.collection("mensajes").get().then((res) {
 
           res.docs.forEach((element) {
+            countPeticiones++;
             element.reference.delete();
           });
         }
@@ -1153,6 +1161,7 @@ class AccesoBD {
 
   buscarIdChat(id1, id2) async{
     try{
+      countPeticiones++;
       var id = '';
       var snapshot = await db.collection("chats")
           .where('idUsuarios',  arrayContains: id1 )
