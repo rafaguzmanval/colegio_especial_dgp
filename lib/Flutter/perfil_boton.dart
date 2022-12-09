@@ -69,7 +69,7 @@ class PerfilbotonState extends State<Perfilboton> {
             'Editar boton: ${Sesion.seleccion.nombres}'
                 ''
                 .toUpperCase(),textAlign: TextAlign.center,
-            style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),
+            style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 30),
           )),
         ),
         body: SingleChildScrollView(
@@ -135,7 +135,7 @@ class PerfilbotonState extends State<Perfilboton> {
           SizedBox(
             width: 500,
             child: TextField(
-              style: TextStyle(fontSize: 30.0,color: GuardadoLocal.colores[0]),
+              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 30.0,color: GuardadoLocal.colores[0]),
               obscureText: false,
               maxLength: 40,
               decoration: InputDecoration(
@@ -144,7 +144,7 @@ class PerfilbotonState extends State<Perfilboton> {
                   ),
                   border: OutlineInputBorder(),
                   hintText: 'INTRODUCE EL NOMBRE DEL PICTOGRAMA *',
-                  hintStyle: TextStyle(color: GuardadoLocal.colores[0])
+                  hintStyle: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0])
               ),
               controller: controladorNombre,
             ),
