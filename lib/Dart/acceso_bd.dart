@@ -1056,10 +1056,12 @@ class AccesoBD {
 
               var snapshot2 = await Sesion.db.consultarIDusuario(event.docs[i].get("idUsuarios")[index]);
 
+              bool sinLeer = index==0?event.docs[i].get("sinLeer2"):event.docs[i].get("sinLeer1");
+
               var foto = snapshot2.foto;
               var nombre = snapshot2.nombre;
 
-              Chat nuevo = Chat(event.docs[i].id,Sesion.id,snapshot2.id,nombre,foto,event.docs[i].get("fechaUltimoMensaje"));
+              Chat nuevo = Chat(event.docs[i].id,Sesion.id,snapshot2.id,nombre,foto,sinLeer,event.docs[i].get("fechaUltimoMensaje"));
               listaChats.add(nuevo);
             }
 
@@ -1084,7 +1086,7 @@ class AccesoBD {
       _subscripcionChat = await db
           .collection('mensajes')
           .where('idChat',  isEqualTo: idChat).orderBy("fechaEnvio")
-          .snapshots().listen((event) {
+          .snapshots().listen((event) async{
             countPeticiones++;
 
             print(idChat);
@@ -1106,6 +1108,17 @@ class AccesoBD {
 
               }
 
+            //marco como leido el chat para este usuario
+            if(listaMensajes.length>0){
+              var snapshot = await db.collection('chats').doc(idChat).get();
+              var sinLeer = event.docs.last.get('idUsuarioEmisor')==Sesion.id?'sinLeer1':'sinLeer2';
+
+              db.collection('chats').doc(idChat).update({
+                'idUsuarios': [event.docs.last.get('idUsuarioEmisor'), event.docs.last.get('idUsuarioReceptor')],
+                sinLeer:false,
+                'fechaUltimoMensaje' : event.docs.last.get('fechaEnvio')});
+              }
+
           });
     } catch (e) {
       print(e);
@@ -1119,6 +1132,8 @@ class AccesoBD {
       if(mensaje.idChat==''){
         Map<String,dynamic> chat = {
           'idUsuarios': [mensaje.idUsuarioEmisor, mensaje.idUsuarioReceptor],
+          'sinLeer1' : false,
+          'sinLeer2' : true,
           'fechaUltimoMensaje' : mensaje.fechaEnvio,
         };
 
@@ -1126,10 +1141,13 @@ class AccesoBD {
         await db.collection('chats').add(chat);
 
         mensaje.idChat = await buscarIdChat(mensaje.idUsuarioEmisor, mensaje.idUsuarioReceptor);
-        print(mensaje.idChat);
       }else{
         //Marco sin leer el chat
-        db.collection('chats').doc(mensaje.idChat).update({'fechaUltimoMensaje' : mensaje.fechaEnvio});
+        db.collection('chats').doc(mensaje.idChat).update({
+          'idUsuarios': [mensaje.idUsuarioEmisor, mensaje.idUsuarioReceptor],
+          'sinLeer1':true,
+          'sinLeer2':true,
+          'fechaUltimoMensaje' : mensaje.fechaEnvio});
       }
 
       Map<String,dynamic> msg = {

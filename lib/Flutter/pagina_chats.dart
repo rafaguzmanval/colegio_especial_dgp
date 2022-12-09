@@ -191,7 +191,7 @@ class PaginaChatsState extends State<PaginaChats> {
                   int reverseIndex = Sesion.chats.length - index - 1; // int reverseIndex = snapshot.data['chats'].length - index - 1
                   var idInterlocutor = Sesion.chats[reverseIndex].idUsuario1==Sesion.id?Sesion.chats[reverseIndex].idUsuario2:Sesion.chats[reverseIndex].idUsuario1;
 
-                  return _listachatAux(Sesion.chats[reverseIndex].id, Sesion.chats[reverseIndex].nombre, Sesion.chats[reverseIndex].foto, idInterlocutor);
+                  return _listachatAux(Sesion.chats[reverseIndex].id, Sesion.chats[reverseIndex].nombre, Sesion.chats[reverseIndex].foto, idInterlocutor,Sesion.chats[reverseIndex].sinLeer);
                   /*ListaChats(
                       chatId: Sesion.chats[reverseIndex].id,
                       nombre:Sesion.chats[reverseIndex].nombre,
@@ -210,7 +210,7 @@ class PaginaChatsState extends State<PaginaChats> {
     );
   }
 
-  _listachatAux(chatId,nombre,foto,idInterlocutor)
+  _listachatAux(chatId,nombre,foto,idInterlocutor,sinLeer)
   {
     return GestureDetector(
       onTap: () async {
@@ -244,11 +244,13 @@ class PaginaChatsState extends State<PaginaChats> {
               backgroundImage: NetworkImage(
                 foto,
               ),
-              child: Container(alignment: FractionalOffset(0.98, 0.98),
-                child:Stack(children: [
-                  Icon(Icons.new_releases,color: GuardadoLocal.colores[1],),
-                  Icon(Icons.new_releases_outlined,color: GuardadoLocal.colores[0],),
-                ],),)
+              child: sinLeer?Container(alignment: FractionalOffset(0.98, 0.98),
+                child:Stack(
+                  children: [
+                    Icon(Icons.mark_email_unread,color: GuardadoLocal.colores[1],),
+                    Icon(Icons.mark_email_unread_outlined,color: GuardadoLocal.colores[0],)
+                  ],
+                )):Container()
           ),
           title: Text(
             nombre.toUpperCase(),

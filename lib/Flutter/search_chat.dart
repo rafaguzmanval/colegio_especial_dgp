@@ -343,7 +343,6 @@ class CustomSearchDelegate extends SearchDelegate {
   buscarIdChat(String miId, String idOtro) async{
     //if(encuentro en la basde de datos) return id;
     //else(creo nuevo chat) return nuevoId;
-
     var id = await Sesion.db.buscarIdChat(miId, idOtro);
 
     return id;

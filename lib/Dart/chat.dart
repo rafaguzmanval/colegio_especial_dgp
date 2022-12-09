@@ -6,6 +6,7 @@ class Chat {
   var idUsuario2;
   var nombre;
   var foto;
+  bool sinLeer;
   var fechaUltimoMensaje;
 
   // Constructor
@@ -14,6 +15,7 @@ class Chat {
         this.idUsuario2,
         this.nombre,
         this.foto,
+        this.sinLeer,
         this.fechaUltimoMensaje);
 
 }
