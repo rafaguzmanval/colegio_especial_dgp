@@ -68,7 +68,7 @@ class ListaBotonesState extends State<ListaBotones> {
               child: Text(
                 'Lista de botones'.toUpperCase(),
                 textAlign: TextAlign.center,
-                style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+                style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2], fontSize: 30),
               )),
         ),
         body: Stack(children: [
@@ -161,7 +161,7 @@ class ListaBotonesState extends State<ListaBotones> {
                             Text(
                               Sesion.tablon[i].nombres.toString().toUpperCase(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: TextStyle(fontWeight: FontWeight.bold,
                                 fontSize: 25,
                                 color: GuardadoLocal.colores[2],
                               ),
