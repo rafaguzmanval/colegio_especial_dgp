@@ -104,7 +104,7 @@ class LoginPageState extends State<LoginPage> {
               style: TextStyle(
                   fontSize: 30,
                   color: GuardadoLocal.colores[2],
-                  fontWeight: FontWeight.normal),
+                fontWeight: FontWeight.bold),
             ))),
         body: Stack(children: [
           ListaUsuarios(),
@@ -275,7 +275,7 @@ class LoginPageState extends State<LoginPage> {
                         children: [
                           Text(
                             usuarios[j].nombre.toString().toUpperCase(),
-                            style: TextStyle(
+                            style: TextStyle(fontWeight: FontWeight.bold,
                               fontSize: 25,
                               color: GuardadoLocal.colores[2],
                             ),
