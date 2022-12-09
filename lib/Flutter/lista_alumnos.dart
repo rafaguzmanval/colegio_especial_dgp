@@ -71,7 +71,7 @@ class ListaAlumnosState extends State<ListaAlumnos> {
             child: Text(
               'LISTA DE ALUMNOS',
               textAlign: TextAlign.center,
-              style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+              style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2], fontSize: 30),
             ),
           )),
       body: Stack(children: [
@@ -161,7 +161,7 @@ class ListaAlumnosState extends State<ListaAlumnos> {
                     children: [
                       Text(
                         Sesion.alumnos[i].nombre.toString().toUpperCase(),
-                        style: TextStyle(
+                        style: TextStyle(fontWeight: FontWeight.bold,
                           color: GuardadoLocal.colores[2],
                           fontSize: 25,
                         ),
