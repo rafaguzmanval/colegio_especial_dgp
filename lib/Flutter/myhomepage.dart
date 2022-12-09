@@ -89,7 +89,7 @@ class MyHomePageState extends State<MyHomePage> {
                     onPressed: () => _onBackPressed(context)),
 
                 title: Column(children: [
-                Center(child: Text('Menú principal'.toUpperCase(),textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
+                Center(child: Text('Menú principal'.toUpperCase(),textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 30),),
                 )]),
                 actions: [IconButton(onPressed: () => Navigator.push(context,
                     MaterialPageRoute(
@@ -131,7 +131,7 @@ class MyHomePageState extends State<MyHomePage> {
                           children: [
                             Text(
                               "GESTION DEL TABLON",
-                              style: TextStyle(
+                              style: TextStyle(fontWeight: FontWeight.bold,
                                 fontSize: 30,
                                 color: GuardadoLocal.colores[2],
                               ),
@@ -165,7 +165,7 @@ class MyHomePageState extends State<MyHomePage> {
                               children: [
                                 Text(
                                   "Lista de alumnos".toUpperCase(),
-                                  style: TextStyle(
+                                  style: TextStyle(fontWeight: FontWeight.bold,
                                     fontSize: 30,
                                     color: GuardadoLocal.colores[2],
                                   ),
@@ -206,7 +206,7 @@ class MyHomePageState extends State<MyHomePage> {
                               children: [
                                 Text(
                                   "GESTION DEL TABLON",
-                                  style: TextStyle(
+                                  style: TextStyle(fontWeight: FontWeight.bold,
                                     fontSize: 30,
                                     color: GuardadoLocal.colores[2],
                                   ),
@@ -240,7 +240,7 @@ class MyHomePageState extends State<MyHomePage> {
                                 children: [
                                   Text(
                                     "Lista de alumnos".toUpperCase(),
-                                    style: TextStyle(
+                                    style: TextStyle(fontWeight: FontWeight.bold,
                                       fontSize: 30,
                                       color: GuardadoLocal.colores[2],
                                     ),
@@ -295,7 +295,7 @@ class MyHomePageState extends State<MyHomePage> {
                         children: [
                           Text(
                             "Tablon de Comunicación".toUpperCase(),
-                            style: TextStyle(
+                            style: TextStyle(fontWeight: FontWeight.bold,
                               fontSize: 30,
                               color: GuardadoLocal.colores[2],
                             ),
@@ -338,7 +338,7 @@ class MyHomePageState extends State<MyHomePage> {
                         children: [
                           Text(
                             "Lista de Tareas".toUpperCase(),
-                            style: TextStyle(
+                            style: TextStyle(fontWeight: FontWeight.bold,
                               fontSize: 30,
                               color: GuardadoLocal.colores[2],
                             ),
@@ -371,7 +371,7 @@ class MyHomePageState extends State<MyHomePage> {
                         children: [
                           Text(
                             "Historial".toUpperCase(),
-                            style: TextStyle(
+                            style: TextStyle(fontWeight: FontWeight.bold,
                               fontSize: 30,
                               color: GuardadoLocal.colores[2],
                             ),
@@ -413,7 +413,7 @@ class MyHomePageState extends State<MyHomePage> {
                         children: [
                           Text(
                             "Tablon de Comunicación".toUpperCase(),
-                            style: TextStyle(
+                            style: TextStyle(fontWeight: FontWeight.bold,
                               fontSize: 30,
                               color: GuardadoLocal.colores[2],
                             ),
@@ -456,7 +456,7 @@ class MyHomePageState extends State<MyHomePage> {
                         children: [
                           Text(
                             "Lista de Tareas".toUpperCase(),
-                            style: TextStyle(
+                            style: TextStyle(fontWeight: FontWeight.bold,
                               fontSize: 30,
                               color: GuardadoLocal.colores[2],
                             ),
@@ -511,7 +511,7 @@ class MyHomePageState extends State<MyHomePage> {
                           children: [
                             Text(
                               "Lista de alumnos".toUpperCase(),
-                              style: TextStyle(
+                              style: TextStyle(fontWeight: FontWeight.bold,
                                 fontSize: 30,
                                 color: GuardadoLocal.colores[2],
                               ),
@@ -544,7 +544,7 @@ class MyHomePageState extends State<MyHomePage> {
                         children: [
                           Text(
                             "Lista de Profesores".toUpperCase(),
-                            style: TextStyle(
+                            style: TextStyle(fontWeight: FontWeight.bold,
                               fontSize: 30,
                               color: GuardadoLocal.colores[2],
                             ),
@@ -586,7 +586,7 @@ class MyHomePageState extends State<MyHomePage> {
                         children: [
                           Text(
                             "Registrar Usuarios".toUpperCase(),
-                            style: TextStyle(
+                            style: TextStyle(fontWeight: FontWeight.bold,
                               fontSize: 30,
                               color: GuardadoLocal.colores[2],
                             ),
@@ -619,7 +619,7 @@ class MyHomePageState extends State<MyHomePage> {
                         children: [
                           Text(
                             "Crear Tareas".toUpperCase(),
-                            style: TextStyle(
+                            style: TextStyle(fontWeight: FontWeight.bold,
                               fontSize: 30,
                               color: GuardadoLocal.colores[2],
                             ),
@@ -662,7 +662,7 @@ class MyHomePageState extends State<MyHomePage> {
                         children: [
                           Text(
                             "GESTION DEL TABLON",
-                            style: TextStyle(
+                            style: TextStyle(fontWeight: FontWeight.bold,
                               fontSize: 30,
                               color: GuardadoLocal.colores[2],
                             ),
@@ -696,7 +696,7 @@ class MyHomePageState extends State<MyHomePage> {
                         children: [
                           Text(
                             "LISTA DE TAREAS",
-                            style: TextStyle(
+                            style: TextStyle(fontWeight: FontWeight.bold,
                               fontSize: 30,
                               color: GuardadoLocal.colores[2],
                             ),
@@ -745,21 +745,21 @@ class MyHomePageState extends State<MyHomePage> {
         builder: (context) {
           return AlertDialog(
               backgroundColor: GuardadoLocal.colores[1],
-              title:  Text('¿SEGURO?',style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),),
-              content: Text('¿QUIERES CERRAR SESIÓN?',style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),),
+              title:  Text('¿SEGURO?',style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0],fontSize: 25),),
+              content: Text('¿QUIERES CERRAR SESIÓN?',style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0],fontSize: 25),),
               actions: [
                 ElevatedButton(
                     onPressed: () {
                       Navigator.pop(context, false);
                     },
-                    child: Text('NO',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),)),
+                    child: Text('NO',style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 25),)),
                 ElevatedButton(
                     onPressed: () {
                       Background.desactivarNotificaciones();
                       Navigator.popUntil(context, (route) => route.isFirst);
 
                     },
-                    child: Text('SÍ',style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),)),
+                    child: Text('SÍ',style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 25),)),
               ],
           );
         });
