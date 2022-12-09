@@ -66,7 +66,7 @@ class _ListaMensajesState extends State<ListaMensajes> {
                 style: TextStyle(fontWeight:FontWeight.bold,fontSize: 16, color: widget.enviadoPorMi?GuardadoLocal.colores[0]:GuardadoLocal.colores[2]),),
             Text(fecha,
                 textAlign: TextAlign.end,
-                style: TextStyle(fontSize: 8, color: widget.enviadoPorMi?GuardadoLocal.colores[0]:GuardadoLocal.colores[2]))
+                style: TextStyle(fontSize: 10, color: widget.enviadoPorMi?GuardadoLocal.colores[0]:GuardadoLocal.colores[2]))
           ],
         ),
       ),

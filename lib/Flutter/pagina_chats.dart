@@ -70,7 +70,7 @@ class PaginaChatsState extends State<PaginaChats> {
           ],
           title: Center(
             child: Text(
-              'CHATS  peti. ${Sesion.db.countPeticiones}',
+              'CHATS',
               textAlign: TextAlign.center,
               style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30, fontWeight: FontWeight.bold),
             ),
