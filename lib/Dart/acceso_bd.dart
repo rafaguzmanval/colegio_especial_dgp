@@ -1055,7 +1055,8 @@ class AccesoBD {
 
               var foto = snapshot2.foto;
               var nombre = snapshot2.nombre;
-              Chat nuevo = Chat(Sesion.id,event.docs[i].get("idUsuarios")[index],snapshot2.id,nombre,foto);
+
+              Chat nuevo = Chat(event.docs[i].id,Sesion.id,snapshot2.id,nombre,foto);
               listaChats.add(nuevo);
             }
 
@@ -1082,6 +1083,8 @@ class AccesoBD {
           .where('idChat',  isEqualTo: idChat).orderBy("fechaEnvio")
           .snapshots().listen((event) {
 
+            print(idChat);
+
           var listaMensajes = [];
 
             for(int i = 0; i<event.docs.length;i++){
@@ -1091,7 +1094,9 @@ class AccesoBD {
             }
 
             if(Sesion.paginaActual.toString().contains("VistaChat"))
-              Sesion.paginaActual.actualizarMensajes(listaMensajes);
+              {
+                Sesion.paginaActual.actualizarMensajes(listaMensajes);
+              }
             else
               {
 
@@ -1112,7 +1117,9 @@ class AccesoBD {
         };
 
         await db.collection('chats').add(chat);
+
         mensaje.idChat = await buscarIdChat(mensaje.idUsuarioEmisor, mensaje.idUsuarioReceptor);
+        print(mensaje.idChat);
       }
 
       Map<String,dynamic> msg = {
@@ -1149,10 +1156,21 @@ class AccesoBD {
       var id = '';
       var snapshot = await db.collection("chats")
           .where('idUsuarios',  arrayContains: id1 )
-          .where('idUsuarios', arrayContains:  id2)
           .get();
 
-      return snapshot.docs[0].id;
+      for(int i = 0; i < snapshot.docs.length;i++)
+        {
+
+          if(snapshot.docs[0].get("idUsuarios").contains(id2))
+            {
+              print(snapshot.docs[0].id);
+              return snapshot.docs[0].id;
+            }
+        }
+
+
+      return '';
+
     }
     catch(e){print(e);};
   }
