@@ -92,9 +92,9 @@ class CustomSearchDelegate extends SearchDelegate {
                               color: GuardadoLocal.colores[2],
                             ),
                           ),
-                          if (!Sesion.tareas[pos].imagenes.isEmpty) ...[
+                          if (!Sesion.tareas[pos].imagen.isEmpty) ...[
                             Image.network(
-                              Sesion.tareas[pos].imagenes[0],
+                              Sesion.tareas[pos].imagen,
                               width: 150,
                               height: 150,
                               fit: BoxFit.fill,
@@ -192,9 +192,9 @@ class CustomSearchDelegate extends SearchDelegate {
                                 color: GuardadoLocal.colores[2],
                               ),
                             ),
-                            if (!Sesion.tareas[pos].imagenes.isEmpty) ...[
+                            if (!Sesion.tareas[pos].imagen.isEmpty) ...[
                               Image.network(
-                                Sesion.tareas[pos].imagenes[0],
+                                Sesion.tareas[pos].imagen,
                                 width: 150,
                                 height: 150,
                                 fit: BoxFit.fill,
