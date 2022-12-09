@@ -79,7 +79,7 @@ class PerfilProfesorState extends State<PerfilProfesor> {
           'PERFIL DE ${Sesion.seleccion.nombre.toUpperCase()}'
           '',
           textAlign: TextAlign.center,
-          style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+          style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2], fontSize: 30),
         )),
       ),
       body: SingleChildScrollView(child: Container(
