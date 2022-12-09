@@ -103,7 +103,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
             child: Text(
               'REGISTRA UN NUEVO USUARIO',
               textAlign: TextAlign.center,
-              style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+              style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2], fontSize: 30),
             ),
           )),
       body: SingleChildScrollView(
@@ -188,7 +188,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                   border: OutlineInputBorder(),
                   hintText: 'INTRODUCE EL NOMBRE *',
                   hintStyle:
-                      TextStyle(color: GuardadoLocal.colores[0], fontSize: 25)),
+                      TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0], fontSize: 25)),
               controller: controladorNombre,
             ),
           ),
@@ -206,7 +206,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                   border: OutlineInputBorder(),
                   hintText: 'INTRODUCE LOS APELLIDOS *',
                   hintStyle:
-                      TextStyle(color: GuardadoLocal.colores[0], fontSize: 25)),
+                      TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0], fontSize: 25)),
               controller: controladorApellidos,
             ),
           ),
@@ -247,7 +247,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                       ),
                       border: OutlineInputBorder(),
                       hintText: 'INTRODUCE LA CONTRASEÑA *',
-                      hintStyle: TextStyle(
+                      hintStyle: TextStyle(fontWeight: FontWeight.bold,
                           color: GuardadoLocal.colores[0], fontSize: 25)),
                   controller: controladorPassword,
                 ),
@@ -301,7 +301,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
                       ? "SIN FECHA"
                       : DateFormat('d/M/y').format(fechaElegida),
                   style:
-                      TextStyle(color: GuardadoLocal.colores[2], fontSize: 25),
+                      TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2], fontSize: 25),
                 ),
                 Image.asset("assets/calendario.png",
                 width: 140,
