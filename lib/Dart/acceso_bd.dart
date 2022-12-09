@@ -1058,7 +1058,7 @@ class AccesoBD {
               var foto = snapshot2.foto;
               var nombre = snapshot2.nombre;
 
-              Chat nuevo = Chat(event.docs[i].id,Sesion.id,snapshot2.id,nombre,foto);
+              Chat nuevo = Chat(event.docs[i].id,Sesion.id,snapshot2.id,nombre,foto,event.docs[i].get("fechaUltimoMensaje"));
               listaChats.add(nuevo);
             }
 
@@ -1118,6 +1118,7 @@ class AccesoBD {
       if(mensaje.idChat==''){
         Map<String,dynamic> chat = {
           'idUsuarios': [mensaje.idUsuarioEmisor, mensaje.idUsuarioReceptor],
+          'fechaUltimoMensaje' : mensaje.fechaEnvio,
         };
 
         countPeticiones++;
@@ -1125,6 +1126,9 @@ class AccesoBD {
 
         mensaje.idChat = await buscarIdChat(mensaje.idUsuarioEmisor, mensaje.idUsuarioReceptor);
         print(mensaje.idChat);
+      }else{
+        //Marco sin leer el chat
+        db.collection('chats').doc(mensaje.idChat).set({'fechaUltimoMensaje' : mensaje.fechaEnvio});
       }
 
       Map<String,dynamic> msg = {
@@ -1168,14 +1172,13 @@ class AccesoBD {
           .get();
 
       for(int i = 0; i < snapshot.docs.length;i++)
-        {
+      {
 
-          if(snapshot.docs[0].get("idUsuarios").contains(id2))
-            {
-              print(snapshot.docs[0].id);
-              return snapshot.docs[0].id;
-            }
-        }
+        if(snapshot.docs[i].get("idUsuarios").contains(id2))
+          {
+            return snapshot.docs[i].id;
+          }
+      }
 
 
       return '';

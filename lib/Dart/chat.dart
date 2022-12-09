@@ -6,12 +6,14 @@ class Chat {
   var idUsuario2;
   var nombre;
   var foto;
+  var fechaUltimoMensaje;
 
   // Constructor
   Chat(this.id,
         this.idUsuario1,
         this.idUsuario2,
         this.nombre,
-        this.foto);
+        this.foto,
+        this.fechaUltimoMensaje);
 
 }

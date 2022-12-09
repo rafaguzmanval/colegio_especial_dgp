@@ -183,21 +183,21 @@ class PaginaChatsState extends State<PaginaChats> {
           if(snapshot.hasData){ //snapshot.hasData
             if(Sesion.chats.length!=0){//snapshot.data['chats']!=null
               return ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: Sesion.chats.length, //snapshot.data['chats'].length
-                  itemBuilder: (context, index) {
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: Sesion.chats.length, //snapshot.data['chats'].length
+                itemBuilder: (context, index) {
 
-                    int reverseIndex = Sesion.chats.length - index - 1; // int reverseIndex = snapshot.data['chats'].length - index - 1
-                    var idInterlocutor = Sesion.chats[reverseIndex].idUsuario1==Sesion.id?Sesion.chats[reverseIndex].idUsuario2:Sesion.chats[reverseIndex].idUsuario1;
+                  int reverseIndex = Sesion.chats.length - index - 1; // int reverseIndex = snapshot.data['chats'].length - index - 1
+                  var idInterlocutor = Sesion.chats[reverseIndex].idUsuario1==Sesion.id?Sesion.chats[reverseIndex].idUsuario2:Sesion.chats[reverseIndex].idUsuario1;
 
-                    return _listachatAux(Sesion.chats[reverseIndex].id, Sesion.chats[reverseIndex].nombre, Sesion.chats[reverseIndex].foto, idInterlocutor);
-                    /*ListaChats(
+                  return _listachatAux(Sesion.chats[reverseIndex].id, Sesion.chats[reverseIndex].nombre, Sesion.chats[reverseIndex].foto, idInterlocutor);
+                  /*ListaChats(
                       chatId: Sesion.chats[reverseIndex].id,
                       nombre:Sesion.chats[reverseIndex].nombre,
                       foto: Sesion.chats[reverseIndex].foto,
                       idInterlocutor: Sesion.chats[reverseIndex].idUsuario1==Sesion.id?Sesion.chats[reverseIndex].idUsuario2:Sesion.chats[reverseIndex].idUsuario1,);*/
-                  },
+                },
               );
             }else{
               return noChatsWidget();
