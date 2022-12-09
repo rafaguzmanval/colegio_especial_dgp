@@ -220,21 +220,23 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                         backgroundImage: NetworkImage(usuarioPerfil.foto),
                         child: Stack(
                           children: [
-                            Container(
-                              child: ElevatedButton(
-                                  onPressed: () {
-                                    dialogEditarFoto();
-                                    actualizar();
-                                  },
-                                  child: Icon(
-                                    Icons.edit,
-                                    color: GuardadoLocal.colores[2],
-                                    size: 40,
-                                  ),
-                                  style: ElevatedButton.styleFrom(
-                                      shape: CircleBorder())),
-                              alignment: Alignment.bottomRight,
-                            )
+                            if (Sesion.rol != Rol.profesor.toString()) ...[
+                              Container(
+                                child: ElevatedButton(
+                                    onPressed: () {
+                                      dialogEditarFoto();
+                                      actualizar();
+                                    },
+                                    child: Icon(
+                                      Icons.edit,
+                                      color: GuardadoLocal.colores[2],
+                                      size: 40,
+                                    ),
+                                    style: ElevatedButton.styleFrom(
+                                        shape: CircleBorder())),
+                                alignment: Alignment.bottomRight,
+                              )
+                            ]
                           ],
                         ),
                       ),
@@ -253,17 +255,18 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                             style: TextStyle(
                                 fontSize: 30, fontWeight: FontWeight.bold),
                           ),
-                          onPressed: () async{
 
-                            var nombre = await dialogNombre(usuarioPerfil.nombre);
-                            if(nombre != null)
-                            {
-                            Sesion.db.editarNombreUsuario(usuarioPerfil.id, nombre);
-                            usuarioPerfil.nombre = nombre;
-                            actualizar();
+                          onPressed: () async {
+                            if (Sesion.rol != Rol.profesor.toString()) {
+                            var nombre =
+                                await dialogNombre(usuarioPerfil.nombre);
+                            if (nombre != null) {
+                              Sesion.db.editarNombreUsuario(
+                                  usuarioPerfil.id, nombre);
+                              usuarioPerfil.nombre = nombre;
+                              actualizar();
                             }
-
-                          }),
+                          }}),
                     ),
                     SizedBox(
                       height: 10,
@@ -276,17 +279,17 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                             style: TextStyle(
                                 fontSize: 30, fontWeight: FontWeight.bold),
                           ),
-                          onPressed: () async{
-
-                            var apellidos = await dialogNombre(usuarioPerfil.apellidos);
-                            if(apellidos != null)
-                              {
-                                Sesion.db.editarApellidosUsuario(usuarioPerfil.id, apellidos);
-                                usuarioPerfil.apellidos = apellidos;
-                                actualizar();
-                              }
-
-                          }),
+                          onPressed: () async {
+                            if (Sesion.rol != Rol.profesor.toString()) {
+                            var apellidos =
+                                await dialogNombre(usuarioPerfil.apellidos);
+                            if (apellidos != null) {
+                              Sesion.db.editarApellidosUsuario(
+                                  usuarioPerfil.id, apellidos);
+                              usuarioPerfil.apellidos = apellidos;
+                              actualizar();
+                            }
+                          }}),
                     ),
                   ],
                 )),
@@ -321,6 +324,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
             ),
             ElevatedButton(
                 onPressed: () async {
+                  if (Sesion.rol != Rol.profesor.toString()) {
                   await showDatePicker(
                           builder: (context, child) {
                             return Theme(
@@ -345,18 +349,18 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                           initialDate: DateTime.now(),
                           firstDate: DateTime(1940),
                           lastDate: DateTime.now())
-                      .then((e) async{
-                        if(e != null)
-                          {
-                            var fecha = DateFormat('d/M/y').format(e!);
-                            await Sesion.db.editarNacimientoUsuario(usuarioPerfil.id, fecha).then((e){
-                              usuarioPerfil.fechanacimiento = fecha;
-                              actualizar();
-                            });
-                          }
-
+                      .then((e) async {
+                    if (e != null) {
+                      var fecha = DateFormat('d/M/y').format(e!);
+                      await Sesion.db
+                          .editarNacimientoUsuario(usuarioPerfil.id, fecha)
+                          .then((e) {
+                        usuarioPerfil.fechanacimiento = fecha;
+                        actualizar();
+                      });
+                    }
                   });
-                },
+                }},
                 child: Image.asset(
                   "assets/calendario.png",
                   width: 50,
@@ -778,9 +782,9 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                         fontSize: 35, color: GuardadoLocal.colores[0]),
                     decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                              color: GuardadoLocal.colores[0], width: 0.0),
-                        )),
+                      borderSide: BorderSide(
+                          color: GuardadoLocal.colores[0], width: 0.0),
+                    )),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -828,67 +832,66 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
         builder: (context) {
           return Dialog(
               alignment: Alignment.center,
-              child:
-                  StreamBuilder(
-                    stream: controlador.stream,
-                    builder: (context,snapshot){
-                    return
-                      snapshot.data == "carga"?
-                          Container(width:50,height:50,child:CircularProgressIndicator())
+              child: StreamBuilder(
+                stream: controlador.stream,
+                builder: (context, snapshot) {
+                  return snapshot.data == "carga"
+                      ? Container(
+                          width: 50,
+                          height: 50,
+                          child: CircularProgressIndicator())
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                              ElevatedButton(
+                                  child: Image.asset(
+                                    "assets/camara.png",
+                                    width: 100,
+                                    height: 100,
+                                  ),
+                                  onPressed: () async {
+                                    controlador.add("carga");
+                                    var imagen = await seleccionarImagen(
+                                        SeleccionImagen.camara);
+                                    var nuevaURL = await Sesion.db
+                                        .editarFotoUsuario(usuarioPerfil.id,
+                                            File(imagen.path));
 
-                          :
-                      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                        ElevatedButton(
-                            child: Image.asset(
-                              "assets/camara.png",
-                              width: 100,
-                              height: 100,
-                            ),
-                            onPressed: () async {
-                              controlador.add("carga");
-                              var imagen =
-                              await seleccionarImagen(SeleccionImagen.camara);
-                              var nuevaURL = await Sesion.db.editarFotoUsuario(
-                                  usuarioPerfil.id, File(imagen.path));
+                                    print("Nueva " + nuevaURL);
+                                    usuarioPerfil.foto = nuevaURL;
+                                    actualizar();
 
-                              print("Nueva " + nuevaURL);
-                              usuarioPerfil.foto = nuevaURL;
-                              actualizar();
+                                    Navigator.pop(context);
+                                  }),
 
-                              Navigator.pop(context);
-                            }),
+                              // Container(width: 10,alignment: Alignment.center,),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              ElevatedButton(
+                                  child: Image.asset(
+                                    'assets/galeria.png',
+                                    width: 100,
+                                    height: 100,
+                                  ),
+                                  onPressed: () async {
+                                    controlador.add("carga");
+                                    var imagen = await seleccionarImagen(
+                                        SeleccionImagen.galeria);
+                                    await Sesion.db
+                                        .editarFotoUsuario(
+                                            usuarioPerfil.id, File(imagen.path))
+                                        .then((foto) {
+                                      print("Nueva " + foto);
+                                      usuarioPerfil.foto = foto;
+                                      actualizar();
+                                    });
 
-                        // Container(width: 10,alignment: Alignment.center,),
-                        SizedBox(
-                          width: 20,
-                        ),
-                        ElevatedButton(
-
-                            child: Image.asset(
-                              'assets/galeria.png',
-                              width: 100,
-                              height: 100,
-                            ),
-                            onPressed: () async {
-                              controlador.add("carga");
-                              var imagen =
-                              await seleccionarImagen(SeleccionImagen.galeria);
-                              await Sesion.db.editarFotoUsuario(
-                                  usuarioPerfil.id, File(imagen.path)).then((foto){
-                                print("Nueva " + foto);
-                                usuarioPerfil.foto = foto;
-                                actualizar();
-
-                              });
-
-
-                              Navigator.pop(context);
-                            }),
-                      ]);
-                  },
-            )
-
-          );
+                                    Navigator.pop(context);
+                                  }),
+                            ]);
+                },
+              ));
         });
   }
 }
