@@ -25,6 +25,8 @@ import 'package:colegio_especial_dgp/Dart/rol.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/tablon.dart';
 import 'package:colegio_especial_dgp/Dart/tarea.dart';
+import 'package:colegio_especial_dgp/Dart/historialbd.dart';
+
 
 import 'package:colegio_especial_dgp/Dart/usuario.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -480,6 +482,25 @@ class AccesoBD {
         var nuevaTarea = element.data();
         nuevaTarea.id = element.id;
         lista.add(nuevaTarea);
+      });
+
+      return lista;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  consultarTareasCompletas(id) async {
+    try {
+      final ref = db.collection("historial").where("idUsuario",isEqualTo: id);
+
+      final consulta = await ref.get();
+
+      var lista = [];
+
+      consulta.docs.forEach((element) {
+        var nuevahisto = Historial(element.id,element.get("nombre"),element.get("retroalimentacion"),element.get("idUsuario"));
+        lista.add(nuevahisto);
       });
 
       return lista;

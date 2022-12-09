@@ -18,6 +18,7 @@ import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Dart/usuario.dart';
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
+import 'package:colegio_especial_dgp/Flutter/historial.dart';
 import 'package:colegio_especial_dgp/Flutter/localizacion.dart';
 import 'package:colegio_especial_dgp/Flutter/ver_tareas.dart';
 import '../Dart/tarea.dart';
@@ -388,7 +389,22 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
           ),
 
           SizedBox(height: 15),
+          ElevatedButton(
+            onPressed: () async {
+              await Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => VerHistorial()));
+              Sesion.paginaActual = this;
+            },
+            child: Text(
+              "EVOLUCIÓN",
+              style: TextStyle(
+                  fontFamily: "Escolar",
+                  fontSize: 30,
+                  color: GuardadoLocal.colores[2]),
+            ),
+          ),
 
+          SizedBox(height: 15),
           /// se muestran las tareas del alumno
           if (Sesion.tareas != null) ...[
             if (tareasSinFinalizar.length != 0) ...[
