@@ -78,7 +78,7 @@ class CustomSearchDelegate extends SearchDelegate {
                       children: [
                         Text(
                           Sesion.alumnos[pos].nombre.toString().toUpperCase(),
-                          style: TextStyle(
+                          style: TextStyle(fontWeight: FontWeight.bold,
                             color: GuardadoLocal.colores[2],
                             fontSize: 25,
                           ),
@@ -172,7 +172,7 @@ class CustomSearchDelegate extends SearchDelegate {
                         children: [
                           Text(
                             Sesion.alumnos[pos].nombre.toString().toUpperCase(),
-                            style: TextStyle(
+                            style: TextStyle(fontWeight: FontWeight.bold,
                               color: GuardadoLocal.colores[2],
                               fontSize: 25,
                             ),

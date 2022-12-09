@@ -87,7 +87,7 @@ class CustomSearchDelegate extends SearchDelegate {
                           Text(
                             Sesion.tareas[pos].nombre.toString().toUpperCase(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(
+                            style: TextStyle(fontWeight: FontWeight.bold,
                               fontSize: 25,
                               color: GuardadoLocal.colores[2],
                             ),
@@ -187,7 +187,7 @@ class CustomSearchDelegate extends SearchDelegate {
                                   .toString()
                                   .toUpperCase(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: TextStyle(fontWeight: FontWeight.bold,
                                 fontSize: 25,
                                 color: GuardadoLocal.colores[2],
                               ),
