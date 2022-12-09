@@ -154,7 +154,7 @@ class VerTareasState extends State<VerTareas> {
                         ? Sesion.nombre.toUpperCase()
                         : Sesion.seleccion.nombre.toUpperCase()),
                 textAlign: TextAlign.center,
-                style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+                style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2], fontSize: 30),
               )),
             )),
         body: Stack(
@@ -406,7 +406,7 @@ class VerTareasState extends State<VerTareas> {
                     "\n" + mensajeTemporizador.toUpperCase() + "\n",
                     //DateFormat('d/M/y HH:mm').format(DateTime.fromMillisecondsSinceEpoch(Sesion.tareas[tareaActual].fechafinal)).toString(),
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: TextStyle(fontWeight: FontWeight.bold,
                       color: GuardadoLocal.colores[0],
                       fontSize: 25.0,
                     ),
@@ -424,7 +424,7 @@ class VerTareasState extends State<VerTareas> {
                       formatoFechafinalizado(
                           Sesion.tareas[tareaActual].fechaentrega).toUpperCase() +
                       " :)",
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
                 ),
               ),
               SizedBox(height: 10,),
@@ -432,7 +432,7 @@ class VerTareasState extends State<VerTareas> {
                 visible: Sesion.tareas[tareaActual].estado == "cancelada",
                 child: Text(
                   "\nTarea sin poder completar :(".toUpperCase(),
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
                 ),
               ),
               SizedBox(height: 10,),
@@ -500,7 +500,7 @@ class VerTareasState extends State<VerTareas> {
               child: Column(children: [
                 Text(
                   '\nEnviar'.toUpperCase(),
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: GuardadoLocal.colores[2]),
                 ),
                 Image.asset(
                   "assets/enviarunemail.png",
@@ -534,7 +534,7 @@ class VerTareasState extends State<VerTareas> {
                                   Sesion.tareas[tareaActual].nombre
                                       .toUpperCase() +
                                   "\n",
-                              style: TextStyle(
+                              style: TextStyle(fontWeight: FontWeight.bold,
                                 color: GuardadoLocal.colores[2],
                                 fontSize: 25,
                               ),
@@ -545,7 +545,7 @@ class VerTareasState extends State<VerTareas> {
                                             .toUpperCase() +
                                         "\n",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                    style: TextStyle(fontWeight: FontWeight.bold,
                                         color: GuardadoLocal.colores[2],
                                         fontSize: 25))),
                             Container(
@@ -590,7 +590,7 @@ class VerTareasState extends State<VerTareas> {
                                     },
                                     child: Text(
                                       "ver video".toUpperCase(),
-                                      style: TextStyle(
+                                      style: TextStyle(fontWeight: FontWeight.bold,
                                           fontSize: 25,
                                           color: GuardadoLocal.colores[2]),
                                     )),
@@ -618,7 +618,7 @@ class VerTareasState extends State<VerTareas> {
                                     },
                                     child: Text(
                                       "Ver pasos".toUpperCase(),
-                                      style: TextStyle(
+                                      style: TextStyle(fontWeight: FontWeight.bold,
                                           fontSize: 25,
                                           color: GuardadoLocal.colores[2]),
                                     )),
@@ -643,7 +643,7 @@ class VerTareasState extends State<VerTareas> {
                                     Text(
                                       Sesion.tareas[tareaActual].formularios[i]
                                           .toUpperCase(),
-                                      style: TextStyle(
+                                      style: TextStyle(fontWeight: FontWeight.bold,
                                           color: GuardadoLocal.colores[2],
                                           fontSize: 25),
                                     ),
@@ -762,7 +762,7 @@ class VerTareasState extends State<VerTareas> {
                             ? "Editar retroalimentación".toUpperCase()
                             : "Enviar retroalimentación")
                         .toUpperCase(),
-                    style: TextStyle(
+                    style: TextStyle(fontWeight: FontWeight.bold,
                         color: GuardadoLocal.colores[2], fontSize: 25)),
               )),
         ],
@@ -785,7 +785,7 @@ class VerTareasState extends State<VerTareas> {
                   },
                   child: Text(
                     "Reinicia la tarea".toUpperCase(),
-                    style: TextStyle(
+                    style: TextStyle(fontWeight: FontWeight.bold,
                         color: GuardadoLocal.colores[2], fontSize: 25),
                   ))),
         ),
@@ -802,7 +802,7 @@ class VerTareasState extends State<VerTareas> {
                     child: Center(
                         child: Text(
                       "¡¡¡Bien!!!  \nNo tienes ninguna tarea".toUpperCase(),
-                      style: TextStyle(
+                      style: TextStyle(fontWeight: FontWeight.bold,
                         fontSize: 25,
                       ),
                       textAlign: TextAlign.center,
@@ -859,7 +859,7 @@ class VerTareasState extends State<VerTareas> {
             },
             child: Text(
               "ver video".toUpperCase(),
-              style: TextStyle(fontSize: 25, color: GuardadoLocal.colores[2]),
+              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25, color: GuardadoLocal.colores[2]),
             )),
       );
     } else
@@ -955,18 +955,18 @@ class VerTareasState extends State<VerTareas> {
               child: Column(children: [
                 Text(
                   "\nIntroduce un comentario opcional:".toUpperCase(),
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
                 ),
                 TextField(
                   key: Key('comentarioRetroalimentacion'),
                   minLines: 3,
                   maxLines: 6,
                   controller: controladorRespuesta,
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
                 ),
                 Text(
                   "\Envia una foto (opcional):".toUpperCase(),
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
                 ),
                 ElevatedButton(
                     onPressed: () async {
@@ -977,7 +977,7 @@ class VerTareasState extends State<VerTareas> {
                       children: [
                         Text(
                           "Tomar foto".toUpperCase(),
-                          style: TextStyle(fontSize: 25),
+                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
                         ),
                         Icon(Icons.camera_alt_outlined)
                       ],
@@ -999,7 +999,7 @@ class VerTareasState extends State<VerTareas> {
                           ? "terminar".toUpperCase()
                           : "cancelar".toUpperCase()) +
                       " la tarea".toUpperCase(),
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
                 ),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Container(
@@ -1011,7 +1011,7 @@ class VerTareasState extends State<VerTareas> {
                           child: Column(children: [
                             Text(
                               '\nNo'.toUpperCase(),
-                              style: TextStyle(fontSize: 25),
+                              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
                             ),
                             Image.asset(
                               "assets/no.png",
@@ -1053,7 +1053,7 @@ class VerTareasState extends State<VerTareas> {
                         child: Column(children: [
                           Text(
                             '\nEnviar'.toUpperCase(),
-                            style: TextStyle(fontSize: 25),
+                            style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
                           ),
                           Image.asset(
                             "assets/enviarunemail.png",
@@ -1083,7 +1083,7 @@ class VerTareasState extends State<VerTareas> {
               ),
               TextField(
                 key: Key('profesorRetroalimentacion'),
-                style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 25),
+                style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0], fontSize: 25),
                 decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
                     borderSide:
@@ -1096,7 +1096,7 @@ class VerTareasState extends State<VerTareas> {
               Text(
                 "\nSeguro que quieres dar".toUpperCase() +
                     " esa realimentacion?".toUpperCase(),
-                style: TextStyle(fontSize: 25),
+                style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -1110,7 +1110,7 @@ class VerTareasState extends State<VerTareas> {
                           child: Column(children: [
                             Text(
                               '\nSalir'.toUpperCase(),
-                              style: TextStyle(
+                              style: TextStyle(fontWeight: FontWeight.bold,
                                   color: GuardadoLocal.colores[2],
                                   fontSize: 25),
                             ),
@@ -1138,7 +1138,7 @@ class VerTareasState extends State<VerTareas> {
                         child: Column(children: [
                           Text(
                             '\nEnviar'.toUpperCase(),
-                            style: TextStyle(
+                            style: TextStyle(fontWeight: FontWeight.bold,
                                 color: GuardadoLocal.colores[2], fontSize: 25),
                           ),
                           Image.asset(
@@ -1165,7 +1165,7 @@ class VerTareasState extends State<VerTareas> {
             indice.toString() +
             " cuando el máximo es".toUpperCase() +
             Sesion.tareas[tareaActual].controladoresComandas.length.toString(),
-        style: TextStyle(fontSize: 25),
+        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
       );
     }
 
@@ -1179,7 +1179,7 @@ class VerTareasState extends State<VerTareas> {
             Flexible(
               child: Text(
                 Sesion.tareas[tareaActual].formularios[j].toUpperCase(),
-                style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 25),
+                style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2], fontSize: 25),
               ),
             ),
             Flexible(
@@ -1202,7 +1202,7 @@ class VerTareasState extends State<VerTareas> {
                           borderSide: BorderSide(
                               color: GuardadoLocal.colores[2], width: 0.0),
                         )),
-                        style: TextStyle(
+                        style: TextStyle(fontWeight: FontWeight.bold,
                           color: GuardadoLocal.colores[2],
                           fontSize: 30,
                         ),
@@ -1286,7 +1286,7 @@ class VerTareasState extends State<VerTareas> {
                 Sesion.tareas[tareaActual].formularios[j + 2]
                     .toString()
                     .toUpperCase(),
-                style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 25),
+                style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2], fontSize: 25),
               )),
             ]
           ],
@@ -1311,31 +1311,31 @@ class VerTareasState extends State<VerTareas> {
 
                 Text(
                   "Asunto:".toUpperCase(),
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
                 ),
                 TextField(
                   controller: controladorAsunto,
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
                 ),
 
                 Text(
                   "Enviar a:".toUpperCase(),
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
                 ),
                 TextField(
                   controller: controladorEnviar,
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
                 ),
 
                 Text(
                   "Mensaje:".toUpperCase(),
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
                 ),
                 TextField(
                   controller: controladorMensaje,
                   minLines: 10,
                   maxLines: 20,
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
                 ),
 
                 Row(
@@ -1347,7 +1347,7 @@ class VerTareasState extends State<VerTareas> {
                         },
                         child: Text(
                           "cancelar".toUpperCase(),
-                          style: TextStyle(fontSize: 25),
+                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
                         )),
                     ElevatedButton(
                         onPressed: () async {
@@ -1368,7 +1368,7 @@ class VerTareasState extends State<VerTareas> {
                         },
                         child: Text(
                           "enviar".toUpperCase(),
-                          style: TextStyle(fontSize: 25),
+                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
                         )),
                   ],
                 ),
