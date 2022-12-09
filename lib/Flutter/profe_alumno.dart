@@ -54,7 +54,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
       appBar: AppBar(
           title: Center(child: Text(
         'TuCole',textAlign: TextAlign.center,
-        style: TextStyle(fontSize:30,color: GuardadoLocal.colores[2],fontWeight: FontWeight.normal),
+        style: TextStyle(fontWeight: FontWeight.bold,fontSize:30,color: GuardadoLocal.colores[2]),
       ))),
       body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -82,7 +82,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
                             Text(
                               "Alumnos".toUpperCase(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: TextStyle(fontWeight: FontWeight.bold,
                                 fontSize: 30,
                                 color: GuardadoLocal.colores[2],
                               ),
@@ -119,7 +119,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
                             Text(
                               "Profesores".toUpperCase(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: TextStyle(fontWeight: FontWeight.bold,
                                 fontSize: 30,
                                 color: GuardadoLocal.colores[2],
                               ),
@@ -165,7 +165,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
                             Text(
                               "Alumnos".toUpperCase(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: TextStyle(fontWeight: FontWeight.bold,
                                 fontSize: 30,
                                 color: GuardadoLocal.colores[2],
                               ),
@@ -202,7 +202,7 @@ class ProfeAlumnoState extends State<ProfeAlumno> {
                             Text(
                               "Profesores".toUpperCase(),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: TextStyle(fontWeight: FontWeight.bold,
                                 fontSize: 30,
                                 color: GuardadoLocal.colores[2],
                               ),
