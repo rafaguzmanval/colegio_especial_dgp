@@ -86,7 +86,7 @@ class ListaTareasState extends State<ListaTareas> {
               child: Text(
             'Lista de Tareas'.toUpperCase(),
             textAlign: TextAlign.center,
-            style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+            style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2], fontSize: 30),
           )),
         ),
         body: Stack(children: [
@@ -179,7 +179,7 @@ class ListaTareasState extends State<ListaTareas> {
                         Text(
                           Sesion.tareas[i].nombre.toString().toUpperCase(),
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: TextStyle(fontWeight: FontWeight.bold,
                             fontSize: 25,
                             color: GuardadoLocal.colores[2],
                           ),
