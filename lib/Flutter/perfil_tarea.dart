@@ -109,7 +109,7 @@ class PerfilTareaState extends State<PerfilTarea> {
             'Editar tarea: ${Sesion.seleccion.nombre}'
                     ''
                 .toUpperCase(),textAlign: TextAlign.center,
-            style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),
+            style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 30),
           )),
         ),
         body: SingleChildScrollView(
@@ -188,7 +188,7 @@ class PerfilTareaState extends State<PerfilTarea> {
             child: TextField(
               obscureText: false,
               maxLength: 40,
-              style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[0]),
+              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: GuardadoLocal.colores[0]),
               decoration: InputDecoration(
                 enabledBorder:  OutlineInputBorder(
                   borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
@@ -204,7 +204,7 @@ class PerfilTareaState extends State<PerfilTarea> {
             child: TextField(
               key: Key('instrucciones'),
               obscureText: false,
-              style: TextStyle(fontSize: 25,color: GuardadoLocal.colores[0]),
+              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: GuardadoLocal.colores[0]),
               maxLength: 500,
               decoration: InputDecoration(
                   enabledBorder:  OutlineInputBorder(
@@ -283,7 +283,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                     (formularios.isEmpty)
                         ? 'Crea un formulario'.toUpperCase()
                         : "Edita el formulario".toUpperCase(),
-                    style: TextStyle(
+                    style: TextStyle(fontWeight: FontWeight.bold,
                         color: GuardadoLocal.colores[2], fontSize: 25)),
                 Image.asset(
                   'assets/formulario.png',
@@ -306,7 +306,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                     (textos.isEmpty && imagenes.isEmpty)
                         ? 'Crea unos pasos'.toUpperCase()
                         : "Edita los pasos".toUpperCase(),
-                    style: TextStyle(
+                    style: TextStyle(fontWeight: FontWeight.bold,
                         color: GuardadoLocal.colores[2], fontSize: 25)),
                 Image.asset('assets/lista.png',
                   width: 140,
@@ -367,7 +367,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                           },
                           child: Text(
                             "ver video".toUpperCase(),
-                            style: TextStyle(fontSize: 25),
+                            style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 25),
                           )),
                       alignment: Alignment.center,
                     ),
@@ -453,7 +453,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                                         child: TextButton(
                                             child: Text(
                                               formularios[i],
-                                              style: TextStyle(
+                                              style: TextStyle(fontWeight: FontWeight.bold,
                                                   fontSize: 40,
                                                   color: GuardadoLocal.colores[0]),
                                             ),
@@ -522,7 +522,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                                               child: TextButton(
                                                   child: Text(
                                                       formularios[j].toUpperCase(),
-                                                      style: TextStyle(
+                                                      style: TextStyle(fontWeight: FontWeight.bold,
                                                           fontSize: 30,
                                                           color: GuardadoLocal
                                                               .colores[0])),
@@ -590,7 +590,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                                       },
                                       child: Text(
                                         "Crea un elemento".toUpperCase(),
-                                        style: TextStyle(
+                                        style: TextStyle(fontWeight: FontWeight.bold,
                                             fontSize: 25,
                                             color: GuardadoLocal.colores[2]),
                                       ))),
@@ -601,7 +601,7 @@ class PerfilTareaState extends State<PerfilTarea> {
 
                         Text(
                           "\n Crea una agrupación".toUpperCase(),
-                          style: TextStyle(
+                          style: TextStyle(fontWeight: FontWeight.bold,
                               fontSize: 25, color: GuardadoLocal.colores[0]),
                         ),
 
@@ -632,7 +632,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                                     child: Column(children: [
                                       Text(
                                         '\nCancelar'.toUpperCase(),
-                                        style: TextStyle(
+                                        style: TextStyle(fontWeight: FontWeight.bold,
                                             fontSize: 25,
                                             color: GuardadoLocal.colores[2]),
                                       ),
@@ -652,7 +652,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                                   },
                                   child: Column(children: [
                                     Text('\n Crear'.toUpperCase(),
-                                        style: TextStyle(
+                                        style: TextStyle(fontWeight: FontWeight.bold,
                                             fontSize: 25,
                                             color: GuardadoLocal.colores[2])),
                                     Image.asset(
