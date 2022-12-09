@@ -379,7 +379,7 @@ class MyHomePageState extends State<MyHomePage> {
                           Flexible(
                               flex: 1,
                               child: Image.asset(
-                                "assets/lectoescritura.png",
+                                "assets/gráfica.png",
                               )),
                         ],
                       ),
