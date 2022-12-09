@@ -26,12 +26,12 @@ import "package:image_picker/image_picker.dart";
 import 'dart:async';
 import 'package:share_plus/share_plus.dart';
 
-
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 //Función para mandar un email.
-Future sendEmail(String name, String email,String subject, String message) async {
+Future sendEmail(
+    String name, String email, String subject, String message) async {
   final url = Uri.parse('https://api.emailjs.com/api/v1.0/email/send');
   const serviceId = 'servicioCorreo';
   const templateId = 'template_xxh3jhv';
@@ -48,12 +48,11 @@ Future sendEmail(String name, String email,String subject, String message) async
         'template_params': {
           'to_email': email,
           'message': message,
-          'subject' : subject
+          'subject': subject
         }
       }));
   return response.body;
 }
-
 
 class VerTareas extends StatefulWidget {
   @override
@@ -78,8 +77,7 @@ class VerTareasState extends State<VerTareas> {
   var controladorTemporizador = StreamController();
   var indiceComanda = 0;
 
-  tomarFoto() async
-  {
+  tomarFoto() async {
     fotoTomada = await capturador.pickImage(
       source: ImageSource.camera,
       imageQuality: 15,
@@ -92,9 +90,8 @@ class VerTareasState extends State<VerTareas> {
   void dispose() {
     for (int i = 0; i < Sesion.tareas.length; i++) {
       for (int j = 0; j < Sesion.tareas[i].controladoresVideo.length; j++) {
-        if( Sesion.tareas[i].controladoresVideo[j] != 0)
-        Sesion.tareas[i].controladoresVideo[j].dispose();
-
+        if (Sesion.tareas[i].controladoresVideo[j] != 0)
+          Sesion.tareas[i].controladoresVideo[j].dispose();
       }
       //Sesion.tareas[i].controladoresVideo.clear();
     }
@@ -118,7 +115,6 @@ class VerTareasState extends State<VerTareas> {
 
     Sesion.tareas = [];
 
-
     enfocarTarea();
     if (Sesion.rol == Rol.alumno.toString()) {
       print("Cargando tareas");
@@ -128,13 +124,11 @@ class VerTareasState extends State<VerTareas> {
     }
   }
 
-  void enfocarTarea()
-  {
+  void enfocarTarea() {
     if (Sesion.argumentos.length == 1) {
       tareaActual = Sesion.argumentos[0];
       iconoAtras = Icons.arrow_back;
-      if(tareaActual == Sesion.tareas.length -1)
-        verFlechaDerecha = false;
+      if (tareaActual == Sesion.tareas.length - 1) verFlechaDerecha = false;
       Sesion.argumentos = [];
     }
   }
@@ -146,86 +140,100 @@ class VerTareasState extends State<VerTareas> {
     var distancia = 0.0;
 
     return new Scaffold(
-            appBar: AppBar(
-              leading: IconButton(
-                icon: Icon(iconoAtras, color: GuardadoLocal.colores[2]),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              title: Center(
-                  child: Center(child: Text('Tareas de '.toUpperCase() +
-                      (Sesion.rol == Rol.alumno.toString()
-                          ? Sesion.nombre.toUpperCase()
-                          : Sesion.seleccion.nombre.toUpperCase()),textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),)),
+        appBar: AppBar(
+            leading: IconButton(
+              icon: Icon(iconoAtras, color: GuardadoLocal.colores[2]),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            title: Center(
+              child: Center(
+                  child: Text(
+                'Tareas de '.toUpperCase() +
+                    (Sesion.rol == Rol.alumno.toString()
+                        ? Sesion.nombre.toUpperCase()
+                        : Sesion.seleccion.nombre.toUpperCase()),
+                textAlign: TextAlign.center,
+                style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+              )),
             )),
-            body: Stack(children: [
-              GestureDetector(
-                onPanStart: (DragStartDetails details) {
-                  dragInicial = details.globalPosition.dx;
-                },
-                onPanUpdate: (details) {
-                  distancia = details.globalPosition.dx - dragInicial;
-                },
-                onPanEnd: (details) {
-                  dragInicial = 0;
-                  if (Sesion.tareas.length > 0) {
-                    if (distancia > 100) {
+        body: Stack(
+          children: [
+            GestureDetector(
+              onPanStart: (DragStartDetails details) {
+                dragInicial = details.globalPosition.dx;
+              },
+              onPanUpdate: (details) {
+                distancia = details.globalPosition.dx - dragInicial;
+              },
+              onPanEnd: (details) {
+                dragInicial = 0;
+                if (Sesion.tareas.length > 0) {
+                  if (distancia > 100) {
+                    desplazarIzquierda();
+                    actualizar();
+                  } else if (distancia < -100) {
+                    desplazarDerecha();
+                    actualizar();
+                  }
+                }
+              },
+              child: SingleChildScrollView(
+                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+                  child: Stack(
+                    children: [
+                      if (Sesion.rol == Rol.alumno.toString()) ...[
+                        VistaAlumno(),
+                      ] else if (Sesion.rol == Rol.profesor.toString()) ...[
+                        VistaProfesor()
+                      ] else if (Sesion.rol ==
+                          Rol.administrador.toString()) ...[
+                        VistaAdministrador()
+                      ] else if (Sesion.rol == Rol.programador.toString()) ...[
+                        VistaProgramador()
+                      ]
+                    ],
+                  )),
+            ),
+
+            ///FLECHA IZQUIERDA
+            Align(
+              alignment: FractionalOffset(0.01, 0.5),
+              child: Visibility(
+                child: FloatingActionButton(
+                    elevation: 1.0,
+                    heroTag: "flechaIzquierda",
+                    onPressed: () {
                       desplazarIzquierda();
                       actualizar();
-                    } else if (distancia < -100) {
+                    },
+                    child: Icon(
+                      Icons.arrow_left,
+                      color: GuardadoLocal.colores[2],
+                    )),
+                visible: verFlechaIzquierda,
+              ),
+            ),
+
+            ///FLECHA DERECHA
+            Align(
+              alignment: FractionalOffset(0.99, 0.5),
+              child: Visibility(
+                child: FloatingActionButton(
+                    elevation: 1.0,
+                    heroTag: "flechaDerecha",
+                    onPressed: () {
                       desplazarDerecha();
                       actualizar();
-                    }
-                  }
-                },
-                child: SingleChildScrollView(
-                    padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                    child: Stack(
-                      children: [
-                        if (Sesion.rol == Rol.alumno.toString()) ...[
-                          VistaAlumno(),
-                        ] else if (Sesion.rol == Rol.profesor.toString()) ...[
-                          VistaProfesor()
-                        ] else if (Sesion.rol == Rol.administrador.toString()) ...[
-                          VistaAdministrador()
-                        ] else if (Sesion.rol == Rol.programador.toString()) ...[
-                          VistaProgramador()
-                        ]
-                      ],
+                    },
+                    child: Icon(
+                      Icons.arrow_right,
+                      color: GuardadoLocal.colores[2],
                     )),
+                visible: verFlechaDerecha,
               ),
-              ///FLECHA IZQUIERDA
-              Align(
-                  alignment: FractionalOffset(0.01,0.5),
-                  child: Visibility(
-                      child: FloatingActionButton(
-                          elevation: 1.0,
-                          heroTag: "flechaIzquierda",
-                          onPressed: () {
-                            desplazarIzquierda();
-                            actualizar();
-                          },
-                          child: Icon(Icons.arrow_left,color: GuardadoLocal.colores[2],)),
-                      visible: verFlechaIzquierda,
-                    ),
-                  ),
-              ///FLECHA DERECHA
-              Align(
-                  alignment: FractionalOffset(0.99,0.5),
-                  child: Visibility(
-                      child: FloatingActionButton(
-                          elevation: 1.0,
-                          heroTag: "flechaDerecha",
-                          onPressed: () {
-                            desplazarDerecha();
-                            actualizar();
-                          },
-                          child:  Icon(Icons.arrow_right,color: GuardadoLocal.colores[2],)),
-                      visible: verFlechaDerecha,
-                    ),
-                  ),
-            ],
-
-            ));
+            ),
+          ],
+        ));
   }
 
   formatTiempoRestante() {
@@ -328,124 +336,141 @@ class VerTareasState extends State<VerTareas> {
     return VistaAlumno();
   }
 
-
-
-
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
   Widget VistaAlumno() {
     if (Sesion.tareas.length > 0) {
       if (temporizador == null) {
-        print("inicializacion formatTiempoRestante");
-        temporizador = Timer.periodic(Duration(seconds: 1), (timer) {
-          formatTiempoRestante();
-        });
+        if (Sesion.rol != Rol.alumno.toString()) {
+          print("inicializacion formatTiempoRestante");
+          temporizador = Timer.periodic(Duration(seconds: 1), (timer) {
+            formatTiempoRestante();
+          });
 
-        ;
+          ;
+        }
       }
     }
 
     return Column(children: <Widget>[
       if (Sesion.tareas.length > 0) ...[
         Wrap(
-          //ROW 2
-          alignment: WrapAlignment.end,
-          //spacing: 800,
-          children: [
-
-
-
+            //ROW 2
+            alignment: WrapAlignment.end,
+            //spacing: 800,
+            children: [
+              if(Sesion.rol != Rol.alumno.toString())...[
               Container(
-              child:
-              StreamBuilder(
-                stream:controladorTemporizador.stream,
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    return
-                    Text(
+
+                  child: StreamBuilder(
+                stream: controladorTemporizador.stream,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  return Text(
                     "\n" + mensajeTemporizador.toUpperCase() + "\n",
                     //DateFormat('d/M/y HH:mm').format(DateTime.fromMillisecondsSinceEpoch(Sesion.tareas[tareaActual].fechafinal)).toString(),
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                    color: GuardadoLocal.colores[0],
-                    fontSize: 25.0,
-                  ),
-                );
-              },
+                      color: GuardadoLocal.colores[0],
+                      fontSize: 25.0,
+                    ),
+                  );
+                },
+              ))],
 
-              )
+              SizedBox(height: 10,),
 
-              ),
               ///TEXTO DE RETROALIMENTACIÓN DE LA APP CUANDO SE TERMINA UNA TAREA
               Visibility(
-              visible: Sesion.tareas[tareaActual].estado == "completada",
-              child: Text("\nTarea terminada ".toUpperCase() +
-              formatoFechafinalizado(Sesion.tareas[tareaActual].fechaentrega) +
-              " :)",style: TextStyle(fontSize: 25),),
+                visible: Sesion.tareas[tareaActual].estado == "completada",
+                child: Text(
+                  "\nTarea terminada ".toUpperCase() +
+                      formatoFechafinalizado(
+                          Sesion.tareas[tareaActual].fechaentrega).toUpperCase() +
+                      " :)",
+                  style: TextStyle(fontSize: 25),
+                ),
               ),
+              SizedBox(height: 10,),
               Visibility(
-              visible: Sesion.tareas[tareaActual].estado == "cancelada",
-              child: Text("\nTarea sin poder completar :(".toUpperCase(), style: TextStyle(fontSize: 25),),
+                visible: Sesion.tareas[tareaActual].estado == "cancelada",
+                child: Text(
+                  "\nTarea sin poder completar :(".toUpperCase(),
+                  style: TextStyle(fontSize: 25),
+                ),
               ),
+              SizedBox(height: 10,),
+            ]),
 
-          ]
+        if (Sesion.rol != Rol.alumno.toString() &&
+            Sesion.tareas[tareaActual].estado != "sinFinalizar" &&
+            Sesion.tareas[tareaActual].formularios.length > 4) ...[
+          ElevatedButton(
+              onPressed: () {
+                var mensaje = "";
+                Map contador = new Map();
 
+                for (int i = 0;
+                    i < Sesion.tareas[tareaActual].formularios.length;
+                    i = i +
+                        2 +
+                        (Sesion.tareas[tareaActual].formularios[i + 1] as int) *
+                            3) {
+                  mensaje += Sesion.tareas[tareaActual].formularios[i] + "\n";
+                  for (int j = i + 2;
+                      j <
+                          i +
+                              2 +
+                              (Sesion.tareas[tareaActual].formularios[i + 1]
+                                      as int) *
+                                  3;
+                      j = j + 3) {
+                    mensaje += "   " +
+                        Sesion.tareas[tareaActual].formularios[j].toString() +
+                        " : " +
+                        Sesion.tareas[tareaActual].formularios[j + 2]
+                            .toString() +
+                        "\n";
 
-            ),
+                    var index = contador.containsKey(
+                        Sesion.tareas[tareaActual].formularios[j].toString());
 
-            if(Sesion.rol != Rol.alumno.toString() && Sesion.tareas[tareaActual].estado != "sinFinalizar" && Sesion.tareas[tareaActual].formularios.length > 4)...[
-                ElevatedButton(onPressed: (){
-                  var mensaje = "";
-                  Map contador = new Map();
+                    var valor = Sesion.tareas[tareaActual].formularios[j + 2];
+                    if (valor is String) {
+                      valor = int.parse(valor);
+                    }
 
-                          for (int i = 0; i < Sesion.tareas[tareaActual].formularios.length; i = i + 2 + (Sesion.tareas[tareaActual].formularios[i + 1] as int) * 3)
-                            {
-                              mensaje += Sesion.tareas[tareaActual].formularios[i] + "\n";
-                              for (int j = i + 2; j < i + 2 + (Sesion.tareas[tareaActual].formularios[i + 1] as int) * 3; j = j + 3)
-                                {
+                    if (index) {
+                      contador[Sesion.tareas[tareaActual].formularios[j]
+                          .toString()] += valor;
+                    } else {
+                      contador[Sesion.tareas[tareaActual].formularios[j]
+                          .toString()] = valor;
+                    }
+                  }
+                }
 
-                                  mensaje += "   "+ Sesion.tareas[tareaActual].formularios[j].toString() + " : " + Sesion.tareas[tareaActual].formularios[j+2].toString() + "\n";
+                mensaje += "\nTotal:\n";
 
-                                  var index = contador.containsKey(Sesion.tareas[tareaActual].formularios[j].toString());
+                contador.forEach((key, value) {
+                  mensaje +=
+                      "   " + key.toString() + " : " + value.toString() + "\n";
+                });
 
-                                  var valor = Sesion.tareas[tareaActual].formularios[j+2];
-                                  if(valor is String )
-                                    {
-                                      valor = int.parse(valor);
-                                    }
+                Share.share(mensaje);
 
-                                  if(index)
-                                    {
-                                      contador[Sesion.tareas[tareaActual].formularios[j].toString()] += valor;
-                                    }
-                                  else
-                                    {
-                                      contador[Sesion.tareas[tareaActual].formularios[j].toString()] = valor;
-
-                                    }
-                                }
-
-                            }
-
-                          mensaje+="\nTotal:\n";
-
-
-                          contador.forEach((key, value) {
-                            mensaje += "   "+key.toString() + " : " + value.toString()+ "\n";
-                          });
-
-
-
-                      Share.share(mensaje);
-
-                    //dialogCorreo(mensaje);
-                   }, child: Column(children: [
-                      Text('\nEnviar'.toUpperCase(),style: TextStyle(fontSize: 25),),
-                      Image.asset(
-                      "assets/enviarunemail.png",
-                      height: 100,
-                      width: 100,
-                      )
-                      ]))
-            ],
+                //dialogCorreo(mensaje);
+              },
+              child: Column(children: [
+                Text(
+                  '\nEnviar'.toUpperCase(),
+                  style: TextStyle(fontSize: 25),
+                ),
+                Image.asset(
+                  "assets/enviarunemail.png",
+                  height: 100,
+                  width: 100,
+                )
+              ]))
+        ],
 
         Row(
             //ROW 2
@@ -455,91 +480,144 @@ class VerTareasState extends State<VerTareas> {
               Flexible(
                   flex: 40,
                   child: Container(
-                    margin: EdgeInsets.only(right: 100,left: 100),
+                    margin: EdgeInsets.only(right: 100, left: 100),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        border: Border.all(width: 2,color: GuardadoLocal.colores[2]),
+                        border: Border.all(
+                            width: 2, color: GuardadoLocal.colores[2]),
                         color: GuardadoLocal.colores[0]),
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           if (Sesion.tareas.length > 0) ...[
-
                             Center(
                                 child: Text(
-                              "\n" + Sesion.tareas[tareaActual].nombre.toUpperCase() + "\n",
-                              style:  TextStyle(
+                              "\n" +
+                                  Sesion.tareas[tareaActual].nombre
+                                      .toUpperCase() +
+                                  "\n",
+                              style: TextStyle(
                                 color: GuardadoLocal.colores[2],
                                 fontSize: 25,
                               ),
                             )),
-
                             Center(
-                            child: Text(Sesion.tareas[tareaActual].descripcion.toUpperCase() + "\n",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                            color: GuardadoLocal.colores[2],
-                            fontSize: 25
-                            ))),
-
-
-                             Container(
-                            decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[2])),
-                            margin: EdgeInsets.only(bottom: 15),
-                            child: Image.network(Sesion.tareas[tareaActual].imagen, width: 200, height: 200)),
-
-                           if(Sesion.tareas[tareaActual].controladoresVideo.length == 1)...[
-                             Container(
-                                decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[2])),
+                                child: Text(
+                                    Sesion.tareas[tareaActual].descripcion
+                                            .toUpperCase() +
+                                        "\n",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: GuardadoLocal.colores[2],
+                                        fontSize: 25))),
+                            Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2,
+                                        color: GuardadoLocal.colores[2])),
                                 margin: EdgeInsets.only(bottom: 15),
-                                child: ElevatedButton(
-                                onPressed: (){
-                                if(Sesion.tareas[tareaActual].controladoresVideo[0] == 0 )
-                                {
-                                var nuevoControlador = VideoPlayerController.network(
-                                Sesion.tareas[tareaActual].videos[0]);
-                                Sesion.tareas[tareaActual].controladoresVideo[0] = nuevoControlador;
-                                Sesion.tareas[tareaActual].controladoresVideo[0].initialize();
-                                }
-
-                                ventanaVideo(
-                                Sesion.tareas[tareaActual].controladoresVideo[0],context);
-                                },
-                                child:Text("ver video".toUpperCase(),style: TextStyle(fontSize:25, color: GuardadoLocal.colores[2]),)
-                                ),
-
-                            ),
-                            ],
-
-                            if(Sesion.tareas[tareaActual].textos.length > 0)...[
+                                child: Image.network(
+                                    Sesion.tareas[tareaActual].imagen,
+                                    width: 200,
+                                    height: 200)),
+                            if (Sesion.tareas[tareaActual].controladoresVideo
+                                    .length ==
+                                1) ...[
                               Container(
-                                decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[2])),
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2,
+                                        color: GuardadoLocal.colores[2])),
                                 margin: EdgeInsets.only(bottom: 15),
                                 child: ElevatedButton(
-                                    onPressed: ()async{
-                                      Sesion.argumentos.clear();
-                                      Sesion.argumentos.add(Sesion.tareas[tareaActual]);
-                                      await Navigator.push(context,MaterialPageRoute(
-                                          builder: (context) => VerPasos()));
-                                      Sesion.argumentos.clear();
+                                    onPressed: () {
+                                      if (Sesion.tareas[tareaActual]
+                                              .controladoresVideo[0] ==
+                                          0) {
+                                        var nuevoControlador =
+                                            VideoPlayerController.network(Sesion
+                                                .tareas[tareaActual].videos[0]);
+                                        Sesion.tareas[tareaActual]
+                                                .controladoresVideo[0] =
+                                            nuevoControlador;
+                                        Sesion.tareas[tareaActual]
+                                            .controladoresVideo[0]
+                                            .initialize();
+                                      }
 
+                                      ventanaVideo(
+                                          Sesion.tareas[tareaActual]
+                                              .controladoresVideo[0],
+                                          context);
                                     },
-                                    child:Text("Ver pasos".toUpperCase(),style: TextStyle(fontSize:25, color: GuardadoLocal.colores[2]),)
-                                ),
-
+                                    child: Text(
+                                      "ver video".toUpperCase(),
+                                      style: TextStyle(
+                                          fontSize: 25,
+                                          color: GuardadoLocal.colores[2]),
+                                    )),
                               ),
                             ],
-
-
+                            if (Sesion.tareas[tareaActual].textos.length >
+                                0) ...[
+                              Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2,
+                                        color: GuardadoLocal.colores[2])),
+                                margin: EdgeInsets.only(bottom: 15),
+                                child: ElevatedButton(
+                                    onPressed: () async {
+                                      Sesion.argumentos.clear();
+                                      Sesion.argumentos
+                                          .add(Sesion.tareas[tareaActual]);
+                                      await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  VerPasos()));
+                                      Sesion.argumentos.clear();
+                                    },
+                                    child: Text(
+                                      "Ver pasos".toUpperCase(),
+                                      style: TextStyle(
+                                          fontSize: 25,
+                                          color: GuardadoLocal.colores[2]),
+                                    )),
+                              ),
+                            ],
                             if (Sesion.tareas[tareaActual].formularios !=
-                                null && Sesion.tareas[tareaActual].formularios != []) ...[
-                              for (int i = 0; i < Sesion.tareas[tareaActual].formularios.length; i = i + 2 + (Sesion.tareas[tareaActual].formularios[i + 1] as int) * 3)
+                                    null &&
+                                Sesion.tareas[tareaActual].formularios !=
+                                    []) ...[
+                              for (int i = 0;
+                                  i <
+                                      Sesion.tareas[tareaActual].formularios
+                                          .length;
+                                  i = i +
+                                      2 +
+                                      (Sesion.tareas[tareaActual]
+                                              .formularios[i + 1] as int) *
+                                          3)
                                 Container(
                                     child: Column(
                                   children: [
-                                    Text(Sesion
-                                        .tareas[tareaActual].formularios[i].toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),),
-                                    for (int j = i + 2; j < i + 2 + (Sesion.tareas[tareaActual].formularios[i + 1] as int) * 3; j = j + 3)
+                                    Text(
+                                      Sesion.tareas[tareaActual].formularios[i]
+                                          .toUpperCase(),
+                                      style: TextStyle(
+                                          color: GuardadoLocal.colores[2],
+                                          fontSize: 25),
+                                    ),
+                                    for (int j = i + 2;
+                                        j <
+                                            i +
+                                                2 +
+                                                (Sesion.tareas[tareaActual]
+                                                            .formularios[i + 1]
+                                                        as int) *
+                                                    3;
+                                        j = j + 3)
                                       comanda(j)
                                   ],
                                 ))
@@ -605,15 +683,19 @@ class VerTareasState extends State<VerTareas> {
                       ? Sesion.nombre.toUpperCase() + ":\n"
                       : Sesion.seleccion.nombre.toUpperCase() + ":\n"),
               textAlign: TextAlign.center,
-              style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
             ),
-            Text(Sesion.tareas[tareaActual].respuesta.toUpperCase(),style: TextStyle(fontSize: 25), ),
-            if(Sesion.tareas[tareaActual].fotoRespuesta != "")...
-              [
-                Image.network(Sesion.tareas[tareaActual].fotoRespuesta,width: 200,height: 200,)
-              ]
-
-
+            Text(
+              Sesion.tareas[tareaActual].respuesta.toUpperCase(),
+              style: TextStyle(fontSize: 25),
+            ),
+            if (Sesion.tareas[tareaActual].fotoRespuesta != "") ...[
+              Image.network(
+                Sesion.tareas[tareaActual].fotoRespuesta,
+                width: 200,
+                height: 200,
+              )
+            ]
           ]),
         ),
 
@@ -624,7 +706,10 @@ class VerTareasState extends State<VerTareas> {
             Text("\n Retroalimentacion: \n".toUpperCase(),
                 textAlign: TextAlign.center,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
-            Text(Sesion.tareas[tareaActual].retroalimentacion.toUpperCase() + "\n",style: TextStyle(fontSize: 25))
+            Text(
+                Sesion.tareas[tareaActual].retroalimentacion.toUpperCase() +
+                    "\n",
+                style: TextStyle(fontSize: 25))
           ]),
         ),
         if (Sesion.rol != Rol.alumno.toString()) ...[
@@ -634,11 +719,14 @@ class VerTareasState extends State<VerTareas> {
                 onPressed: () {
                   dialogRetroalimentacion();
                 },
-                child: Text((Sesion.tareas[tareaActual].retroalimentacion != ""
-                    ? "Editar retroalimentación".toUpperCase()
-                    : "Enviar retroalimentación").toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25)),
+                child: Text(
+                    (Sesion.tareas[tareaActual].retroalimentacion != ""
+                            ? "Editar retroalimentación".toUpperCase()
+                            : "Enviar retroalimentación")
+                        .toUpperCase(),
+                    style: TextStyle(
+                        color: GuardadoLocal.colores[2], fontSize: 25)),
               )),
-
         ],
 
         Visibility(
@@ -646,15 +734,22 @@ class VerTareasState extends State<VerTareas> {
           child: Container(
               margin: EdgeInsets.only(top: 15, bottom: 15),
               child: ElevatedButton(
-              onPressed: () async{
-                await Sesion.db.resetTarea(Sesion.tareas[tareaActual].idRelacion);
-                mostrarBotones = Sesion.tareas[tareaActual].estado == "sinFinalizar";
-                temporizador = Timer.periodic(Duration(seconds: 1), (timer) {
-                  formatTiempoRestante();
-                });
-                actualizar();
-              },
-              child: Text("Reinicia la tarea".toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),))),
+                  onPressed: () async {
+                    await Sesion.db
+                        .resetTarea(Sesion.tareas[tareaActual].idRelacion);
+                    mostrarBotones =
+                        Sesion.tareas[tareaActual].estado == "sinFinalizar";
+                    temporizador =
+                        Timer.periodic(Duration(seconds: 1), (timer) {
+                      formatTiempoRestante();
+                    });
+                    actualizar();
+                  },
+                  child: Text(
+                    "Reinicia la tarea".toUpperCase(),
+                    style: TextStyle(
+                        color: GuardadoLocal.colores[2], fontSize: 25),
+                  ))),
         ),
       ] else ...[
         Container(
@@ -667,7 +762,13 @@ class VerTareasState extends State<VerTareas> {
                     width: 250,
                     decoration: BoxDecoration(border: Border.all(width: 2)),
                     child: Center(
-                        child: Text("¡¡¡Bien!!!  \nNo tienes ninguna tarea".toUpperCase(),style: TextStyle(fontSize: 25, ),textAlign: TextAlign.center,)))
+                        child: Text(
+                      "¡¡¡Bien!!!  \nNo tienes ninguna tarea".toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 25,
+                      ),
+                      textAlign: TextAlign.center,
+                    )))
               ],
             ))
       ]
@@ -682,50 +783,47 @@ class VerTareasState extends State<VerTareas> {
   // Este metodo itera sobre las tareas que tiene el usuario y las muestra
   @deprecated
   Widget LecturaTarea(String valor, i) {
-
     if (valor == "T" && Sesion.tareas[i].textos.length > indiceTextos) {
       String pathTexto = Sesion.tareas[i].textos[indiceTextos];
       indiceTextos++;
       return Center(
           child: Text(pathTexto.toUpperCase() + "\n",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: GuardadoLocal.colores[2],
-                fontSize: 25
-              )));
+              style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 25)));
     } else if (valor == "I" &&
         Sesion.tareas[i].imagenes.length > indiceImagenes) {
       String pathImagen = Sesion.tareas[i].imagenes[indiceImagenes];
       indiceImagenes++;
 
       return Container(
-          decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[2])),
+          decoration: BoxDecoration(
+              border: Border.all(width: 2, color: GuardadoLocal.colores[2])),
           margin: EdgeInsets.only(bottom: 15),
           child: Image.network(pathImagen, width: 200, height: 200));
-
     } else if (valor == "V" && Sesion.tareas[i].controladoresVideo.length > 0) {
       var indice = indiceVideos;
       indiceVideos++;
       return Container(
-          decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[2])),
-          margin: EdgeInsets.only(bottom: 15),
-          child: ElevatedButton(
-            onPressed: (){
-              if(Sesion.tareas[i].controladoresVideo[indice] == 0 )
-                {
-                  var nuevoControlador = VideoPlayerController.network(
-                      Sesion.tareas[i].videos[indice]);
-                  Sesion.tareas[i].controladoresVideo[indice] = nuevoControlador;
-                  Sesion.tareas[i].controladoresVideo[indice].initialize();
-                }
+        decoration: BoxDecoration(
+            border: Border.all(width: 2, color: GuardadoLocal.colores[2])),
+        margin: EdgeInsets.only(bottom: 15),
+        child: ElevatedButton(
+            onPressed: () {
+              if (Sesion.tareas[i].controladoresVideo[indice] == 0) {
+                var nuevoControlador = VideoPlayerController.network(
+                    Sesion.tareas[i].videos[indice]);
+                Sesion.tareas[i].controladoresVideo[indice] = nuevoControlador;
+                Sesion.tareas[i].controladoresVideo[indice].initialize();
+              }
 
               ventanaVideo(
-                  Sesion.tareas[i].controladoresVideo[indice],context);
+                  Sesion.tareas[i].controladoresVideo[indice], context);
             },
-              child:Text("ver video".toUpperCase(),style: TextStyle(fontSize:25, color: GuardadoLocal.colores[2]),)
-            ),
-
-          );
+            child: Text(
+              "ver video".toUpperCase(),
+              style: TextStyle(fontSize: 25, color: GuardadoLocal.colores[2]),
+            )),
+      );
     } else
       return Container();
   }
@@ -743,7 +841,6 @@ class VerTareasState extends State<VerTareas> {
   // Accede a las tareas de la base de datos
   cargarTareas(id) async {
     await Sesion.db.consultarTareasAsignadasAlumno(id, true);
-
   }
 
   // Muestra la vista en horizontal
@@ -805,9 +902,6 @@ class VerTareasState extends State<VerTareas> {
       formatTiempoRestante();
     }
 
-
-
-
     if (!mounted) return;
     setState(() {});
   }
@@ -821,7 +915,10 @@ class VerTareasState extends State<VerTareas> {
           return Dialog(
             child: SingleChildScrollView(
               child: Column(children: [
-                Text("\nIntroduce un comentario opcional:".toUpperCase(),style: TextStyle(fontSize: 25),),
+                Text(
+                  "\nIntroduce un comentario opcional:".toUpperCase(),
+                  style: TextStyle(fontSize: 25),
+                ),
                 TextField(
                   key: Key('comentarioRetroalimentacion'),
                   minLines: 3,
@@ -829,36 +926,55 @@ class VerTareasState extends State<VerTareas> {
                   controller: controladorRespuesta,
                   style: TextStyle(fontSize: 25),
                 ),
-                Text("\Envia una foto (opcional):".toUpperCase(),style: TextStyle(fontSize: 25),),
-                ElevatedButton(onPressed: () async{
-                  await tomarFoto();
-                  controladorStream.add("");
-
-                }, child: Column(children: [
-                  Text("Tomar foto".toUpperCase(),style: TextStyle(fontSize: 25),),
-                  Icon(Icons.camera_alt_outlined)
-
-                ],)),
-
-                StreamBuilder(stream: controladorStream.stream,builder: (context,snapshot){
-                  return fotoTomada==null?Container(width: 100,height: 100):Container(width: 200,height: 200,child:Image.file(File(fotoTomada.path)),);
-                }),
-
-
-
-                Text("\nSeguro que quieres ".toUpperCase() +
-                    (estado ? "terminar".toUpperCase() : "cancelar".toUpperCase()) +
-                    " la tarea".toUpperCase(),style: TextStyle(fontSize: 25),),
+                Text(
+                  "\Envia una foto (opcional):".toUpperCase(),
+                  style: TextStyle(fontSize: 25),
+                ),
+                ElevatedButton(
+                    onPressed: () async {
+                      await tomarFoto();
+                      controladorStream.add("");
+                    },
+                    child: Column(
+                      children: [
+                        Text(
+                          "Tomar foto".toUpperCase(),
+                          style: TextStyle(fontSize: 25),
+                        ),
+                        Icon(Icons.camera_alt_outlined)
+                      ],
+                    )),
+                StreamBuilder(
+                    stream: controladorStream.stream,
+                    builder: (context, snapshot) {
+                      return fotoTomada == null
+                          ? Container(width: 100, height: 100)
+                          : Container(
+                              width: 200,
+                              height: 200,
+                              child: Image.file(File(fotoTomada.path)),
+                            );
+                    }),
+                Text(
+                  "\nSeguro que quieres ".toUpperCase() +
+                      (estado
+                          ? "terminar".toUpperCase()
+                          : "cancelar".toUpperCase()) +
+                      " la tarea".toUpperCase(),
+                  style: TextStyle(fontSize: 25),
+                ),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Container(
                       margin: EdgeInsets.all(10),
                       child: ElevatedButton(
                           onPressed: () {
-
                             Navigator.pop(context);
                           },
                           child: Column(children: [
-                            Text('\nNo'.toUpperCase(),style: TextStyle(fontSize: 25),),
+                            Text(
+                              '\nNo'.toUpperCase(),
+                              style: TextStyle(fontSize: 25),
+                            ),
                             Image.asset(
                               "assets/no.png",
                               height: 100,
@@ -882,13 +998,13 @@ class VerTareasState extends State<VerTareas> {
 
                           if (controladorRespuesta.text != null) {
                             var file = null;
-                            if(fotoTomada != null)
-                            {
+                            if (fotoTomada != null) {
                               file = File(fotoTomada.path);
                             }
                             Sesion.db.addRespuestaTarea(
                                 Sesion.tareas[tareaActual].idRelacion,
-                                controladorRespuesta.text,file);
+                                controladorRespuesta.text,
+                                file);
                           }
 
                           mostrarBotones = false;
@@ -897,7 +1013,10 @@ class VerTareasState extends State<VerTareas> {
                           Navigator.pop(context);
                         },
                         child: Column(children: [
-                          Text('\nEnviar'.toUpperCase(),style: TextStyle(fontSize: 25),),
+                          Text(
+                            '\nEnviar'.toUpperCase(),
+                            style: TextStyle(fontSize: 25),
+                          ),
                           Image.asset(
                             "assets/enviarunemail.png",
                             height: 100,
@@ -920,19 +1039,27 @@ class VerTareasState extends State<VerTareas> {
           return Dialog(
             backgroundColor: GuardadoLocal.colores[1],
             child: Column(children: [
-              Text("\nIntroduce una realimentacion para el alumno:".toUpperCase(),style: TextStyle(fontSize: 25),),
+              Text(
+                "\nIntroduce una realimentacion para el alumno:".toUpperCase(),
+                style: TextStyle(fontSize: 25),
+              ),
               TextField(
                 key: Key('profesorRetroalimentacion'),
-                style: TextStyle(color: GuardadoLocal.colores[0],fontSize: 25),
+                style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 25),
                 decoration: InputDecoration(
-                    enabledBorder:  OutlineInputBorder(
-                      borderSide:  BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
-                    ),
-                    border: OutlineInputBorder(),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: GuardadoLocal.colores[0], width: 0.0),
+                  ),
+                  border: OutlineInputBorder(),
                 ),
                 controller: controlador,
               ),
-              Text("\nSeguro que quieres dar".toUpperCase() + " esa realimentacion?".toUpperCase(),style: TextStyle(fontSize: 25),),
+              Text(
+                "\nSeguro que quieres dar".toUpperCase() +
+                    " esa realimentacion?".toUpperCase(),
+                style: TextStyle(fontSize: 25),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -943,7 +1070,12 @@ class VerTareasState extends State<VerTareas> {
                             Navigator.pop(context);
                           },
                           child: Column(children: [
-                            Text('\nSalir'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),),
+                            Text(
+                              '\nSalir'.toUpperCase(),
+                              style: TextStyle(
+                                  color: GuardadoLocal.colores[2],
+                                  fontSize: 25),
+                            ),
                             Image.asset(
                               "assets/cerrar.png",
                               height: 100,
@@ -966,7 +1098,11 @@ class VerTareasState extends State<VerTareas> {
                           Navigator.pop(context);
                         },
                         child: Column(children: [
-                          Text('\nEnviar'.toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),),
+                          Text(
+                            '\nEnviar'.toUpperCase(),
+                            style: TextStyle(
+                                color: GuardadoLocal.colores[2], fontSize: 25),
+                          ),
                           Image.asset(
                             "assets/enviarunemail.png",
                             height: 100,
@@ -985,19 +1121,28 @@ class VerTareasState extends State<VerTareas> {
     var indice = indiceComanda;
     indiceComanda++;
 
-    if(indice >= Sesion.tareas[tareaActual].controladoresComandas.length)
-      {
-        return Text("Error : se ha pasado el indice ".toUpperCase() + indice.toString() + " cuando el máximo es".toUpperCase() + Sesion.tareas[tareaActual].controladoresComandas.length.toString(),style: TextStyle(fontSize: 25),);
-      }
+    if (indice >= Sesion.tareas[tareaActual].controladoresComandas.length) {
+      return Text(
+        "Error : se ha pasado el indice ".toUpperCase() +
+            indice.toString() +
+            " cuando el máximo es".toUpperCase() +
+            Sesion.tareas[tareaActual].controladoresComandas.length.toString(),
+        style: TextStyle(fontSize: 25),
+      );
+    }
 
     return Container(
-        decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[2])),
+        decoration: BoxDecoration(
+            border: Border.all(width: 2, color: GuardadoLocal.colores[2])),
         margin: EdgeInsets.all(10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Flexible(
-              child: Text(Sesion.tareas[tareaActual].formularios[j].toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),),
+              child: Text(
+                Sesion.tareas[tareaActual].formularios[j].toUpperCase(),
+                style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 25),
+              ),
             ),
             Flexible(
               child: Container(
@@ -1015,12 +1160,17 @@ class VerTareasState extends State<VerTareas> {
                       margin: EdgeInsets.only(left: 20),
                       child: TextFormField(
                         decoration: InputDecoration(
-                          enabledBorder:  OutlineInputBorder(
-                          borderSide:  BorderSide(color: GuardadoLocal.colores[2], width: 0.0),
+                            enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                              color: GuardadoLocal.colores[2], width: 0.0),
                         )),
-                        style: TextStyle(color:GuardadoLocal.colores[2],fontSize: 30,),
+                        style: TextStyle(
+                          color: GuardadoLocal.colores[2],
+                          fontSize: 30,
+                        ),
                         textAlign: TextAlign.center,
-                        controller: Sesion.tareas[tareaActual].controladoresComandas[indice],
+                        controller: Sesion
+                            .tareas[tareaActual].controladoresComandas[indice],
                         keyboardType: TextInputType.number,
                         onChanged: (nuevoNumero) {
                           if (nuevoNumero == null) {
@@ -1034,117 +1184,159 @@ class VerTareasState extends State<VerTareas> {
                               .toString());
                         },
                       ))),
-
               Flexible(
                   child: Container(
-                      decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[2])),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 2, color: GuardadoLocal.colores[2])),
                       margin: EdgeInsets.only(left: 25),
                       child: ElevatedButton(
-                        child: Icon(Icons.remove,color: GuardadoLocal.colores[2],),
+                        child: Icon(
+                          Icons.remove,
+                          color: GuardadoLocal.colores[2],
+                        ),
                         onPressed: () {
-                          var valor = Sesion.tareas[tareaActual].controladoresComandas[indice].text;
+                          var valor = Sesion.tareas[tareaActual]
+                              .controladoresComandas[indice].text;
 
-                          if(valor != "")
-                              {
-                                var num = int.parse(valor);
-                                if(num > 0)
-                                  {
-                                    num--;
-                                    Sesion.tareas[tareaActual].controladoresComandas[indice].text = num.toString();
-                                    Sesion.tareas[tareaActual].formularios[j + 2] = num;
-
-                                  }
-                              }
-
+                          if (valor != "") {
+                            var num = int.parse(valor);
+                            if (num > 0) {
+                              num--;
+                              Sesion
+                                  .tareas[tareaActual]
+                                  .controladoresComandas[indice]
+                                  .text = num.toString();
+                              Sesion.tareas[tareaActual].formularios[j + 2] =
+                                  num;
+                            }
+                          }
                         },
                       ))),
-
               Flexible(
                   child: Container(
-                      decoration: BoxDecoration(border: Border.all(width: 2,color: GuardadoLocal.colores[2])),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                              width: 2, color: GuardadoLocal.colores[2])),
                       margin: EdgeInsets.only(left: 25),
                       child: ElevatedButton(
-                        child: Icon(Icons.add,color: GuardadoLocal.colores[2],),
+                        child: Icon(
+                          Icons.add,
+                          color: GuardadoLocal.colores[2],
+                        ),
                         onPressed: () {
-                          var valor = Sesion.tareas[tareaActual].controladoresComandas[indice].text;
-                          if(valor == "")
-                            {
-                              Sesion.tareas[tareaActual].controladoresComandas[indice].text = "1";
-                              Sesion.tareas[tareaActual].formularios[j + 2] = 1;
-                            }
-                          else
-                            {
-                              var num = int.parse(valor);
-                              num++;
-                              Sesion.tareas[tareaActual].controladoresComandas[indice].text = num.toString();
-                              Sesion.tareas[tareaActual].formularios[j + 2] = num;
-                            }
-
-
+                          var valor = Sesion.tareas[tareaActual]
+                              .controladoresComandas[indice].text;
+                          if (valor == "") {
+                            Sesion.tareas[tareaActual]
+                                .controladoresComandas[indice].text = "1";
+                            Sesion.tareas[tareaActual].formularios[j + 2] = 1;
+                          } else {
+                            var num = int.parse(valor);
+                            num++;
+                            Sesion
+                                .tareas[tareaActual]
+                                .controladoresComandas[indice]
+                                .text = num.toString();
+                            Sesion.tareas[tareaActual].formularios[j + 2] = num;
+                          }
                         },
                       ))),
-
             ] else ...[
               Flexible(
-                  child: Text(Sesion.tareas[tareaActual].formularios[j + 2]
-                      .toString().toUpperCase(),style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 25),)),
+                  child: Text(
+                Sesion.tareas[tareaActual].formularios[j + 2]
+                    .toString()
+                    .toUpperCase(),
+                style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 25),
+              )),
             ]
           ],
         ));
   }
 
-
-
-  dialogCorreo(mensaje)
-  {
+  dialogCorreo(mensaje) {
     var controladorAsunto = TextEditingController();
     var controladorEnviar = TextEditingController();
     var controladorMensaje = TextEditingController();
 
-        controladorMensaje.text = mensaje;
+    controladorMensaje.text = mensaje;
 
-    return showDialog(context: context, builder: (context){
-        return Dialog(
-          child:
-              SingleChildScrollView(child:
-          Column(
-            children: [
-              //Flexible(child: Row(children: [Text("Asunto:"),TextField(controller: controladorAsunto,)],) ),
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+              child: SingleChildScrollView(
+            child: Column(
+              children: [
+                //Flexible(child: Row(children: [Text("Asunto:"),TextField(controller: controladorAsunto,)],) ),
 
-              Text("Asunto:".toUpperCase(),style: TextStyle(fontSize: 25),),
-              TextField(controller: controladorAsunto,style: TextStyle(fontSize: 25),),
+                Text(
+                  "Asunto:".toUpperCase(),
+                  style: TextStyle(fontSize: 25),
+                ),
+                TextField(
+                  controller: controladorAsunto,
+                  style: TextStyle(fontSize: 25),
+                ),
 
+                Text(
+                  "Enviar a:".toUpperCase(),
+                  style: TextStyle(fontSize: 25),
+                ),
+                TextField(
+                  controller: controladorEnviar,
+                  style: TextStyle(fontSize: 25),
+                ),
 
-              Text("Enviar a:".toUpperCase(),style: TextStyle(fontSize: 25),),
-              TextField(controller: controladorEnviar,style: TextStyle(fontSize: 25),),
+                Text(
+                  "Mensaje:".toUpperCase(),
+                  style: TextStyle(fontSize: 25),
+                ),
+                TextField(
+                  controller: controladorMensaje,
+                  minLines: 10,
+                  maxLines: 20,
+                  style: TextStyle(fontSize: 25),
+                ),
 
-              Text("Mensaje:".toUpperCase(),style: TextStyle(fontSize: 25),),
-              TextField(controller: controladorMensaje,minLines: 10,maxLines: 20,style: TextStyle(fontSize: 25),),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                ElevatedButton(onPressed: (){Navigator.pop(context);}, child: Text("cancelar".toUpperCase(),style: TextStyle(fontSize: 25),)),
-                  ElevatedButton(onPressed: () async{
-
-
-                      if(controladorEnviar.text != "" && controladorAsunto.text != "" && controladorMensaje.text != "")
-                        {
-                          await sendEmail("mochileros", controladorEnviar.text, controladorAsunto.text, controladorMensaje.text).then((e){
-                            print(e);
-                          });
-
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                        onPressed: () {
                           Navigator.pop(context);
-                        }
-                      },
+                        },
+                        child: Text(
+                          "cancelar".toUpperCase(),
+                          style: TextStyle(fontSize: 25),
+                        )),
+                    ElevatedButton(
+                        onPressed: () async {
+                          if (controladorEnviar.text != "" &&
+                              controladorAsunto.text != "" &&
+                              controladorMensaje.text != "") {
+                            await sendEmail(
+                                    "mochileros",
+                                    controladorEnviar.text,
+                                    controladorAsunto.text,
+                                    controladorMensaje.text)
+                                .then((e) {
+                              print(e);
+                            });
 
-                      child: Text("enviar".toUpperCase(),style: TextStyle(fontSize: 25),)),
-
-                ],),
-            ],
-          ),
-        )
-        );
-    });
+                            Navigator.pop(context);
+                          }
+                        },
+                        child: Text(
+                          "enviar".toUpperCase(),
+                          style: TextStyle(fontSize: 25),
+                        )),
+                  ],
+                ),
+              ],
+            ),
+          ));
+        });
   }
 }
