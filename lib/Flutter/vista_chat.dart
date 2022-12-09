@@ -165,6 +165,9 @@ class _VistaChatState extends State<VistaChat> {
   enviarMensaje() async{
     if (messageController.text.isNotEmpty) {
 
+
+
+
       Mensaje msg = Mensaje(idChat, Sesion.id, widget.idInterlocutor, 'texto', messageController.text.toUpperCase(), DateTime.now().millisecondsSinceEpoch);
 
       await Sesion.db.addMensaje(msg);
@@ -173,6 +176,7 @@ class _VistaChatState extends State<VistaChat> {
         idChat = await Sesion.db.buscarIdChat(Sesion.id, widget.idInterlocutor);
         cargaMensajes();
       }
+
 
       setState(() {
         messageController.clear();
