@@ -28,10 +28,10 @@ class VerPasosState extends State<VerPasos> {
           title: Center(
               child: Text(
         "PASOS",
-        style: TextStyle(
+        style: TextStyle(fontWeight: FontWeight.bold,
             fontSize: 25,
             color: GuardadoLocal.colores[2],
-            fontWeight: FontWeight.w800),
+            ),
         textAlign: TextAlign.center,
       ))),
       body: Stack(children: [
@@ -135,7 +135,7 @@ class VerPasosState extends State<VerPasos> {
                             style: TextStyle(
                                 fontSize: 40,
                                 color: GuardadoLocal.colores[0],
-                                fontWeight: FontWeight.w800))),
+                              fontWeight: FontWeight.bold,))),
                     SizedBox(
                       height: 20,
                     ),
