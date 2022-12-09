@@ -1044,6 +1044,7 @@ class AccesoBD {
           _subscripcionListaChat1 = await db
           .collection('chats')
           .where('idUsuarios',  arrayContains: id )
+          .orderBy('fechaUltimoMensaje',descending: true)
           .snapshots().listen((event) async{
             countPeticiones++;
             var listaChats = [];
@@ -1128,7 +1129,7 @@ class AccesoBD {
         print(mensaje.idChat);
       }else{
         //Marco sin leer el chat
-        db.collection('chats').doc(mensaje.idChat).set({'fechaUltimoMensaje' : mensaje.fechaEnvio});
+        db.collection('chats').doc(mensaje.idChat).update({'fechaUltimoMensaje' : mensaje.fechaEnvio});
       }
 
       Map<String,dynamic> msg = {
