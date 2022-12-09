@@ -77,7 +77,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
             onPressed: (){Navigator.pop(context);}),
-        title: Center(child: Text('TABLON DE COMUNICACIÓN',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
+        title: Center(child: Text('TABLON DE COMUNICACIÓN',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 30),),
       )),
       body: SingleChildScrollView(
           child: Container(
@@ -138,7 +138,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                               Text(
                                 tablon[i].nombres.toUpperCase(),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: TextStyle(fontWeight: FontWeight.bold,
                                   fontSize: 25,
                                   color: Colors.black,
                                 ),
@@ -241,7 +241,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                               Text(
                                 tablon[i].nombres.toUpperCase(),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: TextStyle(fontWeight: FontWeight.bold,
                                   fontSize: 25,
                                   color: Colors.black,
                                 ),
@@ -346,7 +346,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                               Text(
                                 tablon[i].nombres.toUpperCase(),
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: TextStyle(fontWeight: FontWeight.bold,
                                   fontSize: 25,
                                   color: Colors.black,
                                 ),
