@@ -127,7 +127,7 @@ class CrearTareaState extends State<CrearTarea> {
             child: Text('Crea una nueva tarea'.toUpperCase(),
                 textAlign: TextAlign.center,
                 style:
-                    TextStyle(color: GuardadoLocal.colores[2], fontSize: 30)),
+                    TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2], fontSize: 30)),
           )),
       body: SingleChildScrollView(
           padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
@@ -183,7 +183,7 @@ class CrearTareaState extends State<CrearTarea> {
                   border: OutlineInputBorder(),
                   hintText: 'Título *'.toUpperCase(),
                   hintStyle:
-                      TextStyle(color: GuardadoLocal.colores[0], fontSize: 25)),
+                      TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0], fontSize: 25)),
               controller: controladorNombre,
             ),
           ),
@@ -204,7 +204,7 @@ class CrearTareaState extends State<CrearTarea> {
                   border: OutlineInputBorder(),
                   hintText: 'Descripción *'.toUpperCase(),
                   hintStyle:
-                      TextStyle(color: GuardadoLocal.colores[0], fontSize: 25)),
+                      TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0], fontSize: 25)),
               controller: controladorTexto,
             ),
           ),
@@ -281,7 +281,7 @@ class CrearTareaState extends State<CrearTarea> {
                     (formularios.isEmpty)
                         ? 'Crea un formulario'.toUpperCase()
                         : "Edita el formulario".toUpperCase(),
-                    style: TextStyle(
+                    style: TextStyle(fontWeight: FontWeight.bold,
                         color: GuardadoLocal.colores[2], fontSize: 25)),
                 Image.asset(
                   'assets/formulario.png',
@@ -304,7 +304,7 @@ class CrearTareaState extends State<CrearTarea> {
                     (textos.isEmpty && imagenes.isEmpty)
                         ? 'Crea unos pasos'.toUpperCase()
                         : "Edita los pasos".toUpperCase(),
-                    style: TextStyle(
+                    style: TextStyle(fontWeight: FontWeight.bold,
                         color: GuardadoLocal.colores[2], fontSize: 25)),
                 Image.asset(
                   'assets/lista.png',
@@ -407,7 +407,7 @@ class CrearTareaState extends State<CrearTarea> {
               visible: !creando,
               child: Container(
                   alignment: Alignment.bottomRight,
-                  margin: EdgeInsets.only(top: 0),
+                  margin: EdgeInsets.only(right: 10),
                   child: ElevatedButton(
                     child: Image.asset(
                       'assets/disquete.png',
