@@ -67,7 +67,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
               child: Text(
                 'Lista de Profesores'.toUpperCase(),
                 textAlign: TextAlign.center,
-                style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+                style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2], fontSize: 30),
               ),
             )),
         body: Stack(children: [
@@ -156,7 +156,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
                       children: [
                         Text(
                           Sesion.profesores[i].nombre.toString().toUpperCase(),
-                          style: TextStyle(
+                          style: TextStyle(fontWeight: FontWeight.bold,
                               color: GuardadoLocal.colores[2], fontSize: 25),
                         ),
                         Image.network(
