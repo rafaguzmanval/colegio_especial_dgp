@@ -84,7 +84,7 @@ class TablonAdminState extends State<TablonAdmin> {
                   'GESTION del tablon'.toUpperCase(),
                   textAlign: TextAlign.center,
                   style:
-                      TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+                      TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2], fontSize: 30),
                 ),
               )
             ]),
@@ -145,7 +145,7 @@ class TablonAdminState extends State<TablonAdmin> {
                                 children: [
                                   Text(
                                     "AÑADIR BOTON TABLON",
-                                    style: TextStyle(
+                                    style: TextStyle(fontWeight: FontWeight.bold,
                                       fontSize: 30,
                                       color: GuardadoLocal.colores[2],
                                     ),
@@ -179,7 +179,7 @@ class TablonAdminState extends State<TablonAdmin> {
                                 children: [
                                   Text(
                                     "Lista de botones".toUpperCase(),
-                                    style: TextStyle(
+                                    style: TextStyle(fontWeight: FontWeight.bold,
                                       fontSize: 30,
                                       color: GuardadoLocal.colores[2],
                                     ),
@@ -218,7 +218,7 @@ class TablonAdminState extends State<TablonAdmin> {
                                   children: [
                                     Text(
                                       "GESTION DEL TABLON",
-                                      style: TextStyle(
+                                      style: TextStyle(fontWeight: FontWeight.bold,
                                         fontSize: 30,
                                         color: GuardadoLocal.colores[2],
                                       ),
@@ -253,7 +253,7 @@ class TablonAdminState extends State<TablonAdmin> {
                                   children: [
                                     Text(
                                       "Lista de botones".toUpperCase(),
-                                      style: TextStyle(
+                                      style: TextStyle(fontWeight: FontWeight.bold,
                                         fontSize: 30,
                                         color: GuardadoLocal.colores[2],
                                       ),
