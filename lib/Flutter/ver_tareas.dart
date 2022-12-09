@@ -272,8 +272,9 @@ class VerTareasState extends State<VerTareas> {
   }
 
   formatTiempoRestante() {
-    if (Sesion.tareas[tareaActual].estado != "sinFinalizar") {
+    if (Sesion.tareas[tareaActual].estado != "sinFinalizar" || Sesion.rol == Rol.alumno.toString()) {
       mensajeTemporizador = "";
+      if(temporizador != null)
       temporizador.cancel();
 
       actualizar();
@@ -347,6 +348,7 @@ class VerTareasState extends State<VerTareas> {
       mostrarBotones = Sesion.tareas[tareaActual].estado == "sinFinalizar";
       formatTiempoRestante();
       verFlechaIzquierda = true;
+      if(temporizador !=null)
       temporizador.cancel();
       temporizador = null;
     }
@@ -360,6 +362,7 @@ class VerTareasState extends State<VerTareas> {
       mostrarBotones = Sesion.tareas[tareaActual].estado == "sinFinalizar";
       formatTiempoRestante();
       verFlechaDerecha = true;
+      if(temporizador !=null)
       temporizador.cancel();
       temporizador = null;
     }
