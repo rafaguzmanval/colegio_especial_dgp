@@ -76,6 +76,7 @@ class VerTareasState extends State<VerTareas> {
   var mensajeTemporizador = "";
   var controladorTemporizador = StreamController();
   var indiceComanda = 0;
+  double offSetActual = 0;
 
   tomarFoto() async {
     fotoTomada = await capturador.pickImage(
@@ -177,22 +178,56 @@ class VerTareasState extends State<VerTareas> {
                   }
                 }
               },
-              child: SingleChildScrollView(
-                  padding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                  child: Stack(
-                    children: [
-                      if (Sesion.rol == Rol.alumno.toString()) ...[
-                        VistaAlumno(),
-                      ] else if (Sesion.rol == Rol.profesor.toString()) ...[
-                        VistaProfesor()
-                      ] else if (Sesion.rol ==
-                          Rol.administrador.toString()) ...[
-                        VistaAdministrador()
-                      ] else if (Sesion.rol == Rol.programador.toString()) ...[
-                        VistaProgramador()
-                      ]
-                    ],
-                  )),
+              child: Stack(children: [
+                OrientationBuilder(
+                  builder: (context, orientation) => orientation == Orientation.portrait
+                      ? buildPortrait()
+                      : buildLandscape(),
+                ),
+                Container(
+                  alignment: FractionalOffset(0.98, 0.01),
+                  child: FloatingActionButton(
+                      heroTag: "botonUp",
+                      child: Icon(
+                        Icons.arrow_upward,
+                        color: GuardadoLocal.colores[2],
+                      ),
+                      elevation: 1.0,
+                      onPressed: () {
+                        offSetActual -= 100.0;
+                        if (offSetActual < homeController.position.minScrollExtent)
+                          offSetActual = homeController.position.minScrollExtent;
+
+                        homeController.animateTo(
+                          offSetActual, // change 0.0 {double offset} to corresponding widget position
+                          duration: Duration(seconds: 1),
+                          curve: Curves.easeOut,
+                        );
+                      }),
+                ),
+                Container(
+                  alignment: FractionalOffset(0.98, 0.99),
+                  child: FloatingActionButton(
+                      heroTag: "botonDown",
+                      child: Icon(
+                        Icons.arrow_downward,
+                        color: GuardadoLocal.colores[2],
+                      ),
+                      elevation: 1.0,
+                      onPressed: () {
+                        offSetActual += 100;
+
+                        if (offSetActual > homeController.position.maxScrollExtent)
+                          offSetActual = homeController.position.maxScrollExtent;
+
+                        homeController.animateTo(
+                          offSetActual, // change 0.0 {double offset} to corresponding widget position
+                          duration: Duration(seconds: 1),
+                          curve: Curves.easeOut,
+                        );
+                      }),
+                ),
+              ]),
             ),
 
             ///FLECHA IZQUIERDA
