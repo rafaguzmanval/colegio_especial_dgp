@@ -142,7 +142,7 @@ class LocalizacionState extends State<Localizacion> {
           leading: IconButton(
             icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
             onPressed: (){Navigator.pop(context);}),
-          title: Center(child: Text("UBICACIÓN",textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2],fontSize: 30),),
+          title: Center(child: Text("UBICACIÓN",textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 30),),
 
 
       )),
