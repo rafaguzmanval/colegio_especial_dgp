@@ -191,7 +191,8 @@ class PaginaChatsState extends State<PaginaChats> {
                   int reverseIndex = Sesion.chats.length - index - 1; // int reverseIndex = snapshot.data['chats'].length - index - 1
                   var idInterlocutor = Sesion.chats[reverseIndex].idUsuario1==Sesion.id?Sesion.chats[reverseIndex].idUsuario2:Sesion.chats[reverseIndex].idUsuario1;
 
-                  return _listachatAux(Sesion.chats[reverseIndex].id, Sesion.chats[reverseIndex].nombre, Sesion.chats[reverseIndex].foto, idInterlocutor,Sesion.chats[reverseIndex].sinLeer);
+                  return _listachatAux(Sesion.chats[reverseIndex].id, Sesion.chats[reverseIndex].nombre,
+                    Sesion.chats[reverseIndex].foto, idInterlocutor,Sesion.chats[reverseIndex].sinLeer,Sesion.chats[reverseIndex].fechaUltimoMensaje);
                   /*ListaChats(
                       chatId: Sesion.chats[reverseIndex].id,
                       nombre:Sesion.chats[reverseIndex].nombre,
@@ -210,8 +211,12 @@ class PaginaChatsState extends State<PaginaChats> {
     );
   }
 
-  _listachatAux(chatId,nombre,foto,idInterlocutor,sinLeer)
+  _listachatAux(chatId,nombre,foto,idInterlocutor,sinLeer, fechaUM)
   {
+
+    var fecha = _obtenerFecha(fechaUM);
+
+
     return GestureDetector(
       onTap: () async {
         Sesion.db.desactivarSubscripcionListaChat();
@@ -256,6 +261,10 @@ class PaginaChatsState extends State<PaginaChats> {
             nombre.toUpperCase(),
             style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 30, fontWeight: FontWeight.bold),
           ),
+          subtitle: Text(
+            fecha,
+            style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 15, fontWeight: FontWeight.bold),
+          ),
         ),
       ),
     );
@@ -279,5 +288,17 @@ class PaginaChatsState extends State<PaginaChats> {
 
   void actualizar(){
     setState(() {});
+  }
+
+  String _obtenerFecha(fechaUM){
+    var fecha = DateTime.fromMicrosecondsSinceEpoch(fechaUM*1000);
+
+    var hora = fecha.hour.toString().length==1?('0'+fecha.hour.toString()):fecha.hour.toString();
+    var minuto = fecha.minute.toString().length==1?('0'+fecha.minute.toString()):fecha.minute.toString();
+    var dia = fecha.day.toString().length==1?('0'+fecha.day.toString()):fecha.day.toString();
+    var mes = fecha.month.toString().length==1?('0'+fecha.month.toString()):fecha.month.toString();
+    var stringFecha = hora+':'+minuto+'  ' +dia+'/'+mes+'/'+fecha.year.toString();
+
+    return stringFecha;
   }
 }
