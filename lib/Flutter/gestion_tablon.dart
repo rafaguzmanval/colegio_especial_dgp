@@ -81,7 +81,7 @@ class GestionTablonState extends State<GestionTablon> {
             child: Text(
               'CREA UN NUEVO BOTÓN PARA EL TABLÓN',
               textAlign: TextAlign.center,
-              style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+              style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2], fontSize: 30),
             ),
           )),
       body: SingleChildScrollView(
@@ -136,7 +136,7 @@ class GestionTablonState extends State<GestionTablon> {
                   ),
                   border: OutlineInputBorder(),
                   hintText: 'INTRODUCE EL NOMBRE DEL PICTOGRAMA *',
-                  hintStyle: TextStyle(color: GuardadoLocal.colores[0])),
+                  hintStyle: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0])),
               controller: controladorNombre,
             ),
           ),
