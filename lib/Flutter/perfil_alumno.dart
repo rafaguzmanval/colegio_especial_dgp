@@ -95,7 +95,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                 'PERFIL DE ${Sesion.seleccion.nombre.toUpperCase()}'
                 '',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+                style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2], fontSize: 30),
               ),
             )),
         body: SingleChildScrollView(
@@ -398,6 +398,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
             child: Text(
               "EVOLUCIÓN",
               style: TextStyle(
+                  fontWeight: FontWeight.bold,
                   fontFamily: "Escolar",
                   fontSize: 30,
                   color: GuardadoLocal.colores[2]),
@@ -638,7 +639,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                         ? "ELIGE FECHA DE ENTREGA LIMITE"
                                         : DateFormat('d/M/y')
                                             .format(fechafinal),
-                                    style: TextStyle(
+                                    style: TextStyle(fontWeight: FontWeight.bold,
                                         color: GuardadoLocal.colores[2],
                                         fontSize: 25),
                                   )),
@@ -667,7 +668,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                               ? horafinal.minute.toString()
                                               : "0" +
                                                   horafinal.minute.toString()),
-                                  style: TextStyle(
+                                  style: TextStyle(fontWeight: FontWeight.bold,
                                       color: GuardadoLocal.colores[2],
                                       fontSize: 25),
                                 ),
@@ -754,7 +755,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                   },
                   child: Text(
                     listaIterar[i].nombre.toString().toUpperCase(),
-                    style: TextStyle(
+                    style: TextStyle(fontWeight: FontWeight.bold,
                         fontFamily: "Escolar",
                         fontSize: 30,
                         color: GuardadoLocal.colores[2]),
