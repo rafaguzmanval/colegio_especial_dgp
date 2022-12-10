@@ -247,8 +247,7 @@ class PerfilTareaState extends State<PerfilTarea> {
             ),
             Container(
                 margin: EdgeInsets.only(right: 20, left: 20),
-                child: Flexible(
-                  child: ElevatedButton(
+                child: ElevatedButton(
                       child: Image.asset(
                         'assets/galeria.png',
                         width: 140,
@@ -257,7 +256,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                       onPressed: () {
                         seleccionarImagen(SeleccionImagen.galeria);
                       }),
-                )),
+                ),
             Flexible(
               child: ElevatedButton(
                   child: Image.asset(

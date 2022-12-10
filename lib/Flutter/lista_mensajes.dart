@@ -82,7 +82,7 @@ class _ListaMensajesState extends State<ListaMensajes> {
     var mes = fecha.month.toString().length==1?('0'+fecha.month.toString()):fecha.month.toString();
     var stringFecha = hora+':'+minuto;
 
-    if(fecha.day!=DateTime.now().day) stringFecha += dia+'/'+mes+'/'+fecha.year.toString();
+    if(fecha.day!=DateTime.now().day) stringFecha += '  '+dia+'/'+mes+'/'+fecha.year.toString();
     return stringFecha;
   }
 }

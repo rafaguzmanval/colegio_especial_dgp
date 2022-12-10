@@ -218,7 +218,7 @@ class ListaTareasState extends State<ListaTareas> {
                   },
                   icon: Icon(
                     Icons.delete,
-                    //color: GuardadoLocal.colores[0],
+                    color: GuardadoLocal.colores[0],
                   )),
               if (esTareaEliminandose && i == tareaEliminandose) ...[
                 new CircularProgressIndicator(),
