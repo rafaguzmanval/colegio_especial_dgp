@@ -990,7 +990,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                                         child: Text(
                                           textos[i].toUpperCase(),
                                           style: TextStyle(
-                                              fontSize: 40,
+                                              fontSize: 35,
                                               color: GuardadoLocal.colores[0]),
                                         ),
                                         onPressed: () async {
@@ -1084,7 +1084,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                                 child: Column(children: [
                                   Text(
                                     '\nCancelar'.toUpperCase(),
-                                    style: TextStyle(
+                                    style: TextStyle(fontWeight: FontWeight.bold,
                                         fontSize: 25,
                                         color: GuardadoLocal.colores[2]),
                                   ),
@@ -1104,7 +1104,7 @@ class PerfilTareaState extends State<PerfilTarea> {
                               },
                               child: Column(children: [
                                 Text('\n Crear'.toUpperCase(),
-                                    style: TextStyle(
+                                    style: TextStyle(fontWeight: FontWeight.bold,
                                         fontSize: 25,
                                         color: GuardadoLocal.colores[2])),
                                 Image.asset(

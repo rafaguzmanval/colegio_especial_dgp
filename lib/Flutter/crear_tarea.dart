@@ -521,7 +521,8 @@ class CrearTareaState extends State<CrearTarea> {
                       child: Column(children: [
                     Text(
                       "\nCrea unos pasos".toUpperCase(),
-                      style: TextStyle(fontSize: 40),
+                      style: TextStyle(
+                          fontSize: 40, color: GuardadoLocal.colores[0]),
                     ),
 
                     ///Previsualizacion de los pasos
@@ -529,37 +530,51 @@ class CrearTareaState extends State<CrearTarea> {
                       Container(
                         margin: EdgeInsets.only(top: 15, bottom: 10),
                         child: Column(children: [
-                          Text("Paso " + (i + 1).toString()),
+                          Container(
+                              padding: EdgeInsets.all(5),
+                              margin: EdgeInsets.only(top: 20, bottom: 25),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 1,
+                                      color: GuardadoLocal.colores[0])),
+                              child: Text(
+                                  "Paso ".toUpperCase() +
+                                      (i + 1).toString().toUpperCase(),
+                                  style: TextStyle(
+                                      color: GuardadoLocal.colores[0]))),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Flexible(
+                                  flex: 40,
                                   child: Container(
-                                margin: EdgeInsets.only(bottom: 10),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 1,
-                                        color: GuardadoLocal.colores[0])),
+                                    margin: EdgeInsets.only(bottom: 10),
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 1,
+                                            color: GuardadoLocal.colores[0])),
 
-                                ///DESCRIPCION DEL PASO
-                                child: TextButton(
-                                    child: Text(
-                                      textos[i],
-                                      style: TextStyle(
-                                          fontSize: 40,
-                                          color: GuardadoLocal.colores[0]),
-                                    ),
-                                    onPressed: () async {
-                                      await dialogNombre(textos[i]).then((e) {
-                                        if (e != null) {
-                                          textos[i] = e;
-                                          controladorStream.add("");
-                                        }
-                                      });
-                                    }),
-                              )),
+                                    ///DESCRIPCION DEL PASO
+                                    child: TextButton(
+                                        child: Text(
+                                          textos[i].toUpperCase(),
+                                          style: TextStyle(
+                                              fontSize: 35,
+                                              color: GuardadoLocal.colores[0]),
+                                        ),
+                                        onPressed: () async {
+                                          await dialogNombre(textos[i])
+                                              .then((e) {
+                                            if (e != null) {
+                                              textos[i] = e;
+                                              controladorStream.add("");
+                                            }
+                                          });
+                                        }),
+                                  )),
 
                               Flexible(
+                                flex: 20,
                                 child: Container(
                                     /*margin: EdgeInsets.only(
                                             right: 20,
@@ -620,7 +635,7 @@ class CrearTareaState extends State<CrearTarea> {
                                 child: Column(children: [
                                   Text(
                                     '\nCancelar'.toUpperCase(),
-                                    style: TextStyle(
+                                    style: TextStyle(fontWeight: FontWeight.bold,
                                         fontSize: 25,
                                         color: GuardadoLocal.colores[2]),
                                   ),
@@ -640,7 +655,7 @@ class CrearTareaState extends State<CrearTarea> {
                               },
                               child: Column(children: [
                                 Text('\n Crear'.toUpperCase(),
-                                    style: TextStyle(
+                                    style: TextStyle(fontWeight: FontWeight.bold,
                                         fontSize: 25,
                                         color: GuardadoLocal.colores[2])),
                                 Image.asset(
