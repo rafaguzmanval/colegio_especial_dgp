@@ -11,6 +11,9 @@ class VerPasos extends StatefulWidget {
 
 // Clase que construye la pagina
 class VerPasosState extends State<VerPasos> {
+  int pasoActual = 0;
+  bool verFlechaIzquierda = false;
+  bool verFlechaDerecha = true;
   var tarea;
   double offSetActual = 0;
   ScrollController homeController = new ScrollController();
@@ -19,6 +22,7 @@ class VerPasosState extends State<VerPasos> {
   void initState() {
     tarea = Sesion.argumentos[0];
     super.initState();
+    if(tarea.textos.length>0) verFlechaDerecha = true;
   }
 
   @override
@@ -27,61 +31,57 @@ class VerPasosState extends State<VerPasos> {
       appBar: AppBar(
           title: Center(
               child: Text(
-        "PASOS",
-        style: TextStyle(fontWeight: FontWeight.bold,
-            fontSize: 25,
-            color: GuardadoLocal.colores[2],
-            ),
-        textAlign: TextAlign.center,
-      ))),
+                "PASOS",
+                style: TextStyle(fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                  color: GuardadoLocal.colores[2],
+                ),
+                textAlign: TextAlign.center,
+              ))),
       body: Stack(children: [
         OrientationBuilder(
-          builder: (context, orientation) => orientation == Orientation.portrait
+          builder: (context, orientation) =>
+          orientation == Orientation.portrait
               ? buildPortrait()
               : buildLandscape(),
         ),
-        Container(
-          alignment: FractionalOffset(0.98, 0.01),
-          child: FloatingActionButton(
-              heroTag: "botonUp",
-              child: Icon(
-                Icons.arrow_upward,
-                color: GuardadoLocal.colores[2],
-              ),
-              elevation: 1.0,
-              onPressed: () {
-                offSetActual -= 200.0;
-                if (offSetActual < homeController.position.minScrollExtent)
-                  offSetActual = homeController.position.minScrollExtent;
 
-                homeController.animateTo(
-                  offSetActual, // change 0.0 {double offset} to corresponding widget position
-                  duration: Duration(seconds: 1),
-                  curve: Curves.easeOut,
-                );
-              }),
+        ///FLECHA IZQUIERDA
+        Align(
+          alignment: FractionalOffset(0.01, 0.5),
+          child: Visibility(
+            child: FloatingActionButton(
+                elevation: 1.0,
+                heroTag: "flechaIzquierda",
+                onPressed: () {
+                  desplazarIzquierda();
+                  actualizar();
+                },
+                child: Icon(
+                  Icons.arrow_left,
+                  color: GuardadoLocal.colores[2],
+                )),
+            visible: verFlechaIzquierda,
+          ),
         ),
-        Container(
-          alignment: FractionalOffset(0.98, 0.99),
-          child: FloatingActionButton(
-              heroTag: "botonDown",
-              child: Icon(
-                Icons.arrow_downward,
-                color: GuardadoLocal.colores[2],
-              ),
-              elevation: 1.0,
-              onPressed: () {
-                offSetActual += 200;
 
-                if (offSetActual > homeController.position.maxScrollExtent)
-                  offSetActual = homeController.position.maxScrollExtent;
-
-                homeController.animateTo(
-                  offSetActual, // change 0.0 {double offset} to corresponding widget position
-                  duration: Duration(seconds: 1),
-                  curve: Curves.easeOut,
-                );
-              }),
+        ///FLECHA DERECHA
+        Align(
+          alignment: FractionalOffset(0.99, 0.5),
+          child: Visibility(
+            child: FloatingActionButton(
+                elevation: 1.0,
+                heroTag: "flechaDerecha",
+                onPressed: () {
+                  desplazarDerecha();
+                  actualizar();
+                },
+                child: Icon(
+                  Icons.arrow_right,
+                  color: GuardadoLocal.colores[2],
+                )),
+            visible: verFlechaDerecha,
+          ),
         ),
       ]),
     );
@@ -114,58 +114,100 @@ class VerPasosState extends State<VerPasos> {
   Pasos() {
     if (Sesion.rol == Rol.alumno.toString())
       return VistaAlumno();
-    else if(Sesion.rol == Rol.administrador.toString())
+    else if (Sesion.rol == Rol.administrador.toString())
       return VistaAdministrador();
   }
 
   Widget _listaPasos() {
     return SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            for (int i = 0; i < tarea.textos.length; i++) ...[
-              SizedBox(
-                height: 10,
-              ),
               Container(
+                  height: MediaQuery.of(context).size.height-75,
+                  margin: EdgeInsets.only(right: 100, left: 100,top: 10,bottom: 10),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      border: Border.all(
+                          width: 2, color: GuardadoLocal.colores[2]),
+                      color: GuardadoLocal.colores[0]),
                   child: Column(children: [
-                    Container(
-                        decoration: BoxDecoration(border: Border.all(width: 1)),
-                        padding: EdgeInsets.all(5),
-                        child: Text("PASO " + (i + 1).toString().toUpperCase() + ": ",
-                            style: TextStyle(
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Container(
+                              decoration: BoxDecoration(border: Border.all(width: 1,color: GuardadoLocal.colores[2]), color: GuardadoLocal.colores[0]),
+                              padding: EdgeInsets.all(5),
+                              child: Text(
+                                "PASO " + (pasoActual).toString().toUpperCase() + ": ",
+                                style: TextStyle(
                                 fontSize: 40,
-                                color: GuardadoLocal.colores[0],
-                              fontWeight: FontWeight.bold,))),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                        decoration: BoxDecoration(border: Border.all(width: 1)),
-                        margin: EdgeInsets.all(20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Flexible(
-                                flex: 1,
-                                child: Container(
-                                  margin: EdgeInsets.only(left: 10),
-                                  child: Text(tarea.textos[i].toUpperCase(),
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 30,
-                                          color: GuardadoLocal.colores[0])),
-                                )),
-                            Flexible(
-                                flex: 1,
-                                child: Container(
-                                    margin: EdgeInsets.only(right: 10),
-                                    child: Image.network(tarea.imagenes[i]))),
-                          ],
-                        ))
+                                color: GuardadoLocal.colores[2],
+                                fontWeight: FontWeight.bold,))),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Expanded(child: Container(
+                                decoration: BoxDecoration(border: Border.all(width: 1,color: GuardadoLocal.colores[2])),
+                                margin: EdgeInsets.all(20),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          margin: EdgeInsets.only(left: 10),
+                                          child: Text(tarea.textos[pasoActual].toUpperCase(),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 30,
+                                                  color: GuardadoLocal.colores[2])),
+                                        )),
+                                    Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                            margin: EdgeInsets.only(right: 10),
+                                            child: Image.network(tarea.imagenes[pasoActual]))),
+                                  ],
+                                )))
                   ]))
-            ]
           ],
         ));
+  }
+
+  actualizar() {
+    if (Sesion.tareas.length > 1 && pasoActual == 0) {
+      verFlechaDerecha = true;
+    } else if (Sesion.tareas.length > 2 &&
+        pasoActual > 0 &&
+        pasoActual < Sesion.tareas.length - 1) {
+      verFlechaIzquierda = true;
+      verFlechaDerecha = true;
+    } else if (Sesion.tareas.length > 1 &&
+        pasoActual == Sesion.tareas.length - 1) {
+      verFlechaIzquierda = true;
+    }
+
+    setState(() {});
+  }
+
+  desplazarDerecha() {
+    if (pasoActual < tarea.textos.length - 1) {
+      pasoActual++;
+      verFlechaIzquierda = true;
+
+      verFlechaDerecha = (pasoActual != tarea.textos.length - 1);
+    }
+  }
+
+  desplazarIzquierda() {
+    if (pasoActual > 0) {
+      pasoActual--;
+
+      verFlechaDerecha = true;
+
+      verFlechaIzquierda = pasoActual != 0;
+    }
   }
 }
 
