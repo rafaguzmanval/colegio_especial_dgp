@@ -92,7 +92,7 @@ class VerHistorialState extends State<VerHistorial> {
   }
   ///Este método devuelve toda la vista que va a ver el profesor en un Widget.
   Widget VistaProfesor() {
-    return Container();
+    return VistaAlumno();
   }
 
   ///Este método devuelve toda la vista que va a ver el alumno en un Widget.
@@ -188,7 +188,7 @@ class VerHistorialState extends State<VerHistorial> {
 
   ///Este método devuelve toda la vista que va a ver el administrador en un Widget.
   Widget VistaAdministrador() {
-    return Container();
+    return VistaAlumno();
   }
 
   // Este metodo devuelve una lista con todos los profesores
