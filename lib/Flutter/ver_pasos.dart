@@ -119,12 +119,13 @@ class VerPasosState extends State<VerPasos> {
   }
 
   Widget _listaPasos() {
+    Orientation orientacion = MediaQuery.of(context).orientation;
     return SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
               Container(
-                  height: MediaQuery.of(context).size.height-75,
+                  height: MediaQuery.of(context).size.height-100,
                   margin: EdgeInsets.only(right: 100, left: 100,top: 10,bottom: 10),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
@@ -139,7 +140,7 @@ class VerPasosState extends State<VerPasos> {
                               decoration: BoxDecoration(border: Border.all(width: 1,color: GuardadoLocal.colores[2]), color: GuardadoLocal.colores[0]),
                               padding: EdgeInsets.all(5),
                               child: Text(
-                                "PASO " + (pasoActual).toString().toUpperCase() + ": ",
+                                "PASO " + (pasoActual+1).toString().toUpperCase() + ": ",
                                 style: TextStyle(
                                 fontSize: 40,
                                 color: GuardadoLocal.colores[2],
@@ -150,7 +151,7 @@ class VerPasosState extends State<VerPasos> {
                             Expanded(child: Container(
                                 decoration: BoxDecoration(border: Border.all(width: 1,color: GuardadoLocal.colores[2])),
                                 margin: EdgeInsets.all(20),
-                                child: Row(
+                                child: orientacion==Orientation.landscape ? Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Expanded(
@@ -169,7 +170,23 @@ class VerPasosState extends State<VerPasos> {
                                             margin: EdgeInsets.only(right: 10),
                                             child: Image.network(tarea.imagenes[pasoActual]))),
                                   ],
-                                )))
+                                ):Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Expanded(
+                                        child: Container(
+                                          margin: EdgeInsets.only(top: 10),
+                                          child: Text(tarea.textos[pasoActual].toUpperCase(),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 30,
+                                                  color: GuardadoLocal.colores[2])),
+                                        )),
+                                    Expanded(
+                                        child: Container(
+                                            margin: EdgeInsets.only(bottom: 10),
+                                            child: Image.network(tarea.imagenes[pasoActual]))),
+                                  ],)))
                   ]))
           ],
         ));
