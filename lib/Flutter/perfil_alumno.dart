@@ -394,6 +394,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
               await Navigator.push(context,
                   MaterialPageRoute(builder: (context) => VerHistorial()));
               Sesion.paginaActual = this;
+
             },
             child: Text(
               "EVOLUCIÓN",

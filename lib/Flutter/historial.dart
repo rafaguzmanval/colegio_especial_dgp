@@ -46,7 +46,6 @@ class VerHistorialState extends State<VerHistorial> {
     Sesion.tareas = [];
     cargarHistorial();
     Sesion.paginaActual = this;
-    Sesion.seleccion = "";
 
 
   }
