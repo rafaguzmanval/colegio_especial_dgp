@@ -18,6 +18,33 @@ class CustomSearchDelegate extends SearchDelegate {
 
 // first overwrite to
 // clear the search text
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    assert(context != null);
+    final ThemeData theme = Theme.of(context);
+    final ColorScheme colorScheme = theme.colorScheme;
+    assert(theme != null);
+    return theme.copyWith(
+      textTheme: TextTheme(subtitle1: TextStyle(fontFamily:'Escolar',fontSize: 20,color: GuardadoLocal.colores[0],fontWeight: FontWeight.bold),
+          button: TextStyle(fontFamily:'Escolar',fontSize: 20,color: GuardadoLocal.colores[2],fontWeight: FontWeight.bold)),
+      appBarTheme: AppBarTheme(
+        brightness: colorScheme.brightness,
+        backgroundColor: GuardadoLocal.colores[1],
+      ),
+      inputDecorationTheme: searchFieldDecorationTheme ??
+          InputDecorationTheme(
+            //fillColor: GuardadoLocal.colores[0],
+            //filled: true,
+              hintStyle: TextStyle(color: GuardadoLocal.colores[0]),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                    color: GuardadoLocal.colores[0], width: 0.0),
+              )
+          ),
+    );
+  }
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     if (vez == 0) {
@@ -30,13 +57,13 @@ class CustomSearchDelegate extends SearchDelegate {
           query = '';
           cargarTablon();
         },
-        icon: Icon(Icons.update),
+        icon: Icon(Icons.update,color: GuardadoLocal.colores[0]),
       ),
       IconButton(
         onPressed: () {
           query = '';
         },
-        icon: Icon(Icons.cleaning_services),
+        icon: Icon(Icons.cleaning_services,color: GuardadoLocal.colores[0]),
       ),
     ];
   }
@@ -48,7 +75,7 @@ class CustomSearchDelegate extends SearchDelegate {
       onPressed: () {
         Navigator.pop(context);
       },
-      icon: Icon(Icons.arrow_back),
+      icon: Icon(Icons.arrow_back,color: GuardadoLocal.colores[0]),
     );
   }
 

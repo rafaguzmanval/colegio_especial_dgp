@@ -64,7 +64,7 @@ class ListaAlumnosState extends State<ListaAlumnos> {
                 await showSearch(context: context, delegate: CustomSearchDelegate(),);
                 setState(() {});
               },
-              icon: const Icon(Icons.search),
+              icon: Icon(Icons.search,color: GuardadoLocal.colores[2],),
             ),
           ],
           title: Center(
