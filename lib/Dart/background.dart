@@ -14,6 +14,7 @@ class Background
   static var _subscripcion ;
   static  bool primera= false;
   static var _positionStream;
+  static var _subscripcionChat;
 
 static inicializarBackground() async
   {
@@ -35,7 +36,11 @@ static inicializarBackground() async
           }
 
         else
-          Background.activarNotificacionesTareasTerminadas();
+          {
+            Background.activarNotificacionesTareasTerminadas();
+          }
+
+        _activarNotificacionesChat();
       });
 
 
@@ -138,6 +143,29 @@ static inicializarBackground() async
     }
   }
 
+  static _activarNotificacionesChat () async
+  {
+    _subscripcionChat = await Sesion.db.db
+        .collection('mensajes')
+        .where('idUsuarioReceptor',  isEqualTo: Sesion.id).orderBy("fechaEnvio")
+        .snapshots().listen((event) async{
+          
+
+            var usuario = await Sesion.db.consultarIDusuario(event.docs.last.get("idUsuarioEmisor"));
+            var contenido = "te ha enviado un mensaje";
+            if(event.docs.last.get("tipo") == "texto")
+             contenido = event.docs.last.get("contenido");
+              else if(event.docs.last.get("tipo") == "imagen")
+                {contenido = "te ha enviado una imagen";}
+                else
+                  {contenido = "te ha enviado un video";}
+            
+            Notificacion.showBigTextNotification(title: "${usuario.nombre}", body: "${contenido}", fln: notificaciones );
+          
+
+    });
+  }
+
 
   static obtenerPosicion() async {
     bool serviceEnabled;
@@ -195,6 +223,11 @@ static inicializarBackground() async
 
     if(_positionStream != null)
       _positionStream.cancel();
+
+    if(_subscripcionChat != null)
+      _subscripcionChat.cancel();
+
+
   }
 
 }
