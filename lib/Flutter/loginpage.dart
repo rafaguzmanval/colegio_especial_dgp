@@ -37,6 +37,8 @@ class LoginPageState extends State<LoginPage> {
   var imagenUgr;
   var maxUsuariosPorFila = 2;
   double offSetActual = 0;
+  int anchoUsuarios = 130;
+  int espacioEntreUsuarios = 72;
 
   bool verBotonAbajo = false, verBotonArriba = false;
 
@@ -246,12 +248,22 @@ class LoginPageState extends State<LoginPage> {
 
   buildLandscape() {
     maxUsuariosPorFila = 4;
+
+    while(MediaQuery.of(context).size.width<maxUsuariosPorFila*(anchoUsuarios+espacioEntreUsuarios)){
+      maxUsuariosPorFila--;
+    }
+
     return SingleChildScrollView(
         controller: homeController, child: buildLista());
   }
 
   buildPortrait() {
     maxUsuariosPorFila = 2;
+
+    while(MediaQuery.of(context).size.width<maxUsuariosPorFila*(anchoUsuarios+espacioEntreUsuarios)){
+      maxUsuariosPorFila--;
+    }
+
     return SingleChildScrollView(
         controller: homeController, child: buildLista());
   }
@@ -270,7 +282,7 @@ class LoginPageState extends State<LoginPage> {
                 margin: EdgeInsets.all(20),
                 child: ElevatedButton(
                   child: Container(
-                    width: 130,
+                    width: anchoUsuarios.toDouble(),
                       padding: EdgeInsets.only(bottom: 10),
                       child: Column(
                         children: [
