@@ -270,11 +270,13 @@ class LoginPageState extends State<LoginPage> {
                 margin: EdgeInsets.all(20),
                 child: ElevatedButton(
                   child: Container(
+                    width: 130,
                       padding: EdgeInsets.only(bottom: 10),
                       child: Column(
                         children: [
                           Text(
                             usuarios[j].nombre.toString().toUpperCase(),
+                            textAlign: TextAlign.center,
                             style: TextStyle(fontWeight: FontWeight.bold,
                               fontSize: 25,
                               color: GuardadoLocal.colores[2],
@@ -282,8 +284,8 @@ class LoginPageState extends State<LoginPage> {
                           ),
                           Image.network(
                             usuarios[j].foto,
-                            width: 90,
-                            height: 90,
+                            width: 120,
+                            height: 120,
                             fit: BoxFit.fill,
                             errorBuilder: (context, exception, stacktrace) {
                               print(exception.toString());
