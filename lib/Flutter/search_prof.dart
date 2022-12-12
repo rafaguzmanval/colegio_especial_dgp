@@ -102,17 +102,17 @@ class CustomSearchDelegate extends SearchDelegate {
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Container(
-                    width: 130,
-                    height: 150,
+                    width: 180,
                     margin: EdgeInsets.all(10),
                     alignment: Alignment.center,
-                    child: ElevatedButton(
+                    child: Container(width:170,child: ElevatedButton(
                       child: Column(
                         children: [
                           Text(
                             Sesion.profesores[pos].nombre
                                 .toString()
                                 .toUpperCase(),
+                            textAlign: TextAlign.center,
                             style: TextStyle(fontWeight: FontWeight.bold,
                               color: GuardadoLocal.colores[2],
                               fontSize: 25,
@@ -120,17 +120,17 @@ class CustomSearchDelegate extends SearchDelegate {
                           ),
                           Image.network(
                             Sesion.profesores[pos].foto,
-                            width: 100,
-                            height: 100,
+                            width: 120,
+                            height: 120,
                             fit: BoxFit.fill,
                           ),
+                          SizedBox(height: 10,)
                         ],
                       ),
                       onPressed: () async {
                         var profesores = [];
                         for (int i = 0; i < Sesion.profesores.length; i++) {
-                          if (matchQuery.contains(
-                              Sesion.profesores[i].nombre.toString())) {
+                          if (matchQuery.contains(Sesion.profesores[i].nombre.toString())) {
                             profesores.add(Sesion.profesores[i]);
                           }
                         }
@@ -141,29 +141,27 @@ class CustomSearchDelegate extends SearchDelegate {
                                 builder: (context) => PerfilProfesor()));
                         cargarProfesores();
                       },
-                    )),
-                IconButton(
+                    ))),
+                  if(matchQuery[index] != Sesion.nombre)...[IconButton(
                     onPressed: () async {
                       var profesores = [];
                       for (int i = 0; i < Sesion.profesores.length; i++) {
-                        if (matchQuery
-                            .contains(Sesion.profesores[i].nombre.toString())) {
+                        if (matchQuery.contains(Sesion.profesores[i].nombre.toString())) {
                           profesores.add(Sesion.profesores[i]);
                         }
                       }
                       await Sesion.db
                           .eliminarProfesor(profesores[index].id)
-                          .then((e) {
+                          .then((e) async{
                         esProfesorEliminandose = true;
                         profesorEliminandose = pos;
-                        cargarProfesores();
+                        await cargarProfesores();
                       });
-                      query = '';
                     },
                     icon: Icon(
                       Icons.delete,
                       color: GuardadoLocal.colores[0],
-                    )),
+                    )),],
                 if (esProfesorEliminandose && pos == profesorEliminandose) ...[
                   new CircularProgressIndicator(),
                 ]
@@ -200,17 +198,16 @@ class CustomSearchDelegate extends SearchDelegate {
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Container(
-                    width: 130,
-                    height: 150,
                     margin: EdgeInsets.all(10),
                     alignment: Alignment.center,
-                    child: ElevatedButton(
+                    child: Container(width:170,child: ElevatedButton(
                         child: Column(
                           children: [
                             Text(
                               Sesion.profesores[pos].nombre
                                   .toString()
                                   .toUpperCase(),
+                              textAlign: TextAlign.center,
                               style: TextStyle(fontWeight: FontWeight.bold,
                                 color: GuardadoLocal.colores[2],
                                 fontSize: 25,
@@ -218,17 +215,17 @@ class CustomSearchDelegate extends SearchDelegate {
                             ),
                             Image.network(
                               Sesion.profesores[pos].foto,
-                              width: 100,
-                              height: 100,
+                              width: 120,
+                              height: 120,
                               fit: BoxFit.fill,
                             ),
+                            SizedBox(height: 10,)
                           ],
                         ),
                         onPressed: () async {
                           var profesores = [];
                           for (int i = 0; i < Sesion.profesores.length; i++) {
-                            if (matchQuery.contains(
-                                Sesion.profesores[i].nombre.toString())) {
+                            if (matchQuery.contains(Sesion.profesores[i].nombre.toString())) {
                               profesores.add(Sesion.profesores[i]);
                             }
                           }
@@ -238,29 +235,27 @@ class CustomSearchDelegate extends SearchDelegate {
                               MaterialPageRoute(
                                   builder: (context) => PerfilProfesor()));
                           cargarProfesores();
-                        })),
-                IconButton(
+                        }))),
+                    if(matchQuery[index] != Sesion.nombre)...[IconButton(
                     onPressed: () async {
                       var profesores = [];
                       for (int i = 0; i < Sesion.profesores.length; i++) {
-                        if (matchQuery
-                            .contains(Sesion.profesores[i].nombre.toString())) {
+                        if (matchQuery.contains(Sesion.profesores[i].nombre.toString())) {
                           profesores.add(Sesion.profesores[i]);
                         }
                       }
                       await Sesion.db
                           .eliminarProfesor(profesores[index].id)
-                          .then((e) {
+                          .then((e) async {
                         esProfesorEliminandose = true;
                         profesorEliminandose = pos;
-                        cargarProfesores();
+                        await cargarProfesores();
                       });
-                      query = '';
                     },
                     icon: Icon(
                       Icons.delete,
                       color: GuardadoLocal.colores[0],
-                    )),
+                    ))],
                 if (esProfesorEliminandose && pos == profesorEliminandose) ...[
                   new CircularProgressIndicator(),
                 ]
@@ -274,13 +269,16 @@ class CustomSearchDelegate extends SearchDelegate {
 
   cargarProfesores() async {
     Sesion.profesores = await Sesion.db.consultarTodosProfesores();
-    actualizar();
+    await actualizar();
   }
 
   // metodo para actualizar la pagina
-  void actualizar() async {
-    esProfesorEliminandose = false;
-    searchTerms.clear();
-    crearLista();
+  actualizar() async {
+      String aux = query;
+      query='';
+      query=aux;
+      esProfesorEliminandose = false;
+      searchTerms.clear();
+      crearLista();
   }
 }

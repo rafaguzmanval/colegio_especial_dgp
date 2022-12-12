@@ -154,12 +154,11 @@ class CustomSearchDelegate extends SearchDelegate {
                       }
                       await Sesion.db
                           .eliminarTablon(tablon[index].id)
-                          .then((e) {
+                          .then((e) async{
                         esBotonEliminandose = true;
                         botonEliminandose = pos;
-                        cargarTablon();
+                        await cargarTablon();
                       });
-                      query = '';
                     },
                     icon: Icon(
                       Icons.delete,
@@ -253,12 +252,11 @@ class CustomSearchDelegate extends SearchDelegate {
                       }
                         await Sesion.db
                             .eliminarTablon(tablon[index].id)
-                            .then((e) {
+                            .then((e) async{
                           esBotonEliminandose = true;
                           botonEliminandose = pos;
-                          cargarTablon();
+                          await cargarTablon();
                         });
-                      query = '';
                     },
                     icon: Icon(
                       Icons.delete,
@@ -277,11 +275,14 @@ class CustomSearchDelegate extends SearchDelegate {
 
   cargarTablon() async {
     Sesion.tablon = await Sesion.db.consultarTodosTablon();
-    actualizar();
+    await actualizar();
   }
 
   // metodo para actualizar la pagina
-  void actualizar() async {
+  actualizar() async {
+    String aux = query;
+    query='';
+    query=aux;
     esBotonEliminandose = false;
     searchTerms.clear();
     crearLista();

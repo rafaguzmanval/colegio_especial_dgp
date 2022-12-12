@@ -3,6 +3,8 @@ import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Flutter/perfil_alumno.dart';
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 
+import '../Dart/rol.dart';
+
 class CustomSearchDelegate extends SearchDelegate {
 // Demo list to show querying
   List<String> searchTerms = [];
@@ -95,15 +97,14 @@ class CustomSearchDelegate extends SearchDelegate {
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Container(
-                  width: 130,
-                  height: 150,
                   margin: EdgeInsets.all(10),
                   alignment: Alignment.center,
-                  child: ElevatedButton(
+                  child: Container(width:170,child: ElevatedButton(
                     child: Column(
                       children: [
                         Text(
                           Sesion.alumnos[pos].nombre.toString().toUpperCase(),
+                          textAlign: TextAlign.center,
                           style: TextStyle(fontWeight: FontWeight.bold,
                             color: GuardadoLocal.colores[2],
                             fontSize: 25,
@@ -111,10 +112,11 @@ class CustomSearchDelegate extends SearchDelegate {
                         ),
                         Image.network(
                           Sesion.alumnos[pos].foto,
-                          width: 100,
-                          height: 100,
+                          width: 120,
+                          height: 120,
                           fit: BoxFit.fill,
                         ),
+                        SizedBox(height: 10,)
                       ],
                     ),
                     onPressed: () async {
@@ -130,8 +132,8 @@ class CustomSearchDelegate extends SearchDelegate {
                             MaterialPageRoute(
                                 builder: (context) => PerfilAlumno()));
                     },
-                  )),
-              IconButton(
+                  ))),
+              if(Sesion.rol==Rol.administrador.toString()) ...[IconButton(
                   onPressed: () async {
                     var alumnos = [];
                     for (int i = 0; i < Sesion.alumnos.length; i++) {
@@ -142,17 +144,16 @@ class CustomSearchDelegate extends SearchDelegate {
                     }
                     await Sesion.db
                         .eliminarAlumno(alumnos[index].id)
-                        .then((e) {
+                        .then((e) async{
                       esAlumnoEliminandose = true;
                       alumnoEliminandose = pos;
-                      cargarAlumnos();
+                      await cargarAlumnos();
                     });
-                    query = '';
                   },
                   icon: Icon(
                     Icons.delete,
                     color: GuardadoLocal.colores[0],
-                  )),
+                  )),],
               if (esAlumnoEliminandose && pos == alumnoEliminandose) ...[
                 new CircularProgressIndicator(),
               ]
@@ -189,15 +190,14 @@ class CustomSearchDelegate extends SearchDelegate {
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Container(
-                  width: 130,
-                  height: 150,
                   margin: EdgeInsets.all(10),
                   alignment: Alignment.center,
-                  child: ElevatedButton(
+                  child: Container(width:170,child: ElevatedButton(
                       child: Column(
                         children: [
                           Text(
                             Sesion.alumnos[pos].nombre.toString().toUpperCase(),
+                            textAlign: TextAlign.center,
                             style: TextStyle(fontWeight: FontWeight.bold,
                               color: GuardadoLocal.colores[2],
                               fontSize: 25,
@@ -205,10 +205,11 @@ class CustomSearchDelegate extends SearchDelegate {
                           ),
                           Image.network(
                             Sesion.alumnos[pos].foto,
-                            width: 100,
-                            height: 100,
+                            width: 120,
+                            height: 120,
                             fit: BoxFit.fill,
                           ),
+                          SizedBox(height: 10,)
                         ],
                       ),
                       onPressed: () async {
@@ -223,8 +224,8 @@ class CustomSearchDelegate extends SearchDelegate {
                             context,
                             MaterialPageRoute(
                                 builder: (context) => PerfilAlumno()));
-                      })),
-              IconButton(
+                      }))),
+              if(Sesion.rol==Rol.administrador.toString()) ...[IconButton(
                   onPressed: () async {
                     var alumnos = [];
                     for (int i = 0; i < Sesion.alumnos.length; i++) {
@@ -235,17 +236,16 @@ class CustomSearchDelegate extends SearchDelegate {
                     }
                     await Sesion.db
                         .eliminarAlumno(alumnos[index].id)
-                        .then((e) {
+                        .then((e) async{
                       esAlumnoEliminandose = true;
                       alumnoEliminandose = pos;
-                      cargarAlumnos();
+                      await cargarAlumnos();
                     });
-                    query = '';
                   },
                   icon: Icon(
                     Icons.delete,
                     color: GuardadoLocal.colores[0],
-                  )),
+                  )),],
               if (esAlumnoEliminandose && pos == alumnoEliminandose) ...[
                 new CircularProgressIndicator(),
               ]
@@ -259,11 +259,14 @@ class CustomSearchDelegate extends SearchDelegate {
 
   cargarAlumnos() async {
     Sesion.alumnos = await Sesion.db.consultarTodosAlumnos();
-    actualizar();
+    await actualizar();
   }
 
   // metodo para actualizar la pagina
-  void actualizar() async {
+  actualizar() async {
+    String aux = query;
+    query='';
+    query=aux;
     esAlumnoEliminandose = false;
     searchTerms.clear();
     crearLista();

@@ -103,11 +103,9 @@ class CustomSearchDelegate extends SearchDelegate {
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Container(
-                    width: 200,
-                    height: 220,
                     margin: EdgeInsets.all(20),
                     alignment: Alignment.center,
-                    child: ElevatedButton(
+                    child: Container(width:200,child: ElevatedButton(
                       child: Column(
                         children: [
                           Text(
@@ -125,6 +123,7 @@ class CustomSearchDelegate extends SearchDelegate {
                               height: 150,
                               fit: BoxFit.fill,
                             ),
+                            SizedBox(height: 10,)
                           ]
                         ],
                       ),
@@ -142,7 +141,7 @@ class CustomSearchDelegate extends SearchDelegate {
                                   builder: (context) => PerfilTarea()));
                           cargarTareas();
                       },
-                    )),
+                    ))),
                 IconButton(
                     onPressed: () async {
                       var tareas = [];
@@ -153,12 +152,11 @@ class CustomSearchDelegate extends SearchDelegate {
                       }
                       await Sesion.db
                           .eliminarTarea(tareas[index].id)
-                          .then((e) {
+                          .then((e) async{
                         esTareaEliminandose = true;
                         tareaEliminandose = pos;
-                        cargarTareas();
+                        await cargarTareas();
                       });
-                      query = '';
                     },
                     icon: Icon(
                       Icons.delete,
@@ -201,11 +199,9 @@ class CustomSearchDelegate extends SearchDelegate {
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Container(
-                    width: 200,
-                    height: 220,
                     margin: EdgeInsets.all(20),
                     alignment: Alignment.center,
-                    child: ElevatedButton(
+                    child: Container(width:200,child: ElevatedButton(
                         child: Column(
                           children: [
                             Text(
@@ -225,6 +221,7 @@ class CustomSearchDelegate extends SearchDelegate {
                                 height: 150,
                                 fit: BoxFit.fill,
                               ),
+                              SizedBox(height: 10,)
                             ]
                           ],
                         ),
@@ -241,7 +238,7 @@ class CustomSearchDelegate extends SearchDelegate {
                                 MaterialPageRoute(
                                     builder: (context) => PerfilTarea()));
                             cargarTareas();
-                        })),
+                        }))),
                 IconButton(
                     onPressed: () async {
                       var tareas = [];
@@ -252,12 +249,11 @@ class CustomSearchDelegate extends SearchDelegate {
                       }
                         await Sesion.db
                             .eliminarTarea(tareas[index].id)
-                            .then((e) {
+                            .then((e) async{
                           esTareaEliminandose = true;
                           tareaEliminandose = pos;
-                          cargarTareas();
+                          await cargarTareas();
                         });
-                      query = '';
                     },
                     icon: Icon(
                       Icons.delete,
@@ -276,11 +272,14 @@ class CustomSearchDelegate extends SearchDelegate {
 
   cargarTareas() async {
     Sesion.tareas = await Sesion.db.consultarTodasLasTareas();
-    actualizar();
+    await actualizar();
   }
 
   // metodo para actualizar la pagina
-  void actualizar() async {
+  actualizar() async {
+    String aux = query;
+    query='';
+    query=aux;
     esTareaEliminandose = false;
     searchTerms.clear();
     crearLista();
