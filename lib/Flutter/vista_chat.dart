@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Flutter/lista_mensajes.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../Dart/mensaje.dart';
 import '../Dart/guardado_local.dart';
@@ -31,9 +33,17 @@ class _VistaChatState extends State<VistaChat> {
   StreamController chatsController = new StreamController();
   TextEditingController messageController = TextEditingController();
   ScrollController _scrollController = ScrollController();
+  ImagePicker capturador = new ImagePicker();
   var idChat;
 
   var mensajes = [];
+
+  tomarFoto() async {
+    return await capturador.pickImage(
+      source: ImageSource.camera,
+      imageQuality: 15,
+    );
+  }
 
   @override
   void initState() {
@@ -114,7 +124,22 @@ class _VistaChatState extends State<VistaChat> {
                                           borderRadius: BorderRadius.circular(5),
                                           border: Border.all(color: GuardadoLocal.colores[0])
                                         ),
-                                        child: GestureDetector(onTap: (){Navigator.pop(context);},
+
+                                        ///TOMAR UNA FOTO DE LA CÁMARA
+                                        child: GestureDetector(onTap: ()async{
+
+                                          //Se toma la foto de la cámara
+                                          XFile fotoCapturada = await tomarFoto();
+
+                                          //Se sube la foto tomada en el storage de Firebase
+                                          var url = await Sesion.db.subirArchivo(File(fotoCapturada.path), "Imágenes/chats/${fotoCapturada.name}");
+                                          print(url);
+                                          enviarMensaje(url);
+
+                                          Navigator.pop(context);
+
+
+                                          },
                                           child: Row(mainAxisAlignment: MainAxisAlignment.start,children:[
                                               Icon(Icons.camera_alt,color: GuardadoLocal.colores[0],),
                                               const SizedBox(
@@ -123,6 +148,8 @@ class _VistaChatState extends State<VistaChat> {
                                               Text('CÁMARA',style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 30),)
                                           ])
                                       )),
+
+                                      ///COGER UN ARCHIVO DESDE LA GALERÍA
                                       Container(
                                           padding:EdgeInsets.only(left: 1),
                                           decoration: BoxDecoration(
@@ -136,7 +163,7 @@ class _VistaChatState extends State<VistaChat> {
                                                 const SizedBox(
                                                   width: 2,
                                                 ),
-                                                Text('FOTOS Y VÍDEOS',style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 30),)
+                                                Text('GALERÍA',style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 30),)
                                               ])
                                           )),
                                     ],),
@@ -185,7 +212,7 @@ class _VistaChatState extends State<VistaChat> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    enviarMensaje();
+                    enviarMensaje(null);
                     FocusManager.instance.primaryFocus?.unfocus();
                   },
                   child: Container(
@@ -238,10 +265,13 @@ class _VistaChatState extends State<VistaChat> {
     );
   }
 
-  enviarMensaje() async{
-    if (messageController.text.isNotEmpty) {
-
-      Mensaje msg = Mensaje(idChat, Sesion.id, widget.idInterlocutor, 'texto', messageController.text.toUpperCase(), DateTime.now().millisecondsSinceEpoch);
+  enviarMensaje(multimedia) async{
+    if (messageController.text.isNotEmpty || multimedia != null) {
+      Mensaje msg;
+      if(multimedia == null)
+       msg = Mensaje(idChat, Sesion.id, widget.idInterlocutor, 'texto', messageController.text.toUpperCase(), DateTime.now().millisecondsSinceEpoch);
+      else
+        msg = Mensaje(idChat, Sesion.id, widget.idInterlocutor, 'imagen', multimedia , DateTime.now().millisecondsSinceEpoch);
 
       await Sesion.db.addMensaje(msg);
 

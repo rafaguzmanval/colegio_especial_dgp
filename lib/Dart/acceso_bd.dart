@@ -1181,6 +1181,7 @@ class AccesoBD {
       };
 
       countPeticiones++;
+      print(msg.toString());
       db.collection('mensajes').add(msg);
 
     } catch (e) {
