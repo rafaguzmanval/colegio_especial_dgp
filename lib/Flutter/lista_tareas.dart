@@ -169,11 +169,9 @@ class ListaTareasState extends State<ListaTareas> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
               Container(
-                  width: 200,
-                  height: 220,
                   margin: EdgeInsets.all(20),
                   alignment: Alignment.center,
-                  child: ElevatedButton(
+                  child: Container(width: 200, child:ElevatedButton(
                     child: Column(
                       children: [
                         Text(
@@ -191,7 +189,8 @@ class ListaTareasState extends State<ListaTareas> {
                             height: 150,
                             fit: BoxFit.fill,
                           ),
-                        ]
+                        ],
+                        SizedBox(height: 10,)
                       ],
                     ),
                     onPressed: () async {
@@ -202,7 +201,7 @@ class ListaTareasState extends State<ListaTareas> {
                               builder: (context) => PerfilTarea()));
                       cargarTareas();
                     },
-                  )),
+                  ))),
               IconButton(
                   onPressed: () async {
 

@@ -152,15 +152,14 @@ class ListaAlumnosState extends State<ListaAlumnos> {
         for (int i = 0; i < Sesion.alumnos.length; i++) ...[
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Container(
-                width: 130,
-                height: 150,
                 margin: EdgeInsets.all(10),
                 alignment: Alignment.center,
-                child: ElevatedButton(
+                child: Container(width: 170, child:ElevatedButton(
                   child: Column(
                     children: [
                       Text(
                         Sesion.alumnos[i].nombre.toString().toUpperCase(),
+                        textAlign: TextAlign.center,
                         style: TextStyle(fontWeight: FontWeight.bold,
                           color: GuardadoLocal.colores[2],
                           fontSize: 25,
@@ -169,10 +168,11 @@ class ListaAlumnosState extends State<ListaAlumnos> {
                       if(Sesion.alumnos[i].foto is String)...[
                       Image.network(
                         Sesion.alumnos[i].foto,
-                        width: 100,
-                        height: 100,
+                        width: 120,
+                        height: 120,
                         fit: BoxFit.fill,
                       ),
+                        SizedBox(height: 10,),
     ]
                     ],
                   ),
@@ -184,7 +184,7 @@ class ListaAlumnosState extends State<ListaAlumnos> {
                             builder: (context) => PerfilAlumno()));
                     cargarAlumnos();
                   },
-                )),
+                ))),
             if(Sesion.rol == Rol.administrador.toString())...[
               IconButton(
                   onPressed: () async {

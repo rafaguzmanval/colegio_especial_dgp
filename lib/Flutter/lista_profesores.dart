@@ -147,24 +147,24 @@ class ListaProfesoresState extends State<ListaProfesores> {
           for (int i = 0; i < Sesion.profesores.length; i++) ...[
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Container(
-                  width: 130,
-                  height: 150,
                   margin: EdgeInsets.all(10),
                   alignment: Alignment.center,
-                  child: ElevatedButton(
+                  child: Container(width: 170,child:ElevatedButton(
                     child: Column(
                       children: [
                         Text(
                           Sesion.profesores[i].nombre.toString().toUpperCase(),
+                          textAlign: TextAlign.center,
                           style: TextStyle(fontWeight: FontWeight.bold,
                               color: GuardadoLocal.colores[2], fontSize: 25),
                         ),
                         Image.network(
                           Sesion.profesores[i].foto,
-                          width: 100,
-                          height: 100,
+                          width: 120,
+                          height: 120,
                           fit: BoxFit.fill,
                         ),
+                        SizedBox(height: 10,)
                       ],
                     ),
                     onPressed: () async {
@@ -175,7 +175,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
                               builder: (context) => PerfilProfesor()));
                       cargarProfesores();
                     },
-                  )),
+                  ))),
               if(Sesion.profesores[i].id != Sesion.id)...[
               IconButton(
                   onPressed: () async {

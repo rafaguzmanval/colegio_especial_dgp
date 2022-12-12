@@ -479,6 +479,40 @@ class MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
 
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Container(
+                    margin: EdgeInsets.all(40),
+                    child: ElevatedButton(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Historial".toUpperCase(),
+                            style: TextStyle(fontWeight: FontWeight.bold,
+                              fontSize: 30,
+                              color: GuardadoLocal.colores[2],
+                            ),
+                          ),
+                          Flexible(
+                              flex: 1,
+                              child: Image.asset(
+                                "assets/gráfica.png",
+                              )),
+                        ],
+                      ),
+                      onPressed: () async {
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => VerHistorial()));
+                        Sesion.paginaActual = this;
+                      },
+                    ),
+                  ),
+                ),
+
               ],
             ),
             ),
