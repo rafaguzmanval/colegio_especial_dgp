@@ -87,16 +87,90 @@ class _VistaChatState extends State<VistaChat> {
             width: MediaQuery.of(context).size.width,
             child: Container(
               decoration: BoxDecoration(
-                color: GuardadoLocal.colores[1],
+                color: GuardadoLocal.colores[0],
                   borderRadius: BorderRadius.circular(10.0),
                   border: Border.all(
-                      color: GuardadoLocal.colores[0],
+                      color: GuardadoLocal.colores[2],
                       width: 1)
               ),
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
               width: MediaQuery.of(context).size.width,
               child: Row(children: [
-                Expanded(
+                GestureDetector(
+                  onTap: () async{
+                    return showDialog(
+                      context: context,
+                      builder: (context) {
+                        return Dialog(
+                              alignment: Alignment.bottomCenter,
+                              backgroundColor: GuardadoLocal.colores[0],
+                              child: SingleChildScrollView(
+                                child: Column(children: [
+                                    Column(children: [
+                                      Container(
+                                        padding:EdgeInsets.only(left: 1),
+                                        decoration: BoxDecoration(
+                                          color: GuardadoLocal.colores[1],
+                                          borderRadius: BorderRadius.circular(5),
+                                          border: Border.all(color: GuardadoLocal.colores[0])
+                                        ),
+                                        child: GestureDetector(onTap: (){Navigator.pop(context);},
+                                          child: Row(mainAxisAlignment: MainAxisAlignment.start,children:[
+                                              Icon(Icons.camera_alt,color: GuardadoLocal.colores[0],),
+                                              const SizedBox(
+                                                width: 2,
+                                              ),
+                                              Text('CÁMARA',style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 30),)
+                                          ])
+                                      )),
+                                      Container(
+                                          padding:EdgeInsets.only(left: 1),
+                                          decoration: BoxDecoration(
+                                              color: GuardadoLocal.colores[1],
+                                              borderRadius: BorderRadius.circular(5),
+                                              border: Border.all(color: GuardadoLocal.colores[0])
+                                          ),
+                                          child: GestureDetector(onTap: (){Navigator.pop(context);},
+                                              child: Row(mainAxisAlignment: MainAxisAlignment.start,children:[
+                                                Icon(Icons.photo,color: GuardadoLocal.colores[0],),
+                                                const SizedBox(
+                                                  width: 2,
+                                                ),
+                                                Text('FOTOS Y VÍDEOS',style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 30),)
+                                              ])
+                                          )),
+                                    ],),
+                                    Container(
+                                        padding:EdgeInsets.all(5),
+                                        child: GestureDetector(onTap: (){Navigator.pop(context);},
+                                              child: Text('CANCELAR',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 35),)
+                                        )),
+                                ],),
+                          ));});
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      color: GuardadoLocal.colores[0],
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Center(
+                        child: Icon(
+                          Icons.attach_file,
+                          color: GuardadoLocal.colores[2],
+                        )),
+                  ),
+                ),
+                const SizedBox(
+                  width: 12,
+                ),
+                Expanded(child:Container(
+                    padding: EdgeInsets.only(left: 5),
+                    decoration: BoxDecoration(
+                      color: GuardadoLocal.colores[1],
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                     child: TextFormField(
                       controller: messageController,
                       style: TextStyle(color: GuardadoLocal.colores[0]),
@@ -105,7 +179,7 @@ class _VistaChatState extends State<VistaChat> {
                         hintStyle: TextStyle(color: GuardadoLocal.colores[0], fontSize: 16),
                         border: InputBorder.none,
                       ),
-                    )),
+                    ))),
                 const SizedBox(
                   width: 12,
                 ),
@@ -118,13 +192,13 @@ class _VistaChatState extends State<VistaChat> {
                     height: 50,
                     width: 50,
                     decoration: BoxDecoration(
-                      color: GuardadoLocal.colores[0],
+                      color: GuardadoLocal.colores[2],
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: Center(
                         child: Icon(
                           Icons.send,
-                          color: GuardadoLocal.colores[2],
+                          color: GuardadoLocal.colores[0],
                         )),
                   ),
                 )
@@ -140,10 +214,6 @@ class _VistaChatState extends State<VistaChat> {
     return StreamBuilder(
       stream: chatsController.stream,
       builder: (context, AsyncSnapshot snapshot) {
-        WidgetsBinding.instance.addPostFrameCallback((_){
-          if(_scrollController.hasClients)
-            _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 100), curve: Curves.easeOut);
-        });
         return snapshot.hasData //snapshot.hasData
             ? Expanded(
               child: ListView.builder(
@@ -151,10 +221,15 @@ class _VistaChatState extends State<VistaChat> {
                 shrinkWrap: true,
                 itemCount: mensajes.length,
                 itemBuilder: (context, index) {
+                  WidgetsBinding.instance.addPostFrameCallback((_){
+                    if(_scrollController.hasClients)
+                      _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 50), curve: Curves.easeOut);
+                  });
                   return ListaMensajes(
                       mensaje: mensajes[index].contenido,
                       enviadoPorMi: mensajes[index].idUsuarioEmisor==Sesion.id,
-                      fecha:mensajes[index].fechaEnvio);
+                      fecha:mensajes[index].fechaEnvio,
+                      tipo:mensajes[index].tipo);
                 },
               ),
             )

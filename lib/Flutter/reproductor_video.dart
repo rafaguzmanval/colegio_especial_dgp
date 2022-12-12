@@ -34,6 +34,9 @@ ventanaVideo(controlador,context){
                   Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children:[
+                        Row(mainAxisAlignment: MainAxisAlignment.start,children:[IconButton(
+                            onPressed: (){Navigator.pop(context);},
+                            icon: Icon(Icons.arrow_back),color: GuardadoLocal.colores[2])]),
                         Expanded(
                             flex: 12,
                             child:

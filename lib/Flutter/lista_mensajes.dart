@@ -1,16 +1,21 @@
+import 'package:colegio_especial_dgp/Dart/background.dart';
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
+import 'package:colegio_especial_dgp/Flutter/reproductor_video.dart';
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
 
 class ListaMensajes extends StatefulWidget {
   final String mensaje;
   final bool enviadoPorMi;
   final fecha;
+  final tipo;
 
   const ListaMensajes(
       {Key? key,
         required this.mensaje,
         required this.enviadoPorMi,
-        required this.fecha
+        required this.fecha,
+        required this.tipo
       })
       : super(key: key);
 
@@ -61,9 +66,31 @@ class _ListaMensajesState extends State<ListaMensajes> {
             const SizedBox(
               height: 8,
             ),
-            Text(widget.mensaje.toUpperCase(),
+            if(widget.tipo=='texto')...[Text(widget.mensaje.toUpperCase(),
                 textAlign: TextAlign.start,
-                style: TextStyle(fontWeight:FontWeight.bold,fontSize: 16, color: widget.enviadoPorMi?GuardadoLocal.colores[0]:GuardadoLocal.colores[2]),),
+                style: TextStyle(fontWeight:FontWeight.bold,fontSize: 16, color: widget.enviadoPorMi?GuardadoLocal.colores[0]:GuardadoLocal.colores[2]),)]
+            else if(widget.tipo=='imagen')...[Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: GuardadoLocal.colores[1]),
+                borderRadius: BorderRadius.circular(5)
+              ),
+              child:ElevatedButton(
+                  onPressed: (){
+                    verImagen(widget.mensaje);
+                  },
+                  child: Icon(Icons.photo,color: GuardadoLocal.colores[2],size: 60,)))]
+            else if(widget.tipo=='video')...[Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(color: GuardadoLocal.colores[1]),
+                      borderRadius: BorderRadius.circular(5)
+                  ),
+                  child:ElevatedButton(
+                      onPressed: (){
+                        var nuevoControlador = VideoPlayerController.network(widget.mensaje);
+                        nuevoControlador.initialize();
+                        ventanaVideo(nuevoControlador,context);
+                      },
+                      child: Icon(Icons.ondemand_video_rounded,color: GuardadoLocal.colores[2],size: 60,)))],
             Text(fecha,
                 textAlign: TextAlign.end,
                 style: TextStyle(fontSize: 10, color: widget.enviadoPorMi?GuardadoLocal.colores[0]:GuardadoLocal.colores[2]))
@@ -85,4 +112,19 @@ class _ListaMensajesState extends State<ListaMensajes> {
     if(fecha.day!=DateTime.now().day) stringFecha += '  '+dia+'/'+mes+'/'+fecha.year.toString();
     return stringFecha;
   }
+
+  verImagen(url){
+
+    showDialog(context: context, builder: (context)
+    {
+      return Dialog(
+          backgroundColor: GuardadoLocal.colores[0],
+          child: Column(children:[
+            Row(mainAxisAlignment: MainAxisAlignment.start,children:[IconButton(
+              onPressed: (){Navigator.pop(context);},
+              icon: Icon(Icons.arrow_back),color: GuardadoLocal.colores[2])]),
+            Expanded(child: Image.network(
+              url,))
+          ]));});
+    }
 }
