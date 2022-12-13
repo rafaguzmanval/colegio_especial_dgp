@@ -234,6 +234,7 @@ class PaginaChatsState extends State<PaginaChats> {
 
       },
       child: Container(
+        margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
             color: GuardadoLocal.colores[1],
             borderRadius: BorderRadius.circular(10.0),
