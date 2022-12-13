@@ -533,9 +533,9 @@ actualizar();
             children: [
               ///CONTENEDOR DE LA TAREA
               Flexible(
-                  flex: 40,
+                  flex: 1,
                   child: Container(
-                    margin: EdgeInsets.only(right: 100, left: 100),
+                    margin: EdgeInsets.only(right: 20, left: 20, top: 10),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                         border: Border.all(
@@ -1243,17 +1243,20 @@ actualizar();
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Flexible(
-              child: Text(
+              child: Container(
+                margin: EdgeInsets.only(left: 5),
+                child:Text(
                 Sesion.tareas[tareaActual].formularios[j].toUpperCase(),
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: GuardadoLocal.colores[2],
                     fontSize: 25),
               ),
-            ),
+            )),
             Flexible(
               child: Container(
-                  margin: EdgeInsets.only(right: 20, left: 10),
+                  margin: EdgeInsets.only(right: 15, left: 10),
                   child: Image.network(
                     Sesion.tareas[tareaActual].formularios[j + 1],
                     width: 100,
