@@ -44,7 +44,7 @@ class CustomSearchDelegate extends SearchDelegate {
           InputDecorationTheme(
             //fillColor: GuardadoLocal.colores[0],
             //filled: true,
-              hintStyle: TextStyle(color: GuardadoLocal.colores[0]),
+              hintStyle: TextStyle(color: GuardadoLocal.colores[0], fontWeight: FontWeight.bold),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                     color: GuardadoLocal.colores[0], width: 0.0),
@@ -105,11 +105,9 @@ class CustomSearchDelegate extends SearchDelegate {
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Container(
-                    width: 130,
-                    height: 150,
                     margin: EdgeInsets.all(10),
                     alignment: Alignment.center,
-                    child: ElevatedButton(
+                    child: Container(width: 170,child: ElevatedButton(
                       child: Column(
                         children: [
                           Text(
@@ -121,10 +119,11 @@ class CustomSearchDelegate extends SearchDelegate {
                           ),
                           Image.network(
                             Sesion.profesores[pos].foto,
-                            width: 100,
-                            height: 100,
+                            width: 120,
+                            height: 120,
                             fit: BoxFit.fill,
                           ),
+                          SizedBox(height: 10,)
                         ],
                       ),
                       onPressed: () async {
@@ -149,7 +148,7 @@ class CustomSearchDelegate extends SearchDelegate {
 
                         Sesion.paginaChats.actualizarChats();
                       },
-                    )),
+                    ))),
               ])
             ],
           ),
@@ -170,11 +169,9 @@ class CustomSearchDelegate extends SearchDelegate {
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Container(
-                  width: 130,
-                  height: 150,
                   margin: EdgeInsets.all(10),
                   alignment: Alignment.center,
-                  child: ElevatedButton(
+                  child: Container(width: 170, child: ElevatedButton(
                     child: Column(
                       children: [
                         Text(
@@ -186,10 +183,11 @@ class CustomSearchDelegate extends SearchDelegate {
                         ),
                         Image.network(
                           Sesion.alumnos[pos].foto,
-                          width: 100,
-                          height: 100,
+                          width: 120,
+                          height: 120,
                           fit: BoxFit.fill,
                         ),
+                        SizedBox(height: 10,)
                       ],
                     ),
                     onPressed: () async {
@@ -215,7 +213,7 @@ class CustomSearchDelegate extends SearchDelegate {
                       Sesion.paginaChats.actualizarChats();
 
                     },
-                  )),
+                  ))),
             ])
             ],
           ),
@@ -250,11 +248,9 @@ class CustomSearchDelegate extends SearchDelegate {
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Container(
-                    width: 130,
-                    height: 150,
                     margin: EdgeInsets.all(10),
                     alignment: Alignment.center,
-                    child: ElevatedButton(
+                    child: Container(width: 170,child: ElevatedButton(
                       child: Column(
                         children: [
                           Text(
@@ -266,10 +262,11 @@ class CustomSearchDelegate extends SearchDelegate {
                           ),
                           Image.network(
                             Sesion.profesores[pos].foto,
-                            width: 100,
-                            height: 100,
+                            width: 120,
+                            height: 120,
                             fit: BoxFit.fill,
                           ),
+                          SizedBox(height: 10,)
                         ],
                       ),
                       onPressed: () async {
@@ -293,7 +290,7 @@ class CustomSearchDelegate extends SearchDelegate {
                                 )));
                         Sesion.paginaChats.actualizarChats();
                       },
-                    )),
+                    ))),
               ])
             ],
           ),
@@ -314,11 +311,9 @@ class CustomSearchDelegate extends SearchDelegate {
             children: [
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Container(
-                    width: 130,
-                    height: 150,
                     margin: EdgeInsets.all(10),
                     alignment: Alignment.center,
-                    child: ElevatedButton(
+                    child: Container(width: 170,child:ElevatedButton(
                       child: Column(
                         children: [
                           Text(
@@ -330,10 +325,11 @@ class CustomSearchDelegate extends SearchDelegate {
                           ),
                           Image.network(
                             Sesion.alumnos[pos].foto,
-                            width: 100,
-                            height: 100,
+                            width: 120,
+                            height: 120,
                             fit: BoxFit.fill,
                           ),
+                          SizedBox(height: 10,)
                         ],
                       ),
                       onPressed: () async {
@@ -357,7 +353,7 @@ class CustomSearchDelegate extends SearchDelegate {
                                 )));
                         Sesion.paginaChats.actualizarChats();
                       },
-                    )),
+                    ))),
               ])
             ],
           ),
