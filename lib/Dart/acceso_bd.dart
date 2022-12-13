@@ -19,6 +19,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:colegio_especial_dgp/Dart/rol.dart';
@@ -47,7 +48,9 @@ String encriptacionSha256(String password) {
 class AccesoBD {
   //region atributos de la clase
   var db = FirebaseFirestore.instance;
-  var countPeticiones = 0;
+  var countPeticionesLectura = 0;
+  var countPeticionesEscritura = 0;
+  var countPeticionesEliminacion = 0;
   var storageRef = FirebaseStorage.instance.ref();
   var _subscripcion;
   var _subscripcionListaChat1;
@@ -105,7 +108,9 @@ class AccesoBD {
             "foto": url,
             "metodoLogeo": usuario.metodoLogeo
           };
+
           await db.collection("usuarios").add(user);
+          countPeticionesEscritura++;
 
           return true;
 
@@ -144,6 +149,8 @@ class AccesoBD {
 
         final docSnap = await consulta.get();
 
+        monitorizarPeticionesLectura("consultarIDusuario");
+
         var usuario = null;
         if (docSnap != null) {
           usuario = docSnap.data();
@@ -167,6 +174,8 @@ class AccesoBD {
 
         final consulta = await ref.get();
 
+        monitorizarPeticionesLectura("consultarTodosUsuarios");
+
         consulta.docs.forEach((element) {
           final usuarioNuevo = element.data();
           usuarioNuevo.id = element.id;
@@ -176,6 +185,11 @@ class AccesoBD {
         return usuarios;
       } catch (e) {
         print(e);
+        if(e.toString().contains("Quota exceeded"))
+          {
+            exit(0);
+            throw "La base de datos se ha saturado";
+          }
       }
     }
 
@@ -190,6 +204,8 @@ class AccesoBD {
 
         final consulta = await ref.where("rol", isEqualTo: "Rol.alumno").get();
 
+        monitorizarPeticionesLectura("consultarTodosAlumnos");
+
         consulta.docs.forEach((element) {
           final usuarioNuevo = element.data();
           usuarioNuevo.id = element.id;
@@ -199,6 +215,11 @@ class AccesoBD {
         return usuarios;
       } catch (e) {
         print(e);
+        if(e.toString().contains("Quota exceeded"))
+        {
+          exit(0);
+          throw "La base de datos se ha saturado";
+        }
       }
     }
 
@@ -213,6 +234,9 @@ class AccesoBD {
 
         final consulta = await ref.where("rol", isNotEqualTo: "Rol.alumno").get();
 
+        monitorizarPeticionesLectura("consultarTodosProfesores");
+
+
         consulta.docs.forEach((element) {
           final usuarioNuevo = element.data();
           usuarioNuevo.id = element.id;
@@ -222,6 +246,10 @@ class AccesoBD {
         return usuarios;
       } catch (e) {
         print(e);
+        if(e.toString().contains("Quota exceeded"))
+        {
+          throw "La base de datos se ha saturado";
+        }
       }
     }
 
@@ -285,12 +313,15 @@ class AccesoBD {
 
         if(nuevaFoto is String)
         {
+          countPeticionesEscritura++;
           return db.collection("usuario").doc(idUsuario).update({"foto":nuevaFoto});
+
         }
         else
         {
           var url =  await subirArchivo(nuevaFoto,"Imágenes/perfiles/"+idUsuario.toString()+".jpg");
           await db.collection("usuarios").doc(idUsuario).update({"foto":url});
+          countPeticionesEscritura++;
           return url;
 
         }
@@ -305,6 +336,7 @@ class AccesoBD {
     editarApellidosUsuario(idUsuario,apellidos) async{
       try{
 
+        countPeticionesEscritura++;
         await db.collection("usuarios").doc(idUsuario).update({"apellidos":apellidos}).then(
                 (e){
 
@@ -322,6 +354,7 @@ class AccesoBD {
     editarNombreUsuario(idUsuario,nombre) async{
       try{
 
+        countPeticionesEscritura++;
         return await db.collection("usuarios").doc(idUsuario).update({"nombre":nombre});
 
       }catch(e)
@@ -334,6 +367,7 @@ class AccesoBD {
     editarNacimientoUsuario(idUsuario,fecha) async{
       try{
 
+        countPeticionesEscritura++;
         await db.collection("usuarios").doc(idUsuario).update({"fechanacimiento":fecha}).then((e){
           return true;
         });
@@ -348,18 +382,26 @@ class AccesoBD {
   addFeedbackTarea(tarea,idUsuario, retroalimentacion) async {
     try {
       final ref = db.collection("usuarioTieneTareas");
-      final ref2 = db.collection("historial");
 
-      var tareaHistorial = <String, dynamic>{
-        "idUsuario":idUsuario,
-        "nombre":tarea.nombre,
-        "retroalimentacion":retroalimentacion
-      };
-      ref2.add(tareaHistorial);
+      //Solo se añade al historial si la tarea se ha completado satisfactoriamente
+      if(tarea.estado == "completada")
+        {
+          final ref2 = db.collection("historial");
 
+          var tareaHistorial = <String, dynamic>{
+            "idUsuario":idUsuario,
+            "nombre":tarea.nombre,
+            "retroalimentacion":retroalimentacion
+          };
+          ref2.add(tareaHistorial);
+          countPeticionesEscritura++;
+        }
+
+      countPeticionesEscritura++;
       return await ref
           .doc(tarea.idRelacion)
           .update({"retroalimentacion": retroalimentacion, "estado":"finalizada"});
+
 
 
 
@@ -377,12 +419,16 @@ class AccesoBD {
     try {
       if (Sesion.alumnos != null) {
         await db.collection("usuarios").doc(id).delete().then((e) async {
+
+          monitorizarPeticionesLectura("eliminarAlumno");
+
           await db
               .collection("usuarioTieneTareas")
               .where("idUsuario", isEqualTo: id)
               .get()
               .then((e) {
             for (int i = 0; i < e.docs.length; i++) {
+              countPeticionesEliminacion++;
               db.collection("usuarioTieneTareas").doc(e.docs[i].id).delete();
             }
 
@@ -399,6 +445,7 @@ class AccesoBD {
   Future eliminarProfesor(id) async {
     try {
       if (Sesion.profesores != null&& Sesion.profesores != []) {
+        countPeticionesEliminacion++;
         await db.collection("usuarios").doc(id).delete();
         return true;
       }
@@ -454,6 +501,7 @@ class AccesoBD {
         "formularios": tarea.formularios,
       };
 
+      countPeticionesEscritura++;
       await db.collection("Tareas").add(nuevaTarea);
 
       return true;
@@ -474,6 +522,9 @@ class AccesoBD {
           fromFirestore: Tarea.fromFirestore,
           toFirestore: (Tarea tarea, _) => tarea.toFirestore());
 
+
+      monitorizarPeticionesLectura("consultarTareasCompletas");
+
       final consulta = await ref.get();
 
       var lista = [];
@@ -493,6 +544,8 @@ class AccesoBD {
   consultarTareasCompletas(id) async {
     try {
       final ref = db.collection("historial").where("idUsuario",isEqualTo: id);
+
+      monitorizarPeticionesLectura("consultarTareasCompletas");
 
       final consulta = await ref.get();
 
@@ -517,6 +570,8 @@ class AccesoBD {
       final consulta = ref.doc(id).withConverter(
           fromFirestore: Tarea.fromFirestore,
           toFirestore: (Tarea tarea, _) => tarea.toFirestore());
+
+      monitorizarPeticionesLectura("consultarIDTarea");
 
       final docSnap = await consulta.get();
 
@@ -545,7 +600,11 @@ class AccesoBD {
           .orderBy(
           "fechainicio") // consulta todas las tareas de un usuario ordenadas por fecha de asignación
           .snapshots()
-          .listen((e) async {
+          .listen((e) async
+
+          {
+          monitorizarPeticionesLectura("consultarTareasAsignadasAlumno");
+
         //Escucha los cambios en el servidor
         var nuevasTareas = [];
 
@@ -842,6 +901,9 @@ class AccesoBD {
     try {
       if (Sesion.tareas != null && Sesion.tareas != []) {
         await db.collection("Tareas").doc(id).delete().then((e) async {
+
+          monitorizarPeticionesLectura("eliminarTarea");
+
           await db
               .collection("usuarioTieneTareas")
               .where("idTarea", isEqualTo: id)
@@ -919,6 +981,8 @@ class AccesoBD {
           await ref // consulta todas las tareas de un usuario ordenadas por fecha de asignación
               .snapshots()
               .listen((e) async {
+            monitorizarPeticionesLectura("obtenerPosicion");
+
         if (Sesion.argumentos.length == 0) {
           Sesion.argumentos.add(0.0);
           Sesion.argumentos.add(0.0);
@@ -1010,6 +1074,8 @@ class AccesoBD {
           fromFirestore: Tablon.fromFirestore,
           toFirestore: (Tablon tab, _) => tab.toFirestore());
 
+      monitorizarPeticionesLectura("consultarTodosTablon");
+
       final consulta = await ref.get();
 
       consulta.docs.forEach((element) {
@@ -1043,6 +1109,9 @@ class AccesoBD {
           fromFirestore: Tablon.fromFirestore,
           toFirestore: (Tablon tablon, _) => tablon.toFirestore());
 
+
+      monitorizarPeticionesLectura("consultarIDTablon");
+
       final docSnap = await consulta.get();
 
       var tablon = null;
@@ -1067,7 +1136,8 @@ class AccesoBD {
           .where('idUsuarios',  arrayContains: id )
           .orderBy('fechaUltimoMensaje',descending: true)
           .snapshots().listen((event) async{
-            countPeticiones++;
+
+            monitorizarPeticionesLectura("obtenerChats");
             var listaChats = [];
 
             for(int i = event.docs.length - 1; i>=0;i--){
@@ -1108,7 +1178,8 @@ class AccesoBD {
           .collection('mensajes')
           .where('idChat',  isEqualTo: idChat).orderBy("fechaEnvio")
           .snapshots().listen((event) async{
-            countPeticiones++;
+
+        monitorizarPeticionesLectura("obtenerMensajes (1)");
 
             print(idChat);
 
@@ -1131,6 +1202,9 @@ class AccesoBD {
 
             //marco como leido el chat para este usuario
             if(listaMensajes.length>0){
+
+              monitorizarPeticionesLectura("obtenerMensajes (2)");
+
               var snapshot = await db.collection('chats').doc(idChat).get();
               var sinLeer = event.docs.last.get('idUsuarioEmisor')==Sesion.id?'sinLeer1':'sinLeer2';
 
@@ -1158,7 +1232,7 @@ class AccesoBD {
           'fechaUltimoMensaje' : mensaje.fechaEnvio,
         };
 
-        countPeticiones++;
+        countPeticionesEscritura++;
         await db.collection('chats').add(chat);
 
         mensaje.idChat = await buscarIdChat(mensaje.idUsuarioEmisor, mensaje.idUsuarioReceptor);
@@ -1180,7 +1254,7 @@ class AccesoBD {
         'contenido': mensaje.contenido,
       };
 
-      countPeticiones++;
+
       print(msg.toString());
       db.collection('mensajes').add(msg);
 
@@ -1191,11 +1265,12 @@ class AccesoBD {
 
   eliminarTodosLosMensajes() {
     try{
-      countPeticiones++;
+      monitorizarPeticionesLectura("eliminarTodosLosMensajes");
+
         db.collection("mensajes").get().then((res) {
 
           res.docs.forEach((element) {
-            countPeticiones++;
+            countPeticionesEliminacion++;
             element.reference.delete();
           });
         }
@@ -1206,7 +1281,8 @@ class AccesoBD {
 
   buscarIdChat(id1, id2) async{
     try{
-      countPeticiones++;
+      monitorizarPeticionesLectura("buscarIdChat");
+
       var id = '';
       var snapshot = await db.collection("chats")
           .where('idUsuarios',  arrayContains: id1 )
@@ -1226,5 +1302,20 @@ class AccesoBD {
 
     }
     catch(e){print(e);};
+  }
+
+  monitorizarPeticionesLectura(funcion)
+  {
+    countPeticionesLectura++;
+    print("Las peticiones de lectura: " + countPeticionesLectura.toString() + "  en ${funcion}");
+
+      if(countPeticionesLectura >= 300)
+        {
+          print("peticiones escritura : " + countPeticionesEscritura.toString() + " peticiones eliminacion " + countPeticionesEliminacion.toString() );
+
+          print( "PETICIONES DE LECTURA EXCEDIDAS, EL MÁXIMO SON 300\n última peticion en + ${funcion}");
+
+          exit(0);
+        }
   }
 }
