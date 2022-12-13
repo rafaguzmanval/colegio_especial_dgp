@@ -90,7 +90,8 @@ class _ListaMensajesState extends State<ListaMensajes> {
                         nuevoControlador.initialize();
                         ventanaVideo(nuevoControlador,context);
                       },
-                      child: Icon(Icons.ondemand_video_rounded,color: GuardadoLocal.colores[2],size: 60,)))],
+                      child: Icon(Icons.ondemand_video_rounded,color: GuardadoLocal.colores[2],size: 60,)))]
+            else if(widget.tipo=='arasaac')...[Image.network(widget.mensaje,height: 100,width: 100,)],
             Text(fecha,
                 textAlign: TextAlign.end,
                 style: TextStyle(fontSize: 10, color: widget.enviadoPorMi?GuardadoLocal.colores[0]:GuardadoLocal.colores[2]))

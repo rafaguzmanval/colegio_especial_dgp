@@ -417,7 +417,6 @@ class ConfiguracionState extends State<Configuracion> {
                                 ElevatedButton(
                                     style: ElevatedButton.styleFrom(primary: Colors.red[900]),
                                     onPressed: (){
-                                      Navigator.pop(context, false);
                                     },
                                     child: Text('ACEPTAR',style: TextStyle(fontSize:30,color: Colors.white))),
                               ],

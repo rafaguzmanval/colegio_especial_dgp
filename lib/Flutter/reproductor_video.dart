@@ -5,6 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 
+import '../Dart/mensaje.dart';
+import '../Dart/sesion.dart';
+
+previsualizacionVideo(controlador,context,idChat,idEmisor, idReceptor,url) async{
+  Mensaje msg;
+  msg = Mensaje(idChat, idEmisor, idReceptor, 'video', url , DateTime.now().millisecondsSinceEpoch);
+
+  await ventanaVideo(controlador, context,true,msg);
+}
+
 String _duracionVideo(Duration duracion){
   String dosDigitos(int n) => n.toString().padLeft(2,'0');
   final horas = dosDigitos(duracion.inHours);
@@ -18,7 +28,7 @@ String _duracionVideo(Duration duracion){
   ].join(':');
 }
 
-ventanaVideo(controlador,context){
+ventanaVideo(controlador,context,[previsualizacion=false,mensaje=null]){
   var controladorStream = StreamController();
 
   showDialog(context: context, builder: (context){
@@ -35,7 +45,7 @@ ventanaVideo(controlador,context){
                       mainAxisAlignment: MainAxisAlignment.center,
                       children:[
                         Row(mainAxisAlignment: MainAxisAlignment.start,children:[IconButton(
-                            onPressed: (){Navigator.pop(context);},
+                            onPressed: (){previsualizacion = false;Navigator.pop(context);},
                             icon: Icon(Icons.arrow_back),color: GuardadoLocal.colores[2])]),
                         Expanded(
                             flex: 12,
@@ -79,10 +89,27 @@ ventanaVideo(controlador,context){
                                 _duracionVideo(controlador.value.duration),
                                 style: TextStyle(
                                   color: GuardadoLocal.colores[2],
-                                ),)
+                                ),),
+
                             ]
                         )
-                        )
+                        ),
+                        if(previsualizacion)...[
+                          Row(mainAxisAlignment: MainAxisAlignment.end,children:[IconButton(
+                              onPressed: () async{
+                                await Sesion.db.addMensaje(mensaje);
+
+                                if(mensaje.idChat == ''){
+                                  mensaje.idChat = await Sesion.db.buscarIdChat(mensaje.idEmisor,mensaje.idReceptor);
+                                  await Sesion.db.obtenerMensajes(mensaje.idChat);
+                                }
+
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                },
+                              icon: Icon(Icons.send),color: GuardadoLocal.colores[2])])
+                        ]
                       ]
                   )
               );
@@ -97,7 +124,4 @@ ventanaVideo(controlador,context){
   }
 
   );
-
-
-
 }
