@@ -406,13 +406,15 @@ class MyHomePageState extends State<MyHomePage> {
                   fit: FlexFit.tight,
                   //margin: EdgeInsets.all(10),
                   child: Container(
-                    margin: EdgeInsets.all(40),
+                    margin: EdgeInsets.only(top: 15),
+                    width: 250,
                     child: ElevatedButton(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             "Tablon de Comunicación".toUpperCase(),
+                            textAlign: TextAlign.center,
                             style: TextStyle(fontWeight: FontWeight.bold,
                               fontSize: 30,
                               color: GuardadoLocal.colores[2],
@@ -449,7 +451,8 @@ class MyHomePageState extends State<MyHomePage> {
                   flex: 1,
                   fit: FlexFit.tight,
                   child: Container(
-                    margin: EdgeInsets.all(40),
+                    margin: EdgeInsets.only(top: 15),
+                    width: 250,
                     child: ElevatedButton(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -483,7 +486,8 @@ class MyHomePageState extends State<MyHomePage> {
                   flex: 1,
                   fit: FlexFit.tight,
                   child: Container(
-                    margin: EdgeInsets.all(40),
+                    margin: EdgeInsets.only(top: 15),
+                    width: 250,
                     child: ElevatedButton(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
