@@ -64,7 +64,7 @@ class VerHistorialState extends State<VerHistorial> {
               child: Text(
                 'Historial'.toUpperCase(),
                 textAlign: TextAlign.center,
-                style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30),
+                style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 30, fontWeight: FontWeight.bold),
               )),
         ),
         body: Stack(children: [
@@ -138,7 +138,7 @@ class VerHistorialState extends State<VerHistorial> {
            ),
          ),
            const Text(
-             "RETROALIMENTACIÓN\n",
+             "RETROALIMENTACIÓN:\n",
                style: TextStyle(
                  decoration: TextDecoration.underline,
                ),
@@ -175,9 +175,9 @@ class VerHistorialState extends State<VerHistorial> {
       var cadena;
 
       if(tareas[i].retroalimentacion.toString().isEmpty){
-         cadena = tareas[i].nombre.toString() + ": SIN RETROALIMENTACIÓN \n";
+         cadena = tareas[i].nombre.toString().toUpperCase() + ": SIN RETROALIMENTACIÓN \n";
       }else{
-         cadena = tareas[i].nombre.toString() + ": " + tareas[i].retroalimentacion.toString() + "\n";
+         cadena = tareas[i].nombre.toString().toUpperCase() + ": " + tareas[i].retroalimentacion.toString().toUpperCase() + "\n";
       }
       retroalimentacion += cadena;
     }
