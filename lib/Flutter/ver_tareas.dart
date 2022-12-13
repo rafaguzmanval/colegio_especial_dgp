@@ -394,7 +394,7 @@ class VerTareasState extends State<VerTareas> {
         }
       }
     }
-
+actualizar();
     return Column(children: <Widget>[
       if (Sesion.tareas.length > 0) ...[
         Wrap(
@@ -617,10 +617,10 @@ class VerTareasState extends State<VerTareas> {
                                       ),
                                       Container(
                                           child: Image.asset(
-                                            "assets/VerVideo.png",
-                                            height: 100,
-                                            width: 100,
-                                          )),
+                                        "assets/VerVideo.png",
+                                        height: 100,
+                                        width: 100,
+                                      )),
                                     ])),
                               ),
                             ],
@@ -654,10 +654,10 @@ class VerTareasState extends State<VerTareas> {
                                       ),
                                       Container(
                                           child: Image.asset(
-                                            "assets/1-2-3.png",
-                                            height: 100,
-                                            width: 100,
-                                          )),
+                                        "assets/1-2-3.png",
+                                        height: 100,
+                                        width: 100,
+                                      )),
                                     ])),
                               ),
                             ],
@@ -678,17 +678,23 @@ class VerTareasState extends State<VerTareas> {
                                     child: Column(
                                   children: [
                                     Container(
-                                      padding: EdgeInsets.all(5),
-                                      decoration: BoxDecoration(border: Border.all(width: 5, color: GuardadoLocal.colores[2])),
-                                        margin: EdgeInsets.only(top:10,bottom: 10),
+                                        padding: EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                width: 5,
+                                                color:
+                                                    GuardadoLocal.colores[2])),
+                                        margin: EdgeInsets.only(
+                                            top: 10, bottom: 10),
                                         child: Text(
-                                      Sesion.tareas[tareaActual].formularios[i]
-                                          .toUpperCase(),
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: GuardadoLocal.colores[2],
-                                          fontSize: 25),
-                                    )),
+                                          Sesion.tareas[tareaActual]
+                                              .formularios[i]
+                                              .toUpperCase(),
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: GuardadoLocal.colores[2],
+                                              fontSize: 25),
+                                        )),
                                     for (int j = i + 2;
                                         j <
                                             i +
@@ -697,8 +703,9 @@ class VerTareasState extends State<VerTareas> {
                                                             .formularios[i + 1]
                                                         as int) *
                                                     3;
-                                        j = j + 3)
-                                      comanda(j)
+                                        j = j + 3) ...[
+                                      comanda(j),
+                                    ]
                                   ],
                                 ))
                             ]
