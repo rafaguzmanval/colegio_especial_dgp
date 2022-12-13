@@ -36,7 +36,8 @@ class TablonComunicacionState extends State<TablonComunicacion> {
   ScrollController homeController3 = new ScrollController();
 
   var tablon;
-
+  var frase = "";
+  var hablar = true;
   var lenguajes;
 
   FlutterTts tts = new FlutterTts();
@@ -146,7 +147,12 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                             ]),
                           ),
                           onPressed: () {
-                            _speak(tablon[i].nombres);
+                            if(hablar == true){
+                              _speak(tablon[i].nombres);
+                            }
+                            else{
+                              frase += tablon[i].nombres+" ";
+                            }
                           }),
                     ),
                 ],
@@ -249,7 +255,12 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                             ]),
                           ),
                           onPressed: () {
-                            _speak(tablon[i].nombres);
+                            if(hablar == true){
+                              _speak(tablon[i].nombres);
+                            }
+                            else{
+                              frase += tablon[i].nombres+" ";
+                            }
                           }),
                     ),
                 ],
@@ -354,7 +365,12 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                             ]),
                           ),
                           onPressed: () {
-                            _speak(tablon[i].nombres);
+                            if(hablar == true){
+                              _speak(tablon[i].nombres);
+                            }
+                            else{
+                              frase += tablon[i].nombres+" ";
+                            }
                           }),
                     ),
                 ],
@@ -411,6 +427,94 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                 visible: verFlechaDerecha,
               ),
             )),
+      ]),
+      SizedBox(
+        height: 10,
+      ),
+      Stack(alignment: Alignment.center, children: [
+        SingleChildScrollView(
+          controller: homeController3,
+          scrollDirection: Axis.horizontal,
+          child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.greenAccent,
+                  borderRadius: BorderRadius.circular(20)),
+              child: Row(
+                children: [
+                      Container(
+                        margin: EdgeInsets.all(10),
+                        child: ElevatedButton(
+                            style: ButtonStyle(
+                                shape: MaterialStateProperty.all<
+                                    RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.circular(18.0)))),
+                            child: Container(
+                              constraints:
+                              BoxConstraints(maxWidth: 150, minWidth: 100),
+                              width: 10,
+                              margin: EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                  color: Colors.lightGreenAccent,
+                                  borderRadius: BorderRadius.circular(20)),
+                              alignment: Alignment.center,
+                              child: Column(children: [
+                                Image.asset('assets/frase.png'),
+                                Text(
+                                  "Crear Frase".toUpperCase(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontWeight: FontWeight.bold,
+                                    fontSize: 25,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ]),
+                            ),
+                            onPressed: () {
+                              _speak("CREAR frase");
+                              hablar = false;
+                            }),
+                      ),
+                  Container(
+                    margin: EdgeInsets.all(10),
+                    child: ElevatedButton(
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(18.0)))),
+                        child: Container(
+                          constraints:
+                          BoxConstraints(maxWidth: 150, minWidth: 100),
+                          width: 10,
+                          margin: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                              color: Colors.lightGreenAccent,
+                              borderRadius: BorderRadius.circular(20)),
+                          alignment: Alignment.center,
+                          child: Column(children: [
+                            Image.asset('assets/hablar.png'),
+                            Text(
+                              "Decir Frase".toUpperCase(),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontWeight: FontWeight.bold,
+                                fontSize: 25,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ]),
+                        ),
+                        onPressed: () {
+                          _speak(frase);
+                          hablar = true;
+                          frase = "";
+                        }),
+                  ),
+                ],
+              )),
+        ),
       ]),
     ]);
   }
