@@ -677,14 +677,18 @@ class VerTareasState extends State<VerTareas> {
                                 Container(
                                     child: Column(
                                   children: [
-                                    Text(
+                                    Container(
+                                      padding: EdgeInsets.all(5),
+                                      decoration: BoxDecoration(border: Border.all(width: 5, color: GuardadoLocal.colores[2])),
+                                        margin: EdgeInsets.only(top:10,bottom: 10),
+                                        child: Text(
                                       Sesion.tareas[tareaActual].formularios[i]
                                           .toUpperCase(),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: GuardadoLocal.colores[2],
                                           fontSize: 25),
-                                    ),
+                                    )),
                                     for (int j = i + 2;
                                         j <
                                             i +
