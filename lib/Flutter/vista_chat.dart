@@ -272,7 +272,7 @@ class _VistaChatState extends State<VistaChat> {
                 child: Column(children: [
                   Column(children: [
                     Container(
-                        padding:EdgeInsets.only(left: 1),
+                        padding:EdgeInsets.all(5),
                         decoration: BoxDecoration(
                             color: GuardadoLocal.colores[1],
                             borderRadius: BorderRadius.circular(5),
@@ -281,36 +281,36 @@ class _VistaChatState extends State<VistaChat> {
 
                         ///TOMAR UNA FOTO DE LA CÁMARA
                         child: GestureDetector(onTap: ()async{return opcionesCamara();},
-                            child: Row(mainAxisAlignment: MainAxisAlignment.start,children:[
+                            child: Row(mainAxisAlignment: MainAxisAlignment.center,children:[
                               Icon(Icons.camera_alt,color: GuardadoLocal.colores[0],),
                               const SizedBox(
                                 width: 2,
                               ),
-                              Text('CÁMARA',style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 30),)
+                              Expanded(child:Text('CÁMARA',style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 35),))
                             ])
                         )),
 
                     ///COGER UN ARCHIVO DESDE LA GALERÍA
                     Container(
-                        padding:EdgeInsets.only(left: 1),
+                        padding:EdgeInsets.all(5),
                         decoration: BoxDecoration(
                             color: GuardadoLocal.colores[1],
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(color: GuardadoLocal.colores[0])
                         ),
                         child: GestureDetector(onTap: (){return opcionesGaleria();},
-                            child: Row(mainAxisAlignment: MainAxisAlignment.start,children:[
+                            child: Row(mainAxisAlignment: MainAxisAlignment.center,children:[
                               Icon(Icons.photo,color: GuardadoLocal.colores[0],),
                               const SizedBox(
                                 width: 2,
                               ),
-                              Text('GALERÍA',style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 30),)
+                            Expanded(child:Text('GALERÍA',style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 35),))
                             ])
                         )),
                   ],),
                   ///COGER UN ARCHIVO DESDE ARASAAC
                   Container(
-                      padding:EdgeInsets.only(left: 1),
+                      padding:EdgeInsets.all(5),
                       decoration: BoxDecoration(
                           color: GuardadoLocal.colores[1],
                           borderRadius: BorderRadius.circular(5),
@@ -321,18 +321,18 @@ class _VistaChatState extends State<VistaChat> {
                             String fotoEnviada = await buscadorArasaac(context: context);
                             previsualizacionImagen(fotoEnviada,'arasaac');
                             },
-                          child: Row(mainAxisAlignment: MainAxisAlignment.start,children:[
+                          child: Row(mainAxisAlignment: MainAxisAlignment.center,children:[
                             Icon(Icons.emoji_emotions,color: GuardadoLocal.colores[0],),
                             const SizedBox(
                               width: 2,
                             ),
-                            Text('ARASAAC',style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 30),)
+                          Expanded(child:Text('ARASAAC',style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 35),))
                           ])
                       )),
                   Container(
-                      padding:EdgeInsets.all(5),
+                      padding:EdgeInsets.all(8),
                       child: GestureDetector(onTap: (){Navigator.pop(context);},
-                          child: Text('CANCELAR',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 35),)
+                          child: Row(children:[Expanded(child:Text('CANCELAR',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 40),))])
                       )),
                 ],),
               ));});
@@ -349,7 +349,7 @@ class _VistaChatState extends State<VistaChat> {
                 child: Column(children: [
                   Column(children: [
                     Container(
-                        padding:EdgeInsets.only(left: 1),
+                        padding:EdgeInsets.all(9),
                         decoration: BoxDecoration(
                             color: GuardadoLocal.colores[1],
                             borderRadius: BorderRadius.circular(5),
@@ -368,13 +368,13 @@ class _VistaChatState extends State<VistaChat> {
                           previsualizacionImagen(url, 'imagen');
                         },
                             child: Row(mainAxisAlignment: MainAxisAlignment.center,children:[
-                              Center(child:Text('FOTO',style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 30),))
+                              Expanded(child:Text('FOTO',textAlign:TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 37),))
                             ])
                         )),
 
                     ///TOMAR UN VIDEO DE LA CÁMARA
                     Container(
-                        padding:EdgeInsets.only(left: 1),
+                        padding:EdgeInsets.all(9),
                         decoration: BoxDecoration(
                             color: GuardadoLocal.colores[1],
                             borderRadius: BorderRadius.circular(5),
@@ -398,14 +398,14 @@ class _VistaChatState extends State<VistaChat> {
                           });
                         },
                             child: Row(mainAxisAlignment: MainAxisAlignment.center,children:[
-                              Center(child:Text('VIDEO',style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 30),))
+                              Expanded(child:Text('VIDEO',textAlign:TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 37),))
                             ])
                         )),
                   ],),
                   Container(
-                      padding:EdgeInsets.all(5),
+                      padding:EdgeInsets.all(10),
                       child: GestureDetector(onTap: (){Navigator.pop(context);},
-                          child: Text('ATRÁS',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 35),)
+                          child: Row(children:[Expanded(child:Text('ATRÁS',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 40),))])
                       )),
                 ],),
               ));});
@@ -422,7 +422,7 @@ class _VistaChatState extends State<VistaChat> {
                 child: Column(children: [
                   Column(children: [
                     Container(
-                        padding:EdgeInsets.only(left: 1),
+                        padding:EdgeInsets.all(8),
                         decoration: BoxDecoration(
                             color: GuardadoLocal.colores[1],
                             borderRadius: BorderRadius.circular(5),
@@ -441,13 +441,13 @@ class _VistaChatState extends State<VistaChat> {
                           previsualizacionImagen(url, 'imagen');
                         },
                             child: Row(mainAxisAlignment: MainAxisAlignment.center,children:[
-                              Center(child:Text('FOTO',style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 30),))
+                              Expanded(child:Text('FOTO',textAlign:TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 37),))
                             ])
                         )),
 
                     ///TOMAR UN VIDEO DE LA GALERIA
                     Container(
-                        padding:EdgeInsets.only(left: 1),
+                        padding:EdgeInsets.all(8),
                         decoration: BoxDecoration(
                             color: GuardadoLocal.colores[1],
                             borderRadius: BorderRadius.circular(5),
@@ -471,14 +471,14 @@ class _VistaChatState extends State<VistaChat> {
                           });
                         },
                             child: Row(mainAxisAlignment: MainAxisAlignment.center,children:[
-                              Center(child:Text('VIDEO',style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 30),))
+                              Expanded(child:Text('VIDEO',textAlign:TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 37),))
                             ])
                         )),
                   ],),
                   Container(
-                      padding:EdgeInsets.all(5),
+                      padding:EdgeInsets.all(10),
                       child: GestureDetector(onTap: (){Navigator.pop(context);},
-                          child: Text('ATRÁS',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 35),)
+                          child: Row(children:[Expanded(child:Text('ATRÁS',textAlign: TextAlign.center,style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 40),))])
                       )),
                 ],),
               ));});
@@ -498,7 +498,7 @@ class _VistaChatState extends State<VistaChat> {
             Row(mainAxisAlignment: MainAxisAlignment.end,children:[GestureDetector(
                 onTap: () {
                   enviarMensaje(url,tipo);
-                  Navigator.pop(context);
+                  if(tipo=='imagen')Navigator.pop(context);
                   Navigator.pop(context);
                   Navigator.pop(context);
                 },
