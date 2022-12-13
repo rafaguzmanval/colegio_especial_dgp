@@ -9,20 +9,28 @@ class CustomSearchDelegate extends SearchDelegate {
 // Demo list to show querying
   List<String> searchTerms = [];
   var vez = 0;
+  var veces = 0;
 
   crearLista() async{
-    if(Sesion.rol == "Rol.alumno"){
-      await cargarProfesores();
-      for (var i = 0; i < Sesion.profesores.length; i++) {
-        searchTerms.add(Sesion.profesores[i].nombre);
+
+    if(veces == 0)
+      {
+        if(Sesion.rol == "Rol.alumno"){
+          await cargarProfesores();
+          for (var i = 0; i < Sesion.profesores.length; i++) {
+            searchTerms.add(Sesion.profesores[i].nombre);
+          }
+          veces++;
+        }
+        else{
+          await cargarAlumnos();
+          for (var i = 0; i < Sesion.alumnos.length; i++) {
+            searchTerms.add(Sesion.alumnos[i].nombre);
+          }
+          veces ++;
+        }
       }
-    }
-    else{
-      await cargarAlumnos();
-      for (var i = 0; i < Sesion.alumnos.length; i++) {
-        searchTerms.add(Sesion.alumnos[i].nombre);
-      }
-    }
+
   }
 
 // first overwrite to
