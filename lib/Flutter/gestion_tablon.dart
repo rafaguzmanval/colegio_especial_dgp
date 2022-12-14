@@ -126,7 +126,7 @@ class GestionTablonState extends State<GestionTablon> {
           SizedBox(
             width: 500,
             child: TextField(
-              style: TextStyle(fontSize: 30.0, color: GuardadoLocal.colores[0]),
+              style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0], fontSize: 30),
               obscureText: false,
               maxLength: 40,
               decoration: InputDecoration(
