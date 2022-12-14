@@ -183,10 +183,14 @@ class VerTareasState extends State<VerTareas> {
               },
               child: Stack(children: [
                 OrientationBuilder(
-                  builder: (context, orientation) =>
-                      orientation == Orientation.portrait
-                          ? buildPortrait()
-                          : buildLandscape(),
+                  builder: (context, orientation) {
+                    indiceComanda = 0;
+                    return orientation == Orientation.portrait
+                        ?  buildPortrait()
+                        :  buildLandscape();
+                  }
+                  /*  ,*/
+
                 ),
                 Container(
                   alignment: FractionalOffset(0.98, 0.01),
@@ -394,7 +398,7 @@ class VerTareasState extends State<VerTareas> {
         }
       }
     }
-actualizar();
+
     return Column(children: <Widget>[
       if (Sesion.tareas.length > 0) ...[
         Wrap(
@@ -577,94 +581,98 @@ actualizar();
                                     Sesion.tareas[tareaActual].imagen,
                                     width: 200,
                                     height: 200)),
-                            if (Sesion.tareas[tareaActual].controladoresVideo
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                if (Sesion.tareas[tareaActual].controladoresVideo
                                     .length ==
-                                1) ...[
-                              Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 2,
-                                        color: GuardadoLocal.colores[2])),
-                                margin: EdgeInsets.only(bottom: 15),
-                                child: ElevatedButton(
-                                    onPressed: () {
-                                      if (Sesion.tareas[tareaActual]
+                                    1) ...[
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 2,
+                                            color: GuardadoLocal.colores[2])),
+                                    margin: EdgeInsets.only(bottom: 15),
+                                    child: ElevatedButton(
+                                        onPressed: () {
+                                          if (Sesion.tareas[tareaActual]
                                               .controladoresVideo[0] ==
-                                          0) {
-                                        var nuevoControlador =
+                                              0) {
+                                            var nuevoControlador =
                                             VideoPlayerController.network(Sesion
                                                 .tareas[tareaActual].videos[0]);
-                                        Sesion.tareas[tareaActual]
+                                            Sesion.tareas[tareaActual]
                                                 .controladoresVideo[0] =
-                                            nuevoControlador;
-                                        Sesion.tareas[tareaActual]
-                                            .controladoresVideo[0]
-                                            .initialize();
-                                      }
+                                                nuevoControlador;
+                                            Sesion.tareas[tareaActual]
+                                                .controladoresVideo[0]
+                                                .initialize();
+                                          }
 
-                                      ventanaVideo(
-                                          Sesion.tareas[tareaActual]
-                                              .controladoresVideo[0],
-                                          context);
-                                    },
-                                    child: Column(children: [
-                                      Text(
-                                        "ver video".toUpperCase(),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 25,
-                                            color: GuardadoLocal.colores[2]),
-                                      ),
-                                      Container(
-                                          child: Image.asset(
-                                        "assets/VerVideo.png",
-                                        height: 100,
-                                        width: 100,
-                                      )),
-                                    ])),
-                              ),
-                            ],
-                            if (Sesion.tareas[tareaActual].textos.length >
-                                0) ...[
-                              Container(
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 2,
-                                        color: GuardadoLocal.colores[2])),
-                                margin: EdgeInsets.only(bottom: 15),
-                                child: ElevatedButton(
-                                    onPressed: () async {
-                                      Sesion.argumentos.clear();
-                                      Sesion.argumentos
-                                          .add(Sesion.tareas[tareaActual]);
-                                      await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  VerPasos()));
-                                      Sesion.argumentos.clear();
-                                    },
-                                    child: Column(children: [
-                                      Text(
-                                        "Ver pasos".toUpperCase(),
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 25,
-                                            color: GuardadoLocal.colores[2]),
-                                      ),
-                                      Container(
-                                          child: Image.asset(
-                                        "assets/1-2-3.png",
-                                        height: 100,
-                                        width: 100,
-                                      )),
-                                    ])),
-                              ),
-                            ],
+                                          ventanaVideo(
+                                              Sesion.tareas[tareaActual]
+                                                  .controladoresVideo[0],
+                                              context);
+                                        },
+                                        child: Column(children: [
+                                          Text(
+                                            "ver video".toUpperCase(),
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 25,
+                                                color: GuardadoLocal.colores[2]),
+                                          ),
+                                          Container(
+                                              child: Image.asset(
+                                                "assets/VerVideo.png",
+                                                height: 100,
+                                                width: 100,
+                                              )),
+                                        ])),
+                                  ),
+                                ],
+                                if (Sesion.tareas[tareaActual].textos.length >
+                                    0) ...[
+                                  Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 2,
+                                            color: GuardadoLocal.colores[2])),
+                                    margin: EdgeInsets.only(bottom: 15),
+                                    child: ElevatedButton(
+                                        onPressed: () async {
+                                          Sesion.argumentos.clear();
+                                          Sesion.argumentos
+                                              .add(Sesion.tareas[tareaActual]);
+                                          await Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      VerPasos()));
+                                          Sesion.argumentos.clear();
+                                        },
+                                        child: Column(children: [
+                                          Text(
+                                            "Ver pasos".toUpperCase(),
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 25,
+                                                color: GuardadoLocal.colores[2]),
+                                          ),
+                                          Container(
+                                              child: Image.asset(
+                                                "assets/1-2-3.png",
+                                                height: 100,
+                                                width: 100,
+                                              )),
+                                        ])),
+                                  ),
+                                ],
+                            ],),
+
                             if (Sesion.tareas[tareaActual].formularios !=
-                                    null &&
-                                Sesion.tareas[tareaActual].formularios !=
-                                    []) ...[
+                                    null) ...[
                               for (int i = 0;
                                   i <
                                       Sesion.tareas[tareaActual].formularios
@@ -997,7 +1005,7 @@ actualizar();
       formatTiempoRestante();
     }
 
-    if (!mounted) return;
+    if (mounted)
     setState(() {});
   }
 
