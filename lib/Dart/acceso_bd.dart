@@ -1309,7 +1309,7 @@ class AccesoBD {
     countPeticionesLectura++;
     print("Las peticiones de lectura: " + countPeticionesLectura.toString() + "  en ${funcion}");
 
-      if(countPeticionesLectura >= 300)
+      if(countPeticionesLectura >= 1000)
         {
           print("peticiones escritura : " + countPeticionesEscritura.toString() + " peticiones eliminacion " + countPeticionesEliminacion.toString() );
 
