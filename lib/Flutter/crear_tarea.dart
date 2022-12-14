@@ -170,7 +170,7 @@ class CrearTareaState extends State<CrearTarea> {
           SizedBox(
             width: 500,
             child: TextField(
-              style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0], fontSize: 25),
+              style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0], fontSize: 30),
               obscureText: false,
               maxLength: 40,
               decoration: InputDecoration(
@@ -181,7 +181,7 @@ class CrearTareaState extends State<CrearTarea> {
                   border: OutlineInputBorder(),
                   hintText: 'Título *'.toUpperCase(),
                   hintStyle:
-                      TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0], fontSize: 25)),
+                      TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0], fontSize: 30)),
               controller: controladorNombre,
             ),
           ),
@@ -191,7 +191,7 @@ class CrearTareaState extends State<CrearTarea> {
           SizedBox(
             width: 500,
             child: TextField(
-              style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0], fontSize: 25),
+              style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0], fontSize: 30),
               obscureText: false,
               maxLength: 500,
               decoration: InputDecoration(
@@ -202,7 +202,7 @@ class CrearTareaState extends State<CrearTarea> {
                   border: OutlineInputBorder(),
                   hintText: 'Descripción *'.toUpperCase(),
                   hintStyle:
-                      TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0], fontSize: 25)),
+                      TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0], fontSize: 30)),
               controller: controladorTexto,
             ),
           ),
@@ -248,6 +248,45 @@ class CrearTareaState extends State<CrearTarea> {
                   }),
             )
           ]),
+          SizedBox(
+            height: 15,
+          ),
+          Container(
+            decoration: BoxDecoration(
+                border: Border.all(width: 2, color: GuardadoLocal.colores[0])),
+            height: 150,
+            width: 210,
+            child: fotoDescripcion == null
+                ? Center(
+                child: Text(
+                  'Ninguna foto elegida ****'.toUpperCase(),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 25),
+                ))
+                : Stack(
+              children: [
+                Center(
+                    child: fotoDescripcion is String
+                        ? Image.network(fotoDescripcion)
+                        : Image.file(File(fotoDescripcion.path))),
+                Container(
+                  child: ElevatedButton(
+                      onPressed: () {
+                        fotoDescripcion = null;
+                        actualizar();
+                      },
+                      child: Icon(
+                        Icons.remove,
+                        color: GuardadoLocal.colores[2],
+                      )),
+                  alignment: Alignment.topLeft,
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 10,
+          ),
           Text(
             "HAZ UN VIDEOTUTORIAL : ",
             style: TextStyle(
@@ -318,43 +357,9 @@ class CrearTareaState extends State<CrearTarea> {
           SizedBox(
             height: 20,
           ),
+
+
           /*
-          Container(
-            decoration: BoxDecoration(
-                border: Border.all(width: 2, color: GuardadoLocal.colores[0])),
-            height: 150,
-            width: 210,
-            child: fotoTomada == null
-                ? Center(
-                    child: Text(
-                    'Ninguna foto tomada ****'.toUpperCase(),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 25),
-                  ))
-                : Stack(
-                    children: [
-                      Center(
-                          child: fotoTomada is String
-                              ? Image.network(fotoTomada)
-                              : Image.file(File(fotoTomada.path))),
-                      Container(
-                        child: ElevatedButton(
-                            onPressed: () {
-                              fotoTomada = null;
-                              actualizar();
-                            },
-                            child: Icon(
-                              Icons.remove,
-                              color: GuardadoLocal.colores[0],
-                            )),
-                        alignment: Alignment.topLeft,
-                      )
-                    ],
-                  ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
           Container(
             decoration: BoxDecoration(
                 border: Border.all(width: 2, color: GuardadoLocal.colores[0])),
