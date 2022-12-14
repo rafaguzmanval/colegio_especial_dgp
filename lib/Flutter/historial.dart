@@ -33,7 +33,6 @@ class VerHistorial extends StatefulWidget {
 }
 
 class VerHistorialState extends State<VerHistorial> {
-  double offSetActual = 0;
   ScrollController homeController = new ScrollController();
   late Map<String,int> _charData = new Map();
   late List<DatosHist> _charDataList=[];
