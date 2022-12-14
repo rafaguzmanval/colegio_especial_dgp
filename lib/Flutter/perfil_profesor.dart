@@ -35,20 +35,9 @@ class PerfilProfesor extends StatefulWidget {
 
 class PerfilProfesorState extends State<PerfilProfesor> {
   var usuarioPerfil;
-  var controladorNombre = TextEditingController();
-  var controladorApellidos = TextEditingController();
   final myController = TextEditingController();
-  var fechaElegida = null;
-  var fechaAntigua;
   var fotoTomada;
-  var registrando = false;
-  var mensajeDeRegistro = "";
-  var vez = 0;
   ImagePicker capturador = new ImagePicker();
-  final controladorPassword = TextEditingController();
-  var metodoElegido;
-  var rolElegido;
-  StreamController controladorStream = StreamController.broadcast();
 
   @override
   void dispose() {
@@ -143,22 +132,6 @@ class PerfilProfesorState extends State<PerfilProfesor> {
 
   /// Carga el perfil del profesor
   Widget perfilProfesor() {
-    if (vez == 0) {
-      controladorNombre.text = usuarioPerfil.nombre.toUpperCase();
-      controladorApellidos.text = usuarioPerfil.apellidos.toUpperCase();
-      fechaAntigua = usuarioPerfil.fechanacimiento;
-      fotoTomada = usuarioPerfil.foto;
-      controladorPassword.text = usuarioPerfil.password;
-      rolElegido = usuarioPerfil.rol;
-      metodoElegido = usuarioPerfil.metodoLogeo;
-      if(metodoElegido == "Passportmethod.text"){
-        metodoElegido = "clave";
-      }
-      else{
-        metodoElegido = "pin";
-      }
-      vez++;
-    }
     return
     Column(
       children: [
@@ -462,27 +435,7 @@ class PerfilProfesorState extends State<PerfilProfesor> {
     }
   }*/
 
-  mostrarError(mensaje, error) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          duration: Duration(seconds: 2),
-          elevation: 0,
-          content: Container(
-            padding: const EdgeInsets.all(16),
-            height: 90,
-            decoration: BoxDecoration(
-              color: Color(error ? 0xFFC72C41 : 0xFF6BFF67),
-              borderRadius: BorderRadius.all(Radius.circular(29)),
-            ),
-            child: Text(
-              mensaje,
-              style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 25),
-            ),
-          )),
-    );
-  }
+
 
   Widget cargando() {
     if (usuarioPerfil == null)
