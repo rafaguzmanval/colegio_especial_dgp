@@ -177,7 +177,9 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           SizedBox(
             width: 500,
             child: TextField(
-              style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 25),
+              style: TextStyle(fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                  color: GuardadoLocal.colores[0]),
               obscureText: false,
               maxLength: 20,
               decoration: InputDecoration(
@@ -195,7 +197,9 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           SizedBox(
             width: 500,
             child: TextField(
-              style: TextStyle(color: GuardadoLocal.colores[0], fontSize: 25),
+              style: TextStyle(fontWeight: FontWeight.bold,
+                  fontSize: 25,
+                  color: GuardadoLocal.colores[0]),
               obscureText: false,
               maxLength: 40,
               decoration: InputDecoration(
