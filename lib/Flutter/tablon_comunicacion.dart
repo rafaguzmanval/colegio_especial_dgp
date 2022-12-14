@@ -282,7 +282,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                             homeController2.position.minScrollExtent;
 
                       homeController2.animateTo(
-                        offSetActual, // change 0.0 {double offset} to corresponding widget position
+                        offSetActual2, // change 0.0 {double offset} to corresponding widget position
                         duration: Duration(seconds: 1),
                         curve: Curves.easeOut,
                       );
@@ -392,7 +392,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                             homeController3.position.minScrollExtent;
 
                       homeController3.animateTo(
-                        offSetActual, // change 0.0 {double offset} to corresponding widget position
+                        offSetActual3, // change 0.0 {double offset} to corresponding widget position
                         duration: Duration(seconds: 1),
                         curve: Curves.easeOut,
                       );
@@ -433,7 +433,6 @@ class TablonComunicacionState extends State<TablonComunicacion> {
       ),
       Stack(alignment: Alignment.center, children: [
         SingleChildScrollView(
-          controller: homeController3,
           scrollDirection: Axis.horizontal,
           child: Container(
               decoration: BoxDecoration(
