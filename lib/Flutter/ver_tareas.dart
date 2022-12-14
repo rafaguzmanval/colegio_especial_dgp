@@ -558,7 +558,7 @@ class VerTareasState extends State<VerTareas> {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: GuardadoLocal.colores[2],
-                                fontSize: 25,
+                                fontSize: 35,
                               ),
                             )),
                             Center(
