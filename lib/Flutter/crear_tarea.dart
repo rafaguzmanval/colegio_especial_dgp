@@ -207,7 +207,7 @@ class CrearTareaState extends State<CrearTarea> {
             ),
           ),
           Text(
-            "ELIGE UNA FOTO O PICTOGRAMA: *",
+            "ELIGE UN ICONO PARA LA TAREA: *",
             style: TextStyle(
                 fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),
@@ -259,7 +259,7 @@ class CrearTareaState extends State<CrearTarea> {
             child: fotoDescripcion == null
                 ? Center(
                 child: Text(
-                  'Ninguna foto elegida ****'.toUpperCase(),
+                  'Sin icono *'.toUpperCase(),
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 25),
                 ))
@@ -311,53 +311,57 @@ class CrearTareaState extends State<CrearTarea> {
             "CREA UN FORMULARIO: ",
             style: TextStyle(fontSize: 25.0, height: 2.0, color: GuardadoLocal.colores[0]),
           ),*/
-          ElevatedButton(
-              child: Column(children: [
-                Text(
-                    (formularios.isEmpty)
-                        ? 'Crea un formulario'.toUpperCase()
-                        : "Edita el formulario".toUpperCase(),
-                    style: TextStyle(fontWeight: FontWeight.bold,
-                        color: GuardadoLocal.colores[2], fontSize: 25)),
-                Image.asset(
-                  'assets/formulario.png',
-                  width: 140,
-                  height: 100,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-              ]),
-              onPressed: () async {
-                dialogFormulario();
-              }),
-          SizedBox(
-            height: 15,
-          ),
-          ElevatedButton(
-              child: Column(children: [
-                Text(
-                    (textos.isEmpty && imagenes.isEmpty)
-                        ? 'Crea unos pasos'.toUpperCase()
-                        : "Edita los pasos".toUpperCase(),
-                    style: TextStyle(fontWeight: FontWeight.bold,
-                        color: GuardadoLocal.colores[2], fontSize: 25)),
-                Image.asset(
-                  'assets/lista.png',
-                  width: 140,
-                  height: 100,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-              ]),
-              onPressed: () async {
-                dialogPasos();
-              }),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+            ElevatedButton(
+                child: Column(children: [
+                  Text(
+                      (formularios.isEmpty)
+                          ? 'Crea una comanda'.toUpperCase()
+                          : "Edita la comanda".toUpperCase(),
+                      style: TextStyle(fontWeight: FontWeight.bold,
+                          color: GuardadoLocal.colores[2], fontSize: 25)),
+                  Image.asset(
+                    'assets/formulario.png',
+                    width: 140,
+                    height: 100,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                ]),
+                onPressed: () async {
+                  dialogFormulario();
+                }),
+
+
+            ElevatedButton(
+                child: Column(children: [
+                  Text(
+                      (textos.isEmpty && imagenes.isEmpty)
+                          ? 'Crea unos pasos'.toUpperCase()
+                          : "Edita los pasos".toUpperCase(),
+                      style: TextStyle(fontWeight: FontWeight.bold,
+                          color: GuardadoLocal.colores[2], fontSize: 25)),
+                  Image.asset(
+                    'assets/lista.png',
+                    width: 140,
+                    height: 100,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                ]),
+                onPressed: () async {
+                  dialogPasos();
+                }),
+          ],),
+
           SizedBox(
             height: 20,
           ),
-
 
           /*
           Container(
@@ -689,7 +693,7 @@ class CrearTareaState extends State<CrearTarea> {
                   child: SingleChildScrollView(
                       child: Column(children: [
                     Text(
-                      "\nCrea un nuevo formulario".toUpperCase(),
+                      "\nCrea un nueva comanda".toUpperCase(),
                       style: TextStyle(fontSize: 40),
                     ),
 
@@ -697,6 +701,10 @@ class CrearTareaState extends State<CrearTarea> {
                         i < formularios.length;
                         i = i + 2 + (formularios[i + 1] as int) * 3)
                       Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 5,
+                                color: GuardadoLocal.colores[0])),
                         margin: EdgeInsets.only(top: 15, bottom: 10),
                         child: Column(children: [
                           Row(
@@ -859,26 +867,20 @@ class CrearTareaState extends State<CrearTarea> {
                                     await dialogElemento(i);
                                     controladorStream.add("");
                                   },
-                                  child: Text(
-                                    "Crea un elemento".toUpperCase(),
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        color: GuardadoLocal.colores[2]),
+                                  child: Icon(
+                                    Icons.add,
+                                    color: GuardadoLocal.colores[2],
                                   ))),
                         ]),
                       ),
 
                     ///
 
-                    Text(
-                      "\n Crea una agrupación".toUpperCase(),
-                      style: TextStyle(
-                          fontSize: 25, color: GuardadoLocal.colores[0]),
-                    ),
+
 
                     Container(
-                        margin: EdgeInsets.only(top: 15, bottom: 10),
-                        child: FloatingActionButton(
+                        //margin: EdgeInsets.only(top: 15, bottom: 10),
+                        child: ElevatedButton(
                             onPressed: () async {
                               await dialogNombre("").then((e) {
                                 if (e != null) {
@@ -888,10 +890,15 @@ class CrearTareaState extends State<CrearTarea> {
                                 }
                               });
                             },
-                            child: Icon(
-                              Icons.add,
-                              color: GuardadoLocal.colores[2],
-                            ))),
+                            child:    Text(
+                                  "Crea un grupo de elementos".toUpperCase(),
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                  fontSize: 25,color: GuardadoLocal.colores[2]),
+                                  ),
+                            )),
+
+                    SizedBox(height: 20,),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
