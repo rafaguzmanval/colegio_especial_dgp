@@ -380,12 +380,10 @@ class CustomSearchDelegate extends SearchDelegate {
 
   cargarProfesores() async {
     Sesion.profesores = await Sesion.db.consultarTodosProfesores();
-    actualizar();
   }
 
   cargarAlumnos() async {
     Sesion.alumnos = await Sesion.db.consultarTodosAlumnos();
-    actualizar();
   }
 
   // metodo para actualizar la pagina
