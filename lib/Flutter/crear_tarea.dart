@@ -36,7 +36,6 @@ class CrearTarea extends StatefulWidget {
 
 // Clase para crear tarea
 class CrearTareaState extends State<CrearTarea> {
-  Tarea nuevaTarea = new Tarea();
 
   var fotoDescripcion;
   var video;
@@ -51,7 +50,6 @@ class CrearTareaState extends State<CrearTarea> {
   final controladorNombre = TextEditingController();
   final controladorTexto = TextEditingController();
 
-  var busqueda = "";
 
   ///Cuándo se pasa de página es necesario que todos los controladores de los formularios y de los reproductores de vídeo se destruyan.
   @override
@@ -172,7 +170,7 @@ class CrearTareaState extends State<CrearTarea> {
           SizedBox(
             width: 500,
             child: TextField(
-              style: TextStyle(color: GuardadoLocal.colores[0]),
+              style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0], fontSize: 25),
               obscureText: false,
               maxLength: 40,
               decoration: InputDecoration(
@@ -193,7 +191,7 @@ class CrearTareaState extends State<CrearTarea> {
           SizedBox(
             width: 500,
             child: TextField(
-              style: TextStyle(color: GuardadoLocal.colores[0]),
+              style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0], fontSize: 25),
               obscureText: false,
               maxLength: 500,
               decoration: InputDecoration(
