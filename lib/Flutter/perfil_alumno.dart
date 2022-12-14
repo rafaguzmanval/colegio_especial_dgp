@@ -42,19 +42,9 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
   var tareasCompletadas = [];
   var tareasCanceladas = [];
   var tareasFinalizadas = [];
-  var controladorNombre = TextEditingController();
-  var controladorApellidos = TextEditingController();
   final myController = TextEditingController();
-  var fechaElegida = null;
-  var fechaAntigua;
   var fotoTomada;
-  var registrando = false;
-  var mensajeDeRegistro = "";
-  var vez = 0;
   ImagePicker capturador = new ImagePicker();
-  final controladorPassword = TextEditingController();
-  var metodoElegido;
-  var rolElegido;
 
   //Todas las tareas que el profesor selecciona para asignar al alumno
   var tareas = [];
@@ -396,13 +386,25 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
               Sesion.paginaActual = this;
 
             },
-            child: Text(
-              "EVOLUCIÓN",
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontFamily: "Escolar",
-                  fontSize: 30,
-                  color: GuardadoLocal.colores[2]),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(height: 5,),
+                Text(
+                  "Evolución".toUpperCase(),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontWeight: FontWeight.bold,
+                    fontSize: 30,
+                    color: GuardadoLocal.colores[2],
+                  ),
+                ),
+                Container(
+                    child: Image.asset(
+                      "assets/gráfica.png",
+                      width: 100,
+                      height: 100,
+                    )),
+              ],
             ),
           ),
 
@@ -502,28 +504,6 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
   void actualizar() {
     setState(() {});
     esTareaEliminandose = false;
-  }
-
-  mostrarError(mensaje, error) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.transparent,
-          duration: Duration(seconds: 2),
-          elevation: 0,
-          content: Container(
-            padding: const EdgeInsets.all(16),
-            height: 90,
-            decoration: BoxDecoration(
-              color: Color(error ? 0xFFC72C41 : 0xFF6BFF67),
-              borderRadius: BorderRadius.all(Radius.circular(29)),
-            ),
-            child: Text(
-              mensaje,
-              style: TextStyle(color: GuardadoLocal.colores[2], fontSize: 25),
-            ),
-          )),
-    );
   }
 
   Widget cargando() {
