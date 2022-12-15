@@ -72,6 +72,7 @@ class _VistaChatState extends State<VistaChat> {
 
     if(widget.chatId!='')
       cargaMensajes();
+    else chatsController.add('');
   }
 
   @override
@@ -111,7 +112,7 @@ class _VistaChatState extends State<VistaChat> {
           // chat messages here
           mensajesChat(),
           Container(
-            alignment: Alignment.bottomCenter,
+            alignment: FractionalOffset(0, 0.99),
             width: MediaQuery.of(context).size.width,
             child: Container(
               decoration: BoxDecoration(
@@ -195,7 +196,7 @@ class _VistaChatState extends State<VistaChat> {
     return StreamBuilder(
       stream: chatsController.stream,
       builder: (context, AsyncSnapshot snapshot) {
-        return snapshot.hasData //snapshot.hasData
+        return snapshot.hasData//snapshot.hasData
             ? Expanded(
               child: ListView.builder(
                 controller: _scrollController,
@@ -210,15 +211,20 @@ class _VistaChatState extends State<VistaChat> {
                         }
                     });
                   }
-                  return ListaMensajes(
-                      mensaje: mensajes[index].contenido,
-                      enviadoPorMi: mensajes[index].idUsuarioEmisor==Sesion.id,
-                      fecha:mensajes[index].fechaEnvio,
-                      tipo:mensajes[index].tipo);
+                  if(mensajes.length>0){
+                    return ListaMensajes(
+                        mensaje: mensajes[index].contenido,
+                        enviadoPorMi: mensajes[index].idUsuarioEmisor==Sesion.id,
+                        fecha:mensajes[index].fechaEnvio,
+                        tipo:mensajes[index].tipo);
+                  }
+                  else{
+                    return Container();
+                  }
                 },
               ),
             )
-            : Container();
+            : Expanded(child: Center(child: CircularProgressIndicator(),));
       },
     );
   }
