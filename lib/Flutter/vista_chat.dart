@@ -153,10 +153,11 @@ class _VistaChatState extends State<VistaChat> {
                     ),
                     child: TextFormField(
                       controller: messageController,
+                      textCapitalization: TextCapitalization.sentences,
                       style: TextStyle(color: GuardadoLocal.colores[0]),
                       decoration: InputDecoration(
                         hintText: "Envia un mensaje...".toUpperCase(),
-                        hintStyle: TextStyle(color: GuardadoLocal.colores[0], fontSize: 16),
+                        hintStyle: TextStyle(color: GuardadoLocal.colores[0], fontSize: 20),
                         border: InputBorder.none,
                       ),
                     ))),
@@ -237,7 +238,10 @@ class _VistaChatState extends State<VistaChat> {
         cargaMensajes();
       }
 
+
+      if(_scrollController.position.minScrollExtent < _scrollController.position.maxScrollExtent )
       _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds:50), curve: Curves.easeOut);
+
       setState(() {
         messageController.clear();
       });

@@ -422,6 +422,14 @@ class AccesoBD {
 
           monitorizarPeticionesLectura("eliminarAlumno");
 
+          await db.collection('chats').where('idUsuarios',  arrayContains: id ).get().then((value) {
+            value.docs.forEach((element) {
+              element.reference.delete();
+            });
+          });
+
+
+
           await db
               .collection("usuarioTieneTareas")
               .where("idUsuario", isEqualTo: id)
@@ -447,7 +455,13 @@ class AccesoBD {
       if (Sesion.profesores != null&& Sesion.profesores != []) {
         countPeticionesEliminacion++;
         await db.collection("usuarios").doc(id).delete();
-        return true;
+        await db.collection('chats').where('idUsuarios',  arrayContains: id ).get().then((value) {
+          value.docs.forEach((element) {
+            element.reference.delete();
+          });
+          return true;
+        });
+
       }
     } catch (e) {
       return false;

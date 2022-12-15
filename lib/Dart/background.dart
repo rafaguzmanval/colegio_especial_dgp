@@ -157,8 +157,10 @@ static inicializarBackground() async
              contenido = event.docs.last.get("contenido");
               else if(event.docs.last.get("tipo") == "imagen")
                 {contenido = "te ha enviado una imagen";}
-                else
+                else if(event.docs.last.get("tipo") == "video")
                   {contenido = "te ha enviado un video";}
+                else
+                  {contenido = "te ha enviado una imagen de ARASAAC";}
             
             Notificacion.showBigTextNotification(title: "${usuario.nombre}", body: "${contenido}", fln: notificaciones );
           
