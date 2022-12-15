@@ -46,14 +46,12 @@ import 'lista_profesores.dart';
 import 'lista_tareas.dart';
 import 'package:universal_io/io.dart';
 
-
 class MyHomePage extends StatefulWidget {
   @override
   MyHomePageState createState() => MyHomePageState();
 }
 
 class MyHomePageState extends State<MyHomePage> {
-
   var maxUsuariosPorFila = 2;
   ScrollController homeController = new ScrollController();
 
@@ -70,40 +68,51 @@ class MyHomePageState extends State<MyHomePage> {
     Sesion.paginaActual = this;
     Sesion.seleccion = "";
     Sesion.tareas = [];
-    if(Platform.isAndroid)
-      {
-        Notificacion.initialize(notificaciones,Sesion.rol);
-        Background.inicializarBackground();
-      }
-
+    if (Platform.isAndroid) {
+      Notificacion.initialize(notificaciones, Sesion.rol);
+      Background.inicializarBackground();
+    }
   }
 
   /// Este es el build de la clase MyHomePage que devuelve toda la vista génerica más la vista especial de cada usuario.
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
-      child:Scaffold(
-              appBar: AppBar(
-                leading: IconButton(
-                    icon: Icon(Icons.settings_power, color: GuardadoLocal.colores[2]),
-                    onPressed: () => _onBackPressed(context)),
-
-                title: Column(children: [
-                Center(child: Text('Menú principal'.toUpperCase(),textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 30),),
-                )]),
-                actions: [IconButton(onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(
-                        builder: (context) => PaginaChats())), icon: Icon(Icons.chat, color: GuardadoLocal.colores[2])),
-                  IconButton(onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(
-                        builder: (context) => Configuracion())), icon: Icon(Icons.settings, color: GuardadoLocal.colores[2]))],
-                automaticallyImplyLeading: false,
-              ),
-              body: Container(margin: EdgeInsets.all(5), child: vistaMenu())),
-              onWillPop: () async {
-                final pop = await _onBackPressed(context);
-                return pop ?? false;
-              },
+      child: Scaffold(
+          appBar: AppBar(
+            leading: IconButton(
+                icon:
+                    Icon(Icons.settings_power, color: GuardadoLocal.colores[2]),
+                onPressed: () => _onBackPressed(context)),
+            title: Column(children: [
+              Center(
+                child: Text(
+                  'Menú principal'.toUpperCase(),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: GuardadoLocal.colores[2],
+                      fontSize: 30),
+                ),
+              )
+            ]),
+            actions: [
+              IconButton(
+                  onPressed: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => PaginaChats())),
+                  icon: Icon(Icons.chat, color: GuardadoLocal.colores[2])),
+              IconButton(
+                  onPressed: () => Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Configuracion())),
+                  icon: Icon(Icons.settings, color: GuardadoLocal.colores[2]))
+            ],
+            automaticallyImplyLeading: false,
+          ),
+          body: Container(margin: EdgeInsets.all(5), child: vistaMenu())),
+      onWillPop: () async {
+        final pop = await _onBackPressed(context);
+        return pop ?? false;
+      },
     );
   }
 
@@ -115,122 +124,47 @@ class MyHomePageState extends State<MyHomePage> {
         mainAxisSize: MainAxisSize.max,
         children: [
           Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child:
-                orientacion==Orientation.landscape ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    child: Container(
-                      margin: EdgeInsets.all(50),
-                      child: ElevatedButton(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "GESTIÓN DEL TABLÓN",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold,
-                                fontSize: 30,
-                                color: GuardadoLocal.colores[2],
-                              ),
-                            ),
-                            Flexible(
-                                flex: 1,
-                                child: Image.asset(
-                                  "assets/tableroDeComunicacion.png",
-                                )),
-                          ],
-                        ),
-                        onPressed: () async{
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => GestionTablon()));
-                          Sesion.paginaActual = this;
-                        },
-                      ),
-                    ),
-                  ),
+            flex: 1,
+            fit: FlexFit.tight,
+            child: orientacion == Orientation.landscape
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
                         Flexible(
-                        flex: 1,
-                        fit: FlexFit.tight,
-                        //margin: EdgeInsets.all(10),
-                        child: Container(
-                          margin: EdgeInsets.all(50),
-                          child: ElevatedButton(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Lista de alumnos".toUpperCase(),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(fontWeight: FontWeight.bold,
-                                    fontSize: 30,
-                                    color: GuardadoLocal.colores[2],
+                          flex: 1,
+                          fit: FlexFit.tight,
+                          child: Container(
+                            margin: EdgeInsets.all(50),
+                            child: ElevatedButton(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "GESTIÓN DEL TABLÓN",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 30,
+                                      color: GuardadoLocal.colores[2],
+                                    ),
                                   ),
-                                ),
-                                Flexible(
-                                    flex: 1,
-                                    child: Image.asset(
-                                      "assets/companeros.png",
-                                    )),
-                              ],
+                                  Flexible(
+                                      flex: 1,
+                                      child: Image.asset(
+                                        "assets/tableroDeComunicacion.png",
+                                      )),
+                                ],
+                              ),
+                              onPressed: () async {
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => GestionTablon()));
+                                Sesion.paginaActual = this;
+                              },
                             ),
-                            onPressed: () async {
-                              await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ListaAlumnos()));
-                              Sesion.paginaActual = this;
-                            },
                           ),
                         ),
-                      ),
-
-                  ]):
-                  Container(
-                    alignment: Alignment.center,
-
-                    child:
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [Flexible(
-                        flex: 1,
-                        fit: FlexFit.tight,
-                        child: Container(
-                          margin: EdgeInsets.all(50),
-                          child: ElevatedButton(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "GESTION DEL TABLON",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(fontWeight: FontWeight.bold,
-                                    fontSize: 30,
-                                    color: GuardadoLocal.colores[2],
-                                  ),
-                                ),
-                                Flexible(
-                                    flex: 1,
-                                    child: Image.asset(
-                                      "assets/tableroDeComunicacion.png",
-                                    )),
-                              ],
-                            ),
-                            onPressed: () async{
-                              await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => GestionTablon()));
-                              Sesion.paginaActual = this;
-                            },
-                          ),
-                        ),
-                      ),
                         Flexible(
                           flex: 1,
                           fit: FlexFit.tight,
@@ -244,7 +178,8 @@ class MyHomePageState extends State<MyHomePage> {
                                   Text(
                                     "Lista de alumnos".toUpperCase(),
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(fontWeight: FontWeight.bold,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
                                       fontSize: 30,
                                       color: GuardadoLocal.colores[2],
                                     ),
@@ -266,8 +201,86 @@ class MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                         ),
-
-                      ]),
+                      ])
+                : Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            fit: FlexFit.tight,
+                            child: Container(
+                              margin: EdgeInsets.all(50),
+                              child: ElevatedButton(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "GESTION DEL TABLON",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 30,
+                                        color: GuardadoLocal.colores[2],
+                                      ),
+                                    ),
+                                    Flexible(
+                                        flex: 1,
+                                        child: Image.asset(
+                                          "assets/tableroDeComunicacion.png",
+                                        )),
+                                  ],
+                                ),
+                                onPressed: () async {
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              GestionTablon()));
+                                  Sesion.paginaActual = this;
+                                },
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            flex: 1,
+                            fit: FlexFit.tight,
+                            //margin: EdgeInsets.all(10),
+                            child: Container(
+                              margin: EdgeInsets.all(50),
+                              child: ElevatedButton(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      "Lista de alumnos".toUpperCase(),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 30,
+                                        color: GuardadoLocal.colores[2],
+                                      ),
+                                    ),
+                                    Flexible(
+                                        flex: 1,
+                                        child: Image.asset(
+                                          "assets/companeros.png",
+                                        )),
+                                  ],
+                                ),
+                                onPressed: () async {
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              ListaAlumnos()));
+                                  Sesion.paginaActual = this;
+                                },
+                              ),
+                            ),
+                          ),
+                        ]),
                   ),
           )
         ]);
@@ -283,253 +296,255 @@ class MyHomePageState extends State<MyHomePage> {
           Flexible(
             flex: 1,
             fit: FlexFit.tight,
-            child:
-            orientacion==Orientation.landscape ? Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  //margin: EdgeInsets.all(10),
-                  child: Container(
-                    margin: EdgeInsets.all(40),
-                    child: ElevatedButton(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Tablón de Comunicación".toUpperCase(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold,
-                              fontSize: 30,
-                              color: GuardadoLocal.colores[2],
+            child: orientacion == Orientation.landscape
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Flexible(
+                        flex: 1,
+                        fit: FlexFit.tight,
+                        child: Container(
+                          margin: EdgeInsets.all(40),
+                          child: ElevatedButton(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Lista de Tareas".toUpperCase(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30,
+                                    color: GuardadoLocal.colores[2],
+                                  ),
+                                ),
+                                Flexible(
+                                    flex: 1,
+                                    child: Image.asset(
+                                      "assets/lectoescritura.png",
+                                    )),
+                              ],
+                            ),
+                            onPressed: () async {
+                              await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => VerTareas()));
+                              Sesion.paginaActual = this;
+                            },
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 1,
+                        fit: FlexFit.tight,
+                        //margin: EdgeInsets.all(10),
+                        child: Container(
+                          margin: EdgeInsets.all(40),
+                          child: ElevatedButton(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Tablón de Comunicación".toUpperCase(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30,
+                                    color: GuardadoLocal.colores[2],
+                                  ),
+                                ),
+                                Flexible(
+                                    flex: 1,
+                                    child: Image.asset(
+                                      "assets/tableroDeComunicacion.png",
+                                    )),
+                              ],
+                            ),
+                            onPressed: () async {
+                              await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              TablonComunicacion()))
+                                  .then((value) async {
+                                Sesion.paginaActual = this;
+                                if (Sesion.argumentos.length == 1) {
+                                  await Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => VerTareas()));
+                                  Sesion.paginaActual = this;
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 1,
+                        fit: FlexFit.tight,
+                        child: Container(
+                          margin: EdgeInsets.all(40),
+                          child: ElevatedButton(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Historial".toUpperCase(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 30,
+                                    color: GuardadoLocal.colores[2],
+                                  ),
+                                ),
+                                Flexible(
+                                    flex: 1,
+                                    child: Image.asset(
+                                      "assets/gráfica.png",
+                                    )),
+                              ],
+                            ),
+                            onPressed: () async {
+                              await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => VerHistorial()));
+                              Sesion.paginaActual = this;
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                : Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Flexible(
+                          flex: 1,
+                          fit: FlexFit.tight,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 15),
+                            width: 250,
+                            child: ElevatedButton(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Lista de Tareas".toUpperCase(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 30,
+                                      color: GuardadoLocal.colores[2],
+                                    ),
+                                  ),
+                                  Flexible(
+                                      flex: 1,
+                                      child: Image.asset(
+                                        "assets/lectoescritura.png",
+                                      )),
+                                ],
+                              ),
+                              onPressed: () async {
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => VerTareas()));
+                                Sesion.paginaActual = this;
+                              },
                             ),
                           ),
-                          Flexible(
-                              flex: 1,
-                              child: Image.asset(
-                                "assets/tableroDeComunicacion.png",
-                              )),
-                        ],
-                      ),
-                      onPressed: () async{
-                        await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => TablonComunicacion())).then((value) async{
-                          Sesion.paginaActual = this;
-                          if(Sesion.argumentos.length == 1)
-                          {
-                            await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => VerTareas()));
-                            Sesion.paginaActual = this;
-                          }
-                        });
-
-                      },
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: Container(
-                    margin: EdgeInsets.all(40),
-                    child: ElevatedButton(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Lista de Tareas".toUpperCase(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold,
-                              fontSize: 30,
-                              color: GuardadoLocal.colores[2],
+                        ),
+                        Flexible(
+                          flex: 1,
+                          fit: FlexFit.tight,
+                          //margin: EdgeInsets.all(10),
+                          child: Container(
+                            margin: EdgeInsets.only(top: 15),
+                            width: 250,
+                            child: ElevatedButton(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Tablón de Comunicación".toUpperCase(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 30,
+                                      color: GuardadoLocal.colores[2],
+                                    ),
+                                  ),
+                                  Flexible(
+                                      flex: 1,
+                                      child: Image.asset(
+                                        "assets/tableroDeComunicacion.png",
+                                      )),
+                                ],
+                              ),
+                              onPressed: () async {
+                                await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                TablonComunicacion()))
+                                    .then((value) async {
+                                  Sesion.paginaActual = this;
+                                  if (Sesion.argumentos.length == 1) {
+                                    await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => VerTareas()));
+                                    Sesion.paginaActual = this;
+                                  }
+                                });
+                              },
                             ),
                           ),
-                          Flexible(
-                              flex: 1,
-                              child: Image.asset(
-                                "assets/lectoescritura.png",
-                              )),
-                        ],
-                      ),
-                      onPressed: () async {
-                        await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => VerTareas()));
-                        Sesion.paginaActual = this;
-                      },
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: Container(
-                    margin: EdgeInsets.all(40),
-                    child: ElevatedButton(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Historial".toUpperCase(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold,
-                              fontSize: 30,
-                              color: GuardadoLocal.colores[2],
+                        ),
+                        Flexible(
+                          flex: 1,
+                          fit: FlexFit.tight,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 15),
+                            width: 250,
+                            child: ElevatedButton(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Historial".toUpperCase(),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 30,
+                                      color: GuardadoLocal.colores[2],
+                                    ),
+                                  ),
+                                  Flexible(
+                                      flex: 1,
+                                      child: Image.asset(
+                                        "assets/gráfica.png",
+                                      )),
+                                ],
+                              ),
+                              onPressed: () async {
+                                await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => VerHistorial()));
+                                Sesion.paginaActual = this;
+                              },
                             ),
                           ),
-                          Flexible(
-                              flex: 1,
-                              child: Image.asset(
-                                "assets/gráfica.png",
-                              )),
-                        ],
-                      ),
-                      onPressed: () async {
-                        await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => VerHistorial()));
-                        Sesion.paginaActual = this;
-                      },
+                        ),
+                      ],
                     ),
                   ),
-                ),
-              ],
-            ):Container(
-                alignment: Alignment.center,
-
-                child:
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  //margin: EdgeInsets.all(10),
-                  child: Container(
-                    margin: EdgeInsets.only(top: 15),
-                    width: 250,
-                    child: ElevatedButton(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Tablón de Comunicación".toUpperCase(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold,
-                              fontSize: 30,
-                              color: GuardadoLocal.colores[2],
-                            ),
-                          ),
-                          Flexible(
-                              flex: 1,
-                              child: Image.asset(
-                                "assets/tableroDeComunicacion.png",
-                              )),
-                        ],
-                      ),
-                      onPressed: () async{
-                        await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => TablonComunicacion())).then((value) async{
-                          Sesion.paginaActual = this;
-                          if(Sesion.argumentos.length == 1)
-                          {
-                            await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => VerTareas()));
-                            Sesion.paginaActual = this;
-                          }
-                        });
-
-                      },
-                    ),
-                  ),
-                ),
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 15),
-                    width: 250,
-                    child: ElevatedButton(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Lista de Tareas".toUpperCase(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold,
-                              fontSize: 30,
-                              color: GuardadoLocal.colores[2],
-                            ),
-                          ),
-                          Flexible(
-                              flex: 1,
-                              child: Image.asset(
-                                "assets/lectoescritura.png",
-                              )),
-                        ],
-                      ),
-                      onPressed: () async {
-                        await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => VerTareas()));
-                        Sesion.paginaActual = this;
-                      },
-                    ),
-                  ),
-                ),
-
-                Flexible(
-                  flex: 1,
-                  fit: FlexFit.tight,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 15),
-                    width: 250,
-                    child: ElevatedButton(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Historial".toUpperCase(),
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold,
-                              fontSize: 30,
-                              color: GuardadoLocal.colores[2],
-                            ),
-                          ),
-                          Flexible(
-                              flex: 1,
-                              child: Image.asset(
-                                "assets/gráfica.png",
-                              )),
-                        ],
-                      ),
-                      onPressed: () async {
-                        await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => VerHistorial()));
-                        Sesion.paginaActual = this;
-                      },
-                    ),
-                  ),
-                ),
-
-              ],
-            ),
-            ),
-
           )
         ]);
   }
@@ -546,40 +561,41 @@ class MyHomePageState extends State<MyHomePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    //margin: EdgeInsets.all(10),
-                    child: Container(
-                      margin: EdgeInsets.all(10),
-                      child: ElevatedButton(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Lista de alumnos".toUpperCase(),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontWeight: FontWeight.bold,
-                                fontSize: 30,
-                                color: GuardadoLocal.colores[2],
-                              ),
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  //margin: EdgeInsets.all(10),
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    child: ElevatedButton(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Lista de alumnos".toUpperCase(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 30,
+                              color: GuardadoLocal.colores[2],
                             ),
-                            Flexible(
-                                flex: 1,
-                                child: Image.asset(
-                                  "assets/companeros.png",
-                                )),
-                          ],
-                        ),
-                        onPressed: () async{
-                          await Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ListaAlumnos()));
-                          Sesion.paginaActual = this;
-                        },
+                          ),
+                          Flexible(
+                              flex: 1,
+                              child: Image.asset(
+                                "assets/companeros.png",
+                              )),
+                        ],
                       ),
+                      onPressed: () async {
+                        await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ListaAlumnos()));
+                        Sesion.paginaActual = this;
+                      },
                     ),
+                  ),
                 ),
                 Flexible(
                   flex: 1,
@@ -593,7 +609,8 @@ class MyHomePageState extends State<MyHomePage> {
                           Text(
                             "Lista de Profesores".toUpperCase(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
                               fontSize: 30,
                               color: GuardadoLocal.colores[2],
                             ),
@@ -605,7 +622,7 @@ class MyHomePageState extends State<MyHomePage> {
                               )),
                         ],
                       ),
-                      onPressed: () async{
+                      onPressed: () async {
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -636,7 +653,8 @@ class MyHomePageState extends State<MyHomePage> {
                           Text(
                             "Registrar Usuarios".toUpperCase(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
                               fontSize: 30,
                               color: GuardadoLocal.colores[2],
                             ),
@@ -648,7 +666,7 @@ class MyHomePageState extends State<MyHomePage> {
                               )),
                         ],
                       ),
-                      onPressed: () async{
+                      onPressed: () async {
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -670,7 +688,8 @@ class MyHomePageState extends State<MyHomePage> {
                           Text(
                             "Crear Tareas".toUpperCase(),
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
                               fontSize: 30,
                               color: GuardadoLocal.colores[2],
                             ),
@@ -682,7 +701,7 @@ class MyHomePageState extends State<MyHomePage> {
                               )),
                         ],
                       ),
-                      onPressed: () async{
+                      onPressed: () async {
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -714,7 +733,8 @@ class MyHomePageState extends State<MyHomePage> {
                           Text(
                             "GESTIÓN DEL TABLÓN",
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
                               fontSize: 30,
                               color: GuardadoLocal.colores[2],
                             ),
@@ -726,7 +746,7 @@ class MyHomePageState extends State<MyHomePage> {
                               )),
                         ],
                       ),
-                      onPressed: () async{
+                      onPressed: () async {
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -736,6 +756,7 @@ class MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                 ),
+
                 ///EDICION DE TAREAS
                 Flexible(
                   flex: 1,
@@ -749,7 +770,8 @@ class MyHomePageState extends State<MyHomePage> {
                           Text(
                             "LISTA DE TAREAS",
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontWeight: FontWeight.bold,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
                               fontSize: 30,
                               color: GuardadoLocal.colores[2],
                             ),
@@ -761,7 +783,7 @@ class MyHomePageState extends State<MyHomePage> {
                               )),
                         ],
                       ),
-                      onPressed: () async{
+                      onPressed: () async {
                         await Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -797,23 +819,50 @@ class MyHomePageState extends State<MyHomePage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-              backgroundColor: GuardadoLocal.colores[1],
-              title:  Text('¿SEGURO?',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0],fontSize: 25),),
-              content: Text('¿QUIERES CERRAR SESIÓN?',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[0],fontSize: 25),),
-              actions: [
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context, false);
-                    },
-                    child: Text('NO',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 25),)),
-                ElevatedButton(
-                    onPressed: () {
-                      Background.desactivarNotificaciones();
-                      Navigator.popUntil(context, (route) => route.isFirst);
-
-                    },
-                    child: Text('SÍ',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 25),)),
-              ],
+            backgroundColor: GuardadoLocal.colores[1],
+            title: Text(
+              '¿SEGURO?',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: GuardadoLocal.colores[0],
+                  fontSize: 25),
+            ),
+            content: Text(
+              '¿QUIERES CERRAR SESIÓN?',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: GuardadoLocal.colores[0],
+                  fontSize: 25),
+            ),
+            actions: [
+              ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: Text(
+                    'NO',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: GuardadoLocal.colores[2],
+                        fontSize: 25),
+                  )),
+              ElevatedButton(
+                  onPressed: () {
+                    Background.desactivarNotificaciones();
+                    Navigator.popUntil(context, (route) => route.isFirst);
+                  },
+                  child: Text(
+                    'SÍ',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: GuardadoLocal.colores[2],
+                        fontSize: 25),
+                  )),
+            ],
           );
         });
   }
