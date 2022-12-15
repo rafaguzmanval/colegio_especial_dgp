@@ -36,7 +36,9 @@ class VerHistorialState extends State<VerHistorial> {
   ScrollController homeController = new ScrollController();
   late Map<String,int> _charData = new Map();
   late List<DatosHist> _charDataList=[];
+  var tareasC = [];
   var tareas = [];
+  var iconoTarea = [];
   var retroalimentacion="";
 
   @override
@@ -136,13 +138,21 @@ class VerHistorialState extends State<VerHistorial> {
              primaryYAxis: NumericAxis(labelStyle: TextStyle(color: GuardadoLocal.colores[0], fontFamily: "Escolar",fontSize: 20,fontWeight: FontWeight.bold), edgeLabelPlacement: EdgeLabelPlacement.shift),
            ),
          ),
-           const Text(
-             "RETROALIMENTACIÓN:\n",
-               style: TextStyle(
-                 decoration: TextDecoration.underline,
-               ),
-           ),
-         Text(retroalimentacion)
+           Container(
+             padding: EdgeInsets.all(5),
+             decoration: BoxDecoration(
+               border: Border.all(color: GuardadoLocal.colores[0])
+             ),
+            child:Column(children: [
+               const Text("RETROALIMENTACIÓN:\n",
+                style: TextStyle(
+                decoration: TextDecoration.underline,
+                ),
+                ),
+              Text(retroalimentacion)
+              ],
+            )
+            )
        ],
       )
     );
@@ -157,26 +167,30 @@ class VerHistorialState extends State<VerHistorial> {
   // Metodo que carga las tareas del alumno
   cargarHistorial() async {
     var id = Sesion.rol == Rol.alumno.toString() ? Sesion.id : Sesion.seleccion.id;
-    tareas = await Sesion.db.consultarTareasCompletas(id);
-    log(tareas.toString());
+    tareasC = await Sesion.db.consultarTareasCompletas(id);
+    tareas = await Sesion.db.consultarTodasLasTareas();
+
+    //Rellenamos con todas las tareas
     for (int i = 0; i < tareas.length; i++) {
-      var valor = _charData[tareas[i].nombre.toString()];
+      _charData[tareas[i].nombre.toString()] = 0;
+    }
+
+    //Añadimos las completadas
+    for (int i = 0; i < tareasC.length; i++) {
+      var valor = _charData[tareasC[i].nombre.toString()];
+
       if(valor is int){
-        _charData[tareas[i].nombre.toString()] = valor + 1;
-        log("HA entrado en el if ${tareas[i].nombre.toString()}");
-      }else{
-        _charData[tareas[i].nombre.toString()] = 1;
-        log("HA entrado en el else ${tareas[i].nombre.toString()}");
-        log(_charData.length.toString());
+        _charData[tareasC[i].nombre.toString()] = valor + 1;
       }
-      valor = 0;
+
+      valor  = 0;
 
       var cadena;
 
-      if(tareas[i].retroalimentacion.toString().isEmpty){
-         cadena = tareas[i].nombre.toString().toUpperCase() + ": SIN RETROALIMENTACIÓN \n";
+      if(tareasC[i].retroalimentacion.toString().isEmpty){
+         cadena = tareasC[i].nombre.toString().toUpperCase() + ": SIN RETROALIMENTACIÓN \n";
       }else{
-         cadena = tareas[i].nombre.toString().toUpperCase() + ": " + tareas[i].retroalimentacion.toString().toUpperCase() + "\n";
+         cadena = tareasC[i].nombre.toString().toUpperCase() + ": " + tareasC[i].retroalimentacion.toString().toUpperCase() + "\n";
       }
       retroalimentacion += cadena;
     }
