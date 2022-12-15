@@ -1022,13 +1022,14 @@ class VerTareasState extends State<VerTareas> {
                   "\nIntroduce un comentario opcional:".toUpperCase(),
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
+                Container(margin: EdgeInsets.only(left: 10), child:
                 TextField(
                   key: Key('comentarioRetroalimentacion'),
                   minLines: 3,
                   maxLines: 6,
                   controller: controladorRespuesta,
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-                ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: GuardadoLocal.colores[0]),
+                )),
                 Text(
                   "\Envia una foto (opcional):".toUpperCase(),
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
