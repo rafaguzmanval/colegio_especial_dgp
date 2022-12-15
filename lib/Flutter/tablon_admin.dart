@@ -81,7 +81,7 @@ class TablonAdminState extends State<TablonAdmin> {
             title: Column(children: [
               Center(
                 child: Text(
-                  'GESTION del tablon'.toUpperCase(),
+                  'GESTIÓN del tablón'.toUpperCase(),
                   textAlign: TextAlign.center,
                   style:
                       TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2], fontSize: 30),
@@ -144,7 +144,7 @@ class TablonAdminState extends State<TablonAdmin> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "AÑADIR BOTON TABLON",
+                                    "AÑADIR BOTÓN TABLÓN",
                                     style: TextStyle(fontWeight: FontWeight.bold,
                                       fontSize: 30,
                                       color: GuardadoLocal.colores[2],
@@ -217,7 +217,7 @@ class TablonAdminState extends State<TablonAdmin> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "GESTION DEL TABLON",
+                                      "GESTIÓN DEL TABLÓN",
                                       style: TextStyle(fontWeight: FontWeight.bold,
                                         fontSize: 30,
                                         color: GuardadoLocal.colores[2],

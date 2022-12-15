@@ -130,7 +130,7 @@ class MyHomePageState extends State<MyHomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "GESTION DEL TABLON",
+                              "GESTIÓN DEL TABLÓN",
                               textAlign: TextAlign.center,
                               style: TextStyle(fontWeight: FontWeight.bold,
                                 fontSize: 30,
@@ -298,7 +298,7 @@ class MyHomePageState extends State<MyHomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Tablon de Comunicación".toUpperCase(),
+                            "Tablón de Comunicación".toUpperCase(),
                             textAlign: TextAlign.center,
                             style: TextStyle(fontWeight: FontWeight.bold,
                               fontSize: 30,
@@ -420,7 +420,7 @@ class MyHomePageState extends State<MyHomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "Tablon de Comunicación".toUpperCase(),
+                            "Tablón de Comunicación".toUpperCase(),
                             textAlign: TextAlign.center,
                             style: TextStyle(fontWeight: FontWeight.bold,
                               fontSize: 30,
@@ -712,7 +712,7 @@ class MyHomePageState extends State<MyHomePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "GESTION DEL TABLON",
+                            "GESTIÓN DEL TABLÓN",
                             textAlign: TextAlign.center,
                             style: TextStyle(fontWeight: FontWeight.bold,
                               fontSize: 30,
