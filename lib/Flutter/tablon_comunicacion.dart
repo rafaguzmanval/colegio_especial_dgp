@@ -78,7 +78,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
         leading: IconButton(
             icon: Icon(Icons.arrow_back, color: GuardadoLocal.colores[2]),
             onPressed: (){Navigator.pop(context);}),
-        title: Center(child: Text('TABLON DE COMUNICACIÓN',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 30),),
+        title: Center(child: Text('TABLÓN DE COMUNICACIÓN',textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 30),),
       )),
       body: SingleChildScrollView(
           child: Container(
@@ -165,7 +165,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
               child: Visibility(
                 child: FloatingActionButton(
                     elevation: 1.0,
-                    heroTag: "flechaDerecha",
+                    heroTag: "flechaIzquierda1",
                     onPressed: () {
                       offSetActual -= 100.0;
                       if (offSetActual <
@@ -179,7 +179,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                       );
                     },
                     child: const Icon(Icons.arrow_left)),
-                visible: verFlechaDerecha,
+                visible: verFlechaIzquierda,
               ),
             )),
         Container(
@@ -273,7 +273,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
               child: Visibility(
                 child: FloatingActionButton(
                     elevation: 1.0,
-                    heroTag: "flechaDerecha",
+                    heroTag: "flechaIzquierda2",
                     onPressed: () {
                       offSetActual2 -= 100.0;
                       if (offSetActual2 <
@@ -288,7 +288,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                       );
                     },
                     child: const Icon(Icons.arrow_left)),
-                visible: verFlechaDerecha,
+                visible: verFlechaIzquierda,
               ),
             )),
         Container(
@@ -298,7 +298,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
               child: Visibility(
                 child: FloatingActionButton(
                     elevation: 1.0,
-                    heroTag: "flechaDerecha",
+                    heroTag: "flechaDerecha2",
                     onPressed: () {
                       offSetActual2 += 100;
 
@@ -383,7 +383,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
               child: Visibility(
                 child: FloatingActionButton(
                     elevation: 1.0,
-                    heroTag: "flechaDerecha",
+                    heroTag: "flechaIzquierda3",
                     onPressed: () {
                       offSetActual3 -= 100.0;
                       if (offSetActual3 <
@@ -398,7 +398,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
                       );
                     },
                     child: const Icon(Icons.arrow_left)),
-                visible: verFlechaDerecha,
+                visible: verFlechaIzquierda,
               ),
             )),
         Container(
@@ -408,7 +408,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
               child: Visibility(
                 child: FloatingActionButton(
                     elevation: 1.0,
-                    heroTag: "flechaDerecha",
+                    heroTag: "flechaDerecha3",
                     onPressed: () {
                       offSetActual3 += 100;
 
@@ -520,7 +520,7 @@ class TablonComunicacionState extends State<TablonComunicacion> {
   Widget cargando() {
     if (tablon == null)
       return Center(child:
-        Text('\nCARGANDO EL TABLON',textAlign: TextAlign.center,),
+        Text('\nCARGANDO EL TABLÓN',textAlign: TextAlign.center,),
       );
     else {
       return Vista();
