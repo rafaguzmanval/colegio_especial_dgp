@@ -223,9 +223,11 @@ class CrearTareaState extends State<CrearTarea> {
                     seleccionarImagen(SeleccionImagen.camara);
                   }),
             ),
-            Container(
-                margin: EdgeInsets.only(right: 20, left: 20),
-                child: ElevatedButton(
+            SizedBox(
+              width: 15,
+            ),
+            Flexible(child:
+                ElevatedButton(
                       child: Image.asset(
                         'assets/galeria.png',
                         width: 140,
@@ -235,6 +237,9 @@ class CrearTareaState extends State<CrearTarea> {
                         seleccionarImagen(SeleccionImagen.galeria);
                       }),
                 ),
+            SizedBox(
+              width: 15,
+            ),
             Flexible(
               child: ElevatedButton(
                   child: Image.asset(
@@ -313,9 +318,9 @@ class CrearTareaState extends State<CrearTarea> {
           ),*/
 
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-            ElevatedButton(
+            Flexible(child: ElevatedButton(
                 child: Column(children: [
                   Text(
                       (formularios.isEmpty)
@@ -334,10 +339,10 @@ class CrearTareaState extends State<CrearTarea> {
                 ]),
                 onPressed: () async {
                   dialogFormulario();
-                }),
+                })),
 
 
-            ElevatedButton(
+            Flexible(child:ElevatedButton(
                 child: Column(children: [
                   Text(
                       (textos.isEmpty && imagenes.isEmpty)
@@ -356,7 +361,7 @@ class CrearTareaState extends State<CrearTarea> {
                 ]),
                 onPressed: () async {
                   dialogPasos();
-                }),
+                })),
           ],),
 
           SizedBox(
