@@ -27,7 +27,7 @@ class PaginaChats extends StatefulWidget {
 }
 
 class PaginaChatsState extends State<PaginaChats> {
-  StreamController chatsController = new StreamController();
+  StreamController<String> chatsController = StreamController<String>.broadcast();
   double offSetActual = 0;
   ScrollController homeController = new ScrollController();
 
@@ -35,7 +35,6 @@ class PaginaChatsState extends State<PaginaChats> {
   void initState() {
     super.initState();
 
-    cargarAlumnos();
     Sesion.paginaActual = this;
     Sesion.paginaChats = this;
 
@@ -47,7 +46,6 @@ class PaginaChatsState extends State<PaginaChats> {
     Sesion.db.desactivarSubscripcionListaChat();
     Sesion.paginaChats = null;
     super.dispose();
-
   }
 
   @override
@@ -169,12 +167,6 @@ class PaginaChatsState extends State<PaginaChats> {
     }
   }
 
-  // Obtiene la lista de alumnos y actualiza la pagina
-  cargarAlumnos() async {
-    Sesion.alumnos = await Sesion.db.consultarTodosAlumnos();
-    actualizar();
-  }
-
   Widget _listaChats() {
     return StreamBuilder(
         stream: chatsController.stream,
@@ -206,7 +198,7 @@ class PaginaChatsState extends State<PaginaChats> {
     );
   }
 
-  _listachatAux(chatId,nombre,foto,idInterlocutor,sinLeer, fechaUM) async
+  _listachatAux(chatId,nombre,foto,idInterlocutor,sinLeer, fechaUM)
   {
 
     var fecha = _obtenerFecha(fechaUM);
@@ -278,7 +270,7 @@ class PaginaChatsState extends State<PaginaChats> {
   }
 
   void actualizarChats() async {
-    chatsController.add('');
+    chatsController.add("");
     actualizar();
   }
 

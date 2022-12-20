@@ -1144,7 +1144,6 @@ class AccesoBD {
 
   obtenerChats(id) async{
     try {
-
           _subscripcionListaChat1 = await db
           .collection('chats')
           .where('idUsuarios',  arrayContains: id )
@@ -1157,14 +1156,14 @@ class AccesoBD {
             for(int i = event.docs.length - 1; i>=0;i--){
 
 
-              var index = event.docs[i].get("idUsuarios").indexOf(id) == 0 ? 1: 0;
+              var index = (await event.docs[i].get("idUsuarios").indexOf(id)) == 0 ? 1: 0;
 
               var snapshot2 = await Sesion.db.consultarIDusuario(event.docs[i].get("idUsuarios")[index]);
 
-              bool sinLeer = index==0?event.docs[i].get("sinLeer2"):event.docs[i].get("sinLeer1");
+              bool sinLeer = index==0? (await event.docs[i].get("sinLeer2")):(await event.docs[i].get("sinLeer1"));
 
-              var foto = snapshot2.foto;
-              var nombre = snapshot2.nombre;
+              var foto = await snapshot2.foto;
+              var nombre = await snapshot2.nombre;
 
               Chat nuevo = Chat(event.docs[i].id,Sesion.id,snapshot2.id,nombre,foto,sinLeer,event.docs[i].get("fechaUltimoMensaje"));
               listaChats.add(nuevo);
@@ -1172,11 +1171,7 @@ class AccesoBD {
 
             Sesion.chats = listaChats;
 
-            if(Sesion.paginaActual.toString().contains("PaginaChats"))
-              {
-                Sesion.paginaActual.actualizarChats();
-              }
-
+            await Sesion.paginaChats.actualizarChats();
           });
 
 
@@ -1205,14 +1200,7 @@ class AccesoBD {
               listaMensajes.add(nuevo);
             }
 
-            if(Sesion.paginaActual.toString().contains("VistaChat"))
-              {
-                Sesion.paginaActual.actualizarMensajes(listaMensajes);
-              }
-            else
-              {
-
-              }
+            Sesion.paginaActual.actualizarMensajes(listaMensajes);
 
             //marco como leido el chat para este usuario
             if(listaMensajes.length>0){
