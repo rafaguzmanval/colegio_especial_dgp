@@ -120,13 +120,14 @@ class VerHistorialState extends State<VerHistorial> {
              series: <ChartSeries>[
                ColumnSeries<DatosHist,String>(
                    dataSource: _charDataList,
-                   xValueMapper: (DatosHist dato,_) => dato.tarea,
+                   xValueMapper: (DatosHist dato,_) => dato.tarea.toUpperCase(),
                    yValueMapper: (DatosHist hist,_) =>  hist.veces_realizada,
                    dataLabelSettings: DataLabelSettings(
+                     alignment: ChartAlignment.center,
                        textStyle:TextStyle(
                          color: GuardadoLocal.colores[0],
                        ),
-                       isVisible: true
+                       isVisible: true,
                    ),
                    borderRadius: BorderRadius.all(Radius.circular(15)),
                    color: GuardadoLocal.colores[0],
