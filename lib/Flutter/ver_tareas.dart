@@ -1022,18 +1022,18 @@ class VerTareasState extends State<VerTareas> {
                   "\nIntroduce un comentario opcional:".toUpperCase(),
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
-                Container(margin: EdgeInsets.only(left: 10), child:
+                Container(margin: EdgeInsets.only(left: 10,right: 10), child:
                 TextField(
                   key: Key('comentarioRetroalimentacion'),
-                  minLines: 3,
-                  maxLines: 6,
                   controller: controladorRespuesta,
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25, color: GuardadoLocal.colores[0]),
                 )),
+                SizedBox(height: 20,),
                 Text(
                   "\Envia una foto (opcional):".toUpperCase(),
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
+                SizedBox(height: 10,),
                 ElevatedButton(
                     onPressed: () async {
                       await tomarFoto();
