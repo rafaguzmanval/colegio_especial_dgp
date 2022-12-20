@@ -25,6 +25,7 @@ class Sesion {
   static var seleccion;
   static var paginaActual;
   static var paginaChats;
+  static var paginaChat;
   static var metodoLogin = "";
   static var argumentos = [];
   static AccesoBD db = new AccesoBD();

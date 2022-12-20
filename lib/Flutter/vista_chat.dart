@@ -68,6 +68,7 @@ class _VistaChatState extends State<VistaChat> {
   void initState() {
     super.initState();
     Sesion.paginaActual = this;
+    Sesion.paginaChat = this;
     idChat = widget.chatId;
 
     if(widget.chatId!='')

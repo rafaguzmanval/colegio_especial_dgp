@@ -1171,7 +1171,9 @@ class AccesoBD {
 
             Sesion.chats = listaChats;
 
-            await Sesion.paginaChats.actualizarChats();
+            if(Sesion.paginaActual==Sesion.paginaChats){
+              Sesion.paginaChats.actualizarChats();
+            }
           });
 
 
@@ -1200,7 +1202,9 @@ class AccesoBD {
               listaMensajes.add(nuevo);
             }
 
-            Sesion.paginaActual.actualizarMensajes(listaMensajes);
+            if(Sesion.paginaActual==Sesion.paginaChat) {
+              Sesion.paginaActual.actualizarMensajes(listaMensajes);
+            }
 
             //marco como leido el chat para este usuario
             if(listaMensajes.length>0){
