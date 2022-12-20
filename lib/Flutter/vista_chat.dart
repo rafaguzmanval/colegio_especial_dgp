@@ -153,6 +153,7 @@ class _VistaChatState extends State<VistaChat> {
                       borderRadius: BorderRadius.circular(30),
                     ),
                     child: TextFormField(
+                      key: Key("CampoMensaje"),
                       controller: messageController,
                       textCapitalization: TextCapitalization.sentences,
                       style: TextStyle(color: GuardadoLocal.colores[0]),

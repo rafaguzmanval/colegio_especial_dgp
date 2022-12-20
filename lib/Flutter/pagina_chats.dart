@@ -193,11 +193,6 @@ class PaginaChatsState extends State<PaginaChats> {
 
                   return _listachatAux(Sesion.chats[reverseIndex].id, Sesion.chats[reverseIndex].nombre,
                     Sesion.chats[reverseIndex].foto, idInterlocutor,Sesion.chats[reverseIndex].sinLeer,Sesion.chats[reverseIndex].fechaUltimoMensaje);
-                  /*ListaChats(
-                      chatId: Sesion.chats[reverseIndex].id,
-                      nombre:Sesion.chats[reverseIndex].nombre,
-                      foto: Sesion.chats[reverseIndex].foto,
-                      idInterlocutor: Sesion.chats[reverseIndex].idUsuario1==Sesion.id?Sesion.chats[reverseIndex].idUsuario2:Sesion.chats[reverseIndex].idUsuario1,);*/
                 },
               );
             }else{
@@ -211,7 +206,7 @@ class PaginaChatsState extends State<PaginaChats> {
     );
   }
 
-  _listachatAux(chatId,nombre,foto,idInterlocutor,sinLeer, fechaUM)
+  _listachatAux(chatId,nombre,foto,idInterlocutor,sinLeer, fechaUM) async
   {
 
     var fecha = _obtenerFecha(fechaUM);

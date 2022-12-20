@@ -568,7 +568,7 @@ class PerfilAlumnoState extends State<PerfilAlumno> {
                                   return DropdownMenuItem(
                                     value: value,
                                     child: Text(
-                                      value,
+                                      value.toUpperCase(),
                                       style: TextStyle(fontSize: 25),
                                     ),
                                   );

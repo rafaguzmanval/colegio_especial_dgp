@@ -214,7 +214,7 @@ class ListaProfesoresState extends State<ListaProfesores> {
               ElevatedButton(
                   onPressed: () async{
                     await Sesion.db
-                        .eliminarAlumno(Sesion.alumnos[i].id)
+                        .eliminarProfesor(Sesion.profesores[i].id)
                         .then((e) {
                       esProfesorEliminandose = true;
                       profesorEliminandose = i;
