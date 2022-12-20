@@ -106,7 +106,7 @@ class VerHistorialState extends State<VerHistorial> {
        children: [
          Container(
            padding: EdgeInsets.all(20),
-           child: SfCartesianChart(,
+           child: SfCartesianChart(
              plotAreaBorderColor: GuardadoLocal.colores[0],
              title: ChartTitle(
                text: "HISTORIAL DE TAREAS COMPLETADAS",
