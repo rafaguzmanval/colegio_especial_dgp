@@ -156,7 +156,7 @@ class _VistaChatState extends State<VistaChat> {
                       key: Key("CampoMensaje"),
                       controller: messageController,
                       textCapitalization: TextCapitalization.sentences,
-                      style: TextStyle(color: GuardadoLocal.colores[0]),
+                      style: TextStyle(color: GuardadoLocal.colores[0],fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
                         hintText: "Envia un mensaje...".toUpperCase(),
                         hintStyle: TextStyle(color: GuardadoLocal.colores[0], fontSize: 20),
