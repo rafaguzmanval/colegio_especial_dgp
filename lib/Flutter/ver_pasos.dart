@@ -126,7 +126,7 @@ class VerPasosState extends State<VerPasos> {
           children: [
               Container(
                   height: MediaQuery.of(context).size.height-100,
-                  margin: EdgeInsets.only(right: 100, left: 100,top: 10,bottom: 10),
+                  margin: EdgeInsets.only(right: 50, left: 50,top: 10,bottom: 10),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                       border: Border.all(
@@ -174,6 +174,7 @@ class VerPasosState extends State<VerPasos> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Expanded(
+
                                         child: Container(
                                           margin: EdgeInsets.only(top: 10),
                                           child: Text(tarea.textos[pasoActual].toUpperCase(),
