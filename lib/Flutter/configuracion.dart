@@ -100,6 +100,8 @@ class ConfiguracionState extends State<Configuracion> {
     int marcosB =(255-GuardadoLocal.colores[1].blue) as int;
     Color marcos = Color.fromRGBO(marcosR, marcosG, marcosB, GuardadoLocal.colores[0].opacity);
 
+    Orientation orientacion = MediaQuery.of(context).orientation;
+
     return showDialog(
         context: context,
         builder: (context) {
@@ -131,8 +133,7 @@ class ConfiguracionState extends State<Configuracion> {
                                         color: marcos,
                                         shape: BoxShape.circle),
                                     child: CircleAvatar(backgroundColor: p),),
-                                  ElevatedButton(onPressed: (){_elegirColor('p');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 25),))
-                                ],
+                                  IconButton(color:GuardadoLocal.colores[0],onPressed: (){_elegirColor('p');}, icon: Icon(Icons.color_lens))],
                               )
                             ],
                           ),
@@ -154,7 +155,7 @@ class ConfiguracionState extends State<Configuracion> {
                                         color: marcos,
                                         shape: BoxShape.circle),
                                     child: CircleAvatar(backgroundColor: b),),
-                                  ElevatedButton(onPressed: (){_elegirColor('b');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 25),))
+                                  IconButton(color:GuardadoLocal.colores[0],onPressed: (){_elegirColor('b');}, icon: Icon(Icons.color_lens))
                                 ],
                               )
                             ],
@@ -176,7 +177,7 @@ class ConfiguracionState extends State<Configuracion> {
                                         color: marcos,
                                         shape: BoxShape.circle),
                                     child: CircleAvatar(backgroundColor: l),),
-                                  ElevatedButton(onPressed: (){_elegirColor('l');}, child: Text('Cambiar color'.toUpperCase(),style: TextStyle(fontWeight: FontWeight.bold,color: GuardadoLocal.colores[2],fontSize: 25),))
+                                  IconButton(color:GuardadoLocal.colores[0],onPressed: (){_elegirColor('l');}, icon: Icon(Icons.color_lens))
                                 ],
                               )
                             ],
