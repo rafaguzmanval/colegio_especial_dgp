@@ -161,6 +161,13 @@ class VerHistorialState extends State<VerHistorial> {
 
   void getChartData(){
     _charData.forEach((key, value) {
+      if(MediaQuery.of(context).orientation==Orientation.portrait){
+        var aux = key.split(' ');
+        key = aux[0];
+        for(int i=1; i < aux.length; i++){
+          key += '\n' + aux[i];
+        }
+      }
       _charDataList.add(DatosHist(key, value));
     });
   }
