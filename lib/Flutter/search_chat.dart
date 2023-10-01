@@ -45,7 +45,6 @@ class CustomSearchDelegate extends SearchDelegate {
       textTheme: TextTheme(subtitle1: TextStyle(fontFamily:'Escolar',fontSize: 20,color: GuardadoLocal.colores[0],fontWeight: FontWeight.bold),
           button: TextStyle(fontFamily:'Escolar',fontSize: 20,color: GuardadoLocal.colores[2],fontWeight: FontWeight.bold)),
       appBarTheme: AppBarTheme(
-        brightness: colorScheme.brightness,
         backgroundColor: GuardadoLocal.colores[1],
       ),
       inputDecorationTheme: searchFieldDecorationTheme ??

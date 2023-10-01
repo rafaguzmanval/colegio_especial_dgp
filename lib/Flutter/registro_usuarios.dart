@@ -544,7 +544,8 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
         foto = File(fotoTomada.path);
       }
 
-      var future = Sesion.db.registrarUsuario(usuario, foto);
+
+      Future<bool> future = Sesion.db.registrarUsuario(usuario, foto);
 
       future.then((value) {
         registrando = false;
@@ -561,7 +562,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           rolElegido = "NINGUN ROL ELEGIDO";
 
           mensajeDeRegistro =
-              "REGISTRO COMPLETADO PERFECTAMENTE\nPUEDES VOLVER A REGISTRAR OTRO USUARIO";
+              "REGISTRO COMPLETADO\nPUEDES VOLVER A REGISTRAR OTRO USUARIO";
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 behavior: SnackBarBehavior.floating,
@@ -588,7 +589,7 @@ class RegistroUsuariosState extends State<RegistroUsuarios> {
           mostrarError(mensajeDeRegistro, true);
         }
 
-        actualizar();
+          actualizar();
       });
     } else {
       mensajeDeRegistro = "DEBE RELLENAR TODOS LOS CAMPOS CON *";

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
 import 'package:colegio_especial_dgp/Flutter/perfil_profesor.dart';
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
-
+/*
 class CustomSearchDelegate extends SearchDelegate {
 // Demo list to show querying
   List<String> searchTerms = [];
@@ -282,3 +282,4 @@ class CustomSearchDelegate extends SearchDelegate {
       crearLista();
   }
 }
+*/

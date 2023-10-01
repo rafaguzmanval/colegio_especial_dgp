@@ -1,5 +1,5 @@
 name: colegio_especial_dgp
-description: A new Flutter project.
+description: Aplicación colegio San Rafael.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -29,11 +29,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  charts_flutter: ^0.11.0
   video_player:
   flutter_tts:
-
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -61,7 +58,6 @@ dependencies:
   geolocator: ^9.0.2
   share_plus: ^6.3.0
   flutter_map: ^3.0.0
-  latlong: ^0.6.1
   shared_preferences: ^2.0.15
   flutter_colorpicker: ^1.0.3
   restart_app: ^1.1.0

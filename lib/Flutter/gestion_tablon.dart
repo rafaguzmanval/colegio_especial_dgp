@@ -17,6 +17,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:colegio_especial_dgp/Dart/acceso_bd_firebase.dart';
 import 'package:colegio_especial_dgp/Dart/arasaac.dart';
 import 'package:colegio_especial_dgp/Dart/guardado_local.dart';
 import 'package:colegio_especial_dgp/Dart/sesion.dart';
@@ -36,7 +37,7 @@ class GestionTablon extends StatefulWidget {
 
 // Clase para crear tarea
 class GestionTablonState extends State<GestionTablon> {
-  AccesoBD base = new AccesoBD();
+  AccesoBD base = new AccesoBDFirebase();
   var tipoElegido = "NINGÚN TIPO ELEGIDO";
   var tipo;
   var fotoTomada;

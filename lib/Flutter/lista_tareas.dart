@@ -62,8 +62,8 @@ class ListaTareasState extends State<ListaTareas> {
             ///Boton para buscar tareas
             IconButton(
               onPressed: () async{
-                await showSearch(context: context, delegate: CustomSearchDelegate(),);
-                setState(() {});
+                /*await showSearch(context: context, delegate: CustomSearchDelegate(),);
+                setState(() {});*/
               },
               icon: Icon(Icons.search,color: GuardadoLocal.colores[2]),
             ),

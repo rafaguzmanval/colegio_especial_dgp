@@ -9,6 +9,7 @@
 * */
 
 import 'package:colegio_especial_dgp/Dart/acceso_bd.dart';
+import 'package:colegio_especial_dgp/Dart/acceso_bd_firebase.dart';
 import 'package:colegio_especial_dgp/Dart/passport_method.dart';
 import 'package:flutter/material.dart';
 
@@ -28,7 +29,7 @@ class Sesion {
   static var paginaChat;
   static var metodoLogin = "";
   static var argumentos = [];
-  static AccesoBD db = new AccesoBD();
+  static AccesoBDFirebase db = new AccesoBDFirebase();
   static var posicion;
   static var chats = [];
 
